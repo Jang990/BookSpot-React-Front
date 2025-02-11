@@ -1,37 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import type { Book } from "@/types/Book";
+import { useState } from "react";
 import BookSearch from "@/components/BookSearch";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const [selectedBooks, setSelectedBooks] = useState<Book[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const router = useRouter();
-
-  const handleBookSelect = (book: Book) => {
-    setSelectedBooks((prev) =>
-      prev.some((b) => b.id === book.id)
-        ? prev.filter((b) => b.id !== book.id)
-        : [...prev, book]
-    );
-  };
-
-  const handleFindLibraries = () => {
-    // Save selected books to session storage
-    sessionStorage.setItem("selectedBooks", JSON.stringify(selectedBooks));
-    router.push("/");
-  };
-
-  useEffect(() => {
-    // Restore selected books from session storage on page load
-    const storedBooks = sessionStorage.getItem("selectedBooks");
-    if (storedBooks) {
-      setSelectedBooks(JSON.parse(storedBooks));
-    }
-  }, []);
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -48,17 +22,6 @@ export default function Home() {
               }
             }}
           />
-
-          {selectedBooks.length > 0 && (
-            <div className="mt-8 flex justify-center">
-              <button
-                className="bg-primary text-primary-foreground px-6 py-3 rounded-full hover:bg-primary/90 transition-colors"
-                onClick={handleFindLibraries}
-              >
-                선택한 책으로 도서관 찾기 ({selectedBooks.length})
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </main>
