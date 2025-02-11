@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
 
 export default function CartPage() {
-  const { cart, removeFromCart } = useBookCart();
+  const { cart } = useBookCart();
   const [showMap, setShowMap] = useState(false);
   const router = useRouter();
 
@@ -37,7 +37,7 @@ export default function CartPage() {
                 <BookInfo
                   key={bookId}
                   book={{
-                    id: "30",
+                    id: bookId,
                     isbn: "9791162241851",
                     title: "오브젝트",
                     category: "004.57",
@@ -46,8 +46,6 @@ export default function CartPage() {
                     publisher: "아무개",
                     image: "/placeholder.svg",
                   }}
-                  onAddToCart={() => {}}
-                  onRemoveFromCart={() => removeFromCart(bookId)}
                   isInCart={true}
                 />
               ))}

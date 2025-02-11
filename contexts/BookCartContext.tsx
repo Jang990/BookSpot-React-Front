@@ -40,16 +40,18 @@ export const BookCartProvider = ({ children }: BookCartProviderProps) => {
     return findBookIds();
   };
 
-  const addToCart = (bookid: string) => {
-    const isSaved: boolean = addBookId(bookid);
-    if (isSaved) setCart((prevCart) => [...prevCart, bookid]);
+  const addToCart = (targetId: string) => {
+    const isSaved: boolean = addBookId(targetId);
+    if (isSaved) setCart((prevCart) => [...prevCart, targetId]);
     return isSaved;
   };
 
-  const removeFromCart = (bookId: string) => {
-    const isRemoved: boolean = removeBookId(bookId);
+  const removeFromCart = (targetId: string) => {
+    const isRemoved: boolean = removeBookId(targetId);
     if (isRemoved)
-      setCart((prevCart) => prevCart.filter((book) => book !== bookId));
+      setCart((prevCart) =>
+        prevCart.filter((selectedId) => selectedId !== targetId)
+      );
     return isRemoved;
   };
 

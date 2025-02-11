@@ -6,7 +6,6 @@ import BookInfo from "./Card/BookInfo";
 import { books } from "@/data/books";
 import { debounce } from "@/utils/debounce";
 import { Search } from "lucide-react";
-import { useBookCart } from "@/contexts/BookCartContext";
 
 interface BookSearchProps {
   page: number;
@@ -23,7 +22,6 @@ export default function BookSearch({
 }: BookSearchProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<Book[]>([]);
-  const { addToCart } = useBookCart();
 
   const debouncedSearch = useCallback(
     debounce((term: string) => {
@@ -79,11 +77,7 @@ export default function BookSearch({
                 index === searchResults.length - 1 ? lastBookElementRef : null
               }
             >
-              <BookInfo
-                book={book}
-                onAddToCart={() => addToCart(book.id)}
-                isInCart={false}
-              />
+              <BookInfo book={book} isInCart={false} />
             </div>
           ))}
         </div>

@@ -2,24 +2,17 @@
 
 import Image from "next/image";
 import type { Book } from "@/types/Book";
-import { ShoppingCart, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { AddToCartButton } from "../atoms/button/AddToCartButton";
+import { RemoveFromCartButton } from "../atoms/button/RemoveFromCartButton";
 
 interface BookInfoProps {
   book: Book;
-  onAddToCart: () => void;
-  onRemoveFromCart?: () => void;
   isInCart?: boolean;
 }
 
-export default function BookInfo({
-  book,
-  onAddToCart,
-  onRemoveFromCart,
-  isInCart = false,
-}: BookInfoProps) {
+export default function BookInfo({ book, isInCart = false }: BookInfoProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -51,17 +44,7 @@ export default function BookInfo({
         className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
       >
         {!isInCart && <AddToCartButton bookId={book.id} />}
-        {isInCart && onRemoveFromCart && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onRemoveFromCart();
-            }}
-            className="bg-destructive text-destructive-foreground p-1.5 rounded-full hover:bg-destructive/80 transition-colors animate-in zoom-in-50 duration-200 active:scale-90"
-          >
-            <Trash2 size={20} />
-          </button>
-        )}
+        {isInCart && <RemoveFromCartButton bookId={book.id} />}
       </div>
     </div>
   );
