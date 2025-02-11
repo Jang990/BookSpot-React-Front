@@ -5,6 +5,7 @@ import type { Book } from "@/types/Book";
 import { ShoppingCart, Trash2 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { AddToCartButton } from "../atoms/button/AddToCartButton";
 
 interface BookInfoProps {
   book: Book;
@@ -49,17 +50,7 @@ export default function BookInfo({
       <div
         className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
       >
-        {!isInCart && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart();
-            }}
-            className="bg-primary text-primary-foreground p-1.5 rounded-full hover:bg-primary/80 transition-colors animate-in zoom-in-50 duration-200 active:scale-90"
-          >
-            <ShoppingCart size={20} />
-          </button>
-        )}
+        {!isInCart && <AddToCartButton bookId={book.id} />}
         {isInCart && onRemoveFromCart && (
           <button
             onClick={(e) => {
