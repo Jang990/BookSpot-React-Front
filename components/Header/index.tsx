@@ -1,16 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useBookCart } from "@/contexts/BookCartContext";
 import { GoToCartButton } from "../atoms/button/GoToCartButton";
+import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const { cart } = useBookCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,9 +39,7 @@ export default function Header() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-background/80 backdrop-blur-sm" : "bg-background"}`}
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-primary">
-          BookSpot
-        </Link>
+        <BookSpotLogoButton />
         <h1 className="text-xl font-semibold text-primary">{getPageTitle()}</h1>
         <GoToCartButton />
       </div>
