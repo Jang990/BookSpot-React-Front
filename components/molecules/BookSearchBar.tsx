@@ -6,6 +6,7 @@ interface SearchProps {
 }
 
 export const BookSearchBar = ({ searchTerm, setSearchTerm }: SearchProps) => {
+  // input 따로 뺄 것
   return (
     <div className="relative mb-6">
       <input

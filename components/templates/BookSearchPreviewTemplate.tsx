@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import type { Book } from "@/types/Book";
 import { books } from "@/data/books";
 import { debounce } from "@/utils/debounce";
-import { BookSearchBar } from "../atoms/bar/BookSearchBar";
+import { BookSearchBar } from "../molecules/BookSearchBar";
 import { BookSimpleSearchResult } from "../organisms/BookSearchPreview";
 
 interface BookSearchProps {
