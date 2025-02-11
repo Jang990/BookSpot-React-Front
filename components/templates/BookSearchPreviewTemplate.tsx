@@ -2,12 +2,10 @@
 
 import { useState, useCallback, useEffect } from "react";
 import type { Book } from "@/types/Book";
-import BookInfo from "./Card/BookInfo";
 import { books } from "@/data/books";
 import { debounce } from "@/utils/debounce";
-import { Search } from "lucide-react";
-import { BookSearchBar } from "./atoms/bar/BookSearchBar";
-import { BookSimpleSearchResult } from "./organisms/BookSearchPreview";
+import { BookSearchBar } from "../atoms/bar/BookSearchBar";
+import { BookSimpleSearchResult } from "../organisms/BookSearchPreview";
 
 interface BookSearchProps {
   page: number;

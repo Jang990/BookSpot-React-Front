@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import BookSearch from "@/components/BookSearch";
+import BookSearch from "@/components/templates/BookSearchPreviewTemplate";
 
 export default function Home() {
   const [page, setPage] = useState(1);
