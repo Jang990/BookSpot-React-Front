@@ -81,7 +81,7 @@ export default function BookSearch({
             >
               <BookInfo
                 book={book}
-                onAddToCart={() => addToCart(book)}
+                onAddToCart={() => addToCart(book.id)}
                 isInCart={false}
               />
             </div>

@@ -1,14 +1,18 @@
 "use client";
 
 import type React from "react";
+import {
+  findBookIds,
+  addBookId,
+  removeBookId,
+} from "@/utils/BookCartLocalStorage";
 import { createContext, useContext, useState, useEffect } from "react";
-import type { Book } from "@/types/Book";
 
 type BookCartContextType = {
-  cart: Book[];
-  addToCart: (book: Book) => void;
-  removeFromCart: (bookId: string) => void;
-  clearCart: () => void;
+  cart: string[];
+  findAllBookIds: () => string[];
+  addToCart: (bookId: string) => boolean;
+  removeFromCart: (bookId: string) => boolean;
 };
 
 const BookCartContext = createContext<BookCartContextType | undefined>(
@@ -23,42 +27,35 @@ export const useBookCart = () => {
   return context;
 };
 
-export const BookCartProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [cart, setCart] = useState<Book[]>([]);
+type BookCartProviderProps = { children: React.ReactNode };
+export const BookCartProvider = ({ children }: BookCartProviderProps) => {
+  const [cart, setCart] = useState<string[]>([]);
 
   useEffect(() => {
-    const savedCart = localStorage.getItem("bookCart");
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
+    const bookCart = findAllBookIds();
+    if (bookCart.length > 0) setCart(bookCart);
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("bookCart", JSON.stringify(cart));
-  }, [cart]);
+  const findAllBookIds = () => {
+    return findBookIds();
+  };
 
-  const addToCart = (book: Book) => {
-    setCart((prevCart) => {
-      if (!prevCart.some((item) => item.id === book.id)) {
-        return [...prevCart, book];
-      }
-      return prevCart;
-    });
+  const addToCart = (bookid: string) => {
+    const isSaved: boolean = addBookId(bookid);
+    if (isSaved) setCart((prevCart) => [...prevCart, bookid]);
+    return isSaved;
   };
 
   const removeFromCart = (bookId: string) => {
-    setCart((prevCart) => prevCart.filter((book) => book.id !== bookId));
-  };
-
-  const clearCart = () => {
-    setCart([]);
+    const isRemoved: boolean = removeBookId(bookId);
+    if (isRemoved)
+      setCart((prevCart) => prevCart.filter((book) => book !== bookId));
+    return isRemoved;
   };
 
   return (
     <BookCartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart }}
+      value={{ cart, findAllBookIds, addToCart, removeFromCart }}
     >
       {children}
     </BookCartContext.Provider>

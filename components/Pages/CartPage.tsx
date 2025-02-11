@@ -1,11 +1,11 @@
 "use client";
 
-import { useBookCart } from "@/contexts/BookCartContext";
 import BookInfo from "@/components/Card/BookInfo";
 import MapPopup from "@/components/Popup/MapPopup";
 import { useState } from "react";
 import { MapPin, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 export default function CartPage() {
   const { cart, removeFromCart } = useBookCart();
@@ -33,12 +33,21 @@ export default function CartPage() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {cart.map((book) => (
+              {cart.map((bookId) => (
                 <BookInfo
-                  key={book.id}
-                  book={book}
+                  key={bookId}
+                  book={{
+                    id: "30",
+                    isbn: "9791162241851",
+                    title: "오브젝트",
+                    category: "004.57",
+                    author: "조영호",
+                    year: "2019",
+                    publisher: "아무개",
+                    image: "/placeholder.svg",
+                  }}
                   onAddToCart={() => {}}
-                  onRemoveFromCart={() => removeFromCart(book.id)}
+                  onRemoveFromCart={() => removeFromCart(bookId)}
                   isInCart={true}
                 />
               ))}

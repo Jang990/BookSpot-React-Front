@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
-import { useBookCart } from "@/contexts/BookCartContext";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 export default function Header() {
-  const { cart } = useBookCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const { cart } = useBookCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,6 +50,7 @@ export default function Header() {
           className="text-primary hover:text-primary/80 relative"
         >
           <ShoppingCart size={24} />
+
           {cart.length > 0 && (
             <span className="absolute -top-2 -right-2 bg-accent text-accent-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
               {cart.length}
