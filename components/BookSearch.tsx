@@ -6,6 +6,7 @@ import BookInfo from "./Card/BookInfo";
 import { books } from "@/data/books";
 import { debounce } from "@/utils/debounce";
 import { Search } from "lucide-react";
+import { BookSearchBar } from "./atoms/bar/BookSearchBar";
 
 interface BookSearchProps {
   page: number;
@@ -50,19 +51,7 @@ export default function BookSearch({
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <div className="relative mb-6">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="책 제목, 저자, 출판년도, 카테고리 또는 출판사를 입력하세요"
-          className="w-full p-4 pr-12 text-lg border-2 border-input rounded-full focus:outline-none focus:border-primary"
-        />
-        <Search
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-          size={24}
-        />
-      </div>
+      <BookSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {searchResults.length === 0 && searchTerm ? (
         <div className="flex flex-col items-center justify-center mt-12">
           <Search size={64} className="text-muted-foreground mb-4" />
