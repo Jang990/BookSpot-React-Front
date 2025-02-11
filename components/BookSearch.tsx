@@ -7,6 +7,7 @@ import { books } from "@/data/books";
 import { debounce } from "@/utils/debounce";
 import { Search } from "lucide-react";
 import { BookSearchBar } from "./atoms/bar/BookSearchBar";
+import { BookSimpleSearchResult } from "./organisms/BookSearchPreview";
 
 interface BookSearchProps {
   page: number;
@@ -52,25 +53,10 @@ export default function BookSearch({
   return (
     <div className="w-full max-w-4xl mx-auto">
       <BookSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-      {searchResults.length === 0 && searchTerm ? (
-        <div className="flex flex-col items-center justify-center mt-12">
-          <Search size={64} className="text-muted-foreground mb-4" />
-          <p className="text-xl text-muted-foreground">검색 결과가 없습니다.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {searchResults.map((book, index) => (
-            <div
-              key={book.id}
-              ref={
-                index === searchResults.length - 1 ? lastBookElementRef : null
-              }
-            >
-              <BookInfo book={book} isInCart={false} />
-            </div>
-          ))}
-        </div>
-      )}
+      <BookSimpleSearchResult
+        searchResults={searchResults}
+        lastBookElementRef={lastBookElementRef}
+      />
     </div>
   );
 }
