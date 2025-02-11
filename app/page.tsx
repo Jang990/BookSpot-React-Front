@@ -37,10 +37,6 @@ export default function Home() {
     <main className="min-h-screen bg-gray-100">
       <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold text-center text-primary mb-12">
-            상세 검색
-          </h1>
-
           <BookSearch
             //   onBookSelect={handleBookSelect}
             //   selectedBooks={selectedBooks}
