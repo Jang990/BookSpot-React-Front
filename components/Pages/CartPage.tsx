@@ -6,6 +6,7 @@ import { useState } from "react";
 import { MapPin, ShoppingCart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
+import { EmptyBookCart } from "../molecules/EmptyBookCart";
 
 export default function CartPage() {
   const { cart } = useBookCart();
@@ -24,12 +25,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {cart.length === 0 ? (
-          <div className="flex flex-col items-center justify-center mt-12">
-            <ShoppingCart size={64} className="text-muted-foreground mb-4" />
-            <p className="text-xl text-muted-foreground">
-              북카트가 비어있습니다.
-            </p>
-          </div>
+          <EmptyBookCart />
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
