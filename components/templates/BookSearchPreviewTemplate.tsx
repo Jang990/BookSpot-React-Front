@@ -6,44 +6,35 @@ import { BookSearchBar } from "../molecules/BookSearchBar";
 import { BookSimpleSearchResult } from "../organisms/BookSearchPreview";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
+import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 
 interface BookSearchProps {
-  setHasMore: (hasMore: boolean) => void;
   lastBookElementRef: (node: HTMLDivElement | null) => void;
 }
 
 const ITEMS_PER_PAGE = 12;
 const MIN_SEARCH_TERM_LENGTH = 2;
-const BOOK_API_URL = "http://localhost:8080/api/books";
 
-export default function BookSearch({
-  setHasMore,
-  lastBookElementRef,
-}: BookSearchProps) {
+export default function BookSearch({ lastBookElementRef }: BookSearchProps) {
   const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
 
   const debouncedSearch = useCallback(
-    debounce((term: string, page: number) => {
-      fetch(
-        `${BOOK_API_URL}?title=${term}&page=${page}&size=${ITEMS_PER_PAGE}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((response) => {
-          if (response.ok) return response.json();
-          throw new Error("Network response was not ok");
-        })
-        .then((json) => {
-          setSearchResults(json.content.map(convertBookPreview));
-          setHasMore(!json.last);
-        })
-        .catch((error) => console.error("Error:", error));
+    debounce(async (term: string, page: number) => {
+      try {
+        const json = await fetchBooksPreview({
+          keyword: term,
+          pageNumber: page,
+          pageSize: ITEMS_PER_PAGE,
+        });
+        setSearchResults(json.content.map(convertBookPreview));
+        setHasMore(!json.last);
+      } catch (error) {
+        // TODO: 예외 처리 필요
+        console.error(error);
+      }
     }, 500),
     []
   );
