@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import type { Book } from "@/types/Book";
 import { useState } from "react";
 import Link from "next/link";
 import { AddToCartButton } from "../atoms/button/AddToCartButton";
 import { RemoveFromCartButton } from "../atoms/button/RemoveFromCartButton";
+import { BookPreview } from "@/types/BookPreview";
 
 interface BookInfoProps {
-  book: Book;
+  book: BookPreview;
   isInCart?: boolean;
 }
 
@@ -37,7 +37,7 @@ export default function BookInfo({ book, isInCart = false }: BookInfoProps) {
         </h2>
         <p className="text-sm text-muted-foreground mb-2">{book.author}</p>
         <p className="text-xs text-muted-foreground">
-          {book.year} · {book.publisher}
+          {book.publicationYear} · {book.publisher}
         </p>
       </div>
       <div

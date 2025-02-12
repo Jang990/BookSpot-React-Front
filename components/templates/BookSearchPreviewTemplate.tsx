@@ -1,51 +1,57 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import type { Book } from "@/types/Book";
-import { books } from "@/data/books";
 import { debounce } from "@/utils/debounce";
 import { BookSearchBar } from "../molecules/BookSearchBar";
 import { BookSimpleSearchResult } from "../organisms/BookSearchPreview";
+import { BookPreview } from "@/types/BookPreview";
+import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 
 interface BookSearchProps {
-  page: number;
   setHasMore: (hasMore: boolean) => void;
   lastBookElementRef: (node: HTMLDivElement | null) => void;
 }
 
 const ITEMS_PER_PAGE = 12;
+const MIN_SEARCH_TERM_LENGTH = 2;
+const BOOK_API_URL = "http://localhost:8080/api/books";
 
 export default function BookSearch({
-  page,
   setHasMore,
   lastBookElementRef,
 }: BookSearchProps) {
+  const [page, setPage] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<Book[]>([]);
+  const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
 
   const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      const results = books.filter(
-        (book) =>
-          book.title.toLowerCase().includes(term.toLowerCase()) ||
-          book.author.toLowerCase().includes(term.toLowerCase()) ||
-          book.year.includes(term) ||
-          book.category.includes(term) ||
-          book.publisher.toLowerCase().includes(term.toLowerCase())
-      );
-      setSearchResults(results.slice(0, page * ITEMS_PER_PAGE));
-      setHasMore(results.length > page * ITEMS_PER_PAGE);
+    debounce((term: string, page: number) => {
+      fetch(
+        `${BOOK_API_URL}?title=${term}&page=${page}&size=${ITEMS_PER_PAGE}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          if (response.ok) return response.json();
+          throw new Error("Network response was not ok");
+        })
+        .then((json) => {
+          setSearchResults(json.content.map(convertBookPreview));
+          setHasMore(!json.last);
+        })
+        .catch((error) => console.error("Error:", error));
     }, 500),
     []
   );
 
   useEffect(() => {
-    if (searchTerm) {
-      debouncedSearch(searchTerm);
-    } else {
-      setSearchResults(books.slice(0, page * ITEMS_PER_PAGE));
-      setHasMore(books.length > page * ITEMS_PER_PAGE);
-    }
+    if (searchTerm.length < MIN_SEARCH_TERM_LENGTH) return;
+
+    debouncedSearch(searchTerm, page);
   }, [searchTerm, debouncedSearch, page, setHasMore]);
 
   return (

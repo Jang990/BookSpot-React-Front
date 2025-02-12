@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookSearch from "@/components/templates/BookSearchPreviewTemplate";
+import { BookPreview } from "@/types/BookPreview";
 
 export default function Home() {
-  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [searchResult, setSerachResult] = useState<BookPreview[]>([]);
+
+  useEffect(() => {
+    console.log(searchResult);
+  }, []);
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -14,7 +19,6 @@ export default function Home() {
           <BookSearch
             //   onBookSelect={handleBookSelect}
             //   selectedBooks={selectedBooks}
-            page={page}
             setHasMore={setHasMore}
             lastBookElementRef={(node) => {
               if (node) {

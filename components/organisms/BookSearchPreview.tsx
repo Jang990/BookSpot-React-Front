@@ -1,10 +1,9 @@
-import { Book } from "@/types/Book";
-import { Search } from "lucide-react";
 import BookInfo from "../Card/BookInfo";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
+import { BookPreview } from "@/types/BookPreview";
 
 interface SimpleSearchResultProps {
-  searchResults: Book[];
+  searchResults: BookPreview[];
   lastBookElementRef: (node: HTMLDivElement | null) => void;
 }
 
