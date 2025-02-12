@@ -92,7 +92,11 @@ export default function BookSearch() {
 
   return (
     <div className="w-full max-w-4xl mx-auto">
-      <BookSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <BookSearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        isLoading={isLoading}
+      />
       <BookSimpleSearchResult
         searchResults={searchResults}
         isLoading={isLoading}

@@ -74,3 +74,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes border-loading {
+  0% {
+    border-color: hsl(var(--primary) / 0.2);
+  }
+  50% {
+    border-color: hsl(var(--primary));
+  }
+  100% {
+    border-color: hsl(var(--primary) / 0.2);
+  }
+}
+
+.animate-border-loading {
+  animation: border-loading 1.5s ease-in-out infinite;
+}
