@@ -23,40 +23,36 @@ export default function BookSearch({ lastBookElementRef }: BookSearchProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
 
-  const loadBooks = useCallback(
-    async (term: string, currentPage: number) => {
-      setIsLoading(true);
-      try {
-        const json = await fetchBooksPreview({
-          keyword: term,
-          pageNumber: currentPage,
-          pageSize: ITEMS_PER_PAGE,
-        });
+  const loadBooks = useCallback(async (term: string, currentPage: number) => {
+    setIsLoading(true);
+    try {
+      const json = await fetchBooksPreview({
+        keyword: term,
+        pageNumber: currentPage,
+        pageSize: ITEMS_PER_PAGE,
+      });
 
-        setHasMore(!json.last);
-        const newBooks = json.content.map(convertBookPreview);
-        console.log(newBooks);
-        if (currentPage === FIRST_PAGE) {
-          setSearchResults(newBooks);
-        } else {
-          setSearchResults((prev) => [...prev, ...newBooks]);
-        }
-      } catch (error) {
-        // TODO: 예외 처리 필요
-        console.error("Error fetching books:", error);
-      } finally {
-        setIsLoading(false);
+      setHasMore(!json.last);
+      const newBooks = json.content.map(convertBookPreview);
+      if (currentPage === FIRST_PAGE) {
+        setSearchResults(newBooks);
+      } else {
+        setSearchResults((prev) => [...prev, ...newBooks]);
       }
-    },
-    [setIsLoading, setHasMore]
-  );
+    } catch (error) {
+      // TODO: 예외 처리 필요
+      console.error("Error fetching books:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const debouncedSearch = useCallback(
     debounce((term: string) => {
       setPage(FIRST_PAGE);
       loadBooks(term, FIRST_PAGE);
     }, 300),
-    [loadBooks]
+    []
   );
 
   useEffect(() => {
@@ -66,19 +62,19 @@ export default function BookSearch({ lastBookElementRef }: BookSearchProps) {
       setPage(FIRST_PAGE);
       loadBooks("", FIRST_PAGE);
     }
-  }, [searchTerm, debouncedSearch, setPage, loadBooks]);
+  }, [searchTerm]);
 
   useEffect(() => {
     if (page > FIRST_PAGE) {
       loadBooks(searchTerm, page);
     }
-  }, [page, searchTerm, loadBooks]);
+  }, [page, searchTerm]);
 
   const handleLoadMore = useCallback(() => {
     if (!isLoading && hasMore) {
       setPage((prevPage) => prevPage + 1);
     }
-  }, [isLoading, hasMore, setPage]);
+  }, [isLoading, hasMore]);
 
   useEffect(() => {
     const handleScroll = () => {
