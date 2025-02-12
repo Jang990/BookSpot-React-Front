@@ -2,18 +2,17 @@ import { Loader } from "lucide-react";
 import BookInfo from "../Card/BookInfo";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { BookPreview } from "@/types/BookPreview";
+import { forwardRef } from "react";
 
 interface SimpleSearchResultProps {
   searchResults: BookPreview[];
   isLoading: boolean;
-  lastBookElementRef: (node: HTMLDivElement | null) => void;
 }
 
-export const BookSimpleSearchResult = ({
-  searchResults,
-  isLoading,
-  lastBookElementRef,
-}: SimpleSearchResultProps) => {
+export const BookSimpleSearchResult = forwardRef<
+  HTMLDivElement,
+  SimpleSearchResultProps
+>(({ searchResults, isLoading }: SimpleSearchResultProps, ref) => {
   return (
     <>
       {searchResults.length === 0 ? (
@@ -24,9 +23,7 @@ export const BookSimpleSearchResult = ({
             {searchResults.map((book, index) => (
               <div
                 key={book.id}
-                ref={
-                  index === searchResults.length - 1 ? lastBookElementRef : null
-                } // 무한 스크롤용
+                ref={index === searchResults.length - 1 ? ref : null}
               >
                 <BookInfo book={book} isInCart={false} />
               </div>
@@ -41,4 +38,4 @@ export const BookSimpleSearchResult = ({
       )}
     </>
   );
-};
+});
