@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
-import Link from "next/link";
 import { AddToCartButton } from "../atoms/button/AddToCartButton";
 import { RemoveFromCartButton } from "../atoms/button/RemoveFromCartButton";
 import { BookPreview } from "@/types/BookPreview";
 import { BookPreviewInfo } from "../molecules/BookPreviewInfo";
+import { BookPreviewImage } from "../molecules/BookPreviewImage";
 
 interface BookInfoProps {
   book: BookPreview;
@@ -22,16 +21,7 @@ export default function BookInfo({ book, isInCart = false }: BookInfoProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Link href={`/book/${book.id}`}>
-        <div className="relative h-64 bg-muted">
-          <Image
-            src={book.image || "/placeholder.svg"}
-            alt={book.title}
-            layout="fill"
-            objectFit="cover"
-          />
-        </div>
-      </Link>
+      <BookPreviewImage id={book.id} title={book.title} image={book.image} />
       <BookPreviewInfo book={book} />
       <div
         className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
