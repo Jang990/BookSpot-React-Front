@@ -6,6 +6,11 @@ import Link from "next/link";
 import { AddToCartButton } from "../atoms/button/AddToCartButton";
 import { RemoveFromCartButton } from "../atoms/button/RemoveFromCartButton";
 import { BookPreview } from "@/types/BookPreview";
+import {
+  CardFooterLabel,
+  CardSubLabel,
+  CardTitleLabel,
+} from "../atoms/label/CardLabel";
 
 interface BookInfoProps {
   book: BookPreview;
@@ -32,12 +37,14 @@ export default function BookInfo({ book, isInCart = false }: BookInfoProps) {
         </div>
       </Link>
       <div className="p-4 flex-grow">
-        <h2 className="text-lg font-semibold mb-1 text-card-foreground">
-          {book.title}
-        </h2>
-        <p className="text-sm text-muted-foreground mb-2">{book.author}</p>
-        <p className="text-xs text-muted-foreground">
-          {book.publicationYear} · {book.publisher}
+        <CardTitleLabel text={book.title} />
+        <p className="mb-2">
+          <CardSubLabel text={book.author} />
+        </p>
+        <p>
+          <CardFooterLabel text={book.publicationYear} />
+          <CardFooterLabel text=" · " />
+          <CardFooterLabel text={book.publisher} />
         </p>
       </div>
       <div
