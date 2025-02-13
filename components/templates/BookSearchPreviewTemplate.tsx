@@ -3,10 +3,12 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { debounce } from "@/utils/debounce";
 import { BookSearchBar } from "../molecules/BookSearchBar";
-import { BookSimpleSearchResult } from "../organisms/BookSearchPreview";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
+import { EmptySearchResult } from "../molecules/EmptySearchResult";
+import { BookInfo } from "@/components/organisms/BookInfo";
+import { Loader } from "lucide-react";
 
 const ITEMS_PER_PAGE = 12;
 const MIN_SEARCH_TERM_LENGTH = 2;
@@ -15,7 +17,7 @@ const FIRST_PAGE = 0;
 export default function BookSearch() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -90,21 +92,6 @@ export default function BookSearch() {
     };
   }, [isLoading, hasMore]);
 
-  return (
-    <div className="w-full max-w-4xl mx-auto">
-      <BookSearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        isLoading={isLoading}
-      />
-      <BookSimpleSearchResult
-        searchResults={searchResults}
-        isLoading={isLoading}
-        ref={lastBookElementRef}
-      />
-    </div>
-  );
-
   function clearResult() {
     setPage(FIRST_PAGE);
     setSearchResults([]);
@@ -112,5 +99,42 @@ export default function BookSearch() {
 
   function isInvalidTermLength() {
     return !searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH;
+  }
+
+  return (
+    <div className="w-full max-w-4xl mx-auto">
+      <BookSearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        isLoading={isLoading}
+      />
+
+      {!isLoading && searchResults.length === 0 && <EmptySearchResult />}
+
+      {searchResults.length !== 0 && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {searchResults.map((book, index) => createBookInfo(book, index))}
+          </div>
+        </>
+      )}
+
+      {isLoading && (
+        <div className="flex justify-center items-center mt-8">
+          <Loader className="animate-spin text-primary" size={32} />
+        </div>
+      )}
+    </div>
+  );
+
+  function createBookInfo(book: BookPreview, index: number) {
+    return (
+      <BookInfo
+        key={book.id}
+        book={book}
+        isInCart={false}
+        ref={index === searchResults.length - 1 ? lastBookElementRef : null}
+      />
+    );
   }
 }
