@@ -28,8 +28,7 @@ export default function BookSearch() {
       setIsLoading(true);
       const json = await fetchBooksPreview({
         keyword: term,
-        pageNumber: currentPage,
-        pageSize: ITEMS_PER_PAGE,
+        pageable: { pageNumber: currentPage, pageSize: ITEMS_PER_PAGE },
       });
 
       setHasMore(!json.last);
