@@ -6,11 +6,7 @@ import Link from "next/link";
 import { AddToCartButton } from "../atoms/button/AddToCartButton";
 import { RemoveFromCartButton } from "../atoms/button/RemoveFromCartButton";
 import { BookPreview } from "@/types/BookPreview";
-import {
-  CardFooterLabel,
-  CardSubLabel,
-  CardTitleLabel,
-} from "../atoms/label/CardLabel";
+import { BookPreviewInfo } from "../molecules/BookPreviewInfo";
 
 interface BookInfoProps {
   book: BookPreview;
@@ -36,17 +32,7 @@ export default function BookInfo({ book, isInCart = false }: BookInfoProps) {
           />
         </div>
       </Link>
-      <div className="p-4 flex-grow">
-        <CardTitleLabel text={book.title} />
-        <p className="mb-2">
-          <CardSubLabel text={book.author} />
-        </p>
-        <p>
-          <CardFooterLabel text={book.publicationYear} />
-          <CardFooterLabel text=" · " />
-          <CardFooterLabel text={book.publisher} />
-        </p>
-      </div>
+      <BookPreviewInfo book={book} />
       <div
         className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
       >
