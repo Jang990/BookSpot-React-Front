@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { debounce } from "@/utils/debounce";
-import { BookSearchBar } from "../molecules/BookSearchBar";
+import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
