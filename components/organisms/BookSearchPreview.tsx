@@ -1,6 +1,6 @@
 import { Loader } from "lucide-react";
-import BookInfo from "../Card/BookInfo";
-import { EmptySearchResult } from "../molecules/EmptySearchResult";
+import BookInfo from "@/components/organisms/BookInfo";
+import { EmptySearchResult } from "@/components/molecules/EmptySearchResult";
 import { BookPreview } from "@/types/BookPreview";
 import { forwardRef } from "react";
 

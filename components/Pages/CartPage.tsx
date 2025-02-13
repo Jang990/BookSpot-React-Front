@@ -1,6 +1,6 @@
 "use client";
 
-import BookInfo from "@/components/Card/BookInfo";
+import BookInfo from "@/components/organisms/BookInfo";
 import MapPopup from "@/components/Popup/MapPopup";
 import { useState } from "react";
 import { MapPin, ShoppingCart } from "lucide-react";
