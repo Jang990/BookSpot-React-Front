@@ -3,7 +3,7 @@ interface LabelProps {
 }
 
 export const CardTitleLabel = ({ text }: LabelProps) => {
-  return <h2 className="text-lg font-semibold text-card-foreground">{text}</h2>;
+  return <h2 className="text-xl font-semibold text-card-foreground">{text}</h2>;
 };
 
 export const CardSubLabel = ({ text }: LabelProps) => {

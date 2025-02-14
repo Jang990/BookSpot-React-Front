@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { X, MapPin } from "lucide-react";
+import { CardTitleLabel } from "../atoms/label/CardLabel";
+import { CloseButton } from "../atoms/button/CloseButton";
+import { PopupHeader } from "../molecules/header/PopupHeader";
 
 interface MapPopupProps {
   onConfirm: (location: { lat: number; lng: number }) => void;
@@ -19,17 +22,7 @@ export default function MapPopup({ onConfirm, onClose }: MapPopupProps) {
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-card p-6 rounded-lg shadow-xl w-full max-w-md">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-card-foreground">
-            현재 위치 선택
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-muted-foreground hover:text-foreground animate-in zoom-in-50 duration-200"
-          >
-            <X size={24} />
-          </button>
-        </div>
+        <PopupHeader headerName="위치 선택" onClose={onClose} />
         {/* Here you would typically integrate a map component */}
         <div className="w-full h-64 bg-muted mb-4 flex items-center justify-center">
           <MapPin size={48} className="text-muted-foreground" />
