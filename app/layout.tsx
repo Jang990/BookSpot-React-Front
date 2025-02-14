@@ -18,7 +18,13 @@ export default function RootLayout({
       <body>
         <BookCartProvider>
           <Header />
-          <main className="pt-16">{children}</main>
+          <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="w-full max-w-4xl mx-auto">
+                <main className="pt-16">{children}</main>
+              </div>
+            </div>
+          </div>
         </BookCartProvider>
       </body>
     </html>
