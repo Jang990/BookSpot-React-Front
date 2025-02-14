@@ -1,11 +1,22 @@
 import { Book } from "@/types/Book";
+import { GetServerSideProps } from "next";
 import Image from "next/image";
 
 interface Props {
-  book: Book;
+  bookId: string;
 }
 
-export const BookDetail = ({ book }: Props) => {
+export const BookDetail = ({ bookId }: Props) => {
+  const book = {
+    id: "1",
+    isbn: "0000000000001",
+    title: "이상한 나라 앨리스",
+    category: "005.112",
+    author: "앨리스",
+    year: "2022",
+    publisher: "이상한 나라",
+    image: undefined,
+  };
   return (
     <div className="bg-card shadow-lg rounded-lg overflow-hidden">
       <div className="md:flex">

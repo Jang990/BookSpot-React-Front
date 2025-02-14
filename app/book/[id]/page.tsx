@@ -1,35 +1,24 @@
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import type { Book } from "@/types/Book";
-import { books } from "@/data/books";
-import Image from "next/image";
 import Review from "@/components/organisms/Review";
-import { GetServerSideProps } from "next";
 import { BookDetail } from "@/components/organisms/BookDetail";
+import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 
-interface BookDetailProps {
-  hello: string;
-}
+async function getData() {
+  const res = await fetch("https://api.example.com/...", { cache: "no-store" });
+  fetchBooksPreview;
+  // ISR 방식에서 revalidate: 0 옵션을 주는 것과 동일하다.
+  // ex) fetch(URL, { next: { revalidate: 0 } });
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: { hello: "HelloWorld!" },
-  };
-};
-
-export default function BookDetailPage({ hello }: BookDetailProps) {
-  const { id } = useParams();
-  const [book, setBook] = useState<Book | null>(null);
-
-  useEffect(() => {
-    const foundBook = books.find((b) => b.id === id);
-    setBook(foundBook || null);
-  }, [id]);
-
-  if (!book) {
-    return <div>책을 찾을 수 없습니다.</div>;
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
   }
 
+  return res.json();
+}
+
+type Params = { id: string };
+
+export default function BookDetailPage({ params }: { params: Params }) {
   // 예시 리뷰 데이터
   const reviews = [
     {
@@ -48,7 +37,7 @@ export default function BookDetailPage({ hello }: BookDetailProps) {
 
   return (
     <>
-      <BookDetail book={book} />
+      <BookDetail bookId={params.id} />
 
       <div className="mt-8">
         <h3 className="text-2xl font-bold text-primary mb-4">리뷰</h3>
