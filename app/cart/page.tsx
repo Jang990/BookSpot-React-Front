@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { EmptyBookCart } from "@/components/molecules/EmptyBookCart";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
+import { BookPreview } from "@/types/BookPreview";
 
 export default function Cart() {
   const { cart } = useBookCart();
@@ -21,30 +22,18 @@ export default function Cart() {
   const handleLocationConfirm = (location: { lat: number; lng: number }) => {
     router.push(`/libraries?lat=${location.lat}&lng=${location.lng}`);
   };
+
   return (
     <>
       <div>
         {cart.length === 0 && <EmptyBookCart />}
         {cart.length !== 0 && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {cart.map((bookId) => (
-                <BookInfo
-                  key={bookId}
-                  book={{
-                    id: bookId,
-                    isbn: "9791162241851",
-                    title: "오브젝트",
-                    category: "004.57",
-                    author: "조영호",
-                    year: "2019",
-                    publisher: "아무개",
-                    image: "/placeholder.svg",
-                  }}
-                  isInCart={true}
-                />
-              ))}
-            </div>
+            <BookPreviewList
+              searchResults={cart.map((bookId) => createTempPreview(bookId))}
+              isLoading={false}
+              hasMore={false}
+            />
             <div className="mt-8 flex justify-center">
               <button
                 onClick={handleFindLibraries}
@@ -66,4 +55,15 @@ export default function Cart() {
       )}
     </>
   );
+}
+
+function createTempPreview(bookId: string): BookPreview {
+  return {
+    id: bookId,
+    title: "오브젝트",
+    author: "조영호",
+    publicationYear: "2019",
+    publisher: "아무개",
+    image: "/placeholder.svg",
+  };
 }

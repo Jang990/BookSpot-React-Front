@@ -8,20 +8,20 @@ interface BookPreviewListProps {
   searchResults: BookPreview[];
   isLoading: boolean;
   hasMore: boolean;
-  addPage: () => void;
+  addPage?: () => void;
 }
 
 export const BookPreviewList = ({
+  searchResults,
   isLoading,
   hasMore,
   addPage,
-  searchResults,
 }: BookPreviewListProps) => {
   const observer = useRef<IntersectionObserver | null>(null);
   const lastBookElementRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (isLoading) return; // 로딩 중이면 observer 만들지 않음
+    if (!addPage || isLoading) return;
 
     // 이전 observer가 있으면 해제
     if (observer.current) observer.current.disconnect();
