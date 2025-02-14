@@ -9,6 +9,7 @@ import { useBookCart } from "@/contexts/BookCartContext";
 import { EmptyBookCart } from "@/components/molecules/EmptyBookCart";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
+import { GpsButton } from "@/components/atoms/button/GpsButton";
 
 export default function Cart() {
   const { cart } = useBookCart();
@@ -32,22 +33,15 @@ export default function Cart() {
           hasMore={false}
         />
         <div className="mt-8 flex justify-center">
-          <button
-            onClick={handleFindLibraries}
-            className="bg-primary text-primary-foreground px-6 py-3 rounded-full hover:bg-primary/90 transition-colors flex items-center"
-          >
-            <MapPin className="mr-2" size={20} />
-            소장 도서관 찾기 ({cart.length})
-          </button>
+          <GpsButton onClick={handleFindLibraries} label="소장 도서관 찾기" />
+          {showMap && (
+            <MapPopup
+              onConfirm={handleLocationConfirm}
+              onClose={() => setShowMap(false)}
+            />
+          )}
         </div>
       </div>
-
-      {showMap && (
-        <MapPopup
-          onConfirm={handleLocationConfirm}
-          onClose={() => setShowMap(false)}
-        />
-      )}
     </>
   );
 }
