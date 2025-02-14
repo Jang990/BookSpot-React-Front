@@ -1,20 +1,21 @@
 "use client";
 
-import { forwardRef, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 import { CartButton } from "@/components/atoms/button/icon/CartButton";
 import { TrashButton } from "@/components/atoms/button/icon/TrashButton";
 import { BookPreview } from "@/types/BookPreview";
 import { BookPreviewInfo } from "../molecules/BookPreviewInfo";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { useBookCart } from "@/contexts/BookCartContext";
+import { useRouter } from "next/router";
 
 interface BookInfoProps {
   book: BookPreview;
-  isInCart?: boolean;
+  isCartPage?: boolean;
 }
 
 export const BookInfo = forwardRef<HTMLDivElement, BookInfoProps>(
-  ({ book, isInCart = false }: BookInfoProps, ref) => {
+  ({ book, isCartPage }: BookInfoProps, ref) => {
     const [isHovered, setIsHovered] = useState(false);
     const { removeFromCart, addToCart } = useBookCart();
 
@@ -27,11 +28,15 @@ export const BookInfo = forwardRef<HTMLDivElement, BookInfoProps>(
       >
         <BookPreviewImage id={book.id} title={book.title} image={book.image} />
         <BookPreviewInfo book={book} />
+
         <div
           className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
         >
-          {!isInCart && <CartButton onClick={() => addToCart(book.id)} />}
-          {isInCart && <TrashButton onClick={() => removeFromCart(book.id)} />}
+          {isCartPage ? (
+            <TrashButton onClick={() => removeFromCart(book.id)} />
+          ) : (
+            <CartButton onClick={() => addToCart(book.id)} />
+          )}
         </div>
       </div>
     );

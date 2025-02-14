@@ -8,6 +8,7 @@ interface BookPreviewListProps {
   searchResults: BookPreview[];
   isLoading: boolean;
   hasMore: boolean;
+  isCartPage: boolean;
   addPage?: () => void;
 }
 
@@ -16,6 +17,7 @@ export const BookPreviewList = ({
   isLoading,
   hasMore,
   addPage,
+  isCartPage,
 }: BookPreviewListProps) => {
   const observer = useRef<IntersectionObserver | null>(null);
   const lastBookElementRef = useRef<HTMLDivElement | null>(null);
@@ -67,7 +69,7 @@ export const BookPreviewList = ({
       <BookInfo
         key={book.id}
         book={book}
-        isInCart={false}
+        isCartPage={isCartPage}
         ref={index === searchResults.length - 1 ? lastBookElementRef : null}
       />
     );

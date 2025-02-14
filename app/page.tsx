@@ -88,6 +88,7 @@ export default function Home() {
         searchResults={searchResults}
         isLoading={isLoading}
         hasMore={hasMore}
+        isCartPage={false}
       />
     </>
   );

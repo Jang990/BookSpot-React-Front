@@ -28,6 +28,7 @@ export default function Cart() {
           searchResults={cart.map((bookId) => createTempPreview(bookId))}
           isLoading={false}
           hasMore={false}
+          isCartPage={true}
         />
         <div className="mt-8 flex justify-center">
           <LibrarySearchButton onClick={handleFindLibraries} />
