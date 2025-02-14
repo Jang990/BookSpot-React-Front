@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { GoToCartButton } from "../atoms/button/GoToCartButton";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
+import { CartIconLink } from "../molecules/link/CartIconLink";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const { cart } = useBookCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,7 +43,7 @@ export default function Header() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <BookSpotLogoButton />
         <h1 className="text-xl font-semibold text-primary">{getPageTitle()}</h1>
-        <GoToCartButton />
+        <CartIconLink href="/cart" cartSize={cart.length} />
       </div>
     </header>
   );
