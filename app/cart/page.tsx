@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
-import { GpsButton } from "@/components/atoms/button/GpsButton";
+import { LibrarySearchButton } from "@/components/atoms/button/GpsButton";
 
 export default function Cart() {
   const { cart } = useBookCart();
@@ -30,7 +30,7 @@ export default function Cart() {
           hasMore={false}
         />
         <div className="mt-8 flex justify-center">
-          <GpsButton onClick={handleFindLibraries} />
+          <LibrarySearchButton onClick={handleFindLibraries} />
           {showMap && (
             <MapPopup
               onConfirm={handleLocationConfirm}

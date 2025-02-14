@@ -4,7 +4,7 @@ interface GpsButtonProps {
   onClick: () => void;
 }
 
-export const GpsButton = ({ onClick }: GpsButtonProps) => {
+export const LibrarySearchButton = ({ onClick }: GpsButtonProps) => {
   return (
     <button
       onClick={onClick}
