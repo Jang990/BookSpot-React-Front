@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
-import { LibrarySearchButton } from "@/components/atoms/button/GpsButton";
+import { LibrarySearchButton } from "@/components/atoms/button/LibrarySearchButton";
 
 export default function Cart() {
   const { cart } = useBookCart();

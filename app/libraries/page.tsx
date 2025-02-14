@@ -1,4 +1,4 @@
-import LibraryPage from "@/components/Pages/LibraryPage";
+import LibraryPage from "@/components/templates/LibraryPage";
 
 export default function Libraries() {
   return (

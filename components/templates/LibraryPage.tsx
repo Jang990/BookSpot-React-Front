@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import type { Book } from "@/types/Book";
-import LibraryInfo from "@/components/Card/LibraryInfo";
+import LibraryInfo from "@/components/organisms/LibraryInfo";
 import { libraries } from "@/data/libraries";
 import { books } from "@/data/books";
 

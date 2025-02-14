@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import type { Book } from "@/types/Book";
 import { books } from "@/data/books";
 import Image from "next/image";
-import Review from "@/components/Review/Review";
+import Review from "@/components/organisms/Review";
 
 export default function BookDetailPage() {
   const { id } = useParams();
