@@ -48,19 +48,17 @@ export const BookPreviewList = ({
     <div>
       {!isLoading && searchResults.length === 0 && <EmptySearchResult />}
 
-      {searchResults.length !== 0 && (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {searchResults.map((book, index) => createBookInfo(book, index))}
-          </div>
-        </>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {searchResults.length !== 0 && (
+          <>{searchResults.map((book, index) => createBookInfo(book, index))}</>
+        )}
+      </div>
 
-      {isLoading && (
-        <div className="flex justify-center items-center mt-8">
+      <div className="flex justify-center items-center mt-8">
+        {isLoading && (
           <Loader className="animate-spin text-primary" size={32} />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 
