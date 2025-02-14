@@ -26,25 +26,20 @@ export default function Cart() {
   return (
     <>
       <div>
-        {cart.length === 0 && <EmptyBookCart />}
-        {cart.length !== 0 && (
-          <>
-            <BookPreviewList
-              searchResults={cart.map((bookId) => createTempPreview(bookId))}
-              isLoading={false}
-              hasMore={false}
-            />
-            <div className="mt-8 flex justify-center">
-              <button
-                onClick={handleFindLibraries}
-                className="bg-primary text-primary-foreground px-6 py-3 rounded-full hover:bg-primary/90 transition-colors flex items-center"
-              >
-                <MapPin className="mr-2" size={20} />
-                소장 도서관 찾기 ({cart.length})
-              </button>
-            </div>
-          </>
-        )}
+        <BookPreviewList
+          searchResults={cart.map((bookId) => createTempPreview(bookId))}
+          isLoading={false}
+          hasMore={false}
+        />
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={handleFindLibraries}
+            className="bg-primary text-primary-foreground px-6 py-3 rounded-full hover:bg-primary/90 transition-colors flex items-center"
+          >
+            <MapPin className="mr-2" size={20} />
+            소장 도서관 찾기 ({cart.length})
+          </button>
+        </div>
       </div>
 
       {showMap && (
