@@ -1,4 +1,4 @@
-import { CloseButton } from "@/components/atoms/button/CloseButton";
+import { CloseButton } from "@/components/atoms/button/icon/CloseButton";
 import { CardTitleLabel } from "@/components/atoms/label/CardLabel";
 
 interface PopupHeaderProps {

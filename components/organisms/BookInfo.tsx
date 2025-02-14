@@ -1,8 +1,8 @@
 "use client";
 
 import { forwardRef, useState } from "react";
-import { CartButton } from "../atoms/button/CartButton";
-import { TrashButton } from "../atoms/button/TrashButton";
+import { CartButton } from "@/components/atoms/button/icon/CartButton";
+import { TrashButton } from "@/components/atoms/button/icon/TrashButton";
 import { BookPreview } from "@/types/BookPreview";
 import { BookPreviewInfo } from "../molecules/BookPreviewInfo";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";

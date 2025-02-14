@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { X, MapPin } from "lucide-react";
 import { CardTitleLabel } from "../atoms/label/CardLabel";
-import { CloseButton } from "../atoms/button/CloseButton";
+import { CloseButton } from "../atoms/button/icon/CloseButton";
 import { PopupHeader } from "../molecules/header/PopupHeader";
 import { GpsConfirmButton } from "../atoms/button/GpsConfirmButton";
 

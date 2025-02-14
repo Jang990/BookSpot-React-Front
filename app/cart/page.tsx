@@ -30,7 +30,7 @@ export default function Cart() {
           hasMore={false}
         />
         <div className="mt-8 flex justify-center">
-          <GpsButton onClick={handleFindLibraries} label="소장 도서관 찾기" />
+          <GpsButton onClick={handleFindLibraries} />
           {showMap && (
             <MapPopup
               onConfirm={handleLocationConfirm}
