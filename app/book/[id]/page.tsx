@@ -18,7 +18,9 @@ async function getData() {
 
 type Params = { id: string };
 
-export default function BookDetailPage({ params }: { params: Params }) {
+export default async function BookDetailPage({ params }: { params: Params }) {
+  const { id } = await params; // nextjs 15버전부터는 이렇게
+
   // 예시 리뷰 데이터
   const reviews = [
     {
@@ -37,7 +39,7 @@ export default function BookDetailPage({ params }: { params: Params }) {
 
   return (
     <>
-      <BookDetail bookId={params.id} />
+      <BookDetail bookId={id} />
 
       <div className="mt-8">
         <h3 className="text-2xl font-bold text-primary mb-4">리뷰</h3>
