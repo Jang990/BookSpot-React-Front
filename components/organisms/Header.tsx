@@ -6,7 +6,7 @@ import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { CartIconLink } from "../molecules/link/CartIconLink";
 import { useBookCart } from "@/contexts/BookCartContext";
 
-export default function Header() {
+export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { cart } = useBookCart();
@@ -47,4 +47,4 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};

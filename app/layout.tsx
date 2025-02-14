@@ -1,5 +1,5 @@
 import { BookCartProvider } from "@/contexts/BookCartContext";
-import Header from "@/components/Header";
+import { Header } from "@/components/organisms/Header";
 import "./globals.css";
 import type React from "react";
 
