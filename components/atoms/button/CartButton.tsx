@@ -1,18 +1,15 @@
-import { useBookCart } from "@/contexts/BookCartContext";
 import { ShoppingCart } from "lucide-react";
 
 interface BookCartProps {
-  bookId: string;
+  onClick: () => void;
 }
 
-export const AddToCartButton = ({ bookId }: BookCartProps) => {
-  const { addToCart } = useBookCart();
-
+export const CartButton = ({ onClick }: BookCartProps) => {
   return (
     <button
       onClick={(e) => {
         e.stopPropagation();
-        addToCart(bookId);
+        onClick();
       }}
       className="bg-primary text-primary-foreground p-1.5 rounded-full hover:bg-primary/80 transition-colors animate-in zoom-in-50 duration-200 active:scale-90"
     >

@@ -1,11 +1,12 @@
 "use client";
 
 import { forwardRef, useState } from "react";
-import { AddToCartButton } from "../atoms/button/AddToCartButton";
-import { RemoveFromCartButton } from "../atoms/button/RemoveFromCartButton";
+import { CartButton } from "../atoms/button/CartButton";
+import { TrashButton } from "../atoms/button/TrashButton";
 import { BookPreview } from "@/types/BookPreview";
 import { BookPreviewInfo } from "../molecules/BookPreviewInfo";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 interface BookInfoProps {
   book: BookPreview;
@@ -15,6 +16,7 @@ interface BookInfoProps {
 export const BookInfo = forwardRef<HTMLDivElement, BookInfoProps>(
   ({ book, isInCart = false }: BookInfoProps, ref) => {
     const [isHovered, setIsHovered] = useState(false);
+    const { removeFromCart, addToCart } = useBookCart();
 
     return (
       <div
@@ -28,8 +30,8 @@ export const BookInfo = forwardRef<HTMLDivElement, BookInfoProps>(
         <div
           className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
         >
-          {!isInCart && <AddToCartButton bookId={book.id} />}
-          {isInCart && <RemoveFromCartButton bookId={book.id} />}
+          {!isInCart && <CartButton onClick={() => addToCart(book.id)} />}
+          {isInCart && <TrashButton onClick={() => removeFromCart(book.id)} />}
         </div>
       </div>
     );
