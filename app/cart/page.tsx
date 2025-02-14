@@ -1,12 +1,9 @@
 "use client";
 
-import { BookInfo } from "@/components/organisms/BookInfo";
-import MapPopup from "@/components/Popup/MapPopup";
+import MapPopup from "@/components/organisms/MapPopup";
 import { useState } from "react";
-import { MapPin } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
-import { EmptyBookCart } from "@/components/molecules/EmptyBookCart";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
 import { GpsButton } from "@/components/atoms/button/GpsButton";

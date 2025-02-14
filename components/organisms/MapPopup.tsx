@@ -5,6 +5,7 @@ import { X, MapPin } from "lucide-react";
 import { CardTitleLabel } from "../atoms/label/CardLabel";
 import { CloseButton } from "../atoms/button/CloseButton";
 import { PopupHeader } from "../molecules/header/PopupHeader";
+import { GpsConfirmButton } from "../atoms/button/GpsConfirmButton";
 
 interface MapPopupProps {
   onConfirm: (location: { lat: number; lng: number }) => void;
@@ -28,12 +29,7 @@ export default function MapPopup({ onConfirm, onClose }: MapPopupProps) {
           <MapPin size={48} className="text-muted-foreground" />
         </div>
         <div className="flex justify-end">
-          <button
-            onClick={handleConfirm}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-full hover:bg-primary/90 transition-colors animate-in zoom-in-50 duration-200"
-          >
-            위치 확인
-          </button>
+          <GpsConfirmButton onClick={handleConfirm} />
         </div>
       </div>
     </div>
