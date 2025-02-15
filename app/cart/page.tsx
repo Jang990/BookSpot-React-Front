@@ -24,13 +24,44 @@ export default function Cart() {
   const router = useRouter();
 
   useEffect(() => {
-    fetchBooksPreviewByIds({
-      bookIds: cart,
-      pageable: CART_PAGEABLE,
-    })
-      .then((json) => json.content.map(convertBookPreview))
-      .then((loadedBooks) => setBooks(loadedBooks));
-  }, []);
+    if (isNotLoadedBooks()) {
+      fetch(cart).then((loadedBooks) => setBooks(loadedBooks));
+      return;
+    }
+
+    if (isClearAllEvent()) {
+      setBooks([]);
+      return;
+    }
+
+    if (isRemovedEvent()) {
+      setBooks(filterBooks(cart));
+      return;
+    }
+
+    function isRemovedEvent() {
+      return cart.length !== 0 && filterBooks(cart).length < books.length;
+    }
+
+    function isNotLoadedBooks() {
+      return cart.length !== 0 && books.length === 0;
+    }
+
+    function isClearAllEvent() {
+      return cart.length === 0 && books.length !== 0;
+    }
+
+    function filterBooks(ids: string[]): BookPreview[] {
+      return books.filter((book) => ids.includes(book.id));
+    }
+
+    function fetch(bookIds: string[]): Promise<BookPreview[]> {
+      return fetchBooksPreviewByIds({
+        bookIds: bookIds,
+        pageable: CART_PAGEABLE,
+      }).then((json) => json.content.map(convertBookPreview));
+    }
+  }, [cart]);
 
   const handleFindLibraries = () => {
     setShowMap(true);
