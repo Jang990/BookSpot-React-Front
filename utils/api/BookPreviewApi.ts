@@ -15,16 +15,16 @@ export const fetchBooksPreview = async ({
   pageable,
 }: SearchByKeyword) => {
   const api: string = createApi({ pageable: pageable, keyword: keyword });
-  return await fetchTo(api);
+  return fetchTo(api);
 };
 
-export const fetchBooksPreviewByIds = async ({
+export async function fetchBooksPreviewByIds({
   bookIds,
   pageable,
-}: SearchByIds) => {
+}: SearchByIds) {
   const api: string = createApi({ pageable: pageable, bookIds: bookIds });
-  return await fetchTo(api);
-};
+  return fetchTo(api);
+}
 
 async function fetchTo(api: string) {
   return await fetch(api, {

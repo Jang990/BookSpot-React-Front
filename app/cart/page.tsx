@@ -1,17 +1,36 @@
 "use client";
 
 import MapPopup from "@/components/organisms/MapPopup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
 import { LibrarySearchButton } from "@/components/atoms/button/LibrarySearchButton";
+import { Pageable } from "@/types/Pageable";
+import { fetchBooksPreviewByIds } from "@/utils/api/BookPreviewApi";
+import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 
+const MAX_CART_SIZE = 20;
+const FIRST_PAGE = 0;
+const CART_PAGEABLE: Pageable = {
+  pageNumber: FIRST_PAGE,
+  pageSize: MAX_CART_SIZE,
+};
 export default function Cart() {
   const { cart } = useBookCart();
   const [showMap, setShowMap] = useState(false);
+  const [books, setBooks] = useState<BookPreview[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    fetchBooksPreviewByIds({
+      bookIds: cart,
+      pageable: CART_PAGEABLE,
+    })
+      .then((json) => json.content.map(convertBookPreview))
+      .then((loadedBooks) => setBooks(loadedBooks));
+  }, []);
 
   const handleFindLibraries = () => {
     setShowMap(true);
@@ -25,7 +44,7 @@ export default function Cart() {
     <>
       <div>
         <BookPreviewList
-          searchResults={cart.map((bookId) => createTempPreview(bookId))}
+          searchResults={books}
           isLoading={false}
           hasMore={false}
           isCartPage={true}
@@ -42,15 +61,4 @@ export default function Cart() {
       </div>
     </>
   );
-}
-
-function createTempPreview(bookId: string): BookPreview {
-  return {
-    id: bookId,
-    title: "오브젝트",
-    author: "조영호",
-    publicationYear: "2019",
-    publisher: "아무개",
-    image: "/placeholder.svg",
-  };
 }
