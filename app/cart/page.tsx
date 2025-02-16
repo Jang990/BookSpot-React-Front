@@ -68,7 +68,9 @@ export default function Cart() {
   };
 
   const handleLocationConfirm = (location: { lat: number; lng: number }) => {
-    router.push(`/libraries?lat=${location.lat}&lng=${location.lng}`);
+    router.push(
+      `/libraries/stock/search?lat=${location.lat}&lng=${location.lng}&bookIds=${cart.join(",")}`
+    );
   };
 
   return (

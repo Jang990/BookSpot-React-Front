@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, MapPin } from "lucide-react";
-import { CardTitleLabel } from "../atoms/label/CardLabel";
-import { CloseButton } from "../atoms/button/icon/CloseButton";
+import { MapPin } from "lucide-react";
 import { PopupHeader } from "../molecules/header/PopupHeader";
 import { GpsConfirmButton } from "../atoms/button/GpsConfirmButton";
 
@@ -13,7 +11,10 @@ interface MapPopupProps {
 }
 
 export default function MapPopup({ onConfirm, onClose }: MapPopupProps) {
-  const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const [location, setLocation] = useState({
+    lat: 37.5211992,
+    lng: 126.7458861,
+  });
 
   const handleConfirm = () => {
     onConfirm(location);

@@ -26,8 +26,8 @@ export const Header = () => {
         return "";
       case "/cart":
         return "북카트";
-      case "/libraries":
-        return "소장 도서관";
+      case "/libraries/stock/search":
+        return "소장 도서관 검색";
       default:
         if (pathname.startsWith("/book/")) {
           return "책 정보";
