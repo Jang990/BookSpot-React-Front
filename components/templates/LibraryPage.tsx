@@ -1,29 +1,42 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { Book } from "@/types/Book";
 import LibraryInfo from "@/components/organisms/LibraryInfo";
-import { libraries } from "@/data/libraries";
-import { books } from "@/data/books";
+import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
+import { useSearchParams } from "next/navigation";
+import { NearbyLibraryStock } from "@/types/NearbyLibraryStock";
 
 export default function LibraryPage() {
-  const [selectedBooks, setSelectedBooks] = useState<Book[]>([]);
+  const [libraries, setLibraries] = useState<NearbyLibraryStock[]>([]);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    // In a real application, you would fetch the selected books from some state management solution or API
-    // For this example, we'll just use the first three books
-    setSelectedBooks(books.slice(0, 3));
+    const bookIdsStr = searchParams.get("bookIds");
+    const bookIds = bookIdsStr ? bookIdsStr.split(",") : [];
+    const lat = parseFloat(searchParams.get("lat") || "0");
+    const lng = parseFloat(searchParams.get("lng") || "0");
+    fetchNearByLibraryStock({
+      bookIds: bookIds,
+      location: {
+        latitude: lat,
+        longitude: lng,
+      },
+    });
+
+    fetchNearByLibraryStock({
+      bookIds: bookIds,
+      location: {
+        latitude: lat,
+        longitude: lng,
+      },
+    }).then((libraries) => setLibraries(libraries));
   }, []);
 
   return (
     <div className="container mx-auto p-4">
       <div className="space-y-4">
         {libraries.map((library) => (
-          <LibraryInfo
-            key={library.id}
-            library={library}
-            selectedBooks={selectedBooks}
-          />
+          <LibraryInfo key={library.library.libraryId} libraryStock={library} />
         ))}
       </div>
     </div>
