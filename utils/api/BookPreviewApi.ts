@@ -1,48 +1,25 @@
 import { Pageable } from "@/types/Pageable";
-
-interface SearchByKeyword {
-  keyword: string;
-  pageable: Pageable;
-}
-
-interface SearchByIds {
-  bookIds: string[];
-  pageable: Pageable;
-}
-
-export const fetchBooksPreview = async ({
-  keyword,
-  pageable,
-}: SearchByKeyword) => {
-  const api: string = createApi({ pageable: pageable, keyword: keyword });
-  return fetchTo(api);
-};
-
-export async function fetchBooksPreviewByIds({
-  bookIds,
-  pageable,
-}: SearchByIds) {
-  const api: string = createApi({ pageable: pageable, bookIds: bookIds });
-  return fetchTo(api);
-}
-
-async function fetchTo(api: string) {
-  return await fetch(api, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((response) => {
-    if (response.ok) return response.json();
-    throw new Error("Network response was not ok");
-  });
-}
+import { get } from "./Fetcher";
 
 interface SearchCondition {
   keyword?: string;
   bookIds?: string[];
   pageable: Pageable;
 }
+
+export const fetchBooksPreview = async ({
+  keyword,
+  bookIds,
+  pageable,
+}: SearchCondition) => {
+  return get(
+    createApi({
+      pageable: pageable,
+      keyword: keyword,
+      bookIds: bookIds,
+    })
+  );
+};
 
 const BOOK_API_URL = "http://localhost:8080/api/books";
 function createApi({ pageable, keyword, bookIds }: SearchCondition): string {

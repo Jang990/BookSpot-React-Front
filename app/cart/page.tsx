@@ -8,7 +8,7 @@ import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
 import { LibrarySearchButton } from "@/components/atoms/button/LibrarySearchButton";
 import { Pageable } from "@/types/Pageable";
-import { fetchBooksPreviewByIds } from "@/utils/api/BookPreviewApi";
+import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 
 const MAX_CART_SIZE = 20;
@@ -56,7 +56,7 @@ export default function Cart() {
     }
 
     function fetch(bookIds: string[]): Promise<BookPreview[]> {
-      return fetchBooksPreviewByIds({
+      return fetchBooksPreview({
         bookIds: bookIds,
         pageable: CART_PAGEABLE,
       }).then((json) => json.content.map(convertBookPreview));
