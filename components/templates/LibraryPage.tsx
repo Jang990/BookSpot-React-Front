@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { NearbyLibraryStock } from "@/types/NearbyLibraryStock";
 
 export default function LibraryPage() {
-  const [libraries, setLibraries] = useState<NearbyLibraryStock[]>([]);
+  const [libraryStocks, setLibraryStocks] = useState<NearbyLibraryStock[]>([]);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -21,22 +21,17 @@ export default function LibraryPage() {
         latitude: lat,
         longitude: lng,
       },
-    });
-
-    fetchNearByLibraryStock({
-      bookIds: bookIds,
-      location: {
-        latitude: lat,
-        longitude: lng,
-      },
-    }).then((libraries) => setLibraries(libraries));
+    }).then(setLibraryStocks);
   }, []);
 
   return (
     <div className="container mx-auto p-4">
       <div className="space-y-4">
-        {libraries.map((library) => (
-          <LibraryInfo key={library.library.libraryId} libraryStock={library} />
+        {libraryStocks.map((library) => (
+          <LibraryInfo
+            key={library.library.libraryName}
+            libraryStock={library}
+          />
         ))}
       </div>
     </div>

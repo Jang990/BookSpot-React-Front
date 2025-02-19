@@ -4,6 +4,10 @@ interface LibraryInfoProps {
   libraryStock: NearbyLibraryStock;
 }
 
+function toKm(distanceMeter: number) {
+  return ((Math.round(distanceMeter / 10) * 10) / 1000).toFixed(2);
+}
+
 export default function LibraryInfo({ libraryStock }: LibraryInfoProps) {
   return (
     <div className="bg-white p-4 rounded-lg shadow">
@@ -13,7 +17,7 @@ export default function LibraryInfo({ libraryStock }: LibraryInfoProps) {
             {libraryStock.library.libraryName}
           </h2>
           <p className="text-gray-600">
-            거리: {libraryStock.library.distanceMeter.toFixed(1)}m
+            거리: {toKm(libraryStock.library.distanceMeter)}Km
           </p>
         </div>
         <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
@@ -25,12 +29,18 @@ export default function LibraryInfo({ libraryStock }: LibraryInfoProps) {
         <h3 className="font-semibold mb-2">소장 도서:</h3>
         <ul className="list-disc list-inside">
           {libraryStock.availableBooks.map((book) => (
-            <li key={book.bookId} className="text-green-600">
+            <li
+              key={`${libraryStock.library.libraryId}-${book.bookId}`}
+              className="text-green-600"
+            >
               {book.title}
             </li>
           ))}
           {libraryStock.unavailableBooks.map((book) => (
-            <li key={book.bookId} className="text-green-600">
+            <li
+              key={`${libraryStock.library.libraryId}-${book.bookId}`}
+              className="text-red-600"
+            >
               {book.title}
             </li>
           ))}

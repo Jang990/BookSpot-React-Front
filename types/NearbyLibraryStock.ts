@@ -1,8 +1,6 @@
 export interface NearbyLibraryStock {
   library: Library;
   totalBooksCount: number;
-  availableBooksCount: number;
-  unavailableBooksCount: number;
   availableBooks: BookTitle[];
   unavailableBooks: BookTitle[];
 }

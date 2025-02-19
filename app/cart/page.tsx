@@ -1,7 +1,7 @@
 "use client";
 
 import MapPopup from "@/components/organisms/MapPopup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
@@ -59,7 +59,9 @@ export default function Cart() {
       return fetchBooksPreview({
         bookIds: bookIds,
         pageable: CART_PAGEABLE,
-      }).then((json) => json.content.map(convertBookPreview));
+      }).then((json) => {
+        return json.content.map(convertBookPreview);
+      });
     }
   }, [cart]);
 
@@ -67,11 +69,14 @@ export default function Cart() {
     setShowMap(true);
   };
 
-  const handleLocationConfirm = (location: { lat: number; lng: number }) => {
-    router.push(
-      `/libraries/stock/search?lat=${location.lat}&lng=${location.lng}&bookIds=${cart.join(",")}`
-    );
-  };
+  const handleLocationConfirm = useCallback(
+    (location: { lat: number; lng: number }) => {
+      router.push(
+        `/libraries/stock/search?lat=${location.lat}&lng=${location.lng}&bookIds=${cart.join(",")}`
+      );
+    },
+    [cart]
+  );
 
   return (
     <>

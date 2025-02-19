@@ -35,8 +35,6 @@ function convertResponse(content: any): NearbyLibraryStock {
       distanceMeter: content.library.distanceMeter,
     },
     totalBooksCount: content.totalBooksCount,
-    availableBooksCount: content.availableBooks,
-    unavailableBooksCount: content.unavailableBooks,
     availableBooks: content.availableBooks.map(convertBookTitle),
     unavailableBooks: content.unavailableBooks.map(convertBookTitle),
   };
