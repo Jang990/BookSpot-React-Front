@@ -1,4 +1,7 @@
-import { BookTitle, NearbyLibraryStock } from "@/types/NearbyLibraryStock";
+import {
+  BookStockStatus,
+  NearbyLibraryStock,
+} from "@/types/NearbyLibraryStock";
 import { get } from "./Fetcher";
 import { Location } from "@/types/Location";
 
@@ -34,12 +37,16 @@ function convertResponse(content: any): NearbyLibraryStock {
       libraryName: content.library.libraryName,
       distanceMeter: content.library.distanceMeter,
     },
-    totalBooksCount: content.totalBooksCount,
-    availableBooks: content.availableBooks.map(convertBookTitle),
-    unavailableBooks: content.unavailableBooks.map(convertBookTitle),
+    availableBooksCount: content.availableBooksCount,
+    unavailableBooksCount: content.unavailableBooksCount,
+    bookStocks: content.bookStocks.map(convertBookStockStatus),
   };
 }
 
-function convertBookTitle(content: any): BookTitle {
-  return { bookId: content.bookId, title: content.title };
+function convertBookStockStatus(content: any): BookStockStatus {
+  return {
+    bookId: content.bookId,
+    title: content.title,
+    available: content.available,
+  };
 }

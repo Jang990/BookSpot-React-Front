@@ -1,8 +1,8 @@
 export interface NearbyLibraryStock {
   library: Library;
-  totalBooksCount: number;
-  availableBooks: BookTitle[];
-  unavailableBooks: BookTitle[];
+  availableBooksCount: number;
+  unavailableBooksCount: number;
+  bookStocks: BookStockStatus[];
 }
 
 interface Library {
@@ -11,7 +11,8 @@ interface Library {
   distanceMeter: number;
 }
 
-export interface BookTitle {
+export interface BookStockStatus {
   bookId: string;
   title: string;
+  available: boolean;
 }

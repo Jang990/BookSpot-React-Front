@@ -21,41 +21,20 @@ export default function LibraryInfo({ libraryStock }: LibraryInfoProps) {
           </p>
         </div>
         <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
-          {libraryStock.availableBooks.length} /{" "}
-          {libraryStock.unavailableBooks.length}
+          {libraryStock.availableBooksCount} / {libraryStock.bookStocks.length}
         </div>
       </div>
       <div className="mt-4">
         <h3 className="font-semibold mb-2">소장 도서:</h3>
         <ul className="list-disc list-inside">
-          {libraryStock.availableBooks.map((book) => (
+          {libraryStock.bookStocks.map((book) => (
             <li
               key={`${libraryStock.library.libraryId}-${book.bookId}`}
-              className="text-green-600"
+              className={book.available ? "text-green-600" : "text-red-600"}
             >
               {book.title}
             </li>
           ))}
-          {libraryStock.unavailableBooks.map((book) => (
-            <li
-              key={`${libraryStock.library.libraryId}-${book.bookId}`}
-              className="text-red-600"
-            >
-              {book.title}
-            </li>
-          ))}
-          {/* {selectedBooks.map((book) => (
-            <li
-              key={book.id}
-              className={
-                library.books.includes(book.id)
-                  ? "text-green-600"
-                  : "text-red-600"
-              }
-            >
-              {book.title}
-            </li>
-          ))} */}
         </ul>
       </div>
     </div>
