@@ -4,7 +4,10 @@ import { useState, useEffect } from "react";
 import LibraryInfo from "@/components/organisms/LibraryInfo";
 import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
 import { useSearchParams } from "next/navigation";
-import { NearbyLibraryStock } from "@/types/NearbyLibraryStock";
+import {
+  BookStockStatus,
+  NearbyLibraryStock,
+} from "@/types/NearbyLibraryStock";
 
 export default function LibraryPage() {
   const [libraryStocks, setLibraryStocks] = useState<NearbyLibraryStock[]>([]);
@@ -21,7 +24,16 @@ export default function LibraryPage() {
         latitude: lat,
         longitude: lng,
       },
-    }).then(setLibraryStocks);
+    }).then((libraryStocks) => {
+      libraryStocks.forEach((libraryStock) => {
+        libraryStock.bookStocks = sortBookStocks(
+          libraryStock.bookStocks,
+          bookIds
+        );
+      });
+      console.log(libraryStocks);
+      setLibraryStocks(libraryStocks);
+    });
   }, []);
 
   return (
@@ -36,4 +48,18 @@ export default function LibraryPage() {
       </div>
     </div>
   );
+}
+
+function sortBookStocks(
+  bookStocks: BookStockStatus[],
+  bookIds: string[]
+): BookStockStatus[] {
+  const bookIdOrder = new Map(bookIds.map((id, index) => [id, index]));
+
+  return bookStocks.sort((a, b) => {
+    return (
+      (bookIdOrder.get(a.bookId) ?? Infinity) -
+      (bookIdOrder.get(b.bookId) ?? Infinity)
+    );
+  });
 }
