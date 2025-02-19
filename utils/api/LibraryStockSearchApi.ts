@@ -45,7 +45,7 @@ function convertResponse(content: any): NearbyLibraryStock {
 
 function convertBookStockStatus(content: any): BookStockStatus {
   return {
-    bookId: content.bookId,
+    id: content.id,
     title: content.title,
     available: content.available,
   };

@@ -31,7 +31,6 @@ export default function LibraryPage() {
           bookIds
         );
       });
-      console.log(libraryStocks);
       setLibraryStocks(libraryStocks);
     });
   }, []);
@@ -58,8 +57,7 @@ function sortBookStocks(
 
   return bookStocks.sort((a, b) => {
     return (
-      (bookIdOrder.get(a.bookId) ?? Infinity) -
-      (bookIdOrder.get(b.bookId) ?? Infinity)
+      (bookIdOrder.get(a.id) ?? Infinity) - (bookIdOrder.get(b.id) ?? Infinity)
     );
   });
 }

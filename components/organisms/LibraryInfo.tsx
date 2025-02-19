@@ -29,7 +29,7 @@ export default function LibraryInfo({ libraryStock }: LibraryInfoProps) {
         <ul className="list-disc list-inside">
           {libraryStock.bookStocks.map((book) => (
             <li
-              key={`${libraryStock.library.libraryId}-${book.bookId}`}
+              key={`${libraryStock.library.libraryId}-${book.id}`}
               className={book.available ? "text-green-600" : "text-red-600"}
             >
               {book.title}

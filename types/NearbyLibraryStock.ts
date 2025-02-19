@@ -12,7 +12,7 @@ interface Library {
 }
 
 export interface BookStockStatus {
-  bookId: string;
+  id: string;
   title: string;
   available: boolean;
 }
