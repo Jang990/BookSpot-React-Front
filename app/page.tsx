@@ -20,10 +20,6 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
 
-  function addPage() {
-    setPage((prevPage) => prevPage + 1);
-  }
-
   const loadBooks = useCallback(async (term: string, currentPage: number) => {
     try {
       setIsLoading(true);
@@ -85,10 +81,8 @@ export default function Home() {
       />
 
       <BookPreviewList
-        addPage={addPage}
         searchResults={searchResults}
         isLoading={isLoading}
-        hasMore={hasMore}
         isCartPage={false}
       />
 

@@ -84,7 +84,6 @@ export default function Cart() {
         <BookPreviewList
           searchResults={books}
           isLoading={false}
-          hasMore={false}
           isCartPage={true}
         />
         <div className="mt-8 flex justify-center">
