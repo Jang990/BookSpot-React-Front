@@ -7,6 +7,7 @@ import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
+import { PageNavigator } from "@/components/molecules/PageNavigator";
 
 const ITEMS_PER_PAGE = 12;
 const MIN_SEARCH_TERM_LENGTH = 2;
@@ -90,6 +91,8 @@ export default function Home() {
         hasMore={hasMore}
         isCartPage={false}
       />
+
+      <PageNavigator currentPage={1} totalPages={5} onPageChange={() => {}} />
     </>
   );
 }
