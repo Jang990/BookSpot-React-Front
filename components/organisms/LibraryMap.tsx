@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Map } from "react-kakao-maps-sdk";
+import { Loading } from "@/components/atoms/animation/Loading";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
@@ -32,7 +33,7 @@ export const LibraryMap = () => {
           level={3}
         ></Map>
       ) : (
-        <div>로딩중</div>
+        <Loading />
       )}
     </div>
   );

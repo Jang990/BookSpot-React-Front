@@ -1,7 +1,7 @@
 import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
-import { Loader } from "lucide-react";
-import { BookInfo } from "../organisms/BookInfo";
+import { BookInfo } from "@/components/organisms/BookInfo";
+import { Loading } from "@/components/atoms/animation/Loading";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
@@ -25,9 +25,7 @@ export const BookPreviewList = ({
       </div>
 
       <div className="flex justify-center items-center mt-8">
-        {isLoading && (
-          <Loader className="animate-spin text-primary" size={32} />
-        )}
+        {isLoading && <Loading />}
       </div>
     </div>
   );
