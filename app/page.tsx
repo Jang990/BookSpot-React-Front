@@ -11,11 +11,11 @@ import { PageNavigator } from "@/components/molecules/PageNavigator";
 
 const ITEMS_PER_PAGE = 12;
 const MIN_SEARCH_TERM_LENGTH = 2;
-const FIRST_PAGE = 0;
+const FIRST_PAGE = 1;
 
 export default function Home() {
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
@@ -23,15 +23,14 @@ export default function Home() {
   const loadBooks = useCallback(async (term: string, currentPage: number) => {
     try {
       setIsLoading(true);
+      setSearchResults([]);
       const json = await fetchBooksPreview({
         keyword: term,
-        pageable: { pageNumber: currentPage, pageSize: ITEMS_PER_PAGE },
+        pageable: { pageNumber: currentPage - 1, pageSize: ITEMS_PER_PAGE },
       });
-
-      setHasMore(!json.last);
+      setTotalPage(json.totalPages);
       const newBooks = json.content.map(convertBookPreview);
-      if (currentPage === FIRST_PAGE) setSearchResults(newBooks);
-      else setSearchResults((prev) => [...prev, ...newBooks]);
+      setSearchResults(newBooks);
     } catch (error) {
       // TODO: 예외 처리 필요
       console.error("Error fetching books:", error);
@@ -86,7 +85,11 @@ export default function Home() {
         isCartPage={false}
       />
 
-      <PageNavigator currentPage={1} totalPages={5} onPageChange={() => {}} />
+      <PageNavigator
+        currentPage={page}
+        totalPages={totalPage}
+        onPageChange={setPage}
+      />
     </>
   );
 }
