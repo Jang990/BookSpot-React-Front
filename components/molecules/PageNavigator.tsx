@@ -81,7 +81,7 @@ export const PageNavigator = ({
       <NaviOptionButton
         text="다음"
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || totalPages === 0}
       />
     </div>
   );
