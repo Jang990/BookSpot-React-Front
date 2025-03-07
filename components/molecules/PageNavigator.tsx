@@ -1,5 +1,8 @@
 "use client";
 
+import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
+import { NaviPageNumberButton } from "@/components/atoms/button/navi/NaviPageNumberButton";
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -34,71 +37,52 @@ export const PageNavigator = ({
   return (
     <div className="flex justify-center items-center mt-8 space-x-2">
       {/* 이전 페이지 버튼 */}
-      <button
+      <NaviOptionButton
+        text="이전"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`px-3 py-1 rounded-md ${
-          currentPage === 1
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary hover:bg-primary/10"
-        }`}
-      >
-        이전
-      </button>
+      />
 
       {/* 첫 페이지 버튼 (현재 페이지가 4 이상일 때만 표시) */}
       {getPageNumbers()[0] > 1 && (
         <>
-          <button
+          <NaviPageNumberButton
+            page={1}
             onClick={() => onPageChange(1)}
-            className="px-3 py-1 rounded-md hover:bg-primary/10"
-          >
-            1
-          </button>
+            clicked={currentPage === 1}
+          />
           {getPageNumbers()[0] > 2 && <span className="px-1">...</span>}
         </>
       )}
 
       {/* 페이지 번호 버튼 */}
       {getPageNumbers().map((page) => (
-        <button
+        <NaviPageNumberButton
           key={page}
+          page={page}
           onClick={() => onPageChange(page)}
-          className={`px-3 py-1 rounded-md ${
-            currentPage === page
-              ? "bg-primary text-primary-foreground"
-              : "hover:bg-primary/10"
-          }`}
-        >
-          {page}
-        </button>
+          clicked={currentPage === page}
+        />
       ))}
 
       {/* 마지막 페이지 버튼 (마지막에서 3페이지 이상 떨어져 있을 때만 표시) */}
       {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && (
         <>
           <span className="px-1">...</span>
-          <button
+          <NaviPageNumberButton
+            page={totalPages}
             onClick={() => onPageChange(totalPages)}
-            className="px-3 py-1 rounded-md hover:bg-primary/10"
-          >
-            {totalPages}
-          </button>
+            clicked={false}
+          />
         </>
       )}
 
       {/* 다음 페이지 버튼 */}
-      <button
+      <NaviOptionButton
+        text="다음"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={`px-3 py-1 rounded-md ${
-          currentPage === totalPages
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-primary hover:bg-primary/10"
-        }`}
-      >
-        다음
-      </button>
+      />
     </div>
   );
 };
