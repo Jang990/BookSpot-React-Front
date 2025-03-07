@@ -74,9 +74,11 @@ export default function Home() {
   return (
     <>
       <BookSearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
+        // searchTerm={searchTerm}
         isLoading={isLoading}
+        doSearch={(term: string) => {
+          setSearchTerm(term);
+        }}
       />
 
       <BookPreviewList
