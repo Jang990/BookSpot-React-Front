@@ -7,6 +7,7 @@ const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=f
 
 export const LibraryMap = () => {
   const [scriptLoad, setScriptLoad] = useState<boolean>(false);
+  const [scriptLoadError, setScriptLoadError] = useState<boolean>(false);
 
   useEffect(() => {
     const script: HTMLScriptElement = kakaoMapScript();
@@ -15,6 +16,9 @@ export const LibraryMap = () => {
 
     script.addEventListener("load", () => {
       setScriptLoad(true);
+    });
+    script.addEventListener("error", () => {
+      setScriptLoadError(true);
     });
   }, []);
 
@@ -26,14 +30,15 @@ export const LibraryMap = () => {
   }
   return (
     <div>
-      {scriptLoad ? (
+      {scriptLoadError && <div>잘못된 스크립트 오류입니다.</div>}
+      {!scriptLoad && <Loading />}
+
+      {scriptLoad && (
         <Map
           center={{ lat: 33.5563, lng: 126.79581 }}
           style={{ width: "800px", height: "600px" }}
           level={3}
         ></Map>
-      ) : (
-        <Loading />
       )}
     </div>
   );
