@@ -13,7 +13,7 @@ export default function LibraryPage() {
   const [libraryStocks, setLibraryStocks] = useState<NearbyLibraryStock[]>([]);
   const searchParams = useSearchParams();
 
-  useEffect(() => {
+  /* useEffect(() => {
     const bookIdsStr = searchParams.get("bookIds");
     const bookIds = bookIdsStr ? bookIdsStr.split(",") : [];
     const lat = parseFloat(searchParams.get("lat") || "0");
@@ -33,7 +33,7 @@ export default function LibraryPage() {
       });
       setLibraryStocks(libraryStocks);
     });
-  }, []);
+  }, []); */
 
   return (
     <div className="container mx-auto p-4">
