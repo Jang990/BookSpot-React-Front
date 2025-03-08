@@ -37,8 +37,7 @@ export const LibraryMap = ({ onBoundsChange }: Props) => {
   const handleBoundsChanged = (map: kakao.maps.Map) => {
     const bound = map.getBounds();
     const nw = bound.getNorthEast();
-    const se = bound.getNorthEast();
-
+    const se = bound.getSouthWest();
     onBoundsChange({
       nw: { latitude: nw.getLat(), longitude: nw.getLng() },
       se: { latitude: se.getLat(), longitude: se.getLng() },
