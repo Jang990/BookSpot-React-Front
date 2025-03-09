@@ -1,7 +1,8 @@
-import { NearbyLibraryStock, TEMP_Library } from "@/types/NearbyLibraryStock";
+import { NearbyLibraryStock } from "@/types/NearbyLibraryStock";
 import { get } from "./Fetcher";
 import { convertLibrary, convertLibraryStock } from "./ApiResponseConvertor";
 import { MapBound } from "@/types/MapBound";
+import { Library } from "@/types/Library";
 
 interface Props {
   bookIds: string[];
@@ -11,7 +12,7 @@ interface Props {
 export const fetchNearByLibraryStock = async ({
   bookIds = [],
   mapBound,
-}: Props): Promise<TEMP_Library[]> => {
+}: Props): Promise<Library[]> => {
   const api: string = createApi(bookIds, mapBound);
   return get(api).then((content) => content.map(convertLibrary));
 };

@@ -1,8 +1,8 @@
 import { BookPreview } from "@/types/BookPreview";
+import { Library } from "@/types/Library";
 import {
   BookStockStatus,
   NearbyLibraryStock,
-  TEMP_Library,
 } from "@/types/NearbyLibraryStock";
 
 export function convertBookPreview(content: any): BookPreview {
@@ -15,7 +15,7 @@ export function convertBookPreview(content: any): BookPreview {
   };
 }
 
-export function convertLibrary(content: any): TEMP_Library {
+export function convertLibrary(content: any): Library {
   return {
     id: content.libraryId,
     name: content.libraryName,

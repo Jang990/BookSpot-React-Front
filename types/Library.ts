@@ -1,6 +1,7 @@
+import { Location } from "./Location";
+
 export interface Library {
   id: string;
   name: string;
-  distance: number;
-  books: string[];
+  location: Location;
 }

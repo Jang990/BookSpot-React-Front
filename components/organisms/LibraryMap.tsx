@@ -3,7 +3,7 @@ import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
 import { MapBound } from "@/types/MapBound";
-import { TEMP_Library } from "@/types/NearbyLibraryStock";
+import { Library } from "@/types/Library";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
@@ -16,7 +16,7 @@ function kakaoMapScript(): HTMLScriptElement {
 }
 
 interface Props {
-  libraries: TEMP_Library[];
+  libraries: Library[];
   onBoundsChange: (bound: MapBound) => void;
 }
 
