@@ -20,7 +20,7 @@ interface Props {
   onBoundsChange: (bound: MapBound) => void;
 }
 
-export const LibraryMap = ({ onBoundsChange }: Props) => {
+export const LibraryMap = ({ libraries, onBoundsChange }: Props) => {
   const [scriptLoad, setScriptLoad] = useState<boolean>(false);
   const [scriptLoadError, setScriptLoadError] = useState<boolean>(false);
 
@@ -58,7 +58,17 @@ export const LibraryMap = ({ onBoundsChange }: Props) => {
             style={{ width: "800px", height: "600px" }}
             level={3}
             onBoundsChanged={handleBoundsChanged}
-          ></Map>
+          >
+            {libraries.map((library) => (
+              <MapMarker
+                key={library.id}
+                position={{
+                  lat: library.location.latitude,
+                  lng: library.location.longitude,
+                }}
+              />
+            ))}
+          </Map>
         )}
       </div>
     </div>
