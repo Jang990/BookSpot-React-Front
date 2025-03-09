@@ -4,6 +4,7 @@ import { Loading } from "@/components/atoms/animation/Loading";
 import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
+import { LibraryMarker } from "../molecules/LibararyMarker";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -23,6 +24,7 @@ interface Props {
 export const LibraryMap = ({ libraries, onBoundsChange }: Props) => {
   const [scriptLoad, setScriptLoad] = useState<boolean>(false);
   const [scriptLoadError, setScriptLoadError] = useState<boolean>(false);
+  const [hoveredMarkerId, setHoveredMarkerId] = useState<string | null>(null);
 
   useEffect(() => {
     const script: HTMLScriptElement = kakaoMapScript();
@@ -46,6 +48,8 @@ export const LibraryMap = ({ libraries, onBoundsChange }: Props) => {
     });
   };
 
+  const handleClusteringComplete = () => {};
+
   return (
     <div className="container mx-auto p-4">
       <div className="space-y-4">
@@ -55,18 +59,42 @@ export const LibraryMap = ({ libraries, onBoundsChange }: Props) => {
         {scriptLoad && (
           <Map
             center={{ lat: 37.5081844, lng: 126.7241666 }}
-            style={{ width: "800px", height: "600px" }}
+            style={{
+              width: "800px",
+              height: "600px",
+              margin: "0 auto",
+              borderRadius: "0.5rem",
+              overflow: "hidden",
+            }}
             level={3}
             onBoundsChanged={handleBoundsChanged}
+            className="shadow-xl"
           >
-            <MarkerClusterer averageCenter={true} minLevel={8}>
+            <MarkerClusterer
+              averageCenter={true}
+              minLevel={7}
+              disableClickZoom={false}
+              styles={[
+                {
+                  width: "50px",
+                  height: "50px",
+                  background: "rgba(22, 163, 74, 0.8)",
+                  borderRadius: "25px",
+                  color: "white",
+                  textAlign: "center",
+                  lineHeight: "50px",
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                },
+              ]}
+            >
               {libraries.map((library) => (
-                <MapMarker
+                <LibraryMarker
                   key={library.id}
-                  position={{
-                    lat: library.location.latitude,
-                    lng: library.location.longitude,
-                  }}
+                  library={library}
+                  isHovered={hoveredMarkerId === library.id}
+                  onMouseOver={() => setHoveredMarkerId(library.id)}
+                  onMouseOut={() => setHoveredMarkerId(null)}
                 />
               ))}
             </MarkerClusterer>
