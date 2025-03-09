@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Map } from "react-kakao-maps-sdk";
+import { Map, MapMarker } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
 import { MapBound } from "@/types/MapBound";
+import { TEMP_Library } from "@/types/NearbyLibraryStock";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
@@ -15,6 +16,7 @@ function kakaoMapScript(): HTMLScriptElement {
 }
 
 interface Props {
+  libraries: TEMP_Library[];
   onBoundsChange: (bound: MapBound) => void;
 }
 
@@ -52,7 +54,7 @@ export const LibraryMap = ({ onBoundsChange }: Props) => {
 
         {scriptLoad && (
           <Map
-            center={{ lat: 33.5563, lng: 126.79581 }}
+            center={{ lat: 37.5081844, lng: 126.7241666 }}
             style={{ width: "800px", height: "600px" }}
             level={3}
             onBoundsChanged={handleBoundsChanged}
