@@ -15,20 +15,30 @@ export default function Libraries() {
   const bookIdsStr = searchParams.get("bookIds");
   const bookIds = bookIdsStr ? bookIdsStr.split(",") : [];
   const MAP_SEARCH_DELAY = 275;
+  const CULSTERD_LEVEL = 7;
 
-  const debouncedMapSearch = debounce((bound: MapBound) => {
+  const debouncedMapSearch = debounce((level: number, bound: MapBound) => {
     fetchNearByLibraryStock({
       bookIds: bookIds,
       mapBound: bound,
-    }).then((content) => setLibraries(content));
+    })
+      .then((content) => {
+        setLibraries(content);
+        return content;
+      })
+      .then((content) => {
+        if (level >= CULSTERD_LEVEL) return;
+        // do something...
+      });
   }, MAP_SEARCH_DELAY);
 
   return (
     <main className="min-h-screen bg-gray-100">
       {/* <LibraryPage /> */}
       <LibraryMapTemplate
+        clusterdLevel={CULSTERD_LEVEL}
         libraries={libraries}
-        onBoundsChange={(bound: MapBound) => debouncedMapSearch(bound)}
+        onBoundsChange={debouncedMapSearch}
       />
     </main>
   );

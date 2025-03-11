@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Map, MarkerClusterer } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
@@ -16,14 +16,16 @@ function kakaoMapScript(): HTMLScriptElement {
 }
 
 export interface Props {
+  clusterdLevel: number;
   libraries: Library[];
-  onBoundsChange: (bound: MapBound) => void;
+  onBoundsChange: (level: number, bound: MapBound) => void;
   onError: () => void;
 }
 
 const EMPTY_FUNC = () => {};
 
 export const LibraryMap = ({
+  clusterdLevel,
   libraries,
   onBoundsChange,
   onError = EMPTY_FUNC,
@@ -34,20 +36,15 @@ export const LibraryMap = ({
   useEffect(() => {
     const script: HTMLScriptElement = kakaoMapScript();
     document.head.appendChild(script);
-
-    script.addEventListener("load", () => {
-      setScriptLoad(true);
-    });
-    script.addEventListener("error", () => {
-      onError();
-    });
+    script.addEventListener("load", () => setScriptLoad(true));
+    script.addEventListener("error", () => onError());
   }, []);
 
   const handleBoundsChanged = (map: kakao.maps.Map) => {
     const bound = map.getBounds();
     const nw = bound.getNorthEast();
     const se = bound.getSouthWest();
-    onBoundsChange({
+    onBoundsChange(map.getLevel(), {
       nw: { latitude: nw.getLat(), longitude: nw.getLng() },
       se: { latitude: se.getLat(), longitude: se.getLng() },
     });
@@ -72,7 +69,7 @@ export const LibraryMap = ({
         >
           <MarkerClusterer
             averageCenter={true}
-            minLevel={7}
+            minLevel={clusterdLevel}
             disableClickZoom={false}
             styles={[
               {
