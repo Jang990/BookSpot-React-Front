@@ -1,6 +1,6 @@
 import { NearbyLibraryStock } from "@/types/NearbyLibraryStock";
 import { get } from "./Fetcher";
-import { convertLibrary, convertLibraryStock } from "./ApiResponseConvertor";
+import { convertLibrary } from "./ApiResponseConvertor";
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
 

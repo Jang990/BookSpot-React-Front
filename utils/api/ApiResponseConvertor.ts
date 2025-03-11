@@ -1,5 +1,6 @@
 import { BookPreview } from "@/types/BookPreview";
 import { Library } from "@/types/Library";
+import LibraryStock from "@/types/LibraryStock";
 import {
   BookStockStatus,
   NearbyLibraryStock,
@@ -26,7 +27,7 @@ export function convertLibrary(content: any): Library {
   };
 }
 
-export function convertLibraryStock(content: any): NearbyLibraryStock {
+export function TEMP_convertLibraryStock(content: any): NearbyLibraryStock {
   return {
     library: {
       libraryId: content.library.libraryId,
@@ -45,4 +46,13 @@ export function convertLibraryStock(content: any): NearbyLibraryStock {
       available: content.available,
     };
   }
+}
+
+export function convertLibraryStock(content: any): LibraryStock {
+  return {
+    libraryId: content.libraryId,
+    availableBookIds: content.availableBookIds,
+    unavailableBookIds: content.unavailableBookIds,
+    totalBooksCount: content.totalBooksCount,
+  };
 }
