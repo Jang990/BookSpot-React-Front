@@ -15,11 +15,13 @@ export const LibraryMarker = ({
   onMouseOver,
   onMouseOut,
 }: Props) => {
+  const { library, stock } = libraryMarkerInfo;
+
   return (
     <CustomOverlayMap
       position={{
-        lat: libraryMarkerInfo.library.location.latitude,
-        lng: libraryMarkerInfo.library.location.longitude,
+        lat: library.location.latitude,
+        lng: library.location.longitude,
       }}
       yAnchor={1}
       xAnchor={0.5}
@@ -55,7 +57,7 @@ export const LibraryMarker = ({
             }
           `}
         >
-          {libraryMarkerInfo.library.name}
+          {library.name}
         </div>
       </div>
     </CustomOverlayMap>
