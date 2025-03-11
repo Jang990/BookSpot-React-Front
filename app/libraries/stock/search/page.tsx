@@ -8,8 +8,11 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
+import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 export default function Libraries() {
+  const { cart } = useBookCart();
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
 
   const searchParams = useSearchParams();
@@ -23,13 +26,13 @@ export default function Libraries() {
       bookIds: bookIds,
       mapBound: bound,
     })
-      .then((content) => {
-        const emptyStockLibraries: LibraryMarkerInfo[] = content.map(
+      .then((responseLibraries) => {
+        const emptyStockLibraries: LibraryMarkerInfo[] = responseLibraries.map(
           (library) => toEmptyStockLibrary(library)
         );
 
         setLibraries(emptyStockLibraries);
-        return content;
+        return responseLibraries;
 
         function toEmptyStockLibrary(library: Library): LibraryMarkerInfo {
           return {
@@ -37,9 +40,26 @@ export default function Libraries() {
           } as LibraryMarkerInfo;
         }
       })
-      .then((content) => {
+      .then((responseLibraries) => {
         if (level >= CULSTERD_LEVEL) return;
-        // do something...
+
+        const libraryIds = responseLibraries.map((library) => library.id);
+        const libraryMap = new Map(
+          responseLibraries.map((library) => [library.id, library])
+        );
+
+        fetchLibraryStock({ libraryIds: libraryIds, bookIds: cart }).then(
+          (libraryStocks) => {
+            setLibraries(
+              libraryStocks.map((libStock) => {
+                return {
+                  library: libraryMap.get(libStock.libraryId),
+                  stock: libStock,
+                } as LibraryMarkerInfo;
+              })
+            );
+          }
+        );
       });
   }, MAP_SEARCH_DELAY);
 
