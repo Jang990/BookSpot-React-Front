@@ -1,16 +1,16 @@
-import { Library } from "@/types/Library";
+import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookOpen } from "lucide-react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 
 interface Props {
-  library: Library;
+  libraryMarkerInfo: LibraryMarkerInfo;
   isHovered: boolean;
   onMouseOver: () => void;
   onMouseOut: () => void;
 }
 
 export const LibraryMarker = ({
-  library,
+  libraryMarkerInfo,
   isHovered,
   onMouseOver,
   onMouseOut,
@@ -18,8 +18,8 @@ export const LibraryMarker = ({
   return (
     <CustomOverlayMap
       position={{
-        lat: library.location.latitude,
-        lng: library.location.longitude,
+        lat: libraryMarkerInfo.library.location.latitude,
+        lng: libraryMarkerInfo.library.location.longitude,
       }}
       yAnchor={1}
       xAnchor={0.5}
@@ -55,7 +55,7 @@ export const LibraryMarker = ({
             }
           `}
         >
-          {library.name}
+          {libraryMarkerInfo.library.name}
         </div>
       </div>
     </CustomOverlayMap>

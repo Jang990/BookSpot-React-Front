@@ -7,9 +7,10 @@ import { debounce } from "@/utils/debounce";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
+import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 
 export default function Libraries() {
-  const [libraries, setLibraries] = useState<Library[]>([]);
+  const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
 
   const searchParams = useSearchParams();
   const bookIdsStr = searchParams.get("bookIds");
@@ -23,8 +24,18 @@ export default function Libraries() {
       mapBound: bound,
     })
       .then((content) => {
-        setLibraries(content);
+        const emptyStockLibraries: LibraryMarkerInfo[] = content.map(
+          (library) => toEmptyStockLibrary(library)
+        );
+
+        setLibraries(emptyStockLibraries);
         return content;
+
+        function toEmptyStockLibrary(library: Library): LibraryMarkerInfo {
+          return {
+            library,
+          } as LibraryMarkerInfo;
+        }
       })
       .then((content) => {
         if (level >= CULSTERD_LEVEL) return;

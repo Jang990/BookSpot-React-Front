@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Map, MarkerClusterer } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
-import { Library } from "@/types/Library";
 import { LibraryMarker } from "../molecules/LibararyMarker";
+import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -17,7 +17,7 @@ function kakaoMapScript(): HTMLScriptElement {
 
 export interface Props {
   clusterdLevel: number;
-  libraries: Library[];
+  libraryMarkerInfos: LibraryMarkerInfo[];
   onBoundsChange: (level: number, bound: MapBound) => void;
   onError: () => void;
 }
@@ -26,7 +26,7 @@ const EMPTY_FUNC = () => {};
 
 export const LibraryMap = ({
   clusterdLevel,
-  libraries,
+  libraryMarkerInfos,
   onBoundsChange,
   onError = EMPTY_FUNC,
 }: Props) => {
@@ -85,12 +85,14 @@ export const LibraryMap = ({
               },
             ]}
           >
-            {libraries.map((library) => (
+            {libraryMarkerInfos.map((libraryMarkerInfo) => (
               <LibraryMarker
-                key={library.id}
-                library={library}
-                isHovered={hoveredMarkerId === library.id}
-                onMouseOver={() => setHoveredMarkerId(library.id)}
+                key={libraryMarkerInfo.library.id}
+                libraryMarkerInfo={libraryMarkerInfo}
+                isHovered={hoveredMarkerId === libraryMarkerInfo.library.id}
+                onMouseOver={() =>
+                  setHoveredMarkerId(libraryMarkerInfo.library.id)
+                }
                 onMouseOut={() => setHoveredMarkerId(null)}
               />
             ))}
