@@ -41,7 +41,7 @@ export default function Libraries() {
         }
       })
       .then((responseLibraries) => {
-        if (level >= CULSTERD_LEVEL) return;
+        if (responseLibraries.length === 0 || level >= CULSTERD_LEVEL) return;
 
         const libraryIds = responseLibraries.map((library) => library.id);
         const libraryMap = new Map(
