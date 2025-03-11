@@ -63,13 +63,12 @@ export const LibraryMap = ({
             borderRadius: "0.5rem",
             overflow: "hidden",
           }}
-          level={3}
+          level={clusterdLevel}
           onBoundsChanged={handleBoundsChanged}
           className="shadow-xl"
         >
           <MarkerClusterer
             averageCenter={true}
-            minLevel={clusterdLevel}
             disableClickZoom={false}
             styles={[
               {
