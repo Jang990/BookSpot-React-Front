@@ -1,13 +1,12 @@
 "use client";
 
-import { LibraryMap } from "@/components/organisms/LibraryMap";
-import LibraryPage from "@/components/templates/LibraryPage";
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
 import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
 import { debounce } from "@/utils/debounce";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 
 export default function Libraries() {
   const [libraries, setLibraries] = useState<Library[]>([]);
@@ -27,7 +26,7 @@ export default function Libraries() {
   return (
     <main className="min-h-screen bg-gray-100">
       {/* <LibraryPage /> */}
-      <LibraryMap
+      <LibraryMapTemplate
         libraries={libraries}
         onBoundsChange={(bound: MapBound) => debouncedMapSearch(bound)}
       />
