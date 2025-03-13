@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { Map, MarkerClusterer } from "react-kakao-maps-sdk";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Map as KakaoMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
 import { LibraryMarker } from "../molecules/LibararyMarker";
@@ -24,6 +24,7 @@ export interface Props {
 }
 
 const EMPTY_FUNC = () => {};
+const ANIMATION_DURATION = 250;
 
 export const LibraryMap = ({
   clusterdLevel,
@@ -33,19 +34,40 @@ export const LibraryMap = ({
 }: Props) => {
   const [scriptLoad, setScriptLoad] = useState<boolean>(false);
   const [hoveredMarkerId, setHoveredMarkerId] = useState<string | null>(null);
-  const [selectedLibrary, setSelectedLibrary] =
-    useState<LibraryMarkerInfo | null>(null);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [isEnteringPanel, setIsEnteringPanel] = useState(false);
+  const [previousMarkerId, setPreviousMarkerId] = useState<string | null>(null);
+
+  // libraryMarkerInfos를 Map 형식으로 변환
+  const libraryMarkerInfoMap = useMemo(() => {
+    const map = new Map<string, LibraryMarkerInfo>();
+    libraryMarkerInfos.forEach((info) => {
+      map.set(info.library.id, info);
+    });
+    return map;
+  }, [libraryMarkerInfos]);
 
   useEffect(() => {
     const script: HTMLScriptElement = kakaoMapScript();
     document.head.appendChild(script);
     script.addEventListener("load", () => setScriptLoad(true));
     script.addEventListener("error", () => onError());
-  }, []);
 
-  const handleBoundsChanged = (map: kakao.maps.Map) => {
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, [onError]);
+
+  function kakaoMapScript(): HTMLScriptElement {
+    const script: HTMLScriptElement = document.createElement("script");
+    script.src = kakaoMapSrc;
+    script.async = true;
+    return script;
+  }
+
+  const handleBoundsChanged = (map: any) => {
     const bound = map.getBounds();
     const nw = bound.getNorthEast();
     const se = bound.getSouthWest();
@@ -55,27 +77,29 @@ export const LibraryMap = ({
     });
   };
 
-  const handleMarkerClick = (libraryMarkerInfo: LibraryMarkerInfo) => {
+  const handleMarkerClick = (libraryId: string) => {
     // 이미 선택된 마커를 다시 클릭한 경우
-    if (selectedMarkerId === libraryMarkerInfo.library.id) {
+    if (selectedMarkerId === libraryId) {
       return;
     }
 
+    // 이전 마커 ID 저장
+    setPreviousMarkerId(selectedMarkerId);
+
+    // 즉시 새 마커 선택 상태로 변경 (호버링 효과 즉시 적용)
+    setSelectedMarkerId(libraryId);
+
     // 다른 마커가 이미 선택되어 있는 경우, 패널 애니메이션 처리
-    if (selectedLibrary) {
+    if (previousMarkerId) {
       // 기존 패널 사라지는 애니메이션
       setIsEnteringPanel(false);
 
       // 애니메이션 후 새 패널 표시
       setTimeout(() => {
-        setSelectedLibrary(libraryMarkerInfo);
-        setSelectedMarkerId(libraryMarkerInfo.library.id);
         setIsEnteringPanel(true);
-      }, 250); // 애니메이션 시간과 일치
+      }, ANIMATION_DURATION);
     } else {
       // 처음 선택하는 경우
-      setSelectedLibrary(libraryMarkerInfo);
-      setSelectedMarkerId(libraryMarkerInfo.library.id);
       setIsEnteringPanel(true);
     }
   };
@@ -83,19 +107,24 @@ export const LibraryMap = ({
   const handleClosePanel = () => {
     setIsEnteringPanel(false);
 
-    // 애니메이션 후 패널 제거 및 선택 상태 초기화
+    // 애니메이션 후 선택 상태 초기화
     setTimeout(() => {
-      setSelectedLibrary(null);
       setSelectedMarkerId(null);
-    }, 250); // 애니메이션 시간과 일치
+      setPreviousMarkerId(null);
+    }, ANIMATION_DURATION);
   };
+
+  // 선택된 도서관 정보 가져오기
+  const selectedLibraryInfo = selectedMarkerId
+    ? libraryMarkerInfoMap.get(selectedMarkerId) || null
+    : null;
 
   return (
     <div className="relative">
       {!scriptLoad && <Loading />}
       {scriptLoad && (
         <div className="relative">
-          <Map
+          <KakaoMap
             center={{ lat: 37.5081844, lng: 126.7241666 }}
             style={{
               width: "800px",
@@ -135,15 +164,17 @@ export const LibraryMap = ({
                     setHoveredMarkerId(libraryMarkerInfo.library.id)
                   }
                   onMouseOut={() => setHoveredMarkerId(null)}
-                  onClick={() => handleMarkerClick(libraryMarkerInfo)}
+                  onClick={() =>
+                    handleMarkerClick(libraryMarkerInfo.library.id)
+                  }
                 />
               ))}
             </MarkerClusterer>
 
             {/* 선택된 도서관이 있을 때 지도 내에 패널 표시 */}
-            {selectedLibrary && (
+            {selectedLibraryInfo && (
               <LibraryStockPanel
-                libraryMarkerInfo={selectedLibrary}
+                libraryMarkerInfo={selectedLibraryInfo}
                 books={[
                   {
                     id: "162",
@@ -157,7 +188,7 @@ export const LibraryMap = ({
                 isEntering={isEnteringPanel}
               />
             )}
-          </Map>
+          </KakaoMap>
         </div>
       )}
     </div>

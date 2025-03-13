@@ -47,7 +47,7 @@ export const LibraryStockPanel = ({
     <div
       className={`
           absolute bottom-4 left-4 right-4 max-w-md mx-auto bg-white rounded-lg shadow-lg z-50 
-          max-h-[250px] overflow-hidden transition-all duration-300
+          max-h-[250px] overflow-hidden transition-all duration-250
           ${isEntering ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}
         `}
     >
