@@ -4,4 +4,8 @@ export interface Library {
   id: string;
   name: string;
   location: Location;
+  address: string;
+  homePage: string;
+  closedInfo: string;
+  operatingInfo: string;
 }

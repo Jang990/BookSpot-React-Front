@@ -24,6 +24,10 @@ export function convertLibrary(content: any): Library {
       latitude: content.latitude,
       longitude: content.longitude,
     },
+    address: content.address,
+    homePage: content.homePage,
+    closedInfo: content.closedInfo,
+    operatingInfo: content.operatingInfo,
   };
 }
 
