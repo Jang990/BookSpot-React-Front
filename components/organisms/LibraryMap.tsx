@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Map as KakaoMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
@@ -40,6 +40,7 @@ export const LibraryMap = ({
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [isEnteringPanel, setIsEnteringPanel] = useState(false);
   const [previousMarkerId, setPreviousMarkerId] = useState<string | null>(null);
+  const mapRef = useRef<any>(null);
 
   // libraryMarkerInfos를 Map 형식으로 변환
   const libraryMarkerInfoMap = useMemo(() => {
@@ -71,6 +72,9 @@ export const LibraryMap = ({
   }
 
   const handleBoundsChanged = (map: any) => {
+    // 지도 참조 저장
+    mapRef.current = map;
+
     const bound = map.getBounds();
     const nw = bound.getNorthEast();
     const se = bound.getSouthWest();
@@ -78,6 +82,8 @@ export const LibraryMap = ({
       nw: { latitude: nw.getLat(), longitude: nw.getLng() },
       se: { latitude: se.getLat(), longitude: se.getLng() },
     });
+
+    // 중요: 여기서 패널 상태를 변경하지 않음
   };
 
   const handleMarkerClick = (libraryId: string) => {
@@ -104,6 +110,14 @@ export const LibraryMap = ({
     } else {
       // 처음 선택하는 경우
       setIsEnteringPanel(true);
+    }
+
+    // 선택된 마커가 있는 도서관 위치로 지도 중심 이동 (선택 사항)
+    const selectedLibrary = libraryMarkerInfoMap.get(libraryId);
+    if (selectedLibrary && mapRef.current) {
+      const { latitude, longitude } = selectedLibrary.library.location;
+      // 부드럽게 이동 (애니메이션 효과)
+      mapRef.current.panTo(new window.kakao.maps.LatLng(latitude, longitude));
     }
   };
 
