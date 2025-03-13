@@ -2,14 +2,17 @@ import { useState } from "react";
 import { LibraryMap } from "../organisms/LibraryMap";
 import { MapBound } from "@/types/MapBound";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
+import { BookPreview } from "@/types/BookPreview";
 
 export interface Props {
+  booksInfo: BookPreview[];
   clusterdLevel: number;
   libraries: LibraryMarkerInfo[];
   onBoundsChange: (level: number, bound: MapBound) => void;
 }
 
 export const LibraryMapTemplate = ({
+  booksInfo = [],
   clusterdLevel,
   libraries,
   onBoundsChange,
@@ -22,6 +25,7 @@ export const LibraryMapTemplate = ({
         {scriptLoadError && <div>잘못된 스크립트 오류입니다.</div>}
 
         <LibraryMap
+          booksInfo={booksInfo}
           clusterdLevel={clusterdLevel}
           libraryMarkerInfos={libraries}
           onBoundsChange={onBoundsChange}

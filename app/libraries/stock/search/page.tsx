@@ -5,21 +5,38 @@ import { Library } from "@/types/Library";
 import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
 import { debounce } from "@/utils/debounce";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
 import { useBookCart } from "@/contexts/BookCartContext";
+import { BookPreview } from "@/types/BookPreview";
+import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
+import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 
 export default function Libraries() {
   const { cart } = useBookCart();
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
+  const [booksInfo, setBooksInfo] = useState<BookPreview[]>([]);
 
   const searchParams = useSearchParams();
   const bookIdsStr = searchParams.get("bookIds");
   const bookIds = bookIdsStr ? bookIdsStr.split(",") : [];
   const MAP_SEARCH_DELAY = 275;
   const CULSTERD_LEVEL = 7;
+  const MAX_CART_SIZE = 20;
+
+  useEffect(() => {
+    if (!cart || cart.length === 0) return;
+
+    fetchBooksPreview({
+      bookIds: cart,
+      pageable: { pageNumber: 0, pageSize: MAX_CART_SIZE },
+    }).then((response) => {
+      const books: BookPreview[] = response.content.map(convertBookPreview);
+      setBooksInfo(books);
+    });
+  }, [cart]);
 
   const debouncedMapSearch = debounce((level: number, bound: MapBound) => {
     fetchNearByLibraryStock({
@@ -67,6 +84,7 @@ export default function Libraries() {
     <main className="min-h-screen bg-gray-100">
       {/* <LibraryPage /> */}
       <LibraryMapTemplate
+        booksInfo={booksInfo}
         clusterdLevel={CULSTERD_LEVEL}
         libraries={libraries}
         onBoundsChange={debouncedMapSearch}

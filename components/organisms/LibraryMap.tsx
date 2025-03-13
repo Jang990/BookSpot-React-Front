@@ -5,6 +5,7 @@ import { MapBound } from "@/types/MapBound";
 import { LibraryMarker } from "../molecules/LibararyMarker";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { LibraryStockPanel } from "../molecules/LibraryStockPanel";
+import { BookPreview } from "@/types/BookPreview";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -17,6 +18,7 @@ function kakaoMapScript(): HTMLScriptElement {
 }
 
 export interface Props {
+  booksInfo: BookPreview[];
   clusterdLevel: number;
   libraryMarkerInfos: LibraryMarkerInfo[];
   onBoundsChange: (level: number, bound: MapBound) => void;
@@ -27,6 +29,7 @@ const EMPTY_FUNC = () => {};
 const ANIMATION_DURATION = 250;
 
 export const LibraryMap = ({
+  booksInfo = [],
   clusterdLevel,
   libraryMarkerInfos,
   onBoundsChange,
@@ -175,15 +178,7 @@ export const LibraryMap = ({
             {selectedLibraryInfo && (
               <LibraryStockPanel
                 libraryMarkerInfo={selectedLibraryInfo}
-                books={[
-                  {
-                    id: "162",
-                    title: "팔로우 동유럽 :핵심 6개국",
-                    author: "이주은,박주미 [공] 지음",
-                    publicationYear: "",
-                    publisher: "Travelike(트래블라이크)",
-                  },
-                ]}
+                books={booksInfo}
                 onClose={handleClosePanel}
                 isEntering={isEnteringPanel}
               />
