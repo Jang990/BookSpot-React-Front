@@ -148,22 +148,22 @@ export const LibraryMap = ({
   }, [selectedMarkerId]);
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       {!scriptLoad && <Loading />}
       {scriptLoad && (
-        <div className="relative">
+        <div className="relative w-full">
           <KakaoMap
             center={{ lat: 37.5081844, lng: 126.7241666 }}
             style={{
-              width: "800px",
-              height: "600px",
+              width: "100%",
+              height: "calc(100vh - 180px)",
+              minHeight: "400px", // 최소 높이 설정
+              maxWidth: "1200px",
               margin: "0 auto",
               borderRadius: "0.5rem",
-              overflow: "hidden",
             }}
             level={clusterdLevel}
             onBoundsChanged={handleBoundsChanged}
-            className="shadow-xl"
           >
             <MarkerClusterer
               averageCenter={true}

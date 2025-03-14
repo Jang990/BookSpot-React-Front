@@ -81,14 +81,16 @@ export default function Libraries() {
   }, MAP_SEARCH_DELAY);
 
   return (
-    <main className="min-h-screen bg-gray-100">
+    <div className="py-2 px-2 sm:py-4 sm:px-4">
       {/* <LibraryPage /> */}
-      <LibraryMapTemplate
-        booksInfo={booksInfo}
-        clusterdLevel={CULSTERD_LEVEL}
-        libraries={libraries}
-        onBoundsChange={debouncedMapSearch}
-      />
-    </main>
+      <div className="w-full">
+        <LibraryMapTemplate
+          booksInfo={booksInfo}
+          clusterdLevel={CULSTERD_LEVEL}
+          libraries={libraries}
+          onBoundsChange={debouncedMapSearch}
+        />
+      </div>
+    </div>
   );
 }

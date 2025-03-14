@@ -43,6 +43,7 @@ export const LibraryMarker = ({
         className={`
           flex flex-col items-center transition-all duration-300 cursor-pointer
           ${isHighlighted ? "scale-110" : ""}
+          touch-manipulation
         `}
         onMouseOver={onMouseOver}
         onMouseOut={onMouseOut}

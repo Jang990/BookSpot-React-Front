@@ -20,18 +20,16 @@ export const LibraryMapTemplate = ({
   const [scriptLoadError, setScriptLoadError] = useState<boolean>(false);
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="space-y-4">
-        {scriptLoadError && <div>잘못된 스크립트 오류입니다.</div>}
+    <div className="relative w-full flex items-center justify-center">
+      {scriptLoadError && <div>잘못된 스크립트 오류입니다.</div>}
 
-        <LibraryMap
-          booksInfo={booksInfo}
-          clusterdLevel={clusterdLevel}
-          libraryMarkerInfos={libraries}
-          onBoundsChange={onBoundsChange}
-          onError={() => setScriptLoadError(true)}
-        />
-      </div>
+      <LibraryMap
+        booksInfo={booksInfo}
+        clusterdLevel={clusterdLevel}
+        libraryMarkerInfos={libraries}
+        onBoundsChange={onBoundsChange}
+        onError={() => setScriptLoadError(true)}
+      />
     </div>
   );
 };
