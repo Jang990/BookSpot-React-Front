@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Map as KakaoMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
@@ -36,8 +36,10 @@ export const LibraryMap = ({
   onError = EMPTY_FUNC,
 }: Props) => {
   const [scriptLoad, setScriptLoad] = useState<boolean>(false);
+
   const [hoveredMarkerId, setHoveredMarkerId] = useState<string | null>(null);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
+
   const [isEnteringPanel, setIsEnteringPanel] = useState(false);
   const [previousMarkerId, setPreviousMarkerId] = useState<string | null>(null);
   const mapRef = useRef<any>(null);
@@ -50,7 +52,6 @@ export const LibraryMap = ({
     });
     return map;
   }, [libraryMarkerInfos]);
-
   useEffect(() => {
     const script: HTMLScriptElement = kakaoMapScript();
     document.head.appendChild(script);
@@ -99,7 +100,17 @@ export const LibraryMap = ({
     setSelectedMarkerId(libraryId);
 
     // 다른 마커가 이미 선택되어 있는 경우, 패널 애니메이션 처리
-    if (previousMarkerId) {
+    animateLibraryPanel();
+    // (선택) 선택된 마커가 있는 도서관 위치로 지도 중심 이동
+    moveToMarker();
+
+    function animateLibraryPanel() {
+      // 처음 선택하는 경우
+      if (!previousMarkerId) {
+        setIsEnteringPanel(true);
+        return;
+      }
+
       // 기존 패널 사라지는 애니메이션
       setIsEnteringPanel(false);
 
@@ -107,17 +118,15 @@ export const LibraryMap = ({
       setTimeout(() => {
         setIsEnteringPanel(true);
       }, ANIMATION_DURATION);
-    } else {
-      // 처음 선택하는 경우
-      setIsEnteringPanel(true);
     }
 
-    // 선택된 마커가 있는 도서관 위치로 지도 중심 이동 (선택 사항)
-    const selectedLibrary = libraryMarkerInfoMap.get(libraryId);
-    if (selectedLibrary && mapRef.current) {
-      const { latitude, longitude } = selectedLibrary.library.location;
-      // 부드럽게 이동 (애니메이션 효과)
-      mapRef.current.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+    function moveToMarker() {
+      const selectedLibrary = libraryMarkerInfoMap.get(libraryId);
+      if (selectedLibrary && mapRef.current) {
+        const { latitude, longitude } = selectedLibrary.library.location;
+        // 부드럽게 이동 (애니메이션 효과)
+        mapRef.current.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+      }
     }
   };
 
@@ -132,9 +141,11 @@ export const LibraryMap = ({
   };
 
   // 선택된 도서관 정보 가져오기
-  const selectedLibraryInfo = selectedMarkerId
-    ? libraryMarkerInfoMap.get(selectedMarkerId) || null
-    : null;
+  const selectedLibraryInfo = useMemo(() => {
+    return selectedMarkerId
+      ? libraryMarkerInfoMap.get(selectedMarkerId) || null
+      : null;
+  }, [selectedMarkerId]);
 
   return (
     <div className="relative">
