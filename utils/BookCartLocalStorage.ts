@@ -22,6 +22,10 @@ export function removeBookId(bookId: string): boolean {
   return true;
 }
 
+export function clear(): void {
+  save([]);
+}
+
 function save(element: string[]) {
   localStorage.setItem(STORAGE_NAME, JSON.stringify(element));
 }

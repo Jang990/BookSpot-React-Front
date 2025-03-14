@@ -5,11 +5,13 @@ import {
   findBookIds,
   addBookId,
   removeBookId,
+  clear,
 } from "@/utils/BookCartLocalStorage";
 import { createContext, useContext, useState, useEffect } from "react";
 
 type BookCartContextType = {
   cart: string[];
+  clearCart: () => void;
   findAllBookIds: () => string[];
   addToCart: (bookId: string) => boolean;
   removeFromCart: (bookId: string) => boolean;
@@ -36,6 +38,11 @@ export const BookCartProvider = ({ children }: BookCartProviderProps) => {
     if (bookCart.length > 0) setCart(bookCart);
   }, []);
 
+  const clearCart = () => {
+    setCart([]);
+    clear();
+  };
+
   const findAllBookIds = () => {
     return findBookIds();
   };
@@ -57,7 +64,7 @@ export const BookCartProvider = ({ children }: BookCartProviderProps) => {
 
   return (
     <BookCartContext.Provider
-      value={{ cart, findAllBookIds, addToCart, removeFromCart }}
+      value={{ cart, clearCart, findAllBookIds, addToCart, removeFromCart }}
     >
       {children}
     </BookCartContext.Provider>
