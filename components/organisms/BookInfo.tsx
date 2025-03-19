@@ -23,7 +23,7 @@ export const BookInfo = ({ book, isCartPage }: BookInfoProps) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <BookPreviewImage id={book.id} title={book.title} image={book.image} />
+      <BookPreviewImage id={book.id} title={book.title} isbn13={book.isbn13} />
       <BookPreviewInfo book={book} />
 
       <div

@@ -4,15 +4,15 @@ import Link from "next/link";
 interface BookImageProps {
   id: string;
   title: string;
-  image?: string;
+  isbn13: string;
 }
 
-export const BookPreviewImage = ({ id, title, image }: BookImageProps) => {
+export const BookPreviewImage = ({ id, title, isbn13 }: BookImageProps) => {
   return (
     <Link href={`/book/${id}`}>
       <div className="relative h-64 bg-muted">
         <Image
-          src={image || "/placeholder.svg"}
+          src={`https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn13}.jpg`}
           alt={title}
           layout="fill"
           objectFit="cover"
