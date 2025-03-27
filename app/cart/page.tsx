@@ -72,7 +72,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {cart.length === 0 ? (
           <div className="flex flex-col items-center justify-center mt-12">
