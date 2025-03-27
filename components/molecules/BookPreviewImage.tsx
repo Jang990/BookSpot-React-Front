@@ -8,14 +8,16 @@ interface BookImageProps {
 }
 
 export const BookPreviewImage = ({ id, title, isbn13 }: BookImageProps) => {
+  const imageUrl = `https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn13}.jpg`;
   return (
     <Link href={`/book/${id}`}>
       <div className="relative h-64 bg-muted">
         <Image
-          src={`https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn13}.jpg`}
+          src={imageUrl}
           alt={title}
-          layout="fill"
-          objectFit="cover"
+          fill
+          sizes="(max-width: 768px) 50vw, 33vw"
+          className="object-contain"
         />
       </div>
     </Link>
