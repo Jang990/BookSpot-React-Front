@@ -1,19 +1,22 @@
 import { useState } from "react";
-import { LibraryMap } from "../organisms/LibraryMap";
+import {
+  LibraryMap,
+  MapLocationProps as MapLocationProps,
+} from "../organisms/LibraryMap";
 import { MapBound } from "@/types/MapBound";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
 
 export interface Props {
   booksInfo: BookPreview[];
-  clusterdLevel: number;
+  mapLocationProps: MapLocationProps;
   libraries: LibraryMarkerInfo[];
   onBoundsChange: (level: number, bound: MapBound) => void;
 }
 
 export const LibraryMapTemplate = ({
   booksInfo = [],
-  clusterdLevel,
+  mapLocationProps,
   libraries,
   onBoundsChange,
 }: Props) => {
@@ -25,7 +28,7 @@ export const LibraryMapTemplate = ({
 
       <LibraryMap
         booksInfo={booksInfo}
-        clusterdLevel={clusterdLevel}
+        mapLocationProps={mapLocationProps}
         libraryMarkerInfos={libraries}
         onBoundsChange={onBoundsChange}
         onError={() => setScriptLoadError(true)}

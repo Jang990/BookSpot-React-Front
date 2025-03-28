@@ -6,6 +6,7 @@ import { LibraryMarker } from "../molecules/LibararyMarker";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { LibraryStockPanel } from "../molecules/LibraryStockPanel";
 import { BookPreview } from "@/types/BookPreview";
+import { Location } from "@/types/Location";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -17,9 +18,14 @@ function kakaoMapScript(): HTMLScriptElement {
   return script;
 }
 
+export interface MapLocationProps {
+  location: Location;
+  clusterdLevel: number;
+}
+
 export interface Props {
   booksInfo: BookPreview[];
-  clusterdLevel: number;
+  mapLocationProps: MapLocationProps;
   libraryMarkerInfos: LibraryMarkerInfo[];
   onBoundsChange: (level: number, bound: MapBound) => void;
   onError: () => void;
@@ -30,7 +36,7 @@ const ANIMATION_DURATION = 250;
 
 export const LibraryMap = ({
   booksInfo = [],
-  clusterdLevel,
+  mapLocationProps,
   libraryMarkerInfos,
   onBoundsChange,
   onError = EMPTY_FUNC,
@@ -153,7 +159,10 @@ export const LibraryMap = ({
       {scriptLoad && (
         <div className="relative w-full">
           <KakaoMap
-            center={{ lat: 37.5081844, lng: 126.7241666 }}
+            center={{
+              lat: mapLocationProps.location.latitude,
+              lng: mapLocationProps.location.longitude,
+            }}
             style={{
               width: "100%",
               height: "calc(100vh - 180px)",
@@ -162,7 +171,7 @@ export const LibraryMap = ({
               margin: "0 auto",
               borderRadius: "0.5rem",
             }}
-            level={clusterdLevel}
+            level={mapLocationProps.clusterdLevel}
             onBoundsChanged={handleBoundsChanged}
           >
             <MarkerClusterer

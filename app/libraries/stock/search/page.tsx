@@ -13,6 +13,7 @@ import { useBookCart } from "@/contexts/BookCartContext";
 import { BookPreview } from "@/types/BookPreview";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
+import { MapLocationProps } from "@/components/organisms/LibraryMap";
 
 export default function Libraries() {
   const { cart } = useBookCart();
@@ -80,13 +81,18 @@ export default function Libraries() {
       });
   }, MAP_SEARCH_DELAY);
 
+  const mapLocationProps: MapLocationProps = {
+    clusterdLevel: CULSTERD_LEVEL,
+    location: { latitude: 37.5081844, longitude: 126.7241666 },
+  };
+
   return (
     <div className="py-2 px-2 sm:py-4 sm:px-4">
       {/* <LibraryPage /> */}
       <div className="w-full">
         <LibraryMapTemplate
           booksInfo={booksInfo}
-          clusterdLevel={CULSTERD_LEVEL}
+          mapLocationProps={mapLocationProps}
           libraries={libraries}
           onBoundsChange={debouncedMapSearch}
         />
