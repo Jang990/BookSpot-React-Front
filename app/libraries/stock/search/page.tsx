@@ -14,6 +14,10 @@ import { BookPreview } from "@/types/BookPreview";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import { MapLocationProps } from "@/components/organisms/LibraryMap";
+import {
+  findMapLocationProps,
+  setMapLocationProps,
+} from "@/utils/MapLocalStorage";
 
 export default function Libraries() {
   const { cart } = useBookCart();
@@ -40,6 +44,13 @@ export default function Libraries() {
   }, [cart]);
 
   const debouncedMapSearch = debounce((level: number, bound: MapBound) => {
+    const centerLatitude = (bound.nw.latitude + bound.se.latitude) / 2;
+    const centerLongitude = (bound.nw.longitude + bound.se.longitude) / 2;
+    setMapLocationProps({
+      clusterdLevel: level,
+      location: { latitude: centerLatitude, longitude: centerLongitude },
+    });
+
     fetchNearByLibraryStock({
       bookIds: bookIds,
       mapBound: bound,
@@ -81,10 +92,7 @@ export default function Libraries() {
       });
   }, MAP_SEARCH_DELAY);
 
-  const mapLocationProps: MapLocationProps = {
-    clusterdLevel: CULSTERD_LEVEL,
-    location: { latitude: 37.5081844, longitude: 126.7241666 },
-  };
+  const mapLocationProps: MapLocationProps = findMapLocationProps();
 
   return (
     <div className="py-2 px-2 sm:py-4 sm:px-4">
