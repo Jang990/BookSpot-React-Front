@@ -107,8 +107,6 @@ export const LibraryMap = ({
 
     // 다른 마커가 이미 선택되어 있는 경우, 패널 애니메이션 처리
     animateLibraryPanel();
-    // (선택) 선택된 마커가 있는 도서관 위치로 지도 중심 이동
-    moveToMarker();
 
     function animateLibraryPanel() {
       // 처음 선택하는 경우
@@ -125,16 +123,18 @@ export const LibraryMap = ({
         setIsEnteringPanel(true);
       }, ANIMATION_DURATION);
     }
+  };
 
-    function moveToMarker() {
-      const selectedLibrary = libraryMarkerInfoMap.get(libraryId);
-      if (selectedLibrary && mapRef.current) {
+  function moveToLibraryLocation() {
+    if (selectedMarkerId && mapRef.current) {
+      const selectedLibrary = libraryMarkerInfoMap.get(selectedMarkerId);
+      if (selectedLibrary) {
         const { latitude, longitude } = selectedLibrary.library.location;
         // 부드럽게 이동 (애니메이션 효과)
         mapRef.current.panTo(new window.kakao.maps.LatLng(latitude, longitude));
       }
     }
-  };
+  }
 
   const handleClosePanel = () => {
     setIsEnteringPanel(false);
@@ -215,6 +215,7 @@ export const LibraryMap = ({
                 books={booksInfo}
                 onClose={handleClosePanel}
                 isEntering={isEnteringPanel}
+                onMoveToLocation={moveToLibraryLocation}
               />
             )}
           </KakaoMap>

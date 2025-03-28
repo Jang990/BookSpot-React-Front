@@ -8,6 +8,7 @@ import {
   X,
   Book,
   Info,
+  MapPin,
 } from "lucide-react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
@@ -18,6 +19,7 @@ interface LibraryStockPanelProps {
   books: BookPreview[];
   onClose: () => void;
   isEntering: boolean;
+  onMoveToLocation?: () => void;
 }
 
 export const LibraryStockPanel = ({
@@ -25,6 +27,7 @@ export const LibraryStockPanel = ({
   books,
   onClose,
   isEntering,
+  onMoveToLocation,
 }: LibraryStockPanelProps) => {
   const { library, stock } = libraryMarkerInfo;
   const [activeTab, setActiveTab] = useState<"books" | "info">("books");
@@ -57,6 +60,16 @@ export const LibraryStockPanel = ({
           {library.name}
         </h2>
         <div className="flex items-center space-x-2">
+          {onMoveToLocation && (
+            <button
+              onClick={onMoveToLocation}
+              className="p-1.5 rounded-md text-gray-500 hover:bg-gray-100 transition-colors"
+              aria-label="위치로 이동"
+              title="지도에서 위치 보기"
+            >
+              <MapPin size={16} />
+            </button>
+          )}
           <button
             onClick={() => setActiveTab("books")}
             className={`p-1.5 rounded-md transition-colors ${
