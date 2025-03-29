@@ -89,7 +89,7 @@ export default function Cart() {
               isCartPage={true}
             />
 
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-4 flex justify-center gap-4">
               <button
                 onClick={handleFindLibraries}
                 className="bg-primary text-primary-foreground px-6 py-3 rounded-full hover:bg-primary/90 transition-colors flex items-center"
