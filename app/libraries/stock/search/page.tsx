@@ -19,6 +19,8 @@ import {
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
 
+export const dynamic = "force-dynamic"; // 요거 추가
+
 export default function Libraries() {
   const { cart } = useBookCart();
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
