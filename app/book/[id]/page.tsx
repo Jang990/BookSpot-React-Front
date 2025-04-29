@@ -2,8 +2,9 @@ import { BookDetail } from "@/components/organisms/BookDetail";
 import { BookReviewList } from "@/components/organisms/BookReviewList";
 type Params = { id: string };
 
-export default async function BookDetailPage({ params }: { params: Params }) {
-  const { id } = await params;
+export default async function BookDetailPage(/* { params }: { params: Params } */) {
+  /* const { id } = params; */
+  const id = "1"; // 임시 코드
 
   return (
     <>
