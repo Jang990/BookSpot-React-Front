@@ -21,7 +21,7 @@ export const fetchBooksPreview = async ({
   );
 };
 
-const BOOK_API_URL = "http://localhost:8080/api/books";
+const BOOK_API_URL = process.env.NEXT_PUBLIC_API_SERVER_URL + "/api/books";
 function createApi({ pageable, keyword, bookIds }: SearchCondition): string {
   if (!keyword && !bookIds) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");

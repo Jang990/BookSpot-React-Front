@@ -17,7 +17,7 @@ export const fetchNearByLibraryStock = async ({
   return get(api).then((content) => content.map(convertLibrary));
 };
 
-const BOOK_API_URL = "http://localhost:8080/api/libraries";
+const BOOK_API_URL = process.env.NEXT_PUBLIC_API_SERVER_URL + "/api/libraries";
 function createApi(bookIds: string[], { nw, se }: MapBound): string {
   const url = new URL(BOOK_API_URL);
   // if (bookIds) url.searchParams.append("bookIds", bookIds.join(","));
