@@ -1,27 +1,33 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+// eslint.config.js
+import { defineConfig } from "eslint/config";
+import { flatConfig as nextPlugin } from "@next/eslint-plugin-next";
+import { flatConfig as prettierPlugin } from "eslint-plugin-prettier";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-// 기존 Next.js 설정
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-
-  // Prettier와 ESLint 규칙 추가
-  "plugin:prettier/recommended",
-];
-
-// 추가된 Prettier 규칙
-eslintConfig.push({
-  rules: {
-    "prettier/prettier": "error", // Prettier와 ESLint가 충돌할 때, Prettier를 우선시하고 오류로 처리
+// Next.js 핵심 규칙과 TS, Prettier 플러그인 적용
+export default defineConfig([
+  // Next.js Core Web Vitals 규칙
+  nextPlugin.coreWebVitals,
+  // TypeScript 지원
+  {
+    plugins: { "@typescript-eslint": tsPlugin },
+    languageOptions: {
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: { jsx: true },
+      },
+    },
+    rules: {
+      ...tsPlugin.configs.recommended.rules,
+    },
   },
-});
-
-export default eslintConfig;
+  // Prettier 플러그인
+  prettierPlugin,
+  {
+    rules: {
+      "prettier/prettier": "error",
+    },
+  },
+]);
