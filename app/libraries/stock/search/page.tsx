@@ -4,8 +4,7 @@ import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
 import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
 import { debounce } from "@/utils/debounce";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
@@ -19,13 +18,16 @@ import {
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
 
-export default function Libraries() {
+export default function Libraries({
+  searchParams,
+}: {
+  searchParams: Promise<{ bookIds?: string }>;
+}) {
   const { cart } = useBookCart();
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
   const [booksInfo, setBooksInfo] = useState<BookPreview[]>([]);
 
-  const searchParams = useSearchParams();
-  const bookIdsStr = searchParams.get("bookIds");
+  const bookIdsStr = use(searchParams).bookIds;
   const bookIds = bookIdsStr ? bookIdsStr.split(",") : [];
   const MAP_SEARCH_DELAY = 275;
   const CULSTERD_LEVEL = 7;
