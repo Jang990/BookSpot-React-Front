@@ -23,7 +23,7 @@ export const fetchLibraryStock = async (
 };
 
 const STOCK_API_URL =
-  process.env.NEXT_PUBLIC_API_SERVER_URL + "/api/libraries/stocks";
+  process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/libraries/stocks";
 function createApi({ libraryIds, bookIds }: Props): string {
   const url = new URL(STOCK_API_URL);
   url.searchParams.append("libraryIds", libraryIds.join(","));

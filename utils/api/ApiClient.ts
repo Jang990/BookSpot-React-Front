@@ -9,7 +9,7 @@ export class ApiClient {
   async get<T>(req: NextRequest): Promise<NextResponse> {
     const pathname = req.nextUrl.pathname;
     const search = req.nextUrl.search;
-    const url = process.env.NEXT_PUBLIC_API_SERVER_URL + pathname + search;
+    const url = this.baseUrl + pathname + search;
 
     try {
       // 외부 API로 통신
@@ -31,5 +31,5 @@ export class ApiClient {
 }
 
 // 싱글톤 인스턴스
-const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_SERVER_URL!);
+const apiClient = new ApiClient(process.env.NEXT_PUBLIC_FRONT_SERVER_URL!);
 export default apiClient;
