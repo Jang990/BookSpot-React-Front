@@ -17,7 +17,7 @@ export const fetchLibraryStock = async (
   return get(createApi(props))
     .then((content) => content.map(convertLibraryStock))
     .then((stocks) => {
-      console.log(stocks);
+      // console.log(stocks);
       return stocks;
     });
 };

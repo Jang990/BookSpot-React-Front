@@ -26,8 +26,6 @@ function createApi({ pageable, keyword, bookIds }: SearchCondition): string {
   if (!keyword && !bookIds) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");
   }
-  console.log(BOOK_API_URL);
-
   const url = new URL(BOOK_API_URL);
 
   if (keyword) url.searchParams.append("title", keyword);
