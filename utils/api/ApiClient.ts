@@ -31,5 +31,5 @@ export class ApiClient {
 }
 
 // 싱글톤 인스턴스
-const apiClient = new ApiClient(process.env.NEXT_PUBLIC_FRONT_SERVER_URL!);
+const apiClient = new ApiClient(process.env.NEXT_PUBLIC_API_SERVER_URL!);
 export default apiClient;
