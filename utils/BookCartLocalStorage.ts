@@ -1,8 +1,8 @@
-const STORAGE_NAME = "SELECTED_BOOK_IDS";
+export const STORAGE_NAME = "SELECTED_BOOK_IDS";
 
 export function findBookIds(): string[] {
-  const stored = localStorage.getItem(STORAGE_NAME);
-  return stored ? JSON.parse(stored) : [];
+  const cookieValue = getCookie(STORAGE_NAME);
+  return cookieValue ? JSON.parse(cookieValue) : [];
 }
 
 export function addBookId(bookId: string): boolean {
@@ -27,5 +27,10 @@ export function clear(): void {
 }
 
 function save(element: string[]) {
-  localStorage.setItem(STORAGE_NAME, JSON.stringify(element));
+  document.cookie = `${STORAGE_NAME}=${JSON.stringify(element)}; path=/`;
+}
+
+function getCookie(name: string): string | undefined {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  return match ? decodeURIComponent(match[2]) : undefined;
 }
