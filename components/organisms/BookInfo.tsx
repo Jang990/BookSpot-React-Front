@@ -11,9 +11,10 @@ import { useBookCart } from "@/contexts/BookCartContext";
 interface BookInfoProps {
   book: BookPreview;
   isCartPage?: boolean;
+  remove?: (id: string) => void;
 }
 
-export const BookInfo = ({ book, isCartPage }: BookInfoProps) => {
+export const BookInfo = ({ book, isCartPage, remove }: BookInfoProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const { removeFromCart, addToCart } = useBookCart();
 
@@ -30,7 +31,12 @@ export const BookInfo = ({ book, isCartPage }: BookInfoProps) => {
         className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
       >
         {isCartPage ? (
-          <TrashButton onClick={() => removeFromCart(book.id)} />
+          <TrashButton
+            onClick={() => {
+              removeFromCart(book.id);
+              remove?.(book.id);
+            }}
+          />
         ) : (
           <CartButton onClick={() => addToCart(book.id)} />
         )}

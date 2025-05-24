@@ -1,8 +1,8 @@
 import { Pageable } from "@/types/Pageable";
 import { get } from "./Fetcher";
 
-interface SearchCondition {
-  keyword?: string;
+export interface SearchCondition {
+  keyword?: string | null;
   bookIds?: string[];
   pageable: Pageable;
 }
