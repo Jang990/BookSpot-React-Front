@@ -33,6 +33,8 @@ export default function Libraries({
   const CULSTERD_LEVEL = 7;
   const MAX_CART_SIZE = 20;
 
+  const mapBound: MapBound = findMapLocationProps();
+
   useEffect(() => {
     if (!cart || cart.length === 0) return;
 
@@ -43,6 +45,8 @@ export default function Libraries({
       const books: BookPreview[] = response.content.map(convertBookPreview);
       setBooksInfo(books);
     });
+
+    debouncedMapSearch(mapBound);
   }, [cart]);
 
   const debouncedMapSearch = debounce((bound: MapBound) => {
@@ -92,8 +96,6 @@ export default function Libraries({
         );
       });
   }, MAP_SEARCH_DELAY);
-
-  const mapBound: MapBound = findMapLocationProps();
 
   return (
     <div className="py-2 px-2 sm:py-4 sm:px-4">
