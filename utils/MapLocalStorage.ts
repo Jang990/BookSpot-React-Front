@@ -7,8 +7,8 @@ const DEFAULT_MAP_LOCATION_PROPS: MapLocationProps = {
 };
 
 export function findMapLocationProps(): MapLocationProps {
-  const stored = localStorage.getItem(STORAGE_NAME);
-  return stored ? JSON.parse(stored) : DEFAULT_MAP_LOCATION_PROPS;
+  const cookieValue = getCookie(STORAGE_NAME);
+  return cookieValue ? JSON.parse(cookieValue) : DEFAULT_MAP_LOCATION_PROPS;
 }
 
 export function setMapLocationProps(locationProps: MapLocationProps): boolean {
@@ -17,5 +17,17 @@ export function setMapLocationProps(locationProps: MapLocationProps): boolean {
 }
 
 function save(element: MapLocationProps) {
-  localStorage.setItem(STORAGE_NAME, JSON.stringify(element));
+  const value = JSON.stringify(element);
+  document.cookie = `${STORAGE_NAME}=${encodeURIComponent(value)}; path=/; max-age=${60 * 60 * 24 * 7}`;
+}
+
+function getCookie(name: string): string | null {
+  const cookies = document.cookie.split("; ");
+  for (const cookie of cookies) {
+    const [key, value] = cookie.split("=");
+    if (key === name) {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
 }
