@@ -85,10 +85,13 @@ export const LibraryMap = ({
     const bound = map.getBounds();
     const nw = bound.getNorthEast();
     const se = bound.getSouthWest();
-    onBoundsChange(map.getLevel(), {
-      nw: { latitude: nw.getLat(), longitude: nw.getLng() },
-      se: { latitude: se.getLat(), longitude: se.getLng() },
-    });
+    onBoundsChange(
+      map.getLevel(),
+      new MapBound(
+        { latitude: nw.getLat(), longitude: nw.getLng() },
+        { latitude: se.getLat(), longitude: se.getLng() }
+      )
+    );
 
     // 중요: 여기서 패널 상태를 변경하지 않음
   };

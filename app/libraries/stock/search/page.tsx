@@ -46,11 +46,12 @@ export default function Libraries({
   }, [cart]);
 
   const debouncedMapSearch = debounce((level: number, bound: MapBound) => {
-    const centerLatitude = (bound.nw.latitude + bound.se.latitude) / 2;
-    const centerLongitude = (bound.nw.longitude + bound.se.longitude) / 2;
     setMapLocationProps({
       clusterdLevel: level,
-      location: { latitude: centerLatitude, longitude: centerLongitude },
+      location: {
+        latitude: bound.centerLatitude,
+        longitude: bound.centerLongitude,
+      },
     });
 
     fetchNearByLibraryStock({
