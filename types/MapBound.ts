@@ -3,7 +3,8 @@ import { Location } from "./Location";
 export class MapBound {
   constructor(
     public nw: Location,
-    public se: Location
+    public se: Location,
+    public clusterdLevel: number
   ) {}
 
   get centerLatitude(): number {

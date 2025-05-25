@@ -1,24 +1,50 @@
-import { MapLocationProps } from "@/components/organisms/LibraryMap";
+import { MapBound } from "@/types/MapBound";
 
 const STORAGE_NAME = "MAP_LOCATION";
-const DEFAULT_MAP_LOCATION_PROPS: MapLocationProps = {
-  location: { latitude: 37.566534, longitude: 126.9781931 },
-  clusterdLevel: 3,
-};
 
-export function findMapLocationProps(): MapLocationProps {
+const DEFAULT_MAP_BOUND: MapBound = new MapBound(
+  {
+    latitude: 37.57027567568552,
+    longitude: 126.97290367316594,
+  },
+  {
+    latitude: 37.56269646068594,
+    longitude: 126.98268104389341,
+  },
+  3
+);
+
+export function findMapLocationProps(): MapBound {
   const cookieValue = getCookie(STORAGE_NAME);
-  return cookieValue ? JSON.parse(cookieValue) : DEFAULT_MAP_LOCATION_PROPS;
+
+  if (!cookieValue) return DEFAULT_MAP_BOUND;
+
+  try {
+    const parsed = JSON.parse(cookieValue);
+    return parsed
+      ? new MapBound(parsed.nw, parsed.se, parsed.clusterdLevel)
+      : DEFAULT_MAP_BOUND;
+  } catch (e) {
+    console.error("Parsing error:", e);
+    return DEFAULT_MAP_BOUND;
+  }
 }
 
-export function setMapLocationProps(locationProps: MapLocationProps): boolean {
-  save(locationProps);
+export function setMapLocationProps(bound: MapBound): boolean {
+  save(bound);
   return true;
 }
 
-function save(element: MapLocationProps) {
+function save(element: MapBound) {
   const value = JSON.stringify(element);
-  document.cookie = `${STORAGE_NAME}=${encodeURIComponent(value)}; path=/; max-age=${60 * 60 * 24 * 7}`;
+  // document.cookie = `${STORAGE_NAME}=${encodeURIComponent(value)}; path=/; max-age=${60 * 60 * 24 * 7}`;
+  document.cookie = `${STORAGE_NAME}=${encodeURIComponent(
+    JSON.stringify({
+      nw: element.nw,
+      se: element.se,
+      clusterdLevel: element.clusterdLevel, // 오타 고친 상태여야 함
+    })
+  )}; path=/; max-age=${60 * 60 * 24 * 7}`;
 }
 
 function getCookie(name: string): string | null {

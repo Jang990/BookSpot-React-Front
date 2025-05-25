@@ -12,7 +12,7 @@ import { useBookCart } from "@/contexts/BookCartContext";
 import { BookPreview } from "@/types/BookPreview";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
-import { MapLocationProps } from "@/components/organisms/LibraryMap";
+
 import {
   findMapLocationProps,
   setMapLocationProps,
@@ -45,14 +45,8 @@ export default function Libraries({
     });
   }, [cart]);
 
-  const debouncedMapSearch = debounce((level: number, bound: MapBound) => {
-    setMapLocationProps({
-      clusterdLevel: level,
-      location: {
-        latitude: bound.centerLatitude,
-        longitude: bound.centerLongitude,
-      },
-    });
+  const debouncedMapSearch = debounce((bound: MapBound) => {
+    setMapLocationProps(bound);
 
     fetchNearByLibraryStock({
       bookIds: bookIds,
@@ -73,7 +67,11 @@ export default function Libraries({
         }
       })
       .then((responseLibraries) => {
-        if (responseLibraries.length === 0 || level >= CULSTERD_LEVEL) return;
+        if (
+          responseLibraries.length === 0 ||
+          bound.clusterdLevel >= CULSTERD_LEVEL
+        )
+          return;
 
         const libraryIds = responseLibraries.map((library) => library.id);
         const libraryMap = new Map(
@@ -95,7 +93,7 @@ export default function Libraries({
       });
   }, MAP_SEARCH_DELAY);
 
-  const mapLocationProps: MapLocationProps = findMapLocationProps();
+  const mapBound: MapBound = findMapLocationProps();
 
   return (
     <div className="py-2 px-2 sm:py-4 sm:px-4">
@@ -103,7 +101,7 @@ export default function Libraries({
       <div className="w-full">
         <LibraryMapTemplate
           booksInfo={booksInfo}
-          mapLocationProps={mapLocationProps}
+          mapBound={mapBound}
           libraries={libraries}
           onBoundsChange={debouncedMapSearch}
         />

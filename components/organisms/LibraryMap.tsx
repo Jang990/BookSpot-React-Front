@@ -25,9 +25,9 @@ export interface MapLocationProps {
 
 export interface Props {
   booksInfo: BookPreview[];
-  mapLocationProps: MapLocationProps;
+  mapBound: MapBound;
   libraryMarkerInfos: LibraryMarkerInfo[];
-  onBoundsChange: (level: number, bound: MapBound) => void;
+  onBoundsChange: (bound: MapBound) => void;
   onError: () => void;
 }
 
@@ -36,7 +36,7 @@ const ANIMATION_DURATION = 250;
 
 export const LibraryMap = ({
   booksInfo = [],
-  mapLocationProps,
+  mapBound,
   libraryMarkerInfos,
   onBoundsChange,
   onError = EMPTY_FUNC,
@@ -86,10 +86,10 @@ export const LibraryMap = ({
     const nw = bound.getNorthEast();
     const se = bound.getSouthWest();
     onBoundsChange(
-      map.getLevel(),
       new MapBound(
         { latitude: nw.getLat(), longitude: nw.getLng() },
-        { latitude: se.getLat(), longitude: se.getLng() }
+        { latitude: se.getLat(), longitude: se.getLng() },
+        map.getLevel()
       )
     );
 
@@ -163,8 +163,8 @@ export const LibraryMap = ({
         <div className="relative w-full">
           <KakaoMap
             center={{
-              lat: mapLocationProps.location.latitude,
-              lng: mapLocationProps.location.longitude,
+              lat: mapBound.centerLatitude,
+              lng: mapBound.centerLongitude,
             }}
             style={{
               width: "100%",
@@ -174,7 +174,7 @@ export const LibraryMap = ({
               margin: "0 auto",
               borderRadius: "0.5rem",
             }}
-            level={mapLocationProps.clusterdLevel}
+            level={mapBound.clusterdLevel}
             onBoundsChanged={handleBoundsChanged}
           >
             <MarkerClusterer
