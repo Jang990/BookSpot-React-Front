@@ -4,3 +4,10 @@ export default interface LibraryStock {
   availableBookIds: string[];
   unavailableBookIds: string[];
 }
+
+export const OUT_OF_ZOOM_STOCK: LibraryStock = {
+  libraryId: "-1",
+  totalBooksCount: -1,
+  availableBookIds: [],
+  unavailableBookIds: [],
+};

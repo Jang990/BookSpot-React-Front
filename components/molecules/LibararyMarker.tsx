@@ -1,4 +1,5 @@
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
+import { OUT_OF_ZOOM_STOCK } from "@/types/LibraryStock";
 import { BookOpen, Search } from "lucide-react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
 
@@ -25,6 +26,9 @@ export const LibraryMarker = ({
   const availableCount = stock?.availableBookIds.length || 0;
   const totalCount = stock?.totalBooksCount || 0;
   const isSearching = stock === undefined; // stock이 null이면 검색 중
+  const isOutOfZoom = stock !== undefined && stock === OUT_OF_ZOOM_STOCK;
+  const isAvailableStockData =
+    stock !== undefined && stock !== OUT_OF_ZOOM_STOCK;
 
   // 호버링 또는 선택된 상태
   const isHighlighted = isHovered || isSelected;
@@ -62,7 +66,7 @@ export const LibraryMarker = ({
         </div>
 
         {/* 하단: 재고 정보 (원 형태) */}
-        {!isSearching && (
+        {isAvailableStockData && (
           <div
             className={`
               w-10 h-10 rounded-full flex items-center justify-center shadow-md
@@ -85,6 +89,18 @@ export const LibraryMarker = ({
           >
             <Search size={12} className="mb-0.5" />
             <span>검색중</span>
+          </div>
+        )}
+
+        {isOutOfZoom && (
+          <div
+            className={`
+              w-10 h-10 rounded-full flex items-center justify-center shadow-md
+              transition-all duration-300
+              ${isHighlighted ? "bg-primary text-white" : "bg-white text-primary"}
+            `}
+          >
+            <BookOpen size={16} />
           </div>
         )}
       </div>

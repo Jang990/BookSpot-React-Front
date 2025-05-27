@@ -17,6 +17,7 @@ import {
   findMapLocationProps,
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
+import { OUT_OF_ZOOM_STOCK } from "@/types/LibraryStock";
 
 export default function Libraries({
   searchParams,
@@ -71,16 +72,23 @@ export default function Libraries({
         }
       })
       .then((responseLibraries) => {
-        if (
-          responseLibraries.length === 0 ||
-          bound.clusterdLevel >= CULSTERD_LEVEL
-        )
-          return;
-
         const libraryIds = responseLibraries.map((library) => library.id);
         const libraryMap = new Map(
           responseLibraries.map((library) => [library.id, library])
         );
+
+        if (
+          responseLibraries.length === 0 ||
+          bound.clusterdLevel >= CULSTERD_LEVEL
+        ) {
+          setLibraries(
+            responseLibraries.map((library) => ({
+              library,
+              stock: OUT_OF_ZOOM_STOCK,
+            }))
+          );
+          return;
+        }
 
         fetchLibraryStock({ libraryIds: libraryIds, bookIds: cart }).then(
           (libraryStocks) => {
