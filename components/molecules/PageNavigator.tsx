@@ -2,18 +2,29 @@
 
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
 import { NaviPageNumberButton } from "@/components/atoms/button/navi/NaviPageNumberButton";
+import { useRouter } from "next/navigation";
 
 interface PaginationProps {
+  searchTerm?: string;
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
 }
 
 export const PageNavigator = ({
+  searchTerm,
   currentPage,
   totalPages,
-  onPageChange,
 }: PaginationProps) => {
+  const router = useRouter();
+
+  const goToPage = (page: number) => {
+    const params = new URLSearchParams();
+    if (searchTerm) params.set("searchTerm", searchTerm);
+    params.set("page", String(page));
+
+    router.push(`/?${params.toString()}`);
+  };
+
   // 표시할 페이지 번호 범위 계산
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -39,7 +50,7 @@ export const PageNavigator = ({
       {/* 이전 페이지 버튼 */}
       <NaviOptionButton
         text="이전"
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage === 1}
       />
 
@@ -48,7 +59,7 @@ export const PageNavigator = ({
         <>
           <NaviPageNumberButton
             page={1}
-            onClick={() => onPageChange(1)}
+            onClick={() => goToPage(1)}
             clicked={currentPage === 1}
           />
           {getPageNumbers()[0] > 2 && <span className="px-1">...</span>}
@@ -60,7 +71,7 @@ export const PageNavigator = ({
         <NaviPageNumberButton
           key={page}
           page={page}
-          onClick={() => onPageChange(page)}
+          onClick={() => goToPage(page)}
           clicked={currentPage === page}
         />
       ))}
@@ -71,7 +82,7 @@ export const PageNavigator = ({
           <span className="px-1">...</span>
           <NaviPageNumberButton
             page={totalPages}
-            onClick={() => onPageChange(totalPages)}
+            onClick={() => goToPage(totalPages)}
             clicked={false}
           />
         </>
@@ -80,7 +91,7 @@ export const PageNavigator = ({
       {/* 다음 페이지 버튼 */}
       <NaviOptionButton
         text="다음"
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage === totalPages || totalPages === 0}
       />
     </div>

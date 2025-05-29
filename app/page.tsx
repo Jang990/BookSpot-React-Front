@@ -1,32 +1,74 @@
-"use client";
-
-import { useState, useCallback, useEffect } from "react";
-import { debounce } from "@/utils/debounce";
 import { BookPreview } from "@/types/BookPreview";
-import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
-import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { PageNavigator } from "@/components/molecules/PageNavigator";
+import { Pageable } from "@/types/Pageable";
+import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
+import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 
 const ITEMS_PER_PAGE = 12;
-const MIN_SEARCH_TERM_LENGTH = 2;
+export const MIN_SEARCH_TERM_LENGTH = 2;
 const FIRST_PAGE = 1;
 
-export default function Home() {
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function Home({ searchParams }: Props) {
+  const rawSearchTerm = (await searchParams).searchTerm;
+  const rawPage = (await searchParams).page;
+
+  const searchTerm = Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
+  const page = parsePage(rawPage);
+
+  function parsePage(rawPage: string | string[] | undefined): number {
+    if (!rawPage || Array.isArray(rawPage)) return FIRST_PAGE;
+
+    const parsed = Number.parseInt(rawPage, 10);
+    if (Number.isNaN(parsed) || parsed < FIRST_PAGE) return FIRST_PAGE;
+
+    return parsed;
+  }
+
+  const pageable: Pageable = {
+    pageNumber: page - 1,
+    pageSize: ITEMS_PER_PAGE,
+  };
+
+  let totalPage = 0;
+  let books: BookPreview[] = [];
+
+  // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
+  if (!searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH) {
+    totalPage = 0;
+    books = [];
+  } else {
+    const json = await fetchBooksPreview({
+      keyword: searchTerm,
+      pageable,
+    });
+    totalPage = json.totalPages;
+    books = json.content.map(convertBookPreview);
+  }
+
+  /* 
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
-
   const loadBooks = useCallback(async (term: string, currentPage: number) => {
     try {
       setIsLoading(true);
       setSearchResults([]);
+
+      const pageable: Pageable = {
+        pageNumber: currentPage - 1,
+        pageSize: ITEMS_PER_PAGE,
+      };
       const json = await fetchBooksPreview({
         keyword: term,
-        pageable: { pageNumber: currentPage - 1, pageSize: ITEMS_PER_PAGE },
+        pageable: pageable,
       });
       setTotalPage(json.totalPages);
       const newBooks = json.content.map(convertBookPreview);
@@ -70,27 +112,18 @@ export default function Home() {
 
   function isInvalidTermLength() {
     return !searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH;
-  }
+  } */
+
   return (
     <>
-      <BookSearchBar
-        // searchTerm={searchTerm}
-        isLoading={isLoading}
-        doSearch={(term: string) => {
-          setSearchTerm(term);
-        }}
-      />
+      <BookSearchBar initialSearchTerm={searchTerm} />
 
-      <BookPreviewList
-        searchResults={searchResults}
-        isLoading={isLoading}
-        isCartPage={false}
-      />
+      <BookPreviewList searchResults={books} isCartPage={false} />
 
       <PageNavigator
+        searchTerm={searchTerm}
         currentPage={page}
         totalPages={totalPage}
-        onPageChange={setPage}
       />
     </>
   );
