@@ -17,7 +17,8 @@ export default async function Home({ searchParams }: Props) {
   const rawSearchTerm = (await searchParams).searchTerm;
   const rawPage = (await searchParams).page;
 
-  const searchTerm = Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
+  const searchTerm =
+    !rawSearchTerm || Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
   const page = parsePage(rawPage);
 
   function parsePage(rawPage: string | string[] | undefined): number {

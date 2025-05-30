@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 interface SearchProps {
-  initialSearchTerm?: string;
+  initialSearchTerm: string;
 }
 
 export const BookSearchBar = ({ initialSearchTerm }: SearchProps) => {
