@@ -1,5 +1,5 @@
 "use client";
-import { MIN_SEARCH_TERM_LENGTH } from "@/app/page";
+import { MIN_SEARCH_TERM_LENGTH } from "@/types/Pageable";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";

@@ -2,12 +2,11 @@ import { BookPreview } from "@/types/BookPreview";
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { PageNavigator } from "@/components/molecules/PageNavigator";
-import { Pageable } from "@/types/Pageable";
+import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 
 const ITEMS_PER_PAGE = 12;
-export const MIN_SEARCH_TERM_LENGTH = 2;
 const FIRST_PAGE = 1;
 
 type Props = {
