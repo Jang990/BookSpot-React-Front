@@ -32,7 +32,7 @@ export const BookSearchBar = ({ initialSearchTerm }: SearchProps) => {
       <input
         name="search"
         type="text"
-        placeholder="책 제목, 저자, 출판년도, 카테고리 또는 출판사를 입력하세요"
+        placeholder="책 제목, 저자 또는 출판사를 입력하세요"
         className={`w-full p-4 pr-12 text-lg border-4 rounded-full focus:outline-none transition-all duration-300 ${
           isPending
             ? "border-primary animate-border-loading"
