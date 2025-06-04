@@ -10,7 +10,10 @@ interface BookImageProps {
 export const BookPreviewImage = ({ id, title, isbn13 }: BookImageProps) => {
   const imageUrl = `https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn13}.jpg`;
   return (
-    <Link href={`/book/${id}`}>
+    <a
+      target="_blank"
+      href={`https://search.kyobobook.co.kr/search?keyword=${isbn13}`}
+    >
       <div className="relative h-64 bg-muted">
         <Image
           src={imageUrl}
@@ -20,6 +23,6 @@ export const BookPreviewImage = ({ id, title, isbn13 }: BookImageProps) => {
           className="object-contain"
         />
       </div>
-    </Link>
+    </a>
   );
 };
