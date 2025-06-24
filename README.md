@@ -20,7 +20,7 @@
 
 <br>
 
-## 🖥️ App Preview
+## 🖥️ Demo
 
 <br>
 
