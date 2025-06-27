@@ -90,3 +90,26 @@
 .animate-border-loading {
   animation: border-loading 1.5s ease-in-out infinite;
 }
+
+/* 덜컹거리는 애니메이션 */
+@keyframes bump {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-4px) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(2px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-1px) rotate(-0.5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.animate-bump {
+  animation: bump 0.7s ease-out;
+}
