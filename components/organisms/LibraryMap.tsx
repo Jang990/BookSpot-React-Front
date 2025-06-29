@@ -175,7 +175,7 @@ export const LibraryMap = ({
               borderRadius: "0.5rem",
             }}
             level={mapBound.clusterdLevel}
-            onBoundsChanged={handleBoundsChanged}
+            onIdle={handleBoundsChanged}
           >
             <MarkerClusterer
               averageCenter={true}
