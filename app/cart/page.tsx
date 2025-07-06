@@ -4,7 +4,7 @@ import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import { cookies } from "next/headers";
 import { STORAGE_NAME } from "@/utils/BookCartLocalStorage";
-import { BookCartList } from "@/components/organisms/SSR_BookCartList";
+import { BookCartListTemplate } from "@/components/templates/BookCartListTemplate";
 import { BookCartPopup } from "@/components/organisms/BookCartPopup";
 
 const MAX_CART_SIZE = 20;
@@ -35,7 +35,7 @@ export default async function Cart({
 
   return (
     <div className="min-h-screen bg-background px-4 sm:px-6 lg:px-8">
-      <BookCartList books={books}></BookCartList>
+      <BookCartListTemplate books={books}></BookCartListTemplate>
 
       <BookCartPopup></BookCartPopup>
     </div>
