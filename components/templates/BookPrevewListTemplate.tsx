@@ -1,17 +1,18 @@
+"use client";
 import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { BookInfo } from "@/components/organisms/BookInfo";
 import { Loading } from "@/components/atoms/animation/Loading";
+import { CartButton } from "../atoms/button/icon/CartButton";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
-  isCartPage: boolean;
 }
 
-export const BookPreviewList = ({
-  searchResults,
-  isCartPage,
-}: BookPreviewListProps) => {
+export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
+  const { addToCart } = useBookCart();
+
   return (
     <div>
       {searchResults.length === 0 && <EmptySearchResult />}
@@ -29,6 +30,12 @@ export const BookPreviewList = ({
   );
 
   function createBookInfo(book: BookPreview) {
-    return <BookInfo key={book.id} book={book} isCartPage={isCartPage} />;
+    return (
+      <BookInfo
+        key={book.id}
+        book={book}
+        actionButtons={[<CartButton onClick={() => addToCart(book.id)} />]}
+      />
+    );
   }
 };

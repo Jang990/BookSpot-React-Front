@@ -1,22 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { CartButton } from "@/components/atoms/button/icon/CartButton";
-import { TrashButton } from "@/components/atoms/button/icon/TrashButton";
+import { ReactNode, useState } from "react";
 import { BookPreview } from "@/types/BookPreview";
 import { BookPreviewInfo } from "../molecules/BookPreviewInfo";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
-import { useBookCart } from "@/contexts/BookCartContext";
 
 interface BookInfoProps {
   book: BookPreview;
-  isCartPage?: boolean;
-  remove?: (id: string) => void;
+  actionButtons: ReactNode[];
 }
 
-export const BookInfo = ({ book, isCartPage, remove }: BookInfoProps) => {
+export const BookInfo = ({ book, actionButtons }: BookInfoProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const { removeFromCart, addToCart } = useBookCart();
 
   return (
     <div
@@ -30,16 +25,11 @@ export const BookInfo = ({ book, isCartPage, remove }: BookInfoProps) => {
       <div
         className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
       >
-        {isCartPage ? (
-          <TrashButton
-            onClick={() => {
-              removeFromCart(book.id);
-              remove?.(book.id);
-            }}
-          />
-        ) : (
-          <CartButton onClick={() => addToCart(book.id)} />
-        )}
+        {actionButtons.map((btn, i) => (
+          <span key={i} className="ml-2">
+            {btn}
+          </span>
+        ))}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { Pageable } from "@/types/Pageable";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
+import { TrashButton } from "../atoms/button/icon/TrashButton";
 
 interface Props {
   books: BookPreview[];
@@ -19,8 +20,8 @@ const CART_PAGEABLE: Pageable = {
 };
 
 export const BookCartList = (props: Props) => {
-  const { cart, clearCart } = useBookCart();
   const [books, setBooks] = useState<BookPreview[]>([]);
+  const { removeFromCart } = useBookCart();
   useEffect(() => setBooks(props.books), []);
 
   return (
@@ -48,10 +49,14 @@ export const BookCartList = (props: Props) => {
       <BookInfo
         key={book.id}
         book={book}
-        isCartPage={true}
-        remove={(bookId) => {
-          setBooks(books.filter((book) => book.id !== bookId));
-        }}
+        actionButtons={[
+          <TrashButton
+            onClick={() => {
+              removeFromCart(book.id);
+              setBooks(books.filter((b) => b.id !== book.id));
+            }}
+          />,
+        ]}
       />
     );
   }
