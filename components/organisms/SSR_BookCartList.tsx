@@ -1,19 +1,18 @@
 "use client";
 
 import { BookPreview } from "@/types/BookPreview";
-import { BookInfo } from "@/components/organisms/book/preview/BookInfo";
-import { useBookCart } from "@/contexts/BookCartContext";
 import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
-import { TrashButton } from "../atoms/button/icon/TrashButton";
+import { DeletablaBookInfo } from "./book/preview/DeletableBookInfo";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 interface Props {
   books: BookPreview[];
 }
 
 export const BookCartList = (props: Props) => {
-  const [books, setBooks] = useState<BookPreview[]>([]);
   const { removeFromCart } = useBookCart();
+  const [books, setBooks] = useState<BookPreview[]>([]);
   useEffect(() => setBooks(props.books), []);
 
   return (
@@ -29,27 +28,21 @@ export const BookCartList = (props: Props) => {
       {books.length !== 0 && (
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {books.length !== 0 && (
-            <>{books.map((book) => createBookInfo(book))}</>
+            <>
+              {books.map((book) => (
+                <DeletablaBookInfo
+                  key={book.id}
+                  book={book}
+                  deleteBook={(bookId: string) => {
+                    removeFromCart(bookId);
+                    setBooks(books.filter((b) => b.id !== bookId));
+                  }}
+                ></DeletablaBookInfo>
+              ))}
+            </>
           )}
         </div>
       )}
     </div>
   );
-
-  function createBookInfo(book: BookPreview) {
-    return (
-      <BookInfo
-        key={book.id}
-        book={book}
-        actionButtons={[
-          <TrashButton
-            onClick={() => {
-              removeFromCart(book.id);
-              setBooks(books.filter((b) => b.id !== book.id));
-            }}
-          />,
-        ]}
-      />
-    );
-  }
 };
