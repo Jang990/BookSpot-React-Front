@@ -12,9 +12,7 @@ export const BookCartPopup = () => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   const handleFindLibraries = () => {
-    const params = new URLSearchParams();
-    cart.forEach((bookId) => params.append("bookIds", bookId));
-    router.push(`/libraries/stock/search?${params.toString()}`);
+    router.push(`/libraries/stock/search?bookIds=${cart.join(",")}`);
   };
 
   const handleClearCartClick = () => {
