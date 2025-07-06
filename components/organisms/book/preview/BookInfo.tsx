@@ -5,6 +5,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { BookPreviewInfo } from "@/components/molecules/BookPreviewInfo";
 import { BookPreviewImage } from "@/components/molecules/BookPreviewImage";
 import { MoveButton } from "@/components/atoms/button/icon/MoveButton";
+import { useRouter } from "next/navigation";
 
 interface BookInfoProps {
   book: BookPreview;
@@ -13,6 +14,11 @@ interface BookInfoProps {
 
 export const BookInfo = ({ book, actionButtons }: BookInfoProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
+
+  function moveToMapSearch() {
+    router.push(`/libraries/stock/search?bookIds=${book.id}`);
+  }
 
   return (
     <div
@@ -26,7 +32,7 @@ export const BookInfo = ({ book, actionButtons }: BookInfoProps) => {
       <div
         className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
       >
-        <MoveButton onClick={() => console.log("Hello World")} />
+        <MoveButton onClick={moveToMapSearch} />
         {actionButtons.map((btn, i) => (
           <span key={i} className="ml-2">
             {btn}
