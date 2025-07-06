@@ -7,12 +7,14 @@ import { ConfirmPopup } from "../molecules/ConfirmPopup";
 import { useBookCart } from "@/contexts/BookCartContext";
 
 export const BookCartPopup = () => {
-  const { clearCart } = useBookCart();
+  const { cart, clearCart } = useBookCart();
   const router = useRouter();
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   const handleFindLibraries = () => {
-    router.push(`/libraries/stock/search`);
+    const params = new URLSearchParams();
+    cart.forEach((bookId) => params.append("bookIds", bookId));
+    router.push(`/libraries/stock/search?${params.toString()}`);
   };
 
   const handleClearCartClick = () => {
