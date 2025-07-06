@@ -7,6 +7,7 @@ import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { LibraryStockPanel } from "../molecules/LibraryStockPanel";
 import { BookPreview } from "@/types/BookPreview";
 import { Location } from "@/types/Location";
+import { GpsButton } from "@/components/molecules/button/GpsButton";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -48,7 +49,7 @@ export const LibraryMap = ({
 
   const [isEnteringPanel, setIsEnteringPanel] = useState(false);
   const [previousMarkerId, setPreviousMarkerId] = useState<string | null>(null);
-  const mapRef = useRef<any>(null);
+  const mapRef = useRef<kakao.maps.Map | null>(null);
 
   // libraryMarkerInfos를 Map 형식으로 변환
   const libraryMarkerInfoMap = useMemo(() => {
@@ -161,6 +162,14 @@ export const LibraryMap = ({
       {!scriptLoad && <Loading />}
       {scriptLoad && (
         <div className="relative w-full">
+          <GpsButton
+            onError={onError}
+            onClick={(latitude: number, longitude: number) => {
+              if (!mapRef.current) return;
+              const center = new kakao.maps.LatLng(latitude, longitude);
+              mapRef.current.panTo(center); // 줌 레벨은 그대로
+            }}
+          />
           <KakaoMap
             center={{
               lat: mapBound.centerLatitude,
