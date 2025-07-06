@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Map as KakaoMap, MarkerClusterer } from "react-kakao-maps-sdk";
+import {
+  Map as KakaoMap,
+  MapMarker,
+  MarkerClusterer,
+} from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
 import { LibraryMarker } from "../molecules/LibararyMarker";
@@ -7,6 +11,8 @@ import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { LibraryStockPanel } from "../molecules/LibraryStockPanel";
 import { BookPreview } from "@/types/BookPreview";
 import { Location } from "@/types/Location";
+import { GpsButton } from "@/components/molecules/button/GpsButton";
+import { CurrentLocationMarker } from "../molecules/CurrentLocationMarker";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -48,7 +54,10 @@ export const LibraryMap = ({
 
   const [isEnteringPanel, setIsEnteringPanel] = useState(false);
   const [previousMarkerId, setPreviousMarkerId] = useState<string | null>(null);
-  const mapRef = useRef<any>(null);
+
+  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
+
+  const mapRef = useRef<kakao.maps.Map | null>(null);
 
   // libraryMarkerInfos를 Map 형식으로 변환
   const libraryMarkerInfoMap = useMemo(() => {
@@ -161,6 +170,15 @@ export const LibraryMap = ({
       {!scriptLoad && <Loading />}
       {scriptLoad && (
         <div className="relative w-full">
+          <GpsButton
+            onError={onError}
+            onClick={(latitude: number, longitude: number) => {
+              if (!mapRef.current) return;
+              const center = new kakao.maps.LatLng(latitude, longitude);
+              setCurrentLocation({ latitude: latitude, longitude: longitude });
+              mapRef.current.panTo(center); // 줌 레벨은 그대로
+            }}
+          />
           <KakaoMap
             center={{
               lat: mapBound.centerLatitude,
@@ -210,6 +228,9 @@ export const LibraryMap = ({
                 />
               ))}
             </MarkerClusterer>
+            {currentLocation && (
+              <CurrentLocationMarker currentLocation={currentLocation} />
+            )}
 
             {/* 선택된 도서관이 있을 때 지도 내에 패널 표시 */}
             {selectedLibraryInfo && (
