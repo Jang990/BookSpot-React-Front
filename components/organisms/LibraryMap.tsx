@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Map as KakaoMap, MarkerClusterer } from "react-kakao-maps-sdk";
+import {
+  Map as KakaoMap,
+  MapMarker,
+  MarkerClusterer,
+} from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
 import { LibraryMarker } from "../molecules/LibararyMarker";
@@ -49,6 +53,9 @@ export const LibraryMap = ({
 
   const [isEnteringPanel, setIsEnteringPanel] = useState(false);
   const [previousMarkerId, setPreviousMarkerId] = useState<string | null>(null);
+
+  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
+
   const mapRef = useRef<kakao.maps.Map | null>(null);
 
   // libraryMarkerInfos를 Map 형식으로 변환
@@ -167,6 +174,7 @@ export const LibraryMap = ({
             onClick={(latitude: number, longitude: number) => {
               if (!mapRef.current) return;
               const center = new kakao.maps.LatLng(latitude, longitude);
+              setCurrentLocation({ latitude: latitude, longitude: longitude });
               mapRef.current.panTo(center); // 줌 레벨은 그대로
             }}
           />
@@ -219,6 +227,18 @@ export const LibraryMap = ({
                 />
               ))}
             </MarkerClusterer>
+            {currentLocation && (
+              <MapMarker
+                position={{
+                  lat: currentLocation.latitude,
+                  lng: currentLocation.longitude,
+                }}
+                image={{
+                  src: "data:image/svg+xml,%3csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='10' cy='10' r='8' fill='%23ef4444' stroke='white' stroke-width='2'/%3e%3c/svg%3e",
+                  size: { width: 20, height: 20 },
+                }}
+              />
+            )}
 
             {/* 선택된 도서관이 있을 때 지도 내에 패널 표시 */}
             {selectedLibraryInfo && (
