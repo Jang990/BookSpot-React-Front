@@ -5,6 +5,7 @@ import { BookInfo } from "@/components/organisms/book/preview/BookInfo";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { CartButton } from "../atoms/button/icon/CartButton";
 import { useBookCart } from "@/contexts/BookCartContext";
+import { SearchableBookInfo } from "../organisms/book/preview/SearchableBookInfo";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
@@ -19,7 +20,14 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
 
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         {searchResults.length !== 0 && (
-          <>{searchResults.map((book) => createBookInfo(book))}</>
+          <>
+            {searchResults.map((book) => (
+              <SearchableBookInfo
+                key={book.id}
+                book={book}
+              ></SearchableBookInfo>
+            ))}
+          </>
         )}
       </div>
 
