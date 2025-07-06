@@ -3,14 +3,14 @@
 import { BookPreview } from "@/types/BookPreview";
 import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
-import { DeletablaBookInfo } from "./book/preview/DeletableBookInfo";
+import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
 import { useBookCart } from "@/contexts/BookCartContext";
 
 interface Props {
   books: BookPreview[];
 }
 
-export const BookCartList = (props: Props) => {
+export const BookCartListTemplate = (props: Props) => {
   const { removeFromCart } = useBookCart();
   const [books, setBooks] = useState<BookPreview[]>([]);
   useEffect(() => setBooks(props.books), []);
