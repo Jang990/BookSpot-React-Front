@@ -8,7 +8,6 @@ import { use, useEffect, useState } from "react";
 import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
-import { useBookCart } from "@/contexts/BookCartContext";
 import { BookPreview } from "@/types/BookPreview";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
@@ -25,7 +24,6 @@ export default function Libraries({
 }: {
   searchParams: Promise<{ bookIds?: string }>;
 }) {
-  const { cart } = useBookCart();
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
   const [booksInfo, setBooksInfo] = useState<BookPreview[]>([]);
 
@@ -38,10 +36,10 @@ export default function Libraries({
   const mapBound: MapBound = findMapLocationProps();
 
   useEffect(() => {
-    if (!cart || cart.length === 0) return;
+    if (!bookIds || bookIds.length === 0) return;
 
     fetchBooksPreview({
-      bookIds: cart,
+      bookIds: bookIds,
       pageable: { pageNumber: 0, pageSize: MAX_CART_SIZE },
     }).then((response) => {
       const books: BookPreview[] = response.content.map(convertBookPreview);
@@ -49,7 +47,7 @@ export default function Libraries({
     });
 
     debouncedMapSearch(mapBound);
-  }, [cart]);
+  }, []);
 
   const debouncedMapSearch = debounce((bound: MapBound) => {
     setMapLocationProps(bound);
@@ -91,7 +89,7 @@ export default function Libraries({
           return;
         }
 
-        fetchLibraryStock({ libraryIds: libraryIds, bookIds: cart }).then(
+        fetchLibraryStock({ libraryIds: libraryIds, bookIds: bookIds }).then(
           (libraryStocks) => {
             setLibraries(
               libraryStocks.map((libStock) => {
