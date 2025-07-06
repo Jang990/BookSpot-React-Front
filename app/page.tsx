@@ -118,7 +118,7 @@ export default async function Home({ searchParams }: Props) {
     <>
       <BookSearchBar initialSearchTerm={searchTerm} />
 
-      <BookPreviewList searchResults={books} isCartPage={false} />
+      <BookPreviewList searchResults={books} />
 
       <PageNavigator
         searchTerm={searchTerm}

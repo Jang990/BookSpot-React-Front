@@ -1,25 +1,17 @@
 "use client";
 
 import { BookPreview } from "@/types/BookPreview";
-import { BookInfo } from "@/components/organisms/BookInfo";
-import { Pageable } from "@/types/Pageable";
-import { useBookCart } from "@/contexts/BookCartContext";
 import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
+import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
+import { useBookCart } from "@/contexts/BookCartContext";
 
 interface Props {
   books: BookPreview[];
 }
 
-const MAX_CART_SIZE = 20;
-const FIRST_PAGE = 0;
-const CART_PAGEABLE: Pageable = {
-  pageNumber: FIRST_PAGE,
-  pageSize: MAX_CART_SIZE,
-};
-
-export const BookCartList = (props: Props) => {
-  const { cart, clearCart } = useBookCart();
+export const BookCartListTemplate = (props: Props) => {
+  const { removeFromCart } = useBookCart();
   const [books, setBooks] = useState<BookPreview[]>([]);
   useEffect(() => setBooks(props.books), []);
 
@@ -36,23 +28,21 @@ export const BookCartList = (props: Props) => {
       {books.length !== 0 && (
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
           {books.length !== 0 && (
-            <>{books.map((book) => createBookInfo(book))}</>
+            <>
+              {books.map((book) => (
+                <DeletablaBookInfo
+                  key={book.id}
+                  book={book}
+                  deleteBook={(bookId: string) => {
+                    removeFromCart(bookId);
+                    setBooks(books.filter((b) => b.id !== bookId));
+                  }}
+                ></DeletablaBookInfo>
+              ))}
+            </>
           )}
         </div>
       )}
     </div>
   );
-
-  function createBookInfo(book: BookPreview) {
-    return (
-      <BookInfo
-        key={book.id}
-        book={book}
-        isCartPage={true}
-        remove={(bookId) => {
-          setBooks(books.filter((book) => book.id !== bookId));
-        }}
-      />
-    );
-  }
 };
