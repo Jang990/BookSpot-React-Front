@@ -1,7 +1,7 @@
 "use client";
 import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
-import { BookInfo } from "@/components/organisms/BookInfo";
+import { BookInfo } from "@/components/organisms/book/preview/BookInfo";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { CartButton } from "../atoms/button/icon/CartButton";
 import { useBookCart } from "@/contexts/BookCartContext";

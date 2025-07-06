@@ -1,7 +1,7 @@
 "use client";
 
 import { BookPreview } from "@/types/BookPreview";
-import { BookInfo } from "@/components/organisms/BookInfo";
+import { BookInfo } from "@/components/organisms/book/preview/BookInfo";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";

@@ -2,8 +2,8 @@
 
 import { ReactNode, useState } from "react";
 import { BookPreview } from "@/types/BookPreview";
-import { BookPreviewInfo } from "../molecules/BookPreviewInfo";
-import { BookPreviewImage } from "../molecules/BookPreviewImage";
+import { BookPreviewInfo } from "@/components/molecules/BookPreviewInfo";
+import { BookPreviewImage } from "@/components/molecules/BookPreviewImage";
 
 interface BookInfoProps {
   book: BookPreview;
