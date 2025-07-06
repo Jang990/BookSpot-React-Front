@@ -12,6 +12,7 @@ import { LibraryStockPanel } from "../molecules/LibraryStockPanel";
 import { BookPreview } from "@/types/BookPreview";
 import { Location } from "@/types/Location";
 import { GpsButton } from "@/components/molecules/button/GpsButton";
+import { CurrentLocationMarker } from "../molecules/CurrentLocationMarker";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -228,16 +229,7 @@ export const LibraryMap = ({
               ))}
             </MarkerClusterer>
             {currentLocation && (
-              <MapMarker
-                position={{
-                  lat: currentLocation.latitude,
-                  lng: currentLocation.longitude,
-                }}
-                image={{
-                  src: "data:image/svg+xml,%3csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='10' cy='10' r='8' fill='%23ef4444' stroke='white' stroke-width='2'/%3e%3c/svg%3e",
-                  size: { width: 20, height: 20 },
-                }}
-              />
+              <CurrentLocationMarker currentLocation={currentLocation} />
             )}
 
             {/* 선택된 도서관이 있을 때 지도 내에 패널 표시 */}
