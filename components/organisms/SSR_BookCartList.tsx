@@ -2,7 +2,6 @@
 
 import { BookPreview } from "@/types/BookPreview";
 import { BookInfo } from "@/components/organisms/BookInfo";
-import { Pageable } from "@/types/Pageable";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
@@ -11,13 +10,6 @@ import { TrashButton } from "../atoms/button/icon/TrashButton";
 interface Props {
   books: BookPreview[];
 }
-
-const MAX_CART_SIZE = 20;
-const FIRST_PAGE = 0;
-const CART_PAGEABLE: Pageable = {
-  pageNumber: FIRST_PAGE,
-  pageSize: MAX_CART_SIZE,
-};
 
 export const BookCartList = (props: Props) => {
   const [books, setBooks] = useState<BookPreview[]>([]);
