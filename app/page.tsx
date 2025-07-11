@@ -5,6 +5,7 @@ import { PageNavigator } from "@/components/molecules/PageNavigator";
 import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
+import { toRawQueryString } from "@/utils/QueryString";
 
 const ITEMS_PER_PAGE = 12;
 const FIRST_PAGE = 1;
@@ -116,7 +117,11 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <>
-      <BookSearchBar initialSearchTerm={searchTerm} />
+      <BookSearchBar
+        initialSearchTerm={searchTerm}
+        bookQueryString={toRawQueryString(await searchParams)}
+        libraryId="1"
+      />
 
       <BookPreviewList searchResults={books} />
 

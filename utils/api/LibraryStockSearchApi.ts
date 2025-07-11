@@ -9,6 +9,10 @@ interface Props {
   mapBound: MapBound;
 }
 
+interface SingleLibraryProps {
+  libraryId: string;
+}
+
 export const fetchNearByLibraryStock = async ({
   bookIds = [],
   mapBound,
@@ -29,3 +33,12 @@ function createApi(bookIds: string[], { nw, se }: MapBound): string {
 
   return url.toString();
 }
+
+const SINGLE_LIBRARY_API_URL =
+  process.env.NEXT_PUBLIC_API_SERVER_URL + "/api/libraries";
+export const fetchSingleLibrary = async ({
+  libraryId,
+}: SingleLibraryProps): Promise<Library> => {
+  const api: string = SINGLE_LIBRARY_API_URL.concat("/").concat(libraryId);
+  return get(api).then((content) => convertLibrary(content));
+};
