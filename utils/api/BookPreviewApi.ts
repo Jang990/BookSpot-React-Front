@@ -1,5 +1,7 @@
-import { Pageable } from "@/types/Pageable";
+import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
 import { get } from "./Fetcher";
+import { BookPreview } from "@/types/BookPreview";
+import { convertBookPreview } from "./ApiResponseConvertor";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -7,6 +9,30 @@ export interface SearchCondition {
   libraryId?: string;
   pageable: Pageable;
 }
+
+export interface PagingResult {
+  totalPage: number;
+  books: BookPreview[];
+}
+
+const EMPTY_PAGIN_RESULT: PagingResult = { totalPage: 0, books: [] };
+
+export const findBooksPreview = async (
+  searchCond: SearchCondition
+): Promise<PagingResult> => {
+  const keyword = searchCond.keyword;
+
+  // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
+  if (!keyword || keyword.length < MIN_SEARCH_TERM_LENGTH) {
+    return EMPTY_PAGIN_RESULT;
+  } else {
+    const json = await fetchBooksPreview(searchCond);
+    return {
+      totalPage: json.totalPages,
+      books: json.content.map(convertBookPreview),
+    };
+  }
+};
 
 export const fetchBooksPreview = async (searchCond: SearchCondition) => {
   return get(createApi(searchCond));

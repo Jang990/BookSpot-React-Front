@@ -3,7 +3,11 @@ import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { PageNavigator } from "@/components/molecules/PageNavigator";
 import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
-import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
+import {
+  fetchBooksPreview,
+  findBooksPreview,
+  PagingResult,
+} from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import {
   parsePage,
@@ -19,29 +23,18 @@ type Props = {
 
 export default async function Home({ searchParams }: Props) {
   const queryStrings = await searchParams;
+
   const searchTerm = parseSearchTerm(queryStrings);
   const page = parsePage(queryStrings);
-
   const pageable: Pageable = {
     pageNumber: page - 1,
     pageSize: ITEMS_PER_PAGE,
   };
 
-  let totalPage = 0;
-  let books: BookPreview[] = [];
-
-  // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
-  if (!searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH) {
-    totalPage = 0;
-    books = [];
-  } else {
-    const json = await fetchBooksPreview({
-      keyword: searchTerm,
-      pageable,
-    });
-    totalPage = json.totalPages;
-    books = json.content.map(convertBookPreview);
-  }
+  const { totalPage, books }: PagingResult = await findBooksPreview({
+    keyword: searchTerm,
+    pageable,
+  });
 
   /* 
   const [page, setPage] = useState(1);
