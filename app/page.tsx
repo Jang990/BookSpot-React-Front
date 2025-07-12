@@ -5,7 +5,11 @@ import { PageNavigator } from "@/components/molecules/PageNavigator";
 import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
-import { parsePage, toRawQueryString } from "@/utils/QueryString";
+import {
+  parsePage,
+  parseSearchTerm,
+  toRawQueryString,
+} from "@/utils/QueryString";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -15,10 +19,7 @@ type Props = {
 
 export default async function Home({ searchParams }: Props) {
   const queryStrings = await searchParams;
-  const rawSearchTerm = (await searchParams).searchTerm;
-
-  const searchTerm =
-    !rawSearchTerm || Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
+  const searchTerm = parseSearchTerm(queryStrings);
   const page = parsePage(queryStrings);
 
   const pageable: Pageable = {

@@ -32,3 +32,10 @@ export function parsePage(queryStrings: {
 
   return parsed;
 }
+
+export function parseSearchTerm(queryStrings: {
+  [key: string]: string | string[] | undefined;
+}): string {
+  const rawSearchTerm = queryStrings["searchTerm"];
+  return !rawSearchTerm || Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
+}
