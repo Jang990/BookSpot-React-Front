@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Map as KakaoMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
-import { LibraryMarker } from "../molecules/LibararyMarker";
+import { LibraryStockMarker } from "../molecules/LibararyStockMarker";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { Location } from "@/types/Location";
 import { GpsButton } from "@/components/molecules/button/GpsButton";
@@ -206,7 +206,7 @@ export const LibrarySelectionMap = ({
               ]}
             >
               {libraryMarkerInfos.map((libraryMarkerInfo) => (
-                <LibraryMarker
+                <LibraryStockMarker
                   key={libraryMarkerInfo.library.id}
                   libraryMarkerInfo={libraryMarkerInfo}
                   isHovered={hoveredMarkerId === libraryMarkerInfo.library.id}

@@ -12,7 +12,7 @@ interface LibraryMarkerProps {
   onClick: () => void;
 }
 
-export const LibraryMarker = ({
+export const LibraryStockMarker = ({
   libraryMarkerInfo,
   isHovered,
   isSelected,

@@ -6,7 +6,7 @@ import {
 } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
-import { LibraryMarker } from "../molecules/LibararyMarker";
+import { LibraryStockMarker } from "../molecules/LibararyStockMarker";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { LibraryStockPanel } from "../molecules/LibraryStockPanel";
 import { BookPreview } from "@/types/BookPreview";
@@ -213,7 +213,7 @@ export const LibraryMap = ({
               ]}
             >
               {libraryMarkerInfos.map((libraryMarkerInfo) => (
-                <LibraryMarker
+                <LibraryStockMarker
                   key={libraryMarkerInfo.library.id}
                   libraryMarkerInfo={libraryMarkerInfo}
                   isHovered={hoveredMarkerId === libraryMarkerInfo.library.id}
