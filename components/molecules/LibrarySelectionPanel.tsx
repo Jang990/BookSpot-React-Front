@@ -1,18 +1,11 @@
 "use client";
 
-import {
-  ExternalLink,
-  Clock,
-  Calendar,
-  Check,
-  X,
-  Book,
-  Info,
-  MapPin,
-} from "lucide-react";
+import { X, Info, MapPin } from "lucide-react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { useState } from "react";
 import { LibraryDetailContentPanel } from "./LibraryDetailContentPanel";
+import { SelectLibraryButton } from "../atoms/button/SelectLibraryButton";
+import { useRouter } from "next/navigation";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -27,6 +20,7 @@ export const LibrarySelectionPanel = ({
   isEntering,
   onMoveToLocation,
 }: LibraryStockPanelProps) => {
+  const router = useRouter();
   const { library } = libraryMarkerInfo;
   const [activeTab, setActiveTab] = useState<"books" | "info">("info");
 
@@ -80,7 +74,14 @@ export const LibrarySelectionPanel = ({
         className="overflow-auto p-3"
         style={{ maxHeight: "200px" }}
       >
-        <LibraryDetailContentPanel library={library} />
+        <LibraryDetailContentPanel
+          library={library}
+          selectButton={
+            <SelectLibraryButton
+              onClick={() => router.push(`/libraries/${library.id}/books`)}
+            />
+          }
+        />
       </div>
     </div>
   );

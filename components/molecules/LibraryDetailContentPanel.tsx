@@ -5,10 +5,12 @@ import { Library } from "@/types/Library";
 
 interface LibraryStockPanelProps {
   library: Library;
+  selectButton?: React.ReactNode;
 }
 
 export const LibraryDetailContentPanel = ({
   library,
+  selectButton,
 }: LibraryStockPanelProps) => {
   return (
     <>
@@ -42,6 +44,7 @@ export const LibraryDetailContentPanel = ({
           />
           <span className="text-sm">휴관일: {library.closedInfo}</span>
         </div>
+        {selectButton && <>{selectButton}</>}
       </div>
     </>
   );
