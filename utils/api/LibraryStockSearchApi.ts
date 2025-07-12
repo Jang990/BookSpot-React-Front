@@ -12,7 +12,7 @@ interface SingleLibraryProps {
   libraryId: string;
 }
 
-export const fetchNearByLibraryStock = async ({
+export const fetchNearByLibraries = async ({
   mapBound,
 }: Props): Promise<Library[]> => {
   const api: string = createApi(mapBound);
