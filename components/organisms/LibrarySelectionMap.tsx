@@ -8,6 +8,7 @@ import { Location } from "@/types/Location";
 import { GpsButton } from "@/components/molecules/button/GpsButton";
 import { CurrentLocationMarker } from "../molecules/CurrentLocationMarker";
 import { LibrarySelectionPanel } from "../molecules/LibrarySelectionPanel";
+import { LibraryMarker } from "../molecules/LibararyMarker";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -206,9 +207,9 @@ export const LibrarySelectionMap = ({
               ]}
             >
               {libraryMarkerInfos.map((libraryMarkerInfo) => (
-                <LibraryStockMarker
+                <LibraryMarker
                   key={libraryMarkerInfo.library.id}
-                  libraryMarkerInfo={libraryMarkerInfo}
+                  library={libraryMarkerInfo.library}
                   isHovered={hoveredMarkerId === libraryMarkerInfo.library.id}
                   isSelected={selectedMarkerId === libraryMarkerInfo.library.id}
                   onMouseOver={() =>
