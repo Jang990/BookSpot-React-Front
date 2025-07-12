@@ -35,7 +35,7 @@ function createApi(bookIds: string[], { nw, se }: MapBound): string {
 }
 
 const SINGLE_LIBRARY_API_URL =
-  process.env.NEXT_PUBLIC_API_SERVER_URL + "/api/libraries";
+  process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/libraries";
 export const fetchSingleLibrary = async ({
   libraryId,
 }: SingleLibraryProps): Promise<Library> => {
