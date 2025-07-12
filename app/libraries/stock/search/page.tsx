@@ -53,7 +53,6 @@ export default function Libraries({
     setMapLocationProps(bound);
 
     fetchNearByLibraryStock({
-      bookIds: bookIds,
       mapBound: bound,
     })
       .then((responseLibraries) => {
