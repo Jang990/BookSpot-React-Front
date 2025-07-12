@@ -4,48 +4,25 @@ import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
 import { fetchNearByLibraries } from "@/utils/api/LibraryApi";
 import { debounce } from "@/utils/debounce";
-import { use, useEffect, useState } from "react";
-import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
+import { useEffect, useState } from "react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
-import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
-import { BookPreview } from "@/types/BookPreview";
-import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
-import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 
 import {
   findMapLocationProps,
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
-import { OUT_OF_ZOOM_STOCK } from "@/types/LibraryStock";
 import { MapDetailLimitInfo } from "@/components/organisms/MapLimitInfo";
+import { LibrarySelectionMapTemplate } from "@/components/templates/LibrarySelectionMapTemplate";
 
-export default function LibrariesSelection({
-  searchParams,
-}: {
-  searchParams: Promise<{ bookIds?: string }>;
-}) {
+export default function LibrariesSelection() {
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
-  const [booksInfo, setBooksInfo] = useState<BookPreview[]>([]);
 
-  const bookIdsStr = use(searchParams).bookIds;
-  const bookIds = bookIdsStr ? bookIdsStr.split(",") : [];
   const MAP_SEARCH_DELAY = 275;
   const CULSTERD_LEVEL = 8;
-  const MAX_CART_SIZE = 20;
 
   const mapBound: MapBound = findMapLocationProps();
 
   useEffect(() => {
-    if (!bookIds || bookIds.length === 0) return;
-
-    fetchBooksPreview({
-      bookIds: bookIds,
-      pageable: { pageNumber: 0, pageSize: MAX_CART_SIZE },
-    }).then((response) => {
-      const books: BookPreview[] = response.content.map(convertBookPreview);
-      setBooksInfo(books);
-    });
-
     debouncedMapSearch(mapBound);
   }, []);
 
@@ -74,8 +51,7 @@ export default function LibrariesSelection({
     <div className="py-2 px-2 sm:py-4 sm:px-4">
       {/* <LibraryPage /> */}
       <div className="w-full">
-        <LibraryMapTemplate
-          booksInfo={booksInfo}
+        <LibrarySelectionMapTemplate
           mapBound={mapBound}
           libraries={libraries}
           onBoundsChange={debouncedMapSearch}
