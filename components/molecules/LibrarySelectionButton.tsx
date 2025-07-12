@@ -17,7 +17,7 @@ export const LibrarySelectionButton = async ({
     const library: Library = await fetchSingleLibrary({ libraryId: libraryId });
 
     return (
-      <Link href={`?${bookQueryString ?? ""}`}>
+      <Link href={`/?${bookQueryString ?? ""}`}>
         <Button
           variant="ghost"
           size="sm"
