@@ -23,12 +23,15 @@ export default function LibrariesSelection() {
   const mapBound: MapBound = findMapLocationProps();
 
   useEffect(() => {
-    debouncedMapSearch(mapBound);
+    findLibraries(mapBound);
   }, []);
 
   const debouncedMapSearch = debounce((bound: MapBound) => {
     setMapLocationProps(bound);
+    findLibraries(bound);
+  }, MAP_SEARCH_DELAY);
 
+  function findLibraries(bound: MapBound) {
     fetchNearByLibraries({
       mapBound: bound,
     }).then((responseLibraries) => {
@@ -45,7 +48,7 @@ export default function LibrariesSelection() {
         } as LibraryMarkerInfo;
       }
     });
-  }, MAP_SEARCH_DELAY);
+  }
 
   return (
     <div className="py-2 px-2 sm:py-4 sm:px-4">
