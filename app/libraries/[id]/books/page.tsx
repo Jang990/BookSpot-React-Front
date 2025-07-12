@@ -11,10 +11,12 @@ const ITEMS_PER_PAGE = 12;
 const FIRST_PAGE = 1;
 
 type Props = {
+  params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function Home({ searchParams }: Props) {
+export default async function Home({ searchParams, params }: Props) {
+  const libraryId = (await params).id;
   const rawSearchTerm = (await searchParams).searchTerm;
   const rawPage = (await searchParams).page;
 
@@ -46,80 +48,19 @@ export default async function Home({ searchParams }: Props) {
   } else {
     const json = await fetchBooksPreview({
       keyword: searchTerm,
+      libraryId: libraryId,
       pageable,
     });
     totalPage = json.totalPages;
     books = json.content.map(convertBookPreview);
   }
 
-  /* 
-  const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState<BookPreview[]>([]);
-  const loadBooks = useCallback(async (term: string, currentPage: number) => {
-    try {
-      setIsLoading(true);
-      setSearchResults([]);
-
-      const pageable: Pageable = {
-        pageNumber: currentPage - 1,
-        pageSize: ITEMS_PER_PAGE,
-      };
-      const json = await fetchBooksPreview({
-        keyword: term,
-        pageable: pageable,
-      });
-      setTotalPage(json.totalPages);
-      const newBooks = json.content.map(convertBookPreview);
-      setSearchResults(newBooks);
-    } catch (error) {
-      // TODO: 예외 처리 필요
-      console.error("Error fetching books:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      setPage(FIRST_PAGE);
-      loadBooks(term, FIRST_PAGE);
-    }, 300),
-    []
-  );
-
-  useEffect(() => {
-    if (isInvalidTermLength()) {
-      clearResult();
-      return;
-    }
-    debouncedSearch(searchTerm);
-  }, [searchTerm]);
-
-  useEffect(() => {
-    if (page < FIRST_PAGE || isInvalidTermLength()) {
-      clearResult();
-      return;
-    }
-    loadBooks(searchTerm, page);
-  }, [page]);
-
-  function clearResult() {
-    setPage(FIRST_PAGE);
-    setSearchResults([]);
-  }
-
-  function isInvalidTermLength() {
-    return !searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH;
-  } */
-
   return (
     <>
       <BookSearchBar
         initialSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
+        libraryId={libraryId}
       />
 
       <BookPreviewList searchResults={books} />
