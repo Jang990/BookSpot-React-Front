@@ -18,3 +18,17 @@ export function toRawQueryString(
   // ex) "searchTerm=한강&page=..."
   return qs ? `${qs}` : "";
 }
+
+const FIRST_PAGE = 1;
+const PAGE_QUERY_STRING_KEY = "page";
+export function parsePage(queryStrings: {
+  [key: string]: string | string[] | undefined;
+}): number {
+  const rawPage = queryStrings[PAGE_QUERY_STRING_KEY];
+  if (!rawPage || Array.isArray(rawPage)) return FIRST_PAGE;
+
+  const parsed = Number.parseInt(rawPage, 10);
+  if (Number.isNaN(parsed) || parsed < FIRST_PAGE) return FIRST_PAGE;
+
+  return parsed;
+}

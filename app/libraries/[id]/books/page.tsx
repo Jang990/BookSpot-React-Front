@@ -5,10 +5,9 @@ import { PageNavigator } from "@/components/molecules/PageNavigator";
 import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
 import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
-import { toRawQueryString } from "@/utils/QueryString";
+import { parsePage, toRawQueryString } from "@/utils/QueryString";
 
 const ITEMS_PER_PAGE = 12;
-const FIRST_PAGE = 1;
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -17,21 +16,12 @@ type Props = {
 
 export default async function Home({ searchParams, params }: Props) {
   const libraryId = (await params).id;
-  const rawSearchTerm = (await searchParams).searchTerm;
-  const rawPage = (await searchParams).page;
+  const queryStrings = await searchParams;
+  const rawSearchTerm = queryStrings.searchTerm;
 
   const searchTerm =
     !rawSearchTerm || Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
-  const page = parsePage(rawPage);
-
-  function parsePage(rawPage: string | string[] | undefined): number {
-    if (!rawPage || Array.isArray(rawPage)) return FIRST_PAGE;
-
-    const parsed = Number.parseInt(rawPage, 10);
-    if (Number.isNaN(parsed) || parsed < FIRST_PAGE) return FIRST_PAGE;
-
-    return parsed;
-  }
+  const page = parsePage(queryStrings);
 
   const pageable: Pageable = {
     pageNumber: page - 1,
