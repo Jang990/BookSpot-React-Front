@@ -31,7 +31,7 @@ export const LibrarySelectionButton = async ({
   }
 
   return (
-    <Link href="libraries/map">
+    <Link href="libraries/map/select">
       <Button
         variant="ghost"
         size="sm"
