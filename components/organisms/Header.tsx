@@ -27,10 +27,15 @@ export const Header = () => {
       case "/cart":
         return "북카트";
       case "/libraries/stock/search":
-        return "소장 도서관 검색";
+      case "/libraries/stock/map":
+      case "/libraries/map/select":
+        return "도서관 검색";
       default:
-        if (pathname.startsWith("/book/")) {
-          return "책 정보";
+        if (pathname.startsWith("/book")) {
+          return "책 검색";
+        }
+        if (pathname.startsWith("/libraries") && pathname.endsWith("books")) {
+          return "도서관 책 검색";
         }
         return "???";
     }
