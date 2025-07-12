@@ -1,7 +1,7 @@
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { fetchSingleLibrary } from "@/utils/api/LibraryStockSearchApi";
+import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import { Library } from "@/types/Library";
 
 interface LibrarySelectionButtonProps {

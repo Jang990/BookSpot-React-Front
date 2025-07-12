@@ -2,7 +2,7 @@
 
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
-import { fetchNearByLibraries } from "@/utils/api/LibraryStockSearchApi";
+import { fetchNearByLibraries } from "@/utils/api/LibraryApi";
 import { debounce } from "@/utils/debounce";
 import { use, useEffect, useState } from "react";
 import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
