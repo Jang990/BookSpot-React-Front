@@ -76,11 +76,7 @@ export const LibrarySelectionPanel = ({
       >
         <LibraryDetailContentPanel
           library={library}
-          selectButton={
-            <SelectLibraryButton
-              onClick={() => router.push(`/libraries/${library.id}/books`)}
-            />
-          }
+          selectButton={<SelectLibraryButton libraryId={library.id} />}
         />
       </div>
     </div>

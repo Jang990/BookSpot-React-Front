@@ -31,7 +31,7 @@ export const LibrarySelectionButton = async ({
   }
 
   return (
-    <Link href="libraries/map/select">
+    <Link href={`libraries/map/select?${bookQueryString}`}>
       <Button
         variant="ghost"
         size="sm"

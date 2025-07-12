@@ -1,3 +1,5 @@
+import { ReadonlyURLSearchParams } from "next/navigation";
+
 export function toRawQueryString(
   searchParams: Record<string, string | string[] | undefined>
 ): string {
@@ -33,9 +35,17 @@ export function parsePage(queryStrings: {
   return parsed;
 }
 
+export const SEARCH_TERM_KEY = "searchTerm";
+export function parseSearchTermInClient(
+  queryStrings: ReadonlyURLSearchParams
+): string {
+  const rawSearchTerm = queryStrings.get(SEARCH_TERM_KEY);
+  return !rawSearchTerm || Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
+}
+
 export function parseSearchTerm(queryStrings: {
   [key: string]: string | string[] | undefined;
 }): string {
-  const rawSearchTerm = queryStrings["searchTerm"];
+  const rawSearchTerm = queryStrings[SEARCH_TERM_KEY];
   return !rawSearchTerm || Array.isArray(rawSearchTerm) ? "" : rawSearchTerm;
 }
