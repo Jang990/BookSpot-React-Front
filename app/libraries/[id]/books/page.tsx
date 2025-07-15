@@ -12,10 +12,12 @@ import {
 const ITEMS_PER_PAGE = 12;
 
 type Props = {
+  params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function Home({ searchParams }: Props) {
+export default async function Home({ searchParams, params }: Props) {
+  const libraryId = (await params).id;
   const queryStrings = await searchParams;
 
   const searchTerm = parseSearchTerm(queryStrings);
@@ -27,6 +29,7 @@ export default async function Home({ searchParams }: Props) {
 
   const { totalPage, books }: PagingResult = await findBooksPreview({
     keyword: searchTerm,
+    libraryId: libraryId,
     pageable,
   });
 
@@ -35,6 +38,7 @@ export default async function Home({ searchParams }: Props) {
       <BookSearchBar
         initialSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
+        libraryId={libraryId}
       />
 
       <BookPreviewList searchResults={books} />

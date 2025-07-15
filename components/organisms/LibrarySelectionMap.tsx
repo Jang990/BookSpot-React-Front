@@ -1,18 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  Map as KakaoMap,
-  MapMarker,
-  MarkerClusterer,
-} from "react-kakao-maps-sdk";
+import { Map as KakaoMap, MarkerClusterer } from "react-kakao-maps-sdk";
 import { Loading } from "@/components/atoms/animation/Loading";
 import { MapBound } from "@/types/MapBound";
 import { LibraryStockMarker } from "../molecules/LibararyStockMarker";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
-import { LibraryStockPanel } from "../molecules/LibraryStockPanel";
-import { BookPreview } from "@/types/BookPreview";
 import { Location } from "@/types/Location";
 import { GpsButton } from "@/components/molecules/button/GpsButton";
 import { CurrentLocationMarker } from "../molecules/CurrentLocationMarker";
+import { LibrarySelectionPanel } from "../molecules/LibrarySelectionPanel";
+import { LibraryMarker } from "../molecules/LibararyMarker";
 
 const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_JS;
 const kakaoMapSrc = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false&libraries=clusterer`;
@@ -30,7 +26,6 @@ export interface MapLocationProps {
 }
 
 export interface Props {
-  booksInfo: BookPreview[];
   mapBound: MapBound;
   libraryMarkerInfos: LibraryMarkerInfo[];
   onBoundsChange: (bound: MapBound) => void;
@@ -40,8 +35,7 @@ export interface Props {
 const EMPTY_FUNC = () => {};
 const ANIMATION_DURATION = 250;
 
-export const LibraryMap = ({
-  booksInfo = [],
+export const LibrarySelectionMap = ({
   mapBound,
   libraryMarkerInfos,
   onBoundsChange,
@@ -213,9 +207,9 @@ export const LibraryMap = ({
               ]}
             >
               {libraryMarkerInfos.map((libraryMarkerInfo) => (
-                <LibraryStockMarker
+                <LibraryMarker
                   key={libraryMarkerInfo.library.id}
-                  libraryMarkerInfo={libraryMarkerInfo}
+                  library={libraryMarkerInfo.library}
                   isHovered={hoveredMarkerId === libraryMarkerInfo.library.id}
                   isSelected={selectedMarkerId === libraryMarkerInfo.library.id}
                   onMouseOver={() =>
@@ -234,9 +228,8 @@ export const LibraryMap = ({
 
             {/* 선택된 도서관이 있을 때 지도 내에 패널 표시 */}
             {selectedLibraryInfo && (
-              <LibraryStockPanel
+              <LibrarySelectionPanel
                 libraryMarkerInfo={selectedLibraryInfo}
-                books={booksInfo}
                 onClose={handleClosePanel}
                 isEntering={isEnteringPanel}
                 onMoveToLocation={moveToLibraryLocation}
