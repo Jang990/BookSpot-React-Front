@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 
 import {
+  DEFAULT_MAP_BOUND,
   findMapLocationProps,
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
@@ -16,13 +17,14 @@ import { LibrarySelectionMapTemplate } from "@/components/templates/LibrarySelec
 
 export default function LibrariesSelection() {
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
+  const [initMapBound, setInitMapBound] = useState<MapBound>(DEFAULT_MAP_BOUND);
 
   const MAP_SEARCH_DELAY = 275;
   const CULSTERD_LEVEL = 8;
 
-  const mapBound: MapBound = findMapLocationProps();
-
   useEffect(() => {
+    const mapBound = findMapLocationProps();
+    setInitMapBound(mapBound);
     findLibraries(mapBound);
   }, []);
 
@@ -55,7 +57,7 @@ export default function LibrariesSelection() {
       {/* <LibraryPage /> */}
       <div className="w-full">
         <LibrarySelectionMapTemplate
-          mapBound={mapBound}
+          mapBound={initMapBound}
           libraries={libraries}
           onBoundsChange={debouncedMapSearch}
         />

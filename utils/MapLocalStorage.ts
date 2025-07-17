@@ -2,7 +2,7 @@ import { MapBound } from "@/types/MapBound";
 
 const STORAGE_NAME = "MAP_LOCATION";
 
-const DEFAULT_MAP_BOUND: MapBound = new MapBound(
+export const DEFAULT_MAP_BOUND: MapBound = new MapBound(
   {
     latitude: 37.57027567568552,
     longitude: 126.97290367316594,
