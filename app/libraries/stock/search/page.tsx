@@ -2,7 +2,7 @@
 
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
-import { fetchNearByLibraryStock } from "@/utils/api/LibraryStockSearchApi";
+import { fetchNearByLibraries } from "@/utils/api/LibraryApi";
 import { debounce } from "@/utils/debounce";
 import { use, useEffect, useState } from "react";
 import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
@@ -52,8 +52,7 @@ export default function Libraries({
   const debouncedMapSearch = debounce((bound: MapBound) => {
     setMapLocationProps(bound);
 
-    fetchNearByLibraryStock({
-      bookIds: bookIds,
+    fetchNearByLibraries({
       mapBound: bound,
     })
       .then((responseLibraries) => {
