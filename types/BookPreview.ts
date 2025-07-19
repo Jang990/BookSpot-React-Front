@@ -9,5 +9,6 @@ export interface BookPreview {
   publisher: string;
   loanCount: number;
   category: BookCategory;
+  createdAt: string;
   image?: string;
 }
