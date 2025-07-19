@@ -15,6 +15,7 @@ export function convertBookPreview(content: any): BookPreview {
     publicationYear: content.publicationYear ?? /* undefined */ 1111,
     publisher: content.publisher ?? /* undefined */ "Unknown",
     loanCount: content.loanCount,
+    category: content.category,
   };
 }
 
