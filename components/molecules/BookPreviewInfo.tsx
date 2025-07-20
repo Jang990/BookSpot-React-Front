@@ -11,6 +11,10 @@ interface BookPreviewInfoProps {
 }
 
 export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
+  function categoryIdText(categoryId: string | number): string {
+    return categoryId.toString().padStart(3, "0");
+  }
+
   return (
     <div className="p-4 flex-grow">
       <CardTitleLabel text={book.title} />
@@ -18,9 +22,10 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
         <CardSubLabel text={book.author} />
       </p>
       <p>
-        <CardFooterLabel text={book.publicationYear} />
-        <CardFooterLabel text=" · " />
-        <CardFooterLabel text={book.publisher} />
+        <CardFooterLabel text={`${book.publicationYear} · ${book.publisher}`} />
+        <CardFooterLabel
+          text={`${categoryIdText(book.category.id)} · ${book.category.name}`}
+        />
       </p>
     </div>
   );
