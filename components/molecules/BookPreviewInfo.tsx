@@ -5,6 +5,7 @@ import {
   CardSubLabel,
   CardTitleLabel,
 } from "../atoms/label/CardLabel";
+import { formatCount } from "@/utils/NumberFormatter";
 
 interface BookPreviewInfoProps {
   book: BookPreview;
@@ -16,7 +17,7 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
   }
 
   return (
-    <div className="p-4 flex-grow">
+    <div className="p-4 flex flex-col flex-grow">
       <CardTitleLabel text={book.title} />
       <p className="mb-1">
         <CardSubLabel text={book.author} />
@@ -27,6 +28,9 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
           text={`${categoryIdText(book.category.id)} · ${book.category.name}`}
         />
       </p>
+      <div className="mt-auto pt-2">
+        <CardFooterLabel text={`📖 ${formatCount(book.loanCount, "회")}`} />
+      </div>
     </div>
   );
 };
