@@ -8,6 +8,7 @@ import {
   parseSearchTerm,
   toRawQueryString,
 } from "@/utils/QueryString";
+import { CursorPageNavigator } from "@/components/molecules/pagination/CursorPageNavigator";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -15,6 +16,7 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
+export const MAX_PAGINATED_PAGES = 50;
 export default async function Home({ searchParams }: Props) {
   const queryStrings = await searchParams;
 
@@ -38,12 +40,15 @@ export default async function Home({ searchParams }: Props) {
       />
 
       <BookPreviewList searchResults={books} />
-
-      <PageNavigator
-        searchTerm={searchTerm}
-        currentPage={page}
-        totalPages={totalPage}
-      />
+      {page <= 50 ? (
+        <PageNavigator
+          searchTerm={searchTerm}
+          currentPage={page}
+          totalPages={totalPage}
+        />
+      ) : (
+        <CursorPageNavigator searchTerm={searchTerm} currentPage={page} />
+      )}
     </>
   );
 }
