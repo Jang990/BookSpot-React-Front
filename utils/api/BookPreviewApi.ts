@@ -29,7 +29,7 @@ export const findBooksPreview = async (
     const json = await fetchBooksPreview(searchCond);
     return {
       totalPage: json.totalPages,
-      books: json.content.map(convertBookPreview),
+      books: json.books.content.map(convertBookPreview),
     };
   }
 };
