@@ -1,6 +1,6 @@
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
-import { PageNavigator } from "@/components/molecules/PageNavigator";
+import { PageNavigator } from "@/components/molecules/pagination/PageNavigator";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview, PagingResult } from "@/utils/api/BookPreviewApi";
 import {
