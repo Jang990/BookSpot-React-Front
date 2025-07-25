@@ -11,11 +11,18 @@ export interface SearchCondition {
 }
 
 export interface PagingResult {
-  totalPage: number;
   books: BookPreview[];
+  totalPage: number;
+  totalElements: number;
+  lastLoanCount?: number;
+  lastBookId?: number;
 }
 
-const EMPTY_PAGIN_RESULT: PagingResult = { totalPage: 0, books: [] };
+const EMPTY_PAGIN_RESULT: PagingResult = {
+  totalPage: 0,
+  totalElements: 0,
+  books: [],
+};
 
 export const findBooksPreview = async (
   searchCond: SearchCondition
@@ -28,8 +35,11 @@ export const findBooksPreview = async (
   } else {
     const json = await fetchBooksPreview(searchCond);
     return {
-      totalPage: json.totalPages,
+      totalPage: json.books.totalPages,
+      totalElements: json.books.totalElements,
       books: json.books.content.map(convertBookPreview),
+      lastLoanCount: json.lastLoanCount,
+      lastBookId: json.lastBookId,
     };
   }
 };
