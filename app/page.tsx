@@ -41,11 +41,7 @@ export default async function Home({ searchParams }: Props) {
 
       <BookPreviewList searchResults={books} />
       {page <= 50 ? (
-        <PageNavigator
-          searchTerm={searchTerm}
-          currentPage={page}
-          totalPages={totalPage}
-        />
+        <PageNavigator currentPage={page} totalPages={totalPage} />
       ) : (
         <CursorPageNavigator searchTerm={searchTerm} currentPage={page} />
       )}

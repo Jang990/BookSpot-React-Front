@@ -2,27 +2,22 @@
 
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
 import { NaviPageNumberButton } from "@/components/atoms/button/navi/NaviPageNumberButton";
-import { useRouter } from "next/navigation";
+import { goToPage as goToPageHelper } from "@/utils/GoToPage";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface PaginationProps {
-  searchTerm?: string;
   currentPage: number;
   totalPages: number;
 }
 
-export const PageNavigator = ({
-  searchTerm,
-  currentPage,
-  totalPages,
-}: PaginationProps) => {
+export const PageNavigator = ({ currentPage, totalPages }: PaginationProps) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const goToPage = (page: number) => {
-    const params = new URLSearchParams();
-    if (searchTerm) params.set("searchTerm", searchTerm);
-    params.set("page", String(page));
-
-    router.push(`/?${params.toString()}`);
+  const goToPage = (pageNumber: number) => {
+    goToPageHelper(router, pathname, searchParams, pageNumber);
   };
 
   // 표시할 페이지 번호 범위 계산
