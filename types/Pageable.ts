@@ -6,3 +6,13 @@ export interface Pageable {
   pageNumber: number;
   pageSize: number;
 }
+
+export const EMPTY_SEARCH_AFTER: SearchAfter = {
+  lastLoanCount: undefined,
+  lastBookId: undefined,
+};
+
+export interface SearchAfter {
+  lastLoanCount?: number;
+  lastBookId?: number;
+}

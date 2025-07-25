@@ -1,4 +1,9 @@
-import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
+import {
+  EMPTY_SEARCH_AFTER,
+  MIN_SEARCH_TERM_LENGTH,
+  Pageable,
+  SearchAfter,
+} from "@/types/Pageable";
 import { get } from "./Fetcher";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "./ApiResponseConvertor";
@@ -13,14 +18,14 @@ export interface PagingResult {
   books: BookPreview[];
   totalPage: number;
   totalElements: number;
-  lastLoanCount?: number;
-  lastBookId?: number;
+  searchAfter: SearchAfter;
 }
 
 const EMPTY_PAGIN_RESULT: PagingResult = {
   totalPage: 0,
   totalElements: 0,
   books: [],
+  searchAfter: EMPTY_SEARCH_AFTER,
 };
 
 export const findBooksPreview = async (
@@ -39,8 +44,10 @@ export const findBooksPreview = async (
       totalPage: json.books.totalPages,
       totalElements: json.books.totalElements,
       books: json.books.content.map(convertBookPreview),
-      lastLoanCount: json.lastLoanCount,
-      lastBookId: json.lastBookId,
+      searchAfter: {
+        lastLoanCount: json.lastLoanCount,
+        lastBookId: json.lastBookId,
+      },
     };
   }
 };
