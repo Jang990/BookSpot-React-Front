@@ -24,11 +24,13 @@ export default async function Cart({
   const cookieVal = (await cookies()).get(STORAGE_NAME)?.value ?? "[]";
   const bookIds: string[] = JSON.parse(cookieVal);
 
-  const books: BookPreview[] = await fetchBooksPreview({
-    keyword: keyword,
-    bookIds: bookIds,
-    pageable: CART_PAGEABLE,
-  }).then((json) => {
+  const books: BookPreview[] = await fetchBooksPreview(
+    {
+      keyword: keyword,
+      bookIds: bookIds,
+    },
+    CART_PAGEABLE
+  ).then((json) => {
     if (!json.content) return [];
     return json.content.map(convertBookPreview);
   });

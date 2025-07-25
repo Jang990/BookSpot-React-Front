@@ -38,10 +38,10 @@ export default function Libraries({
   useEffect(() => {
     if (!bookIds || bookIds.length === 0) return;
 
-    fetchBooksPreview({
-      bookIds: bookIds,
-      pageable: { pageNumber: 0, pageSize: MAX_CART_SIZE },
-    }).then((response) => {
+    fetchBooksPreview(
+      { bookIds: bookIds },
+      { pageNumber: 0, pageSize: MAX_CART_SIZE }
+    ).then((response) => {
       const books: BookPreview[] = response.content.map(convertBookPreview);
       setBooksInfo(books);
     });

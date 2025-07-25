@@ -7,7 +7,6 @@ export interface SearchCondition {
   keyword?: string | null;
   bookIds?: string[];
   libraryId?: string;
-  pageable: Pageable;
 }
 
 export interface PagingResult {
@@ -25,7 +24,8 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
 };
 
 export const findBooksPreview = async (
-  searchCond: SearchCondition
+  searchCond: SearchCondition,
+  pageable: Pageable
 ): Promise<PagingResult> => {
   const keyword = searchCond.keyword;
 
@@ -33,7 +33,8 @@ export const findBooksPreview = async (
   if (!keyword || keyword.length < MIN_SEARCH_TERM_LENGTH) {
     return EMPTY_PAGIN_RESULT;
   } else {
-    const json = await fetchBooksPreview(searchCond);
+    const json = await fetchBooksPreview(searchCond, pageable);
+
     return {
       totalPage: json.books.totalPages,
       totalElements: json.books.totalElements,
@@ -44,17 +45,18 @@ export const findBooksPreview = async (
   }
 };
 
-export const fetchBooksPreview = async (searchCond: SearchCondition) => {
-  return get(createApi(searchCond));
+export const fetchBooksPreview = async (
+  searchCond: SearchCondition,
+  pageable: Pageable
+) => {
+  return get(createApi(searchCond, pageable));
 };
 
 const BOOK_API_URL = process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books";
-function createApi({
-  pageable,
-  keyword,
-  bookIds,
-  libraryId,
-}: SearchCondition): string {
+function createApi(
+  { keyword, bookIds, libraryId }: SearchCondition,
+  pageable: Pageable
+): string {
   if (!keyword && !bookIds) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");
   }

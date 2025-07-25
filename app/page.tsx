@@ -27,10 +27,10 @@ export default async function Home({ searchParams }: Props) {
     pageSize: ITEMS_PER_PAGE,
   };
 
-  const { totalPage, books }: PagingResult = await findBooksPreview({
-    keyword: searchTerm,
-    pageable,
-  });
+  const { totalPage, books }: PagingResult = await findBooksPreview(
+    { keyword: searchTerm },
+    pageable
+  );
 
   return (
     <>
