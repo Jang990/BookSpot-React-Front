@@ -2,12 +2,10 @@ import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
-import {
-  parsePage,
-  parseSearchTerm,
-  toRawQueryString,
-} from "@/utils/querystring/QueryString";
+import { toRawQueryString } from "@/utils/querystring/QueryString";
 import { PageNavigator } from "@/components/organisms/PageNavigator";
+import { parseSearchTerm } from "@/utils/querystring/SearchTerm";
+import { parsePage } from "@/utils/querystring/PageNumber";
 
 const ITEMS_PER_PAGE = 12;
 
