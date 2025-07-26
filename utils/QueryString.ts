@@ -26,13 +26,21 @@ const PAGE_QUERY_STRING_KEY = "page";
 export function parsePage(queryStrings: {
   [key: string]: string | string[] | undefined;
 }): number {
-  const rawPage = queryStrings[PAGE_QUERY_STRING_KEY];
-  if (!rawPage || Array.isArray(rawPage)) return FIRST_PAGE;
+  const page = parseNumber(queryStrings, PAGE_QUERY_STRING_KEY);
+  if (page === null || page < FIRST_PAGE) return FIRST_PAGE;
+  return page;
+}
 
-  const parsed = Number.parseInt(rawPage, 10);
-  if (Number.isNaN(parsed) || parsed < FIRST_PAGE) return FIRST_PAGE;
+export function parseNumber(
+  queryStrings: {
+    [key: string]: string | string[] | undefined;
+  },
+  key: string
+): number | null {
+  const rawPage = queryStrings[key];
+  if (!rawPage || Array.isArray(rawPage) || Number.isNaN(rawPage)) return null;
 
-  return parsed;
+  return Number.parseInt(rawPage, 10);
 }
 
 export const SEARCH_TERM_KEY = "searchTerm";
