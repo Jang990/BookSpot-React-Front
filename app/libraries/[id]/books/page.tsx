@@ -27,13 +27,14 @@ export default async function Home({ searchParams, params }: Props) {
     pageSize: ITEMS_PER_PAGE,
   };
 
-  const { totalPage, books }: PagingResult = await findBooksPreview(
-    {
-      keyword: searchTerm,
-      libraryId: libraryId,
-    },
-    pageable
-  );
+  const { totalPage, books, searchAfter }: PagingResult =
+    await findBooksPreview(
+      {
+        keyword: searchTerm,
+        libraryId: libraryId,
+      },
+      pageable
+    );
 
   return (
     <>
@@ -45,7 +46,7 @@ export default async function Home({ searchParams, params }: Props) {
 
       <BookPreviewList searchResults={books} />
 
-      <PageNavigator totalPages={totalPage} />
+      <PageNavigator searchAfter={searchAfter} totalPages={totalPage} />
     </>
   );
 }

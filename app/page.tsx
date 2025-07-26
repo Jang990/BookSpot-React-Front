@@ -1,7 +1,7 @@
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { Pageable } from "@/types/Pageable";
-import { findBooksPreview, PagingResult } from "@/utils/api/BookPreviewApi";
+import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import {
   parsePage,
   parseSearchTerm,
@@ -21,16 +21,16 @@ export default async function Home({ searchParams }: Props) {
 
   const searchTerm = parseSearchTerm(queryStrings);
   const page = parsePage(queryStrings);
+
   const pageable: Pageable = {
     pageNumber: page - 1,
     pageSize: ITEMS_PER_PAGE,
   };
 
-  const { totalPage, books }: PagingResult = await findBooksPreview(
+  const { books, totalPage, searchAfter } = await findBooksPreview(
     { keyword: searchTerm },
     pageable
   );
-  const isOutOfPageRange = page > MAX_PAGINATED_PAGES;
 
   return (
     <>
@@ -41,7 +41,7 @@ export default async function Home({ searchParams }: Props) {
 
       <BookPreviewList searchResults={books} />
 
-      <PageNavigator totalPages={totalPage} />
+      <PageNavigator totalPages={totalPage} searchAfter={searchAfter} />
     </>
   );
 }

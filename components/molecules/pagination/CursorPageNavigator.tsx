@@ -1,36 +1,32 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { goToPage as goToPageHelper } from "@/utils/GoToPage";
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
 import { MAX_PAGINATED_PAGES } from "@/app/page";
+import { SearchAfter } from "@/types/Pageable";
 
 interface CursorPageNaviProps {
   searchTerm?: string;
-  currentPage?: number;
-  lastLoanCount?: number;
-  lastBookId?: number;
   // 다음 페이지를 위한 현재 결과의 마지막 항목 정보
-  currentLastLoanCount?: number;
-  currentLastBookId?: number;
+  searchAfter: SearchAfter;
   hasNextPage?: boolean;
 }
 
 export const CursorPageNavigator = ({
   searchTerm,
-  currentPage,
-  lastLoanCount,
-  lastBookId,
-  currentLastLoanCount,
-  currentLastBookId,
+  searchAfter,
   hasNextPage,
 }: CursorPageNaviProps) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const goToPage = (page: number) => {
-    const params = new URLSearchParams();
-    if (searchTerm) params.set("searchTerm", searchTerm);
-    params.set("page", String(page));
-    router.push(`/?${params.toString()}`);
+  const lastLoanCount = searchAfter.lastLoanCount;
+  const lastBookId = searchAfter.lastBookId;
+
+  const goToPage = (pageNumber: number) => {
+    goToPageHelper(router, pathname, searchParams, pageNumber);
   };
 
   const goToSearchAfter = (loanCount?: number, bookId?: number) => {
@@ -42,17 +38,12 @@ export const CursorPageNavigator = ({
   };
 
   const handlePrevious = () => {
-    // 51페이지(첫 search_after 페이지)에서 이전을 누르면 50페이지로
-    if (currentPage === 51 || (!lastLoanCount && !lastBookId)) {
-      goToPage(MAX_PAGINATED_PAGES);
-    } else {
-      router.back();
-    }
+    router.back();
   };
 
   const handleNext = () => {
-    if (currentLastLoanCount && currentLastBookId) {
-      goToSearchAfter(currentLastLoanCount, currentLastBookId);
+    if (lastLoanCount && lastBookId) {
+      goToSearchAfter(lastLoanCount, lastBookId);
     }
   };
 
@@ -75,7 +66,7 @@ export const CursorPageNavigator = ({
         <NaviOptionButton
           text="다음"
           onClick={handleNext}
-          disabled={hasNextPage || !currentLastLoanCount}
+          disabled={hasNextPage || !lastLoanCount}
         />
       </div>
 
