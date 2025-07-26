@@ -8,11 +8,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  hasNext: boolean;
 }
 
 export const NumberPageNavigator = ({
   currentPage,
   totalPages,
+  hasNext,
 }: PaginationProps) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -89,7 +91,7 @@ export const NumberPageNavigator = ({
       <NaviOptionButton
         text="다음"
         onClick={() => goToPage(currentPage + 1)}
-        disabled={currentPage === totalPages || totalPages === 0}
+        disabled={!hasNext}
       />
     </div>
   );

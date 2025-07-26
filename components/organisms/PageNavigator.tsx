@@ -34,7 +34,12 @@ export const PageNavigator = ({
       ) : (
         <NumberPageNavigator
           currentPage={currentPage}
-          totalPages={totalPages}
+          totalPages={Math.min(totalPages, MAX_PAGINATED_PAGES)}
+          hasNext={
+            currentPage === totalPages ||
+            totalPages === 0 ||
+            totalPages > MAX_PAGINATED_PAGES
+          }
         />
       )}
     </>
