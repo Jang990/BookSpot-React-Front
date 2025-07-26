@@ -43,7 +43,7 @@ export const findBooksPreview = async (
   const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
-  if (keyword || isTooShortKeyword || (!keyword && isEmptyBookIds)) {
+  if (isTooShortKeyword || (!keyword && isEmptyBookIds)) {
     return EMPTY_PAGIN_RESULT;
   }
 
