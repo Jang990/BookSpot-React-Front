@@ -45,7 +45,7 @@ export default async function Home({ searchParams, params }: Props) {
 
       <BookPreviewList searchResults={books} />
 
-      <PageNavigator currentPage={page} totalPages={totalPage} />
+      <PageNavigator totalPages={totalPage} />
     </>
   );
 }

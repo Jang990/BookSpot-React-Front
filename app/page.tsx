@@ -31,6 +31,7 @@ export default async function Home({ searchParams }: Props) {
     { keyword: searchTerm },
     pageable
   );
+  const isOutOfPageRange = page > MAX_PAGINATED_PAGES;
 
   return (
     <>
@@ -40,10 +41,10 @@ export default async function Home({ searchParams }: Props) {
       />
 
       <BookPreviewList searchResults={books} />
-      {page <= 50 ? (
-        <PageNavigator currentPage={page} totalPages={totalPage} />
+      {isOutOfPageRange ? (
+        <CursorPageNavigator searchTerm={searchTerm} />
       ) : (
-        <CursorPageNavigator searchTerm={searchTerm} currentPage={page} />
+        <PageNavigator totalPages={totalPage} />
       )}
     </>
   );

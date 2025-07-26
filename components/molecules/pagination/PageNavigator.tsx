@@ -7,14 +7,16 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface PaginationProps {
-  currentPage: number;
   totalPages: number;
 }
 
-export const PageNavigator = ({ currentPage, totalPages }: PaginationProps) => {
+export const PageNavigator = ({ totalPages }: PaginationProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
   const goToPage = (pageNumber: number) => {
     goToPageHelper(router, pathname, searchParams, pageNumber);
