@@ -6,7 +6,7 @@ import {
   parsePage,
   parseSearchTerm,
   toRawQueryString,
-} from "@/utils/QueryString";
+} from "@/utils/querystring/QueryString";
 import { PageNavigator } from "@/components/organisms/PageNavigator";
 
 const ITEMS_PER_PAGE = 12;

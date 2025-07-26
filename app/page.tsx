@@ -6,7 +6,7 @@ import {
   parsePage,
   parseSearchTerm,
   toRawQueryString,
-} from "@/utils/QueryString";
+} from "@/utils/querystring/QueryString";
 import { PageNavigator } from "@/components/organisms/PageNavigator";
 
 const ITEMS_PER_PAGE = 12;
@@ -21,6 +21,9 @@ export default async function Home({ searchParams }: Props) {
 
   const searchTerm = parseSearchTerm(queryStrings);
   const page = parsePage(queryStrings);
+
+  const lastBookId = parsePage(queryStrings);
+  const lastLoanCount = parsePage(queryStrings);
 
   const pageable: Pageable = {
     pageNumber: page - 1,
