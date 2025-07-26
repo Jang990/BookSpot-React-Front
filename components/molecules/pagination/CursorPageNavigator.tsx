@@ -35,9 +35,11 @@ export const CursorPageNavigator = ({
   };
 
   const handleNext = () => {
-    if (lastLoanCount && lastBookId) {
+    if (lastLoanCount != null && lastBookId !== null) {
       goToSearchAfterPage(router, pathname, searchParams, searchAfter);
+      return;
     }
+    throw new Error("SearchAfter 조건 잘못됨");
   };
 
   return (
