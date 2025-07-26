@@ -1,6 +1,9 @@
 import { BookPreview } from "@/types/BookPreview";
 import { Pageable } from "@/types/Pageable";
-import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
+import {
+  fetchBooksPreview,
+  findBooksPreview,
+} from "@/utils/api/BookPreviewApi";
 import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
 import { cookies } from "next/headers";
 import { STORAGE_NAME } from "@/utils/BookCartLocalStorage";
@@ -24,16 +27,14 @@ export default async function Cart({
   const cookieVal = (await cookies()).get(STORAGE_NAME)?.value ?? "[]";
   const bookIds: string[] = JSON.parse(cookieVal);
 
-  const books: BookPreview[] = await fetchBooksPreview(
+  console.log(bookIds);
+  const { books } = await findBooksPreview(
     {
       keyword: keyword,
       bookIds: bookIds,
     },
     CART_PAGEABLE
-  ).then((json) => {
-    if (!json.content) return [];
-    return json.content.map(convertBookPreview);
-  });
+  );
 
   return (
     <div className="min-h-screen bg-background px-4 sm:px-6 lg:px-8">

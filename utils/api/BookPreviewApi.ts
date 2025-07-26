@@ -39,9 +39,11 @@ export const findBooksPreview = async (
   pageable: Pageable
 ): Promise<PagingResult> => {
   const keyword = searchCond.keyword;
+  const isEmptyBookIds = !searchCond.bookIds || searchCond.bookIds.length === 0;
+  const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
-  if (!keyword || keyword.length < MIN_SEARCH_TERM_LENGTH) {
+  if (keyword || isTooShortKeyword || (!keyword && isEmptyBookIds)) {
     return EMPTY_PAGIN_RESULT;
   }
 
