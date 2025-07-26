@@ -25,7 +25,7 @@ export const goToSearchAfterPage = (
   searchAfter: SearchAfter
 ) => {
   const params = new URLSearchParams(searchParams as any);
-  params.delete(PAGE_QUERY_STRING_KEY);
+  // params.delete(PAGE_QUERY_STRING_KEY);
   params.set(LAST_LOAN_COUNT_KEY, String(searchAfter.lastLoanCount));
   params.set(LAST_BOOK_ID_KEY, String(searchAfter.lastBookId));
   router.push(`${path}?${params.toString()}`);
