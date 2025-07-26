@@ -1,4 +1,4 @@
-export const MAX_NUMBER_PAGE = 30;
+export const MAX_NUMBER_PAGE = 50;
 
 export const ITEMS_PER_PAGE = 12;
 export const FIRST_PAGE = 1;
