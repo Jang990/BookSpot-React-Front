@@ -1,6 +1,5 @@
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
-import { NumberPageNavigator } from "@/components/molecules/pagination/NumberPageNavigator";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview, PagingResult } from "@/utils/api/BookPreviewApi";
 import {
@@ -8,6 +7,7 @@ import {
   parseSearchTerm,
   toRawQueryString,
 } from "@/utils/QueryString";
+import { PageNavigator } from "@/components/organisms/PageNavigator";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -45,7 +45,7 @@ export default async function Home({ searchParams, params }: Props) {
 
       <BookPreviewList searchResults={books} />
 
-      <NumberPageNavigator totalPages={totalPage} />
+      <PageNavigator totalPages={totalPage} />
     </>
   );
 }
