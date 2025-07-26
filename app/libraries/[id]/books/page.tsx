@@ -1,13 +1,11 @@
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
-import { PageNavigator } from "@/components/molecules/PageNavigator";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview, PagingResult } from "@/utils/api/BookPreviewApi";
-import {
-  parsePage,
-  parseSearchTerm,
-  toRawQueryString,
-} from "@/utils/QueryString";
+import { toRawQueryString } from "@/utils/querystring/QueryString";
+import { PageNavigator } from "@/components/organisms/PageNavigator";
+import { parseSearchTerm } from "@/utils/querystring/SearchTerm";
+import { parsePage } from "@/utils/querystring/PageNumber";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -27,11 +25,14 @@ export default async function Home({ searchParams, params }: Props) {
     pageSize: ITEMS_PER_PAGE,
   };
 
-  const { totalPage, books }: PagingResult = await findBooksPreview({
-    keyword: searchTerm,
-    libraryId: libraryId,
-    pageable,
-  });
+  const { totalPage, books, searchAfter }: PagingResult =
+    await findBooksPreview(
+      {
+        keyword: searchTerm,
+        libraryId: libraryId,
+      },
+      pageable
+    );
 
   return (
     <>
@@ -43,11 +44,7 @@ export default async function Home({ searchParams, params }: Props) {
 
       <BookPreviewList searchResults={books} />
 
-      <PageNavigator
-        searchTerm={searchTerm}
-        currentPage={page}
-        totalPages={totalPage}
-      />
+      <PageNavigator searchAfter={searchAfter} totalPages={totalPage} />
     </>
   );
 }

@@ -1,4 +1,9 @@
-import { MIN_SEARCH_TERM_LENGTH, Pageable } from "@/types/Pageable";
+import {
+  EMPTY_SEARCH_AFTER,
+  MIN_SEARCH_TERM_LENGTH,
+  Pageable,
+  SearchAfter,
+} from "@/types/Pageable";
 import { get } from "./Fetcher";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "./ApiResponseConvertor";
@@ -7,44 +12,89 @@ export interface SearchCondition {
   keyword?: string | null;
   bookIds?: string[];
   libraryId?: string;
-  pageable: Pageable;
 }
 
 export interface PagingResult {
-  totalPage: number;
   books: BookPreview[];
+  searchAfter: SearchAfter;
+  totalElements: number;
+  totalPage: number;
 }
 
-const EMPTY_PAGIN_RESULT: PagingResult = { totalPage: 0, books: [] };
+export interface SearchAfterResult {
+  books: BookPreview[];
+  searchAfter: SearchAfter;
+  totalElements: number;
+}
+
+const EMPTY_PAGIN_RESULT: PagingResult = {
+  totalPage: 0,
+  totalElements: 0,
+  books: [],
+  searchAfter: EMPTY_SEARCH_AFTER,
+};
 
 export const findBooksPreview = async (
-  searchCond: SearchCondition
+  searchCond: SearchCondition,
+  pageable: Pageable
 ): Promise<PagingResult> => {
+  const keyword = searchCond.keyword;
+  const isEmptyBookIds = !searchCond.bookIds || searchCond.bookIds.length === 0;
+  const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
+
+  // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
+  if (isTooShortKeyword || (!keyword && isEmptyBookIds)) {
+    return EMPTY_PAGIN_RESULT;
+  }
+
+  const json = await fetchBooksPreview(searchCond, pageable);
+
+  return {
+    totalPage: json.books.totalPages,
+    totalElements: json.books.totalElements,
+    books: json.books.content.map(convertBookPreview),
+    searchAfter: {
+      lastLoanCount: json.lastLoanCount,
+      lastBookId: json.lastBookId,
+    },
+  };
+};
+
+export const findBooksPreviewWithSA = async (
+  searchCond: SearchCondition,
+  searchAfter: SearchAfter
+): Promise<SearchAfterResult> => {
   const keyword = searchCond.keyword;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
   if (!keyword || keyword.length < MIN_SEARCH_TERM_LENGTH) {
     return EMPTY_PAGIN_RESULT;
-  } else {
-    const json = await fetchBooksPreview(searchCond);
-    return {
-      totalPage: json.totalPages,
-      books: json.content.map(convertBookPreview),
-    };
   }
+
+  const json = await fetchBooksPreview(searchCond, searchAfter);
+
+  return {
+    totalElements: json.totalElements,
+    books: json.books.map(convertBookPreview),
+    searchAfter: {
+      lastLoanCount: json.lastLoanCount,
+      lastBookId: json.lastBookId,
+    },
+  };
 };
 
-export const fetchBooksPreview = async (searchCond: SearchCondition) => {
-  return get(createApi(searchCond));
+const fetchBooksPreview = async (
+  searchCond: SearchCondition,
+  pagingCond: Pageable | SearchAfter
+) => {
+  return get(createApi(searchCond, pagingCond));
 };
 
 const BOOK_API_URL = process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books";
-function createApi({
-  pageable,
-  keyword,
-  bookIds,
-  libraryId,
-}: SearchCondition): string {
+function createApi(
+  { keyword, bookIds, libraryId }: SearchCondition,
+  pageCond: Pageable | SearchAfter
+): string {
   if (!keyword && !bookIds) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");
   }
@@ -53,7 +103,30 @@ function createApi({
   if (keyword) url.searchParams.append("title", keyword);
   if (bookIds) url.searchParams.append("bookIds", bookIds.join(","));
   if (libraryId) url.searchParams.append("libraryId", libraryId);
-  url.searchParams.append("page", pageable.pageNumber.toString());
-  url.searchParams.append("size", pageable.pageSize.toString());
+
+  if (isPageable(pageCond)) appendPageableQuery(url, pageCond);
+  if (isSearchAfter(pageCond)) appendSearchAfterQuery(pageCond, url);
+
   return url.toString();
+}
+
+function appendSearchAfterQuery(pageCond: SearchAfter, url: URL) {
+  if (pageCond.lastLoanCount !== undefined)
+    url.searchParams.append("lastLoanCount", pageCond.lastLoanCount.toString());
+
+  if (pageCond.lastBookId !== undefined)
+    url.searchParams.append("lastBookId", pageCond.lastBookId.toString());
+}
+
+function appendPageableQuery(url: URL, pageCond: Pageable) {
+  url.searchParams.append("page", pageCond.pageNumber.toString());
+  url.searchParams.append("size", pageCond.pageSize.toString());
+}
+
+function isPageable(x: Pageable | SearchAfter): x is Pageable {
+  return (x as Pageable).pageNumber !== undefined;
+}
+
+function isSearchAfter(x: Pageable | SearchAfter): x is SearchAfter {
+  return !isPageable(x);
 }

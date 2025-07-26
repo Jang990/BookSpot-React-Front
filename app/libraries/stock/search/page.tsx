@@ -9,15 +9,14 @@ import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
 import { BookPreview } from "@/types/BookPreview";
-import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
-import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
+import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 
 import {
   findMapLocationProps,
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
 import { OUT_OF_ZOOM_STOCK } from "@/types/LibraryStock";
-import { MapDetailLimitInfo } from "@/components/organisms/MapLimitInfo";
+import { MapLimitInfo } from "@/components/organisms/MapLimitInfo";
 
 export default function Libraries({
   searchParams,
@@ -38,12 +37,11 @@ export default function Libraries({
   useEffect(() => {
     if (!bookIds || bookIds.length === 0) return;
 
-    fetchBooksPreview({
-      bookIds: bookIds,
-      pageable: { pageNumber: 0, pageSize: MAX_CART_SIZE },
-    }).then((response) => {
-      const books: BookPreview[] = response.content.map(convertBookPreview);
-      setBooksInfo(books);
+    findBooksPreview(
+      { bookIds: bookIds },
+      { pageNumber: 0, pageSize: MAX_CART_SIZE }
+    ).then((pageResult) => {
+      setBooksInfo(pageResult.books);
     });
 
     debouncedMapSearch(mapBound);
@@ -88,6 +86,14 @@ export default function Libraries({
           return;
         }
 
+        if (
+          !libraryIds ||
+          libraryIds.length === 0 ||
+          !bookIds ||
+          bookIds.length === 0
+        )
+          return;
+
         fetchLibraryStock({ libraryIds: libraryIds, bookIds: bookIds }).then(
           (libraryStocks) => {
             setLibraries(
@@ -115,7 +121,7 @@ export default function Libraries({
         />
       </div>
 
-      <MapDetailLimitInfo detailLevel={CULSTERD_LEVEL}></MapDetailLimitInfo>
+      <MapLimitInfo detailLevel={CULSTERD_LEVEL}></MapLimitInfo>
     </div>
   );
 }

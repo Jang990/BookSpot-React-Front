@@ -12,7 +12,6 @@ import {
   findMapLocationProps,
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
-import { MapDetailLimitInfo } from "@/components/organisms/MapLimitInfo";
 import { LibrarySelectionMapTemplate } from "@/components/templates/LibrarySelectionMapTemplate";
 
 export default function LibrariesSelection() {
@@ -20,7 +19,6 @@ export default function LibrariesSelection() {
   const [initMapBound, setInitMapBound] = useState<MapBound>(DEFAULT_MAP_BOUND);
 
   const MAP_SEARCH_DELAY = 275;
-  const CULSTERD_LEVEL = 8;
 
   useEffect(() => {
     const mapBound = findMapLocationProps();
@@ -62,8 +60,6 @@ export default function LibrariesSelection() {
           onBoundsChange={debouncedMapSearch}
         />
       </div>
-
-      <MapDetailLimitInfo detailLevel={CULSTERD_LEVEL}></MapDetailLimitInfo>
     </div>
   );
 }

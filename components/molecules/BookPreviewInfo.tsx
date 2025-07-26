@@ -25,7 +25,13 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
       <p>
         <CardFooterLabel text={`${book.publicationYear} · ${book.publisher}`} />
         <CardFooterLabel
-          text={`${categoryIdText(book.category.id)} · ${book.category.name}`}
+          text={
+            book.category == null ||
+            book.category.id == null ||
+            book.category.name == null
+              ? "알 수 없음"
+              : `${categoryIdText(book.category.id)} · ${book.category.name}`
+          }
         />
       </p>
       <div className="mt-auto pt-2">
