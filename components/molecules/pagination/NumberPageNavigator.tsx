@@ -3,20 +3,20 @@
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
 import { NaviPageNumberButton } from "@/components/atoms/button/navi/NaviPageNumberButton";
 import { goToPage as goToPageHelper } from "@/utils/GoToPage";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface PaginationProps {
+  currentPage: number;
   totalPages: number;
 }
 
-export const NumberPageNavigator = ({ totalPages }: PaginationProps) => {
+export const NumberPageNavigator = ({
+  currentPage,
+  totalPages,
+}: PaginationProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const pageParam = searchParams.get("page");
-  const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
 
   const goToPage = (pageNumber: number) => {
     goToPageHelper(router, pathname, searchParams, pageNumber);
