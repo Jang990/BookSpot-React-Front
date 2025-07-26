@@ -9,8 +9,7 @@ import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
 import { BookPreview } from "@/types/BookPreview";
-import { fetchBooksPreview } from "@/utils/api/BookPreviewApi";
-import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
+import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 
 import {
   findMapLocationProps,
@@ -38,12 +37,11 @@ export default function Libraries({
   useEffect(() => {
     if (!bookIds || bookIds.length === 0) return;
 
-    fetchBooksPreview(
+    findBooksPreview(
       { bookIds: bookIds },
       { pageNumber: 0, pageSize: MAX_CART_SIZE }
-    ).then((response) => {
-      const books: BookPreview[] = response.content.map(convertBookPreview);
-      setBooksInfo(books);
+    ).then((pageResult) => {
+      setBooksInfo(pageResult.books);
     });
 
     debouncedMapSearch(mapBound);
@@ -87,6 +85,14 @@ export default function Libraries({
           );
           return;
         }
+
+        if (
+          !libraryIds ||
+          libraryIds.length === 0 ||
+          !bookIds ||
+          bookIds.length === 0
+        )
+          return;
 
         fetchLibraryStock({ libraryIds: libraryIds, bookIds: bookIds }).then(
           (libraryStocks) => {

@@ -1,10 +1,5 @@
-import { BookPreview } from "@/types/BookPreview";
 import { Pageable } from "@/types/Pageable";
-import {
-  fetchBooksPreview,
-  findBooksPreview,
-} from "@/utils/api/BookPreviewApi";
-import { convertBookPreview } from "@/utils/api/ApiResponseConvertor";
+import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { cookies } from "next/headers";
 import { STORAGE_NAME } from "@/utils/BookCartLocalStorage";
 import { BookCartListTemplate } from "@/components/templates/BookCartListTemplate";
@@ -27,7 +22,6 @@ export default async function Cart({
   const cookieVal = (await cookies()).get(STORAGE_NAME)?.value ?? "[]";
   const bookIds: string[] = JSON.parse(cookieVal);
 
-  console.log(bookIds);
   const { books } = await findBooksPreview(
     {
       keyword: keyword,

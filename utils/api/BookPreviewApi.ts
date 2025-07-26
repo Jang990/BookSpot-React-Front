@@ -83,7 +83,7 @@ export const findBooksPreviewWithSA = async (
   };
 };
 
-export const fetchBooksPreview = async (
+const fetchBooksPreview = async (
   searchCond: SearchCondition,
   pagingCond: Pageable | SearchAfter
 ) => {
