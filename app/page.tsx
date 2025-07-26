@@ -6,7 +6,10 @@ import {
   findBooksPreviewWithSA,
 } from "@/utils/api/BookPreviewApi";
 import { parseNumber, toRawQueryString } from "@/utils/querystring/QueryString";
-import { PageNavigator } from "@/components/organisms/PageNavigator";
+import {
+  MAX_PAGINATED_PAGES,
+  PageNavigator,
+} from "@/components/organisms/PageNavigator";
 import { parseSearchTerm } from "@/utils/querystring/SearchTerm";
 import { parsePage } from "@/utils/querystring/PageNumber";
 import {
@@ -21,7 +24,6 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export const MAX_PAGINATED_PAGES = 50;
 export default async function Home({ searchParams }: Props) {
   const queryStrings = await searchParams;
 

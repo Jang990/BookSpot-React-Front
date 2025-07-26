@@ -6,7 +6,7 @@ import {
   goToSearchAfterPage,
 } from "@/utils/GoToPage";
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
-import { MAX_PAGINATED_PAGES } from "@/app/page";
+import { MAX_PAGINATED_PAGES } from "@/components/organisms/PageNavigator";
 import { SearchAfter } from "@/types/Pageable";
 
 interface CursorPageNaviProps {
