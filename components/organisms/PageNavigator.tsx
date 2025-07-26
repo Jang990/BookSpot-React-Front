@@ -1,7 +1,7 @@
 "use client";
 
 import { NumberPageNavigator } from "@/components/molecules/pagination/NumberPageNavigator";
-import { SearchAfter } from "@/types/Pageable";
+import { MAX_NUMBER_PAGE, SearchAfter } from "@/types/Pageable";
 import { useSearchParams } from "next/navigation";
 import { CursorPageNavigator } from "../molecules/pagination/CursorPageNavigator";
 
@@ -11,7 +11,6 @@ interface PageNaviProps {
   hasNext?: boolean;
 }
 
-export const MAX_PAGINATED_PAGES = 50;
 export const PageNavigator = ({
   totalPages,
   searchAfter,
@@ -25,7 +24,7 @@ export const PageNavigator = ({
   const hasOnlyCursorCond = currentPage === null;
   searchParams.get("lastLoanCount") !== null &&
     searchParams.get("lastBookId") !== null;
-  const isOutOfPageNumber: boolean = currentPage > MAX_PAGINATED_PAGES;
+  const isOutOfPageNumber: boolean = currentPage > MAX_NUMBER_PAGE;
 
   return (
     <>
@@ -34,11 +33,11 @@ export const PageNavigator = ({
       ) : (
         <NumberPageNavigator
           currentPage={currentPage}
-          totalPages={Math.min(totalPages, MAX_PAGINATED_PAGES)}
+          totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
           hasNext={
             currentPage === totalPages ||
             totalPages === 0 ||
-            totalPages > MAX_PAGINATED_PAGES
+            totalPages > MAX_NUMBER_PAGE
           }
         />
       )}

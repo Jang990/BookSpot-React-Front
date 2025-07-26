@@ -6,8 +6,7 @@ import {
   goToSearchAfterPage,
 } from "@/utils/GoToPage";
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
-import { MAX_PAGINATED_PAGES } from "@/components/organisms/PageNavigator";
-import { SearchAfter } from "@/types/Pageable";
+import { MAX_NUMBER_PAGE, SearchAfter } from "@/types/Pageable";
 
 interface CursorPageNaviProps {
   // 다음 페이지를 위한 현재 결과의 마지막 항목 정보
@@ -54,7 +53,7 @@ export const CursorPageNavigator = ({
         <div className="flex items-center space-x-2 px-4 py-2 bg-gray-50 rounded-md border">
           <span className="text-sm text-gray-600">페이지</span>
           <span className="font-semibold text-gray-900">
-            {MAX_PAGINATED_PAGES}+
+            {MAX_NUMBER_PAGE}+
           </span>
         </div>
 
@@ -68,10 +67,10 @@ export const CursorPageNavigator = ({
       {/* 50페이지로 돌아가기 버튼 */}
       <div className="border-l border-gray-300 pl-4">
         <button
-          onClick={() => goToPage(MAX_PAGINATED_PAGES)}
+          onClick={() => goToPage(MAX_NUMBER_PAGE)}
           className="px-3 py-2 text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors"
         >
-          페이지 {MAX_PAGINATED_PAGES}로 돌아가기
+          페이지 {MAX_NUMBER_PAGE}로 돌아가기
         </button>
       </div>
     </div>

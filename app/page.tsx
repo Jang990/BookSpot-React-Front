@@ -1,15 +1,12 @@
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
-import { Pageable, SearchAfter } from "@/types/Pageable";
+import { MAX_NUMBER_PAGE, Pageable, SearchAfter } from "@/types/Pageable";
 import {
   findBooksPreview,
   findBooksPreviewWithSA,
 } from "@/utils/api/BookPreviewApi";
 import { parseNumber, toRawQueryString } from "@/utils/querystring/QueryString";
-import {
-  MAX_PAGINATED_PAGES,
-  PageNavigator,
-} from "@/components/organisms/PageNavigator";
+import { PageNavigator } from "@/components/organisms/PageNavigator";
 import { parseSearchTerm } from "@/utils/querystring/SearchTerm";
 import { parsePage } from "@/utils/querystring/PageNumber";
 import {
@@ -43,7 +40,7 @@ export default async function Home({ searchParams }: Props) {
   let searchAfter: SearchAfter;
 
   const hasCursorCond = lastLoanCount !== null && lastBookId !== null;
-  const isOutOfPageNumber: boolean = page > MAX_PAGINATED_PAGES;
+  const isOutOfPageNumber: boolean = page > MAX_NUMBER_PAGE;
 
   if (hasCursorCond && isOutOfPageNumber) {
     const result = await findBooksPreviewWithSA(
