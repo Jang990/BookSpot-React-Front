@@ -73,7 +73,7 @@ export const findBooksPreviewWithSA = async (
 
   return {
     totalElements: json.totalElements,
-    books: json.books.content.map(convertBookPreview),
+    books: json.books.map(convertBookPreview),
     searchAfter: {
       lastLoanCount: json.lastLoanCount,
       lastBookId: json.lastBookId,

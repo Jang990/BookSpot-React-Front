@@ -1,20 +1,21 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { goToPage as goToPageHelper } from "@/utils/GoToPage";
+import {
+  goToPage as goToPageHelper,
+  goToSearchAfterPage,
+} from "@/utils/GoToPage";
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
 import { MAX_PAGINATED_PAGES } from "@/app/page";
 import { SearchAfter } from "@/types/Pageable";
 
 interface CursorPageNaviProps {
-  searchTerm?: string;
   // 다음 페이지를 위한 현재 결과의 마지막 항목 정보
   searchAfter: SearchAfter;
-  hasNextPage?: boolean;
+  hasNextPage: boolean;
 }
 
 export const CursorPageNavigator = ({
-  searchTerm,
   searchAfter,
   hasNextPage,
 }: CursorPageNaviProps) => {
@@ -29,21 +30,13 @@ export const CursorPageNavigator = ({
     goToPageHelper(router, pathname, searchParams, pageNumber);
   };
 
-  const goToSearchAfter = (loanCount?: number, bookId?: number) => {
-    const params = new URLSearchParams();
-    if (searchTerm) params.set("searchTerm", searchTerm);
-    if (loanCount) params.set("lastLoanCount", String(loanCount));
-    if (bookId) params.set("lastBookId", String(bookId));
-    router.push(`/?${params.toString()}`);
-  };
-
   const handlePrevious = () => {
     router.back();
   };
 
   const handleNext = () => {
     if (lastLoanCount && lastBookId) {
-      goToSearchAfter(lastLoanCount, lastBookId);
+      goToSearchAfterPage(router, pathname, searchParams, searchAfter);
     }
   };
 
@@ -66,7 +59,7 @@ export const CursorPageNavigator = ({
         <NaviOptionButton
           text="다음"
           onClick={handleNext}
-          disabled={hasNextPage || !lastLoanCount}
+          disabled={!hasNextPage}
         />
       </div>
 
