@@ -1,7 +1,7 @@
 import { parseNumber } from "./QueryString";
 
 const FIRST_PAGE = 1;
-const PAGE_QUERY_STRING_KEY = "page";
+export const PAGE_QUERY_STRING_KEY = "page";
 export function parsePage(queryStrings: {
   [key: string]: string | string[] | undefined;
 }): number {
