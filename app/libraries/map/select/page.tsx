@@ -12,7 +12,7 @@ import {
   findMapLocationProps,
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
-import { MapDetailLimitInfo } from "@/components/organisms/MapLimitInfo";
+import { MapLimitInfo } from "@/components/organisms/MapLimitInfo";
 import { LibrarySelectionMapTemplate } from "@/components/templates/LibrarySelectionMapTemplate";
 
 export default function LibrariesSelection() {
@@ -63,7 +63,7 @@ export default function LibrariesSelection() {
         />
       </div>
 
-      <MapDetailLimitInfo detailLevel={CULSTERD_LEVEL}></MapDetailLimitInfo>
+      <MapLimitInfo detailLevel={CULSTERD_LEVEL}></MapLimitInfo>
     </div>
   );
 }

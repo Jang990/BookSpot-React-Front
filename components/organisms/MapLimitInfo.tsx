@@ -12,7 +12,7 @@ function formatDistance(meter: number): string {
   return meter + " m";
 }
 
-export const MapDetailLimitInfo = ({ detailLevel }: MapLimitInfoProps) => {
+export const MapLimitInfo = ({ detailLevel }: MapLimitInfoProps) => {
   return (
     <div className="mt-4 flex items-center justify-center">
       <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm">

@@ -17,7 +17,7 @@ import {
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
 import { OUT_OF_ZOOM_STOCK } from "@/types/LibraryStock";
-import { MapDetailLimitInfo } from "@/components/organisms/MapLimitInfo";
+import { MapLimitInfo } from "@/components/organisms/MapLimitInfo";
 
 export default function Libraries({
   searchParams,
@@ -115,7 +115,7 @@ export default function Libraries({
         />
       </div>
 
-      <MapDetailLimitInfo detailLevel={CULSTERD_LEVEL}></MapDetailLimitInfo>
+      <MapLimitInfo detailLevel={CULSTERD_LEVEL}></MapLimitInfo>
     </div>
   );
 }
