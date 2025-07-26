@@ -10,7 +10,7 @@ interface PaginationProps {
   totalPages: number;
 }
 
-export const PageNavigator = ({ totalPages }: PaginationProps) => {
+export const NumberPageNavigator = ({ totalPages }: PaginationProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

@@ -1,6 +1,6 @@
 import { BookSearchBar } from "@/components/organisms/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
-import { PageNavigator } from "@/components/molecules/pagination/PageNavigator";
+import { NumberPageNavigator } from "@/components/molecules/pagination/NumberPageNavigator";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview, PagingResult } from "@/utils/api/BookPreviewApi";
 import {
@@ -44,7 +44,7 @@ export default async function Home({ searchParams }: Props) {
       {isOutOfPageRange ? (
         <CursorPageNavigator searchTerm={searchTerm} />
       ) : (
-        <PageNavigator totalPages={totalPage} />
+        <NumberPageNavigator totalPages={totalPage} />
       )}
     </>
   );
