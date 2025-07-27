@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import { Library } from "@/types/Library";
+import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 
 interface LibrarySelectionButtonProps {
   bookQueryString?: string;
@@ -17,9 +18,14 @@ export const LibrarySelectionButton = async ({
     const library: Library = await fetchSingleLibrary({
       libraryId: libraryId.toString(),
     });
+    const queryString = (): string => {
+      const params = new URLSearchParams(bookQueryString);
+      params.delete(LIBRARY_QUERY_STRING_KEY);
+      return params.toString();
+    };
 
     return (
-      <Link href={`/?${bookQueryString ?? ""}`}>
+      <Link href={`/?${queryString()}`}>
         <Button
           variant="ghost"
           size="sm"
