@@ -3,6 +3,8 @@ export interface BookCategory {
   name: string;
 }
 
+export const CATEGORY_MAP = new Map<number, BookCategory>();
+
 export const CATEGORY_ARRAY: BookCategory[] = [
   { id: 0, name: "총류" },
   { id: 1, name: "지식 및 학문 일반" },
@@ -915,3 +917,5 @@ export const CATEGORY_ARRAY: BookCategory[] = [
   { id: 998, name: "주제별 전기" },
   { id: 999, name: "계보, 족보" },
 ];
+
+CATEGORY_ARRAY.forEach((cat) => CATEGORY_MAP.set(cat.id, cat));

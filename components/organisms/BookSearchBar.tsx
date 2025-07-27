@@ -1,14 +1,17 @@
+import { CategorySelectionButton } from "../molecules/CategorySelectionButton";
 import { LibrarySelectionButton } from "../molecules/LibrarySelectionButton";
 import { SearchBar } from "../molecules/SearchBar";
 
 interface SearchProps {
   libraryId?: string;
+  categoryId: number | null;
   bookQueryString?: string;
   initialSearchTerm: string;
 }
 
 export const BookSearchBar = ({
   libraryId,
+  categoryId,
   bookQueryString,
   initialSearchTerm,
 }: SearchProps) => {
@@ -18,6 +21,10 @@ export const BookSearchBar = ({
         <div className="flex items-center gap-2">
           <LibrarySelectionButton
             libraryId={libraryId}
+            bookQueryString={bookQueryString}
+          />
+          <CategorySelectionButton
+            categoryId={categoryId}
             bookQueryString={bookQueryString}
           />
         </div>

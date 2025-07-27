@@ -6,6 +6,7 @@ import { toRawQueryString } from "@/utils/querystring/QueryString";
 import { PageNavigator } from "@/components/organisms/PageNavigator";
 import { parseSearchTerm } from "@/utils/querystring/SearchTerm";
 import { parsePage } from "@/utils/querystring/PageNumber";
+import { parseCategoryId } from "@/utils/querystring/CategoryId";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -20,6 +21,7 @@ export default async function Home({ searchParams, params }: Props) {
 
   const searchTerm = parseSearchTerm(queryStrings);
   const page = parsePage(queryStrings);
+  const categoryId = parseCategoryId(queryStrings);
   const pageable: Pageable = {
     pageNumber: page - 1,
     pageSize: ITEMS_PER_PAGE,
@@ -40,6 +42,7 @@ export default async function Home({ searchParams, params }: Props) {
         initialSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
         libraryId={libraryId}
+        categoryId={categoryId}
       />
 
       <BookPreviewList searchResults={books} />

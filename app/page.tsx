@@ -14,6 +14,7 @@ import {
   LAST_LOAN_COUNT_KEY,
 } from "@/utils/querystring/SearchAfter";
 import { BookPreview } from "@/types/BookPreview";
+import { parseCategoryId } from "@/utils/querystring/CategoryId";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -26,6 +27,7 @@ export default async function Home({ searchParams }: Props) {
 
   const searchTerm = parseSearchTerm(queryStrings);
   const page = parsePage(queryStrings);
+  const categoryId = parseCategoryId(queryStrings);
 
   const lastBookId = parseNumber(queryStrings, LAST_BOOK_ID_KEY);
   const lastLoanCount = parseNumber(queryStrings, LAST_LOAN_COUNT_KEY);
@@ -62,6 +64,7 @@ export default async function Home({ searchParams }: Props) {
       <BookSearchBar
         initialSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
+        categoryId={categoryId}
       />
 
       <BookPreviewList searchResults={books} />
