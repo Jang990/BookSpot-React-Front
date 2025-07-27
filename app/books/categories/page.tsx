@@ -5,8 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
+import { useSearchParams } from "next/navigation";
+import { CATEGORY_QUERY_STRING_KEY } from "@/utils/querystring/CategoryId";
 
 export default function CategorySelector() {
+  const searchParams = useSearchParams();
+  const queryString = (categoryId: number): string => {
+    const params = new URLSearchParams(searchParams as any);
+    params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
+    return params.toString();
+  };
+
   const [currentPath, setCurrentPath] = useState<number[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -83,7 +92,7 @@ export default function CategorySelector() {
       setCurrentPath([...currentPath, categoryId]);
     } else {
       // 최종 선택 - 실제로는 books?categoryId=categoryId로 이동
-      window.location.href = `/books?categoryId=${categoryId}`;
+      window.location.href = `/?${queryString(categoryId)}`;
     }
   };
 
@@ -194,7 +203,7 @@ export default function CategorySelector() {
                       <div
                         className="flex-1 p-4 cursor-pointer hover:bg-muted/50 transition-colors"
                         onClick={() => {
-                          window.location.href = `/books?categoryId=${category.id}`;
+                          window.location.href = `/?${queryString(category.id)}`;
                         }}
                       >
                         <div className="space-y-2">
