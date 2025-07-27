@@ -11,5 +11,9 @@ export const CardSubLabel = ({ text }: LabelProps) => {
 };
 
 export const CardFooterLabel = ({ text }: LabelProps) => {
-  return <span className="text-xs text-muted-foreground">{text}</span>;
+  return (
+    <span className="text-xs text-muted-foreground block leading-tight">
+      {text}
+    </span>
+  );
 };

@@ -1,7 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { parseSearchTermInClient, SEARCH_TERM_KEY } from "@/utils/QueryString";
+import {
+  parseSearchTermInClient,
+  SEARCH_TERM_KEY,
+} from "@/utils/querystring/SearchTerm";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface SelectLibraryButtonProps {
