@@ -3,7 +3,7 @@ import { LibrarySelectionButton } from "../molecules/LibrarySelectionButton";
 import { SearchBar } from "../molecules/SearchBar";
 
 interface SearchProps {
-  libraryId?: string;
+  libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
   initialSearchTerm: string;

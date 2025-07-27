@@ -16,6 +16,7 @@ import {
 } from "@/utils/querystring/SearchAfter";
 import { BookPreview } from "@/types/BookPreview";
 import { parseCategoryId } from "@/utils/querystring/CategoryId";
+import { parseLibraryId } from "@/utils/querystring/LibraryId";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -28,6 +29,7 @@ export default async function Home({ searchParams }: Props) {
 
   const searchTerm = parseSearchTerm(queryStrings);
   const page = parsePage(queryStrings);
+  const libraryId = parseLibraryId(queryStrings);
   const categoryId = parseCategoryId(queryStrings);
 
   const lastBookId = parseNumber(queryStrings, LAST_BOOK_ID_KEY);
@@ -46,6 +48,7 @@ export default async function Home({ searchParams }: Props) {
   const isOutOfPageNumber: boolean = page > MAX_NUMBER_PAGE;
   const searchCond: SearchCondition = {
     keyword: searchTerm,
+    libraryId: libraryId?.toString(),
     categoryId: categoryId?.toString(),
   };
 
@@ -69,6 +72,7 @@ export default async function Home({ searchParams }: Props) {
       <BookSearchBar
         initialSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
+        libraryId={libraryId}
         categoryId={categoryId}
       />
 

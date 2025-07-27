@@ -6,7 +6,7 @@ import { Library } from "@/types/Library";
 
 interface LibrarySelectionButtonProps {
   bookQueryString?: string;
-  libraryId?: string;
+  libraryId: number | null;
 }
 
 export const LibrarySelectionButton = async ({
@@ -14,7 +14,9 @@ export const LibrarySelectionButton = async ({
   libraryId,
 }: LibrarySelectionButtonProps) => {
   if (libraryId) {
-    const library: Library = await fetchSingleLibrary({ libraryId: libraryId });
+    const library: Library = await fetchSingleLibrary({
+      libraryId: libraryId.toString(),
+    });
 
     return (
       <Link href={`/?${bookQueryString ?? ""}`}>
