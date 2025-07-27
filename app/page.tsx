@@ -4,6 +4,7 @@ import { MAX_NUMBER_PAGE, Pageable, SearchAfter } from "@/types/Pageable";
 import {
   findBooksPreview,
   findBooksPreviewWithSA,
+  SearchCondition,
 } from "@/utils/api/BookPreviewApi";
 import { parseNumber, toRawQueryString } from "@/utils/querystring/QueryString";
 import { PageNavigator } from "@/components/organisms/PageNavigator";
@@ -43,17 +44,21 @@ export default async function Home({ searchParams }: Props) {
 
   const hasCursorCond = lastLoanCount !== null && lastBookId !== null;
   const isOutOfPageNumber: boolean = page > MAX_NUMBER_PAGE;
+  const searchCond: SearchCondition = {
+    keyword: searchTerm,
+    categoryId: categoryId?.toString(),
+  };
 
   if (hasCursorCond && isOutOfPageNumber) {
-    const result = await findBooksPreviewWithSA(
-      { keyword: searchTerm },
-      { lastLoanCount: lastLoanCount, lastBookId: lastBookId }
-    );
+    const result = await findBooksPreviewWithSA(searchCond, {
+      lastLoanCount: lastLoanCount,
+      lastBookId: lastBookId,
+    });
     books = result.books;
     totalPages = null;
     searchAfter = result.searchAfter;
   } else {
-    const result = await findBooksPreview({ keyword: searchTerm }, pageable);
+    const result = await findBooksPreview(searchCond, pageable);
     books = result.books;
     totalPages = result.totalPage;
     searchAfter = result.searchAfter;
