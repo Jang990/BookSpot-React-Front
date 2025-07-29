@@ -20,7 +20,7 @@ export function CategoryNavigation({
   return (
     <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
       {breadcrumbs.map((breadcrumb, index) => (
-        <div key={breadcrumb.id} className="flex items-center gap-2">
+        <div key={index} className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"

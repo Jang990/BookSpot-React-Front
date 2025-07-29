@@ -44,17 +44,23 @@ export default function CategorySelector() {
 
   // 1) level 결정: 100단위→1, 10단위→2, 개별→3
   const getCurrentLevel = (): number => {
-    if (currentPath.length === 0) return 0;
-    const parent = currentPath[currentPath.length - 1];
-    if (parent % 100 === 0) return 1;
-    if (parent % 10 === 0) return 2;
-    return 3;
+    // if (currentPath.length === 0) return 0;
+    // const parent = currentPath[currentPath.length - 1];
+    // if (parent % 100 === 0) return 1;
+    // if (parent % 10 === 0) return 2;
+    // return 3;
+    return currentPath.length;
+  };
+
+  const getCurrentCategoryId = (): number | null => {
+    return currentPath.length === 0
+      ? null
+      : currentPath[currentPath.length - 1];
   };
 
   // 2) 보여줄 카테고리 필터링
   const getVisibleCategories = (): BookCategory[] => {
     const level = getCurrentLevel();
-
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       return CATEGORY_ARRAY.filter(
@@ -63,27 +69,25 @@ export default function CategorySelector() {
           cat.id.toString().includes(term)
       );
     }
-
     if (level === 0) {
+      // 000,100,200...
       return CATEGORY_ARRAY.filter((cat) => cat.id % 100 === 0);
     }
-
     const parent = currentPath[currentPath.length - 1];
 
     if (level === 1) {
+      // 100을 눌렀으면 같은 100단위(100~900 중) + 자신의 부모(100) 포함
       const base = parent / 100;
       return CATEGORY_ARRAY.filter(
-        (cat) =>
-          Math.floor(cat.id / 100) === base &&
-          cat.id % 10 === 0 &&
-          cat.id !== parent
+        (cat) => Math.floor(cat.id / 100) === base && cat.id % 10 === 0
       );
     }
 
     if (level === 2) {
-      const base = Math.floor(parent / 10);
+      // 120을 눌렀으면 120~129 모두
+      const baseTen = Math.floor(parent / 10);
       return CATEGORY_ARRAY.filter(
-        (cat) => Math.floor(cat.id / 10) === base && cat.id % 10 !== 0
+        (cat) => Math.floor(cat.id / 10) === baseTen
       );
     }
 
@@ -92,6 +96,7 @@ export default function CategorySelector() {
 
   // 하위 카테고리 존재 여부 확인
   const hasChildren = (id: number): boolean => {
+    if (getCurrentLevel() === 2 && id === getCurrentCategoryId()) return false;
     // 1) 백 단위
     if (id % 100 === 0) {
       const baseHundred = id / 100;
@@ -105,9 +110,7 @@ export default function CategorySelector() {
     // 2) 십 단위
     if (id % 10 === 0) {
       const baseTen = Math.floor(id / 10);
-      return CATEGORY_ARRAY.some(
-        (cat) => Math.floor(cat.id / 10) === baseTen && cat.id % 10 !== 0
-      );
+      return CATEGORY_ARRAY.some((cat) => Math.floor(cat.id / 10) === baseTen);
     }
     // 3) 일 단위
     return false;
