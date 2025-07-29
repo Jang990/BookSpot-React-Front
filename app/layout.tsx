@@ -1,5 +1,6 @@
 import { BookCartProvider } from "@/contexts/BookCartContext";
 import { Header } from "@/components/organisms/Header";
+import { Footer } from "@/components/organisms/Footer";
 import "./globals.css";
 import type React from "react";
 
@@ -17,13 +18,18 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <BookCartProvider>
-          <Header />
-          <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="w-full max-w-4xl mx-auto">
-                <main className="py-8 h-[calc(100vh-5rem)]">{children}</main>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+
+            <div className="flex-1 bg-background py-12 px-4 sm:px-6 lg:px-8">
+              <div className="max-w-6xl mx-auto">
+                <div className="w-full max-w-4xl mx-auto">
+                  <main className="py-8">{children}</main>
+                </div>
               </div>
             </div>
+
+            <Footer />
           </div>
         </BookCartProvider>
       </body>
