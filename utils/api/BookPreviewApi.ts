@@ -41,11 +41,11 @@ export const findBooksPreview = async (
   pageable: Pageable
 ): Promise<PagingResult> => {
   const keyword = searchCond.keyword;
-  const isEmptyBookIds = !searchCond.bookIds || searchCond.bookIds.length === 0;
-  const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
+  // const isEmptyBookIds = !searchCond.bookIds || searchCond.bookIds.length === 0;
+  // const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
-  if (isTooShortKeyword || (!keyword && isEmptyBookIds)) {
+  if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     return EMPTY_PAGIN_RESULT;
   }
 
@@ -69,7 +69,7 @@ export const findBooksPreviewWithSA = async (
   const keyword = searchCond.keyword;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
-  if (!keyword || keyword.length < MIN_SEARCH_TERM_LENGTH) {
+  if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     return EMPTY_PAGIN_RESULT;
   }
 
@@ -97,7 +97,7 @@ function createApi(
   { keyword, bookIds, libraryId, categoryId }: SearchCondition,
   pageCond: Pageable | SearchAfter
 ): string {
-  if (!keyword && !bookIds) {
+  if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");
   }
   const url = new URL(BOOK_API_URL);
