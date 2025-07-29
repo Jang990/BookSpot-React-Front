@@ -7,7 +7,6 @@ import type { BookCategory } from "@/types/BookCategory";
 interface CategoryCardProps {
   category: BookCategory;
   hasChildren: boolean;
-  onCategoryClick: (categoryId: number) => void;
   onExploreClick: (categoryId: number) => void;
   queryString: (categoryId: number) => string;
 }
@@ -15,7 +14,6 @@ interface CategoryCardProps {
 export function CategoryCard({
   category,
   hasChildren,
-  onCategoryClick,
   onExploreClick,
   queryString,
 }: CategoryCardProps) {

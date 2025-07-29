@@ -3,8 +3,12 @@ import { useState } from "react";
 import { Home } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
-import { useSearchParams } from "next/navigation";
-import { CATEGORY_QUERY_STRING_KEY } from "@/utils/querystring/CategoryId";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  CATEGORY_HISTORY_QUERY_STRING_KEY,
+  CATEGORY_QUERY_STRING_KEY,
+  parseCategoryHistory,
+} from "@/utils/querystring/CategoryId";
 import { CategorySearchBar } from "@/components/molecules/category/CategorySearchBar";
 import { CategoryNavigation } from "@/components/molecules/category/CategoryNavigation";
 import { CategoryGrid } from "@/components/molecules/category/CategoryGrid";
@@ -12,15 +16,31 @@ import { CategoryEmptyState } from "@/components/molecules/category/CategoryEmpt
 
 export default function CategorySelector() {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
 
-  const queryString = (categoryId: number): string => {
-    const params = new URLSearchParams(searchParams as any);
-    params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
-    return params.toString();
-  };
-
-  const [currentPath, setCurrentPath] = useState<number[]>([]);
+  // URL에서 현재 경로 파싱
+  const currentPath = parseCategoryHistory(searchParams);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // 경로 업데이트 (URL 변경)
+  const updatePath = (newPath: number[]) => {
+    const params = new URLSearchParams(searchParams as any);
+
+    if (newPath.length === 0) {
+      params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
+    } else {
+      params.set(CATEGORY_HISTORY_QUERY_STRING_KEY, newPath.join(","));
+    }
+
+    // 검색어가 있으면 경로 변경 시 검색어 초기화
+    if (searchTerm) {
+      setSearchTerm("");
+    }
+
+    const newUrl = params.toString() ? `?${params.toString()}` : `${pathname}`;
+    router.push(newUrl);
+  };
 
   // 1) level 결정: 100단위→1, 10단위→2, 개별→3
   const getCurrentLevel = (): number => {
@@ -96,18 +116,28 @@ export default function CategorySelector() {
   // 카테고리 선택 핸들러
   const handleCategorySelect = (categoryId: number) => {
     if (hasChildren(categoryId)) {
-      setCurrentPath([...currentPath, categoryId]);
+      const newPath = [...currentPath, categoryId];
+      updatePath(newPath);
     } else {
+      // 최종 선택 - 카테고리 검색으로 이동
       window.location.href = `/?${queryString(categoryId)}`;
     }
+  };
+
+  const queryString = (categoryId: number): string => {
+    const params = new URLSearchParams();
+    params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
+    params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
+    return params.toString();
   };
 
   // 브레드크럼 클릭 핸들러
   const handleBreadcrumbClick = (index: number) => {
     if (index === -1) {
-      setCurrentPath([]);
+      updatePath([]);
     } else {
-      setCurrentPath(currentPath.slice(0, index + 1));
+      const newPath = currentPath.slice(0, index + 1);
+      updatePath(newPath);
     }
   };
 
@@ -125,7 +155,6 @@ export default function CategorySelector() {
 
   const visibleCategories = getVisibleCategories();
   const breadcrumbs = getBreadcrumbs();
-
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="border-none shadow-none">
@@ -152,7 +181,6 @@ export default function CategorySelector() {
           {visibleCategories.length > 0 ? (
             <CategoryGrid
               categories={visibleCategories}
-              onCategoryClick={handleCategorySelect}
               onExploreClick={handleCategorySelect}
               queryString={queryString}
               hasChildren={hasChildren}
