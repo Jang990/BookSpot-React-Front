@@ -27,7 +27,7 @@ export const CategorySelectionButton = async ({
           className="text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200 animate-in fade-in-0 slide-in-from-left-2"
         >
           <span>
-            - {`${String(category.id).padStart(3, "0")}.${category.name}`}
+            {`${String(category.id).padStart(3, "0")}.${category.name}`}
           </span>
           <X className="ml-1 h-3 w-3 transition-transform hover:rotate-90" />
         </Button>
