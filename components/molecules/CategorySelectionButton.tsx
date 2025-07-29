@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { CATEGORY_MAP } from "@/types/BookCategory";
 import { CATEGORY_QUERY_STRING_KEY } from "@/utils/querystring/CategoryId";
+import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
 
 interface CategorySelectionButtonProps {
   bookQueryString?: string;
@@ -17,6 +18,7 @@ export const CategorySelectionButton = async ({
   if (categoryId !== null) category = CATEGORY_MAP.get(categoryId);
   const deleteCategoryParams = new URLSearchParams(bookQueryString as any);
   deleteCategoryParams.delete(CATEGORY_QUERY_STRING_KEY);
+  deleteCategoryParams.delete(PAGE_QUERY_STRING_KEY);
 
   if (category !== undefined) {
     return (
@@ -36,7 +38,7 @@ export const CategorySelectionButton = async ({
   }
 
   return (
-    <Link href={`/books/categories?${bookQueryString}`}>
+    <Link href={`/books/categories?${deleteCategoryParams}`}>
       <Button
         variant="ghost"
         size="sm"
