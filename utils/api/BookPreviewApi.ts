@@ -7,11 +7,13 @@ import {
 import { get } from "./Fetcher";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "./ApiResponseConvertor";
+import { CATEGORY_QUERY_STRING_KEY } from "../querystring/CategoryId";
 
 export interface SearchCondition {
   keyword?: string | null;
   bookIds?: string[];
   libraryId?: string;
+  categoryId?: string;
 }
 
 export interface PagingResult {
@@ -92,7 +94,7 @@ const fetchBooksPreview = async (
 
 const BOOK_API_URL = process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books";
 function createApi(
-  { keyword, bookIds, libraryId }: SearchCondition,
+  { keyword, bookIds, libraryId, categoryId }: SearchCondition,
   pageCond: Pageable | SearchAfter
 ): string {
   if (!keyword && !bookIds) {
@@ -103,6 +105,8 @@ function createApi(
   if (keyword) url.searchParams.append("title", keyword);
   if (bookIds) url.searchParams.append("bookIds", bookIds.join(","));
   if (libraryId) url.searchParams.append("libraryId", libraryId);
+  if (categoryId)
+    url.searchParams.append(CATEGORY_QUERY_STRING_KEY, categoryId);
 
   if (isPageable(pageCond)) appendPageableQuery(url, pageCond);
   if (isSearchAfter(pageCond)) appendSearchAfterQuery(pageCond, url);

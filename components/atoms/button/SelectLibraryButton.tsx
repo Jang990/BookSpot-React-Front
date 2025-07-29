@@ -1,10 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  parseSearchTermInClient,
-  SEARCH_TERM_KEY,
-} from "@/utils/querystring/SearchTerm";
+import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface SelectLibraryButtonProps {
@@ -16,15 +13,17 @@ export const SelectLibraryButton = ({
 }: SelectLibraryButtonProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const searchTerm = parseSearchTermInClient(searchParams);
+  const queryString = (): string => {
+    const params = new URLSearchParams(searchParams as any);
+    params.set(LIBRARY_QUERY_STRING_KEY, libraryId);
+    return params.toString();
+  };
 
   return (
     <div className="py-1">
       <Button
         onClick={() => {
-          router.push(
-            `/libraries/${libraryId}/books?${SEARCH_TERM_KEY}=${searchTerm}`
-          );
+          router.push(`/?${queryString()}`);
         }}
         className="w-full"
       >
