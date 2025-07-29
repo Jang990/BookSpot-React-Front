@@ -181,8 +181,7 @@ export default function CategorySelector() {
       <Card className="border-none shadow-none">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Home className="w-5 h-5" />
-            도서 분류 선택
+            <div className="ps-3">도서 분류 선택</div>
           </CardTitle>
         </CardHeader>
 
