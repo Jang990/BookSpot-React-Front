@@ -9,6 +9,8 @@ interface CategoryCardProps {
   hasChildren: boolean;
   onExploreClick: (categoryId: number) => void;
   queryString: (categoryId: number) => string;
+  isNavigating?: boolean;
+  navigatingTo?: number | null;
 }
 
 export function CategoryCard({
@@ -16,9 +18,17 @@ export function CategoryCard({
   hasChildren,
   onExploreClick,
   queryString,
+  isNavigating = false,
+  navigatingTo,
 }: CategoryCardProps) {
+  const isCurrentlyNavigating = isNavigating && navigatingTo === category.id;
+
   return (
-    <Card className="hover:shadow-md transition-shadow border-2 hover:border-primary/20 overflow-hidden">
+    <Card
+      className={`hover:shadow-md transition-all duration-300 border-2 hover:border-primary/20 overflow-hidden ${
+        isCurrentlyNavigating ? "scale-105 shadow-lg border-primary/40" : ""
+      }`}
+    >
       <CardContent className="p-0 h-full">
         <div className="flex h-full">
           {/* 메인 영역 - 카테고리로 이동 */}
@@ -44,14 +54,20 @@ export function CategoryCard({
           {/* 하위 탐색 영역 - 하위 카테고리가 있을 때만 표시 */}
           {hasChildren && (
             <div
-              className="w-12 flex items-center justify-center cursor-pointer hover:bg-primary/10 transition-colors border-l"
+              className={`w-12 flex items-center justify-center cursor-pointer hover:bg-primary/10 transition-all duration-300 border-l ${
+                isCurrentlyNavigating ? "bg-primary/20" : ""
+              }`}
               onClick={(e) => {
                 e.stopPropagation();
                 onExploreClick(category.id);
               }}
               title="하위 카테고리 탐색"
             >
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              <ChevronRight
+                className={`w-4 h-4 text-muted-foreground transition-transform duration-300 ${
+                  isCurrentlyNavigating ? "translate-x-1" : ""
+                }`}
+              />
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Home } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
@@ -22,6 +22,8 @@ export default function CategorySelector() {
   // URL에서 현재 경로 파싱
   const currentPath = parseCategoryHistory(searchParams);
   const [searchTerm, setSearchTerm] = useState("");
+  const [navigatingTo, setNavigatingTo] = useState<number | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   // 경로 업데이트 (URL 변경)
   const updatePath = (newPath: number[]) => {
@@ -39,7 +41,15 @@ export default function CategorySelector() {
     }
 
     const newUrl = params.toString() ? `?${params.toString()}` : `${pathname}`;
-    router.push(newUrl);
+
+    startTransition(() => {
+      router.push(newUrl);
+    });
+
+    // 네비게이션 완료 후 상태 초기화
+    setTimeout(() => {
+      setNavigatingTo(null);
+    }, 75);
   };
 
   // 1) level 결정: 100단위→1, 10단위→2, 개별→3
@@ -119,8 +129,14 @@ export default function CategorySelector() {
   // 카테고리 선택 핸들러
   const handleCategorySelect = (categoryId: number) => {
     if (hasChildren(categoryId)) {
-      const newPath = [...currentPath, categoryId];
-      updatePath(newPath);
+      // 네비게이션 시작 표시
+      setNavigatingTo(categoryId);
+
+      // 약간의 지연 후 실제 네비게이션 실행
+      setTimeout(() => {
+        const newPath = [...currentPath, categoryId];
+        updatePath(newPath);
+      }, 75);
     } else {
       // 최종 선택 - 카테고리 검색으로 이동
       window.location.href = `/?${queryString(categoryId)}`;
@@ -158,6 +174,8 @@ export default function CategorySelector() {
 
   const visibleCategories = getVisibleCategories();
   const breadcrumbs = getBreadcrumbs();
+  const isNavigating = isPending || navigatingTo !== null;
+
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="border-none shadow-none">
@@ -187,6 +205,8 @@ export default function CategorySelector() {
               onExploreClick={handleCategorySelect}
               queryString={queryString}
               hasChildren={hasChildren}
+              isNavigating={isNavigating}
+              navigatingTo={navigatingTo}
             />
           ) : (
             <CategoryEmptyState searchTerm={searchTerm} />

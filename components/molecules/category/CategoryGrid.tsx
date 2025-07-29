@@ -8,6 +8,8 @@ interface CategoryGridProps {
   onExploreClick: (categoryId: number) => void;
   queryString: (categoryId: number) => string;
   hasChildren: (id: number) => boolean;
+  isNavigating?: boolean;
+  navigatingTo: number | null;
 }
 
 export function CategoryGrid({
@@ -15,6 +17,8 @@ export function CategoryGrid({
   onExploreClick,
   queryString,
   hasChildren,
+  isNavigating = false,
+  navigatingTo,
 }: CategoryGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -25,6 +29,8 @@ export function CategoryGrid({
           hasChildren={hasChildren(category.id)}
           onExploreClick={onExploreClick}
           queryString={queryString}
+          isNavigating={isNavigating}
+          navigatingTo={navigatingTo}
         />
       ))}
     </div>
