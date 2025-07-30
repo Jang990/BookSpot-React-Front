@@ -2,9 +2,10 @@
 
 import { NumberPageNavigator } from "@/components/molecules/pagination/NumberPageNavigator";
 import { MAX_NUMBER_PAGE, SearchAfter } from "@/types/Pageable";
-import { useSearchParams } from "next/navigation";
 import { CursorPageNavigator } from "../molecules/pagination/CursorPageNavigator";
 import { InfoPanel } from "../molecules/InfoPanel";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
 
 interface PageNaviProps {
   totalPages: number | null;
@@ -13,6 +14,8 @@ interface PageNaviProps {
 }
 
 export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const pageParam = searchParams.get("page");
@@ -26,6 +29,12 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
   const hasNext =
     totalPages !== null && currentPage < totalPages && totalPages !== 0;
 
+  const goToPage = (page: number): void => {
+    const params = new URLSearchParams(searchParams as any);
+    params.set(PAGE_QUERY_STRING_KEY, String(page));
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <>
       {hasOnlyCursorCond || isOutOfPageNumber || totalPages == null ? (
@@ -36,6 +45,7 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
             currentPage={currentPage}
             totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
             hasNext={hasNext}
+            goToPage={goToPage}
           />
           {currentPage === MAX_NUMBER_PAGE && hasNext && (
             <div className="flex justify-center">
