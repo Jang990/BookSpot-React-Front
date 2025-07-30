@@ -6,7 +6,10 @@ import { CursorPageNavigator } from "../molecules/pagination/CursorPageNavigator
 import { InfoPanel } from "../molecules/InfoPanel";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
-import { goToSearchAfterPage } from "@/utils/GoToPage";
+import {
+  LAST_BOOK_ID_KEY,
+  LAST_LOAN_COUNT_KEY,
+} from "@/utils/querystring/SearchAfter";
 
 interface PageNaviProps {
   totalPages: number | null;
@@ -36,6 +39,22 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  const goToSearchAfter = (): void => {
+    const hasSearchAfterCond =
+      searchAfter.lastLoanCount != null && searchAfter.lastBookId !== null;
+
+    if (hasSearchAfterCond) {
+      const params = new URLSearchParams(searchParams as any);
+      params.set(PAGE_QUERY_STRING_KEY, String(MAX_NUMBER_PAGE + 1));
+      params.set(LAST_LOAN_COUNT_KEY, String(searchAfter.lastLoanCount));
+      params.set(LAST_BOOK_ID_KEY, String(searchAfter.lastBookId));
+      router.push(`${pathname}?${params.toString()}`);
+      return;
+    }
+
+    throw new Error("SearchAfter 조건 잘못됨");
+  };
+
   return (
     <>
       {hasOnlyCursorCond || isOutOfPageNumber || totalPages == null ? (
@@ -45,17 +64,7 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
           clickPrev={() => {
             router.back();
           }}
-          clickNext={() => {
-            const hasSearchAfterCond =
-              searchAfter.lastLoanCount != null &&
-              searchAfter.lastBookId !== null;
-
-            if (hasSearchAfterCond) {
-              goToSearchAfterPage(router, pathname, searchParams, searchAfter);
-              return;
-            }
-            throw new Error("SearchAfter 조건 잘못됨");
-          }}
+          clickNext={goToSearchAfter}
         />
       ) : (
         <div>
@@ -69,7 +78,8 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
               goToPage(currentPage - 1);
             }}
             clickNext={() => {
-              goToPage(currentPage);
+              if (currentPage === MAX_NUMBER_PAGE && hasNext) goToSearchAfter();
+              else goToPage(currentPage);
             }}
           />
           {currentPage === MAX_NUMBER_PAGE && hasNext && (

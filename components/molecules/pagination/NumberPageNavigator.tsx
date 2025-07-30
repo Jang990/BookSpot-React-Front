@@ -1,5 +1,3 @@
-"use client";
-
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
 import { NaviPageNumberButton } from "@/components/atoms/button/navi/NaviPageNumberButton";
 

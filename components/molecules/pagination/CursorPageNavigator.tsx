@@ -1,9 +1,5 @@
-"use client";
-
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { goToPage as goToPageHelper } from "@/utils/GoToPage";
 import { NaviOptionButton } from "@/components/atoms/button/navi/NaviOptionButton";
-import { MAX_NUMBER_PAGE, SearchAfter } from "@/types/Pageable";
+import { MAX_NUMBER_PAGE } from "@/types/Pageable";
 import { ArrowLeft } from "lucide-react";
 
 interface CursorPageNaviProps {
@@ -19,14 +15,6 @@ export const CursorPageNavigator = ({
   clickPrev,
   clickNext,
 }: CursorPageNaviProps) => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const goToPage = (pageNumber: number) => {
-    goToPageHelper(router, pathname, searchParams, pageNumber);
-  };
-
   return (
     <div className="flex justify-center items-center mt-8 space-x-4">
       {/* 50페이지로 돌아가기 버튼 */}
