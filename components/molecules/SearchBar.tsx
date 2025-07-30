@@ -1,7 +1,12 @@
 "use client";
 import { MIN_SEARCH_TERM_LENGTH } from "@/types/Pageable";
+import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
+import {
+  LAST_BOOK_ID_KEY,
+  LAST_LOAN_COUNT_KEY,
+} from "@/utils/querystring/SearchAfter";
 import { Search } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 
 interface SearchProps {
@@ -10,6 +15,7 @@ interface SearchProps {
 
 export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [isPending, startTransition] = useTransition();
 
@@ -17,11 +23,17 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 2자 미만 검색 불가 알림 필요
-    if (!searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH) return;
+    if (!searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH) {
+      alert(`${MIN_SEARCH_TERM_LENGTH}글자 이상 입력해주세요.`);
+      return;
+    }
 
     startTransition(() => {
-      const params = new URLSearchParams();
+      const params = new URLSearchParams(searchParams as any);
       params.set("searchTerm", searchTerm);
+      params.delete(PAGE_QUERY_STRING_KEY);
+      params.delete(LAST_LOAN_COUNT_KEY);
+      params.delete(LAST_BOOK_ID_KEY);
       router.push(`?${params.toString()}`);
     });
   };
