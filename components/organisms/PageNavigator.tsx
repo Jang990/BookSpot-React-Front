@@ -2,9 +2,14 @@
 
 import { NumberPageNavigator } from "@/components/molecules/pagination/NumberPageNavigator";
 import { MAX_NUMBER_PAGE, SearchAfter } from "@/types/Pageable";
-import { useSearchParams } from "next/navigation";
 import { CursorPageNavigator } from "../molecules/pagination/CursorPageNavigator";
 import { InfoPanel } from "../molecules/InfoPanel";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
+import {
+  LAST_BOOK_ID_KEY,
+  LAST_LOAN_COUNT_KEY,
+} from "@/utils/querystring/SearchAfter";
 
 interface PageNaviProps {
   totalPages: number | null;
@@ -13,6 +18,8 @@ interface PageNaviProps {
 }
 
 export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const pageParam = searchParams.get("page");
@@ -26,16 +33,54 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
   const hasNext =
     totalPages !== null && currentPage < totalPages && totalPages !== 0;
 
+  const goToPage = (page: number): void => {
+    const params = new URLSearchParams(searchParams as any);
+    params.set(PAGE_QUERY_STRING_KEY, String(page));
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const goToSearchAfter = (): void => {
+    const hasSearchAfterCond =
+      searchAfter.lastLoanCount != null && searchAfter.lastBookId !== null;
+
+    if (hasSearchAfterCond) {
+      const params = new URLSearchParams(searchParams as any);
+      params.set(PAGE_QUERY_STRING_KEY, String(MAX_NUMBER_PAGE + 1));
+      params.set(LAST_LOAN_COUNT_KEY, String(searchAfter.lastLoanCount));
+      params.set(LAST_BOOK_ID_KEY, String(searchAfter.lastBookId));
+      router.push(`${pathname}?${params.toString()}`);
+      return;
+    }
+
+    throw new Error("SearchAfter 조건 잘못됨");
+  };
+
   return (
     <>
       {hasOnlyCursorCond || isOutOfPageNumber || totalPages == null ? (
-        <CursorPageNavigator searchAfter={searchAfter} hasNextPage={true} />
+        <CursorPageNavigator
+          clickMovePageBtn={() => goToPage(MAX_NUMBER_PAGE)}
+          hasNext={true}
+          clickPrev={() => {
+            router.back();
+          }}
+          clickNext={goToSearchAfter}
+        />
       ) : (
         <div>
           <NumberPageNavigator
             currentPage={currentPage}
             totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
+            hasPrev={currentPage === 1}
             hasNext={hasNext}
+            goToPage={goToPage}
+            clickPrev={() => {
+              goToPage(currentPage - 1);
+            }}
+            clickNext={() => {
+              if (currentPage === MAX_NUMBER_PAGE && hasNext) goToSearchAfter();
+              else goToPage(currentPage);
+            }}
           />
           {currentPage === MAX_NUMBER_PAGE && hasNext && (
             <div className="flex justify-center">
