@@ -44,8 +44,15 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
           <NumberPageNavigator
             currentPage={currentPage}
             totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
+            hasPrev={currentPage === 1}
             hasNext={hasNext}
             goToPage={goToPage}
+            clickPrev={() => {
+              goToPage(currentPage - 1);
+            }}
+            clickNext={() => {
+              goToPage(currentPage);
+            }}
           />
           {currentPage === MAX_NUMBER_PAGE && hasNext && (
             <div className="flex justify-center">

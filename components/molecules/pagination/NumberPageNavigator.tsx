@@ -6,15 +6,21 @@ import { NaviPageNumberButton } from "@/components/atoms/button/navi/NaviPageNum
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  hasPrev: boolean;
   hasNext: boolean;
   goToPage: (page: number) => void;
+  clickPrev: () => void;
+  clickNext: () => void;
 }
 
 export const NumberPageNavigator = ({
   currentPage,
   totalPages,
+  hasPrev,
   hasNext,
   goToPage,
+  clickPrev,
+  clickNext,
 }: PaginationProps) => {
   // 표시할 페이지 번호 범위 계산
   const getPageNumbers = () => {
@@ -39,11 +45,7 @@ export const NumberPageNavigator = ({
   return (
     <div className="flex justify-center items-center mt-8 space-x-2">
       {/* 이전 페이지 버튼 */}
-      <NaviOptionButton
-        text="이전"
-        onClick={() => goToPage(currentPage - 1)}
-        disabled={currentPage === 1}
-      />
+      <NaviOptionButton text="이전" onClick={clickPrev} disabled={hasPrev} />
 
       {/* 첫 페이지 버튼 (현재 페이지가 4 이상일 때만 표시) */}
       {getPageNumbers()[0] > 1 && (
@@ -80,11 +82,7 @@ export const NumberPageNavigator = ({
       )}
 
       {/* 다음 페이지 버튼 */}
-      <NaviOptionButton
-        text="다음"
-        onClick={() => goToPage(currentPage + 1)}
-        disabled={!hasNext}
-      />
+      <NaviOptionButton text="다음" onClick={clickNext} disabled={!hasNext} />
     </div>
   );
 };
