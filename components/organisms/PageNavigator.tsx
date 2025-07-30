@@ -6,6 +6,7 @@ import { CursorPageNavigator } from "../molecules/pagination/CursorPageNavigator
 import { InfoPanel } from "../molecules/InfoPanel";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
+import { goToSearchAfterPage } from "@/utils/GoToPage";
 
 interface PageNaviProps {
   totalPages: number | null;
@@ -38,7 +39,24 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
   return (
     <>
       {hasOnlyCursorCond || isOutOfPageNumber || totalPages == null ? (
-        <CursorPageNavigator searchAfter={searchAfter} hasNextPage={true} />
+        <CursorPageNavigator
+          clickMovePageBtn={() => goToPage(MAX_NUMBER_PAGE)}
+          hasNext={true}
+          clickPrev={() => {
+            router.back();
+          }}
+          clickNext={() => {
+            const hasSearchAfterCond =
+              searchAfter.lastLoanCount != null &&
+              searchAfter.lastBookId !== null;
+
+            if (hasSearchAfterCond) {
+              goToSearchAfterPage(router, pathname, searchParams, searchAfter);
+              return;
+            }
+            throw new Error("SearchAfter 조건 잘못됨");
+          }}
+        />
       ) : (
         <div>
           <NumberPageNavigator
