@@ -143,7 +143,7 @@ export const BookCategoryPageTemplate = () => {
   };
 
   const queryString = (categoryId: number): string => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams as any);
     params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
     params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
     return params.toString();
