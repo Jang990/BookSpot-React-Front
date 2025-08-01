@@ -9,7 +9,9 @@ import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
 import {
   LAST_BOOK_ID_KEY,
   LAST_LOAN_COUNT_KEY,
+  LAST_SCORE_KEY,
 } from "@/utils/querystring/SearchAfter";
+import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
 
 interface PageNaviProps {
   totalPages: number | null;
@@ -45,6 +47,9 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
 
     if (hasSearchAfterCond) {
       const params = new URLSearchParams(searchParams as any);
+      if (params.get(SEARCH_TERM_KEY) && searchAfter.lastScore)
+        params.set(LAST_SCORE_KEY, String(searchAfter.lastScore));
+
       params.set(PAGE_QUERY_STRING_KEY, String(MAX_NUMBER_PAGE + 1));
       params.set(LAST_LOAN_COUNT_KEY, String(searchAfter.lastLoanCount));
       params.set(LAST_BOOK_ID_KEY, String(searchAfter.lastBookId));
@@ -60,7 +65,7 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
       {hasOnlyCursorCond || isOutOfPageNumber || totalPages == null ? (
         <CursorPageNavigator
           clickMovePageBtn={() => goToPage(MAX_NUMBER_PAGE)}
-          hasNext={true}
+          hasNext={hasNext}
           clickPrev={() => {
             router.back();
           }}
@@ -79,7 +84,7 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
             }}
             clickNext={() => {
               if (currentPage === MAX_NUMBER_PAGE && hasNext) goToSearchAfter();
-              else goToPage(currentPage);
+              else goToPage(currentPage + 1);
             }}
           />
           {currentPage === MAX_NUMBER_PAGE && hasNext && (

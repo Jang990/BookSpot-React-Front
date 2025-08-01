@@ -6,13 +6,18 @@ import {
   findBooksPreviewWithSA,
   SearchCondition,
 } from "@/utils/api/BookPreviewApi";
-import { parseNumber, toRawQueryString } from "@/utils/querystring/QueryString";
+import {
+  parseNumber,
+  parseString,
+  toRawQueryString,
+} from "@/utils/querystring/QueryString";
 import { PageNavigator } from "@/components/organisms/PageNavigator";
 import { parseSearchTerm } from "@/utils/querystring/SearchTerm";
 import { parsePage } from "@/utils/querystring/PageNumber";
 import {
   LAST_BOOK_ID_KEY,
   LAST_LOAN_COUNT_KEY,
+  LAST_SCORE_KEY,
 } from "@/utils/querystring/SearchAfter";
 import { BookPreview } from "@/types/BookPreview";
 import { parseCategoryId } from "@/utils/querystring/CategoryId";
@@ -34,6 +39,7 @@ export default async function Home({ searchParams }: Props) {
 
   const lastBookId = parseNumber(queryStrings, LAST_BOOK_ID_KEY);
   const lastLoanCount = parseNumber(queryStrings, LAST_LOAN_COUNT_KEY);
+  const lastScore = parseString(queryStrings, LAST_SCORE_KEY);
 
   const pageable: Pageable = {
     pageNumber: page - 1,
@@ -54,6 +60,7 @@ export default async function Home({ searchParams }: Props) {
 
   if (hasCursorCond && isOutOfPageNumber) {
     const result = await findBooksPreviewWithSA(searchCond, {
+      lastScore: lastScore === null ? undefined : lastScore,
       lastLoanCount: lastLoanCount,
       lastBookId: lastBookId,
     });

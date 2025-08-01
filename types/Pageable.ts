@@ -15,6 +15,7 @@ export const EMPTY_SEARCH_AFTER: SearchAfter = {
 };
 
 export interface SearchAfter {
+  lastScore?: string;
   lastLoanCount?: number;
   lastBookId?: number;
 }
