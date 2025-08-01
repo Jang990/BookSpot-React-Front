@@ -84,7 +84,7 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
             }}
             clickNext={() => {
               if (currentPage === MAX_NUMBER_PAGE && hasNext) goToSearchAfter();
-              else goToPage(currentPage);
+              else goToPage(currentPage + 1);
             }}
           />
           {currentPage === MAX_NUMBER_PAGE && hasNext && (
