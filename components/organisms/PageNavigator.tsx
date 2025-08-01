@@ -65,7 +65,7 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
       {hasOnlyCursorCond || isOutOfPageNumber || totalPages == null ? (
         <CursorPageNavigator
           clickMovePageBtn={() => goToPage(MAX_NUMBER_PAGE)}
-          hasNext={true}
+          hasNext={hasNext}
           clickPrev={() => {
             router.back();
           }}
