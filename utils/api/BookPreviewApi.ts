@@ -8,6 +8,7 @@ import { get } from "./Fetcher";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "./ApiResponseConvertor";
 import { CATEGORY_QUERY_STRING_KEY } from "../querystring/CategoryId";
+import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -56,6 +57,7 @@ export const findBooksPreview = async (
     totalElements: json.books.totalElements,
     books: json.books.content.map(convertBookPreview),
     searchAfter: {
+      lastScore: json.lastScore,
       lastLoanCount: json.lastLoanCount,
       lastBookId: json.lastBookId,
     },
@@ -79,6 +81,7 @@ export const findBooksPreviewWithSA = async (
     totalElements: json.totalElements,
     books: json.books.map(convertBookPreview),
     searchAfter: {
+      lastScore: json.lastScore,
       lastLoanCount: json.lastLoanCount,
       lastBookId: json.lastBookId,
     },
@@ -100,6 +103,9 @@ function createApi(
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");
   }
+  if (isSearchAfter(pageCond) && pageCond.lastScore && !keyword) {
+    throw new Error("관련성 검색은 keyword가 있어야 합니다.");
+  }
   const url = new URL(BOOK_API_URL);
 
   if (keyword) url.searchParams.append("title", keyword);
@@ -120,6 +126,9 @@ function appendSearchAfterQuery(pageCond: SearchAfter, url: URL) {
 
   if (pageCond.lastBookId !== undefined)
     url.searchParams.append("lastBookId", pageCond.lastBookId.toString());
+
+  if (pageCond.lastScore !== undefined)
+    url.searchParams.append(LAST_SCORE_KEY, pageCond.lastScore.toString());
 }
 
 function appendPageableQuery(url: URL, pageCond: Pageable) {

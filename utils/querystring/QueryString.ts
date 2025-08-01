@@ -30,3 +30,15 @@ export function parseNumber(
 
   return Number.parseInt(rawPage, 10);
 }
+
+export function parseString(
+  queryStrings: {
+    [key: string]: string | string[] | undefined;
+  },
+  key: string
+): string | null {
+  const rawString = queryStrings[key];
+  if (!rawString || Array.isArray(rawString)) return null;
+
+  return rawString;
+}

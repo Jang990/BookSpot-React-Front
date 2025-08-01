@@ -1,4 +1,4 @@
-export const MAX_NUMBER_PAGE = 50;
+export const MAX_NUMBER_PAGE = 39;
 
 export const ITEMS_PER_PAGE = 12;
 export const FIRST_PAGE = 1;
@@ -15,6 +15,7 @@ export const EMPTY_SEARCH_AFTER: SearchAfter = {
 };
 
 export interface SearchAfter {
+  lastScore?: string;
   lastLoanCount?: number;
   lastBookId?: number;
 }
