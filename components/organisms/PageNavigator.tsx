@@ -16,10 +16,14 @@ import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
 interface PageNaviProps {
   totalPages: number | null;
   searchAfter: SearchAfter;
-  hasNext?: boolean;
+  hasNext: boolean;
 }
 
-export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
+export const PageNavigator = ({
+  totalPages,
+  searchAfter,
+  hasNext,
+}: PageNaviProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -31,9 +35,6 @@ export const PageNavigator = ({ totalPages, searchAfter }: PageNaviProps) => {
   searchParams.get("lastLoanCount") !== null &&
     searchParams.get("lastBookId") !== null;
   const isOutOfPageNumber: boolean = currentPage > MAX_NUMBER_PAGE;
-
-  const hasNext =
-    totalPages !== null && currentPage < totalPages && totalPages !== 0;
 
   const goToPage = (page: number): void => {
     const params = new URLSearchParams(searchParams as any);

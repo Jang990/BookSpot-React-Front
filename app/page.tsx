@@ -49,6 +49,7 @@ export default async function Home({ searchParams }: Props) {
   let totalPages: number | null;
   let books: BookPreview[];
   let searchAfter: SearchAfter;
+  let hasNext: boolean;
 
   const hasCursorCond = lastLoanCount !== null && lastBookId !== null;
   const isOutOfPageNumber: boolean = page > MAX_NUMBER_PAGE;
@@ -67,11 +68,13 @@ export default async function Home({ searchParams }: Props) {
     books = result.books;
     totalPages = null;
     searchAfter = result.searchAfter;
+    hasNext = result.hasNext;
   } else {
     const result = await findBooksPreview(searchCond, pageable);
     books = result.books;
     totalPages = result.totalPage;
     searchAfter = result.searchAfter;
+    hasNext = result.hasNext;
   }
 
   return (
@@ -85,7 +88,11 @@ export default async function Home({ searchParams }: Props) {
 
       <BookPreviewList searchResults={books} />
 
-      <PageNavigator totalPages={totalPages} searchAfter={searchAfter} />
+      <PageNavigator
+        totalPages={totalPages}
+        searchAfter={searchAfter}
+        hasNext={hasNext}
+      />
     </>
   );
 }
