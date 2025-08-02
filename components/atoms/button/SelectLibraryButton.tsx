@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
+import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface SelectLibraryButtonProps {
@@ -16,6 +17,7 @@ export const SelectLibraryButton = ({
   const queryString = (): string => {
     const params = new URLSearchParams(searchParams as any);
     params.set(LIBRARY_QUERY_STRING_KEY, libraryId);
+    deletePaginationOptions(params);
     return params.toString();
   };
 
