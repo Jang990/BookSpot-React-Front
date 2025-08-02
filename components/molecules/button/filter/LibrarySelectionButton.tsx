@@ -2,7 +2,7 @@ import { Plus, X } from "lucide-react";
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import { Library } from "@/types/Library";
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
-import { BookSearchFilterButton } from "./button/filter/BookSearchFilterButton";
+import { BookSearchFilterButton } from "./BookSearchFilterButton";
 
 interface LibrarySelectionButtonProps {
   bookQueryString?: string;

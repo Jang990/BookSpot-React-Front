@@ -1,10 +1,8 @@
 import { Plus, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { CATEGORY_MAP } from "@/types/BookCategory";
 import { CATEGORY_QUERY_STRING_KEY } from "@/utils/querystring/CategoryId";
 import { PAGE_QUERY_STRING_KEY } from "@/utils/querystring/PageNumber";
-import { BookSearchFilterButton } from "./button/filter/BookSearchFilterButton";
+import { BookSearchFilterButton } from "./BookSearchFilterButton";
 
 interface CategorySelectionButtonProps {
   bookQueryString?: string;

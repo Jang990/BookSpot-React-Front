@@ -1,5 +1,5 @@
-import { CategorySelectionButton } from "../molecules/CategorySelectionButton";
-import { LibrarySelectionButton } from "../molecules/LibrarySelectionButton";
+import { CategorySelectionButton } from "../molecules/button/filter/CategorySelectionButton";
+import { LibrarySelectionButton } from "../molecules/button/filter/LibrarySelectionButton";
 import { SearchBar } from "../molecules/SearchBar";
 
 interface SearchProps {
