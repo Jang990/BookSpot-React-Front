@@ -6,6 +6,7 @@ import { DefaultFilterButton } from "../molecules/button/filter/DefaultFilterBut
 import { CATEGORY_MAP } from "@/types/BookCategory";
 import { CATEGORY_QUERY_STRING_KEY } from "@/utils/querystring/CategoryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
+import { ListFilter, MapPin } from "lucide-react";
 
 interface SearchProps {
   libraryId: number | null;
@@ -50,6 +51,7 @@ export const BookSearchBar = async ({
           ).name
         }
         href={deleteLibraryHref()}
+        SelectedIcon={MapPin}
       />
     );
 
@@ -80,6 +82,7 @@ export const BookSearchBar = async ({
       <SelectedFilterButton
         text={`${String(category.id).padStart(3, "0")}.${category.name}`}
         href={`/?${deleteCategoryParams()}`}
+        SelectedIcon={ListFilter}
       />
     );
 
