@@ -1,5 +1,6 @@
 import {
   EMPTY_SEARCH_AFTER,
+  ITEMS_PER_PAGE,
   MIN_SEARCH_TERM_LENGTH,
   Pageable,
   SearchAfter,
@@ -22,12 +23,14 @@ export interface PagingResult {
   searchAfter: SearchAfter;
   totalElements: number;
   totalPage: number;
+  hasNext: boolean;
 }
 
 export interface SearchAfterResult {
   books: BookPreview[];
   searchAfter: SearchAfter;
   totalElements: number;
+  hasNext: boolean;
 }
 
 const EMPTY_PAGIN_RESULT: PagingResult = {
@@ -35,6 +38,7 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
   totalElements: 0,
   books: [],
   searchAfter: EMPTY_SEARCH_AFTER,
+  hasNext: false,
 };
 
 export const findBooksPreview = async (
@@ -61,6 +65,7 @@ export const findBooksPreview = async (
       lastLoanCount: json.lastLoanCount,
       lastBookId: json.lastBookId,
     },
+    hasNext: !json.books.last,
   };
 };
 
@@ -85,6 +90,7 @@ export const findBooksPreviewWithSA = async (
       lastLoanCount: json.lastLoanCount,
       lastBookId: json.lastBookId,
     },
+    hasNext: json.books.length === ITEMS_PER_PAGE,
   };
 };
 
