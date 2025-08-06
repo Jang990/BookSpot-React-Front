@@ -10,12 +10,5 @@ export const DefaultFilterButton = async ({
   text,
   href,
 }: DefaultFilterButtonProps) => {
-  return (
-    <BookSearchFilterButton
-      text={text}
-      buttonClassName="text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200 hover:scale-105"
-      Icon={Plus}
-      href={href}
-    />
-  );
+  return <BookSearchFilterButton text={text} Icon={Plus} href={href} />;
 };

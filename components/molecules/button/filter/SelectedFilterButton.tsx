@@ -15,9 +15,9 @@ export const SelectedFilterButton = async ({
   return (
     <BookSearchFilterButton
       text={text}
-      buttonClassName="text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all duration-200 hover:scale-105"
       Icon={SelectedIcon}
       href={href}
+      selected={true}
     />
   );
 };
