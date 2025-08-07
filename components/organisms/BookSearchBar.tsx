@@ -4,7 +4,10 @@ import { SelectedFilterButton } from "../molecules/button/filter/SelectedFilterB
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import { DefaultFilterButton } from "../molecules/button/filter/DefaultFilterButton copy";
 import { CATEGORY_MAP } from "@/types/BookCategory";
-import { CATEGORY_QUERY_STRING_KEY } from "@/utils/querystring/CategoryId";
+import {
+  CATEGORY_LEVEL_QUERY_STRING_KEY,
+  CATEGORY_QUERY_STRING_KEY,
+} from "@/utils/querystring/CategoryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
 import { ListFilter, MapPin } from "lucide-react";
 
@@ -89,6 +92,7 @@ export const BookSearchBar = async ({
     function deleteCategoryParams(): string {
       const deleteCategoryParams = new URLSearchParams(bookQueryString as any);
       deleteCategoryParams.delete(CATEGORY_QUERY_STRING_KEY);
+      deleteCategoryParams.delete(CATEGORY_LEVEL_QUERY_STRING_KEY);
       deletePaginationOptions(deleteCategoryParams);
       return deleteCategoryParams.toString();
     }
