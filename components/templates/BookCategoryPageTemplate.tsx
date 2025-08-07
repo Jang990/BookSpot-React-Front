@@ -5,7 +5,9 @@ import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CATEGORY_HISTORY_QUERY_STRING_KEY,
+  CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
+  getCategoryLevel,
   parseCategoryHistory,
 } from "@/utils/querystring/CategoryId";
 import { CategorySearchBar } from "@/components/molecules/category/CategorySearchBar";
@@ -145,6 +147,10 @@ export const BookCategoryPageTemplate = () => {
   const queryString = (categoryId: number): string => {
     const params = new URLSearchParams(searchParams as any);
     params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
+    params.set(
+      CATEGORY_LEVEL_QUERY_STRING_KEY,
+      getCategoryLevel(currentPath.length)
+    );
     params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
     return params.toString();
   };
