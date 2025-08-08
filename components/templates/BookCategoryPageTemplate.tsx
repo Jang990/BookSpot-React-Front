@@ -6,8 +6,8 @@ import {
   CATEGORY_HISTORY_QUERY_STRING_KEY,
   CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
-  defaultCategoryLevel,
   getCategoryLevel,
+  LEVEL_LEAF,
   parseCategoryHistory,
 } from "@/utils/querystring/CategoryId";
 import { CategorySearchBar } from "@/components/molecules/category/CategorySearchBar";
@@ -146,7 +146,7 @@ export const BookCategoryPageTemplate = () => {
   };
 
   const getCurrentCategoryLevel = (): string => {
-    if (searchTerm) return defaultCategoryLevel;
+    if (searchTerm) return LEVEL_LEAF;
     return getCategoryLevel(currentPath.length);
   };
 

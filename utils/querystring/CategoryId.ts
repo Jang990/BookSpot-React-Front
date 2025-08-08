@@ -4,8 +4,10 @@ export const CATEGORY_QUERY_STRING_KEY = "categoryId";
 export const CATEGORY_LEVEL_QUERY_STRING_KEY = "categoryLevel";
 export const CATEGORY_HISTORY_QUERY_STRING_KEY = "categorySearchHistory";
 
-const categoryLevels: string[] = ["TOP", "MID", "LEAF"];
-export const defaultCategoryLevel = categoryLevels[categoryLevels.length - 1];
+export const LEVEL_TOP = "TOP";
+export const LEVEL_MID = "MID";
+export const LEVEL_LEAF = "LEAF";
+const categoryLevels: string[] = [LEVEL_TOP, LEVEL_MID, LEVEL_LEAF];
 
 export function parseCategoryLevel(queryStrings: {
   [key: string]: string | string[] | undefined;
@@ -16,7 +18,7 @@ export function parseCategoryLevel(queryStrings: {
   );
   if (categoryLevel === null) return null;
   if (categoryLevels.includes(categoryLevel)) return categoryLevel;
-  return defaultCategoryLevel;
+  return LEVEL_LEAF;
 }
 
 export function parseCategoryId(queryStrings: {
