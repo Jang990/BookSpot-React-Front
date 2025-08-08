@@ -11,6 +11,7 @@ interface CategoryCardProps {
   queryString: (categoryId: number) => string;
   isNavigating?: boolean;
   navigatingTo?: number | null;
+  subText: string;
 }
 
 export function CategoryCard({
@@ -20,6 +21,7 @@ export function CategoryCard({
   queryString,
   isNavigating = false,
   navigatingTo,
+  subText,
 }: CategoryCardProps) {
   const isCurrentlyNavigating = isNavigating && navigatingTo === category.id;
 
@@ -47,7 +49,7 @@ export function CategoryCard({
                   {category.name}
                 </h3>
               </div>
-              <p className="text-xs text-muted-foreground">해당 분류로 검색</p>
+              <p className="text-xs text-muted-foreground">{subText}</p>
             </div>
           </div>
 
