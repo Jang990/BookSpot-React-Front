@@ -7,6 +7,7 @@ import {
   CATEGORY_HISTORY_QUERY_STRING_KEY,
   CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
+  defaultCategoryLevel,
   getCategoryLevel,
   parseCategoryHistory,
 } from "@/utils/querystring/CategoryId";
@@ -107,6 +108,7 @@ export const BookCategoryPageTemplate = () => {
 
   // 하위 카테고리 존재 여부 확인
   const hasChildren = (id: number): boolean => {
+    if (searchTerm) return false;
     if (getCurrentLevel() === 2 && id === getCurrentCategoryId()) return false;
     // 1) 백 단위
     if (id % 100 === 0) {
@@ -147,10 +149,13 @@ export const BookCategoryPageTemplate = () => {
   const queryString = (categoryId: number): string => {
     const params = new URLSearchParams(searchParams as any);
     params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
-    params.set(
-      CATEGORY_LEVEL_QUERY_STRING_KEY,
-      getCategoryLevel(currentPath.length)
-    );
+    if (searchTerm)
+      params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, defaultCategoryLevel);
+    else
+      params.set(
+        CATEGORY_LEVEL_QUERY_STRING_KEY,
+        getCategoryLevel(currentPath.length)
+      );
     params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
     return params.toString();
   };

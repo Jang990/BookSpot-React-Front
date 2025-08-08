@@ -22,17 +22,19 @@ export function CategoryGrid({
 }: CategoryGridProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {categories.map((category) => (
-        <CategoryCard
-          key={category.id}
-          category={category}
-          hasChildren={hasChildren(category.id)}
-          onExploreClick={onExploreClick}
-          queryString={queryString}
-          isNavigating={isNavigating}
-          navigatingTo={navigatingTo}
-        />
-      ))}
+      {categories
+        .sort((a, b) => a.id - b.id)
+        .map((category) => (
+          <CategoryCard
+            key={category.id}
+            category={category}
+            hasChildren={hasChildren(category.id)}
+            onExploreClick={onExploreClick}
+            queryString={queryString}
+            isNavigating={isNavigating}
+            navigatingTo={navigatingTo}
+          />
+        ))}
     </div>
   );
 }
