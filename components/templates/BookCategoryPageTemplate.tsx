@@ -1,6 +1,5 @@
 "use client";
 import { useState, useTransition } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -188,40 +187,32 @@ export const BookCategoryPageTemplate = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Card className="border-none shadow-none">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <div className="ps-3">도서 분류 선택</div>
-          </CardTitle>
-        </CardHeader>
+      <div className="px-6 space-y-6">
+        {/* 검색 */}
+        <CategorySearchBar value={searchTerm} onChange={setSearchTerm} />
 
-        <CardContent className="space-y-6">
-          {/* 검색 */}
-          <CategorySearchBar value={searchTerm} onChange={setSearchTerm} />
+        {/* 브레드크럼 */}
+        {!searchTerm && (
+          <CategoryNavigation
+            breadcrumbs={breadcrumbs}
+            onBreadcrumbClick={handleBreadcrumbClick}
+          />
+        )}
 
-          {/* 브레드크럼 */}
-          {!searchTerm && (
-            <CategoryNavigation
-              breadcrumbs={breadcrumbs}
-              onBreadcrumbClick={handleBreadcrumbClick}
-            />
-          )}
-
-          {/* 카테고리 그리드 */}
-          {visibleCategories.length > 0 ? (
-            <CategoryGrid
-              categories={visibleCategories}
-              onExploreClick={handleCategorySelect}
-              queryString={queryString}
-              hasChildren={hasChildren}
-              isNavigating={isNavigating}
-              navigatingTo={navigatingTo}
-            />
-          ) : (
-            <CategoryEmptyState searchTerm={searchTerm} />
-          )}
-        </CardContent>
-      </Card>
+        {/* 카테고리 그리드 */}
+        {visibleCategories.length > 0 ? (
+          <CategoryGrid
+            categories={visibleCategories}
+            onExploreClick={handleCategorySelect}
+            queryString={queryString}
+            hasChildren={hasChildren}
+            isNavigating={isNavigating}
+            navigatingTo={navigatingTo}
+          />
+        ) : (
+          <CategoryEmptyState searchTerm={searchTerm} />
+        )}
+      </div>
     </div>
   );
 };
