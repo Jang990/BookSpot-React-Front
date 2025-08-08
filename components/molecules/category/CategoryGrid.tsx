@@ -33,6 +33,7 @@ export function CategoryGrid({
             queryString={queryString}
             isNavigating={isNavigating}
             navigatingTo={navigatingTo}
+            subText="하위 카테고리 탐색"
           />
         ))}
     </div>
