@@ -14,6 +14,7 @@ import { CategorySearchBar } from "@/components/molecules/category/CategorySearc
 import { CategoryNavigation } from "@/components/molecules/category/CategoryNavigation";
 import { CategoryGrid } from "@/components/molecules/category/CategoryGrid";
 import { CategoryEmptyState } from "@/components/molecules/category/CategoryEmptyState";
+import { CategoryCard } from "../molecules/category/CategoryCard";
 
 export const BookCategoryPageTemplate = () => {
   const searchParams = useSearchParams();
@@ -201,14 +202,22 @@ export const BookCategoryPageTemplate = () => {
 
         {/* 카테고리 그리드 */}
         {visibleCategories.length > 0 ? (
-          <CategoryGrid
-            categories={visibleCategories}
-            onExploreClick={handleCategorySelect}
-            queryString={queryString}
-            hasChildren={hasChildren}
-            isNavigating={isNavigating}
-            navigatingTo={navigatingTo}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {visibleCategories
+              .sort((a, b) => a.id - b.id)
+              .map((category) => (
+                <CategoryCard
+                  key={category.id}
+                  category={category}
+                  hasChildren={hasChildren(category.id)}
+                  onExploreClick={handleCategorySelect}
+                  queryString={queryString}
+                  isNavigating={isNavigating}
+                  navigatingTo={navigatingTo}
+                  subText="하위 카테고리 탐색"
+                />
+              ))}
+          </div>
         ) : (
           <CategoryEmptyState searchTerm={searchTerm} />
         )}
