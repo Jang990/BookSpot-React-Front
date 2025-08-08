@@ -107,6 +107,7 @@ export const BookCategoryPageTemplate = () => {
 
   // 하위 카테고리 존재 여부 확인
   const hasChildren = (id: number): boolean => {
+    if (searchTerm) return false;
     if (getCurrentLevel() === 2 && id === getCurrentCategoryId()) return false;
     // 1) 백 단위
     if (id % 100 === 0) {
