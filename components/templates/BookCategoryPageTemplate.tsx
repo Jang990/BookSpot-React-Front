@@ -12,7 +12,6 @@ import {
 } from "@/utils/querystring/CategoryId";
 import { CategorySearchBar } from "@/components/molecules/category/CategorySearchBar";
 import { CategoryNavigation } from "@/components/molecules/category/CategoryNavigation";
-import { CategoryGrid } from "@/components/molecules/category/CategoryGrid";
 import { CategoryEmptyState } from "@/components/molecules/category/CategoryEmptyState";
 import { CategoryCard } from "../molecules/category/CategoryCard";
 
@@ -146,16 +145,15 @@ export const BookCategoryPageTemplate = () => {
     }
   };
 
+  const getCurrentCategoryLevel = (): string => {
+    if (searchTerm) return defaultCategoryLevel;
+    return getCategoryLevel(currentPath.length);
+  };
+
   const queryString = (categoryId: number): string => {
     const params = new URLSearchParams(searchParams as any);
     params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
-    if (searchTerm)
-      params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, defaultCategoryLevel);
-    else
-      params.set(
-        CATEGORY_LEVEL_QUERY_STRING_KEY,
-        getCategoryLevel(currentPath.length)
-      );
+    params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, getCurrentCategoryLevel());
     params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
     return params.toString();
   };
