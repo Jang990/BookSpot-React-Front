@@ -32,6 +32,7 @@ export default async function Cart({
         {
           keyword: keyword,
           bookIds: bookIds,
+          categoryCond: null,
         },
         CART_PAGEABLE
       )

@@ -20,7 +20,10 @@ import {
   LAST_SCORE_KEY,
 } from "@/utils/querystring/SearchAfter";
 import { BookPreview } from "@/types/BookPreview";
-import { parseCategoryId } from "@/utils/querystring/CategoryId";
+import {
+  parseCategoryId,
+  parseCategoryLevel,
+} from "@/utils/querystring/CategoryId";
 import { parseLibraryId } from "@/utils/querystring/LibraryId";
 
 const ITEMS_PER_PAGE = 12;
@@ -36,6 +39,7 @@ export default async function Home({ searchParams }: Props) {
   const page = parsePage(queryStrings);
   const libraryId = parseLibraryId(queryStrings);
   const categoryId = parseCategoryId(queryStrings);
+  const categoryLevel = parseCategoryLevel(queryStrings);
 
   const lastBookId = parseNumber(queryStrings, LAST_BOOK_ID_KEY);
   const lastLoanCount = parseNumber(queryStrings, LAST_LOAN_COUNT_KEY);
@@ -49,13 +53,20 @@ export default async function Home({ searchParams }: Props) {
   let totalPages: number | null;
   let books: BookPreview[];
   let searchAfter: SearchAfter;
+  let hasNext: boolean;
 
   const hasCursorCond = lastLoanCount !== null && lastBookId !== null;
   const isOutOfPageNumber: boolean = page > MAX_NUMBER_PAGE;
   const searchCond: SearchCondition = {
     keyword: searchTerm,
     libraryId: libraryId?.toString(),
-    categoryId: categoryId?.toString(),
+    categoryCond:
+      categoryId === null
+        ? null
+        : {
+            categoryId: categoryId.toString(),
+            categoryLevel: categoryLevel,
+          },
   };
 
   if (hasCursorCond && isOutOfPageNumber) {
@@ -67,11 +78,13 @@ export default async function Home({ searchParams }: Props) {
     books = result.books;
     totalPages = null;
     searchAfter = result.searchAfter;
+    hasNext = result.hasNext;
   } else {
     const result = await findBooksPreview(searchCond, pageable);
     books = result.books;
     totalPages = result.totalPage;
     searchAfter = result.searchAfter;
+    hasNext = result.hasNext;
   }
 
   return (
@@ -85,7 +98,11 @@ export default async function Home({ searchParams }: Props) {
 
       <BookPreviewList searchResults={books} />
 
-      <PageNavigator totalPages={totalPages} searchAfter={searchAfter} />
+      <PageNavigator
+        totalPages={totalPages}
+        searchAfter={searchAfter}
+        hasNext={hasNext}
+      />
     </>
   );
 }

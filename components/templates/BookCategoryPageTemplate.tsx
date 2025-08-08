@@ -1,17 +1,21 @@
 "use client";
 import { useState, useTransition } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CATEGORY_HISTORY_QUERY_STRING_KEY,
+  CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
+  getCategoryLevel,
+  LEVEL_LEAF,
+  LEVEL_MID,
+  LEVEL_TOP,
   parseCategoryHistory,
 } from "@/utils/querystring/CategoryId";
 import { CategorySearchBar } from "@/components/molecules/category/CategorySearchBar";
 import { CategoryNavigation } from "@/components/molecules/category/CategoryNavigation";
-import { CategoryGrid } from "@/components/molecules/category/CategoryGrid";
 import { CategoryEmptyState } from "@/components/molecules/category/CategoryEmptyState";
+import { CategoryCard } from "../molecules/category/CategoryCard";
 
 export const BookCategoryPageTemplate = () => {
   const searchParams = useSearchParams();
@@ -105,6 +109,7 @@ export const BookCategoryPageTemplate = () => {
 
   // 하위 카테고리 존재 여부 확인
   const hasChildren = (id: number): boolean => {
+    if (searchTerm) return false;
     if (getCurrentLevel() === 2 && id === getCurrentCategoryId()) return false;
     // 1) 백 단위
     if (id % 100 === 0) {
@@ -142,11 +147,32 @@ export const BookCategoryPageTemplate = () => {
     }
   };
 
+  const getCurrentCategoryLevel = (): string => {
+    if (searchTerm) return LEVEL_LEAF;
+    return getCategoryLevel(currentPath.length);
+  };
+
   const queryString = (categoryId: number): string => {
     const params = new URLSearchParams(searchParams as any);
     params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
+    params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, getCurrentCategoryLevel());
     params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
     return params.toString();
+  };
+
+  const subText = (categoryId: number): string => {
+    const level = getCurrentCategoryLevel();
+    const start = categoryId;
+    const end = calcEnd();
+
+    function calcEnd() {
+      if (searchTerm) return start;
+      if (level === LEVEL_TOP) return start + 99;
+      if (level === LEVEL_MID) return start + 9;
+      return start;
+    }
+
+    return start === end ? `해당 분류로 검색` : `${start}~${end} 범위 검색`;
   };
 
   // 브레드크럼 클릭 핸들러
@@ -177,40 +203,40 @@ export const BookCategoryPageTemplate = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <Card className="border-none shadow-none">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <div className="ps-3">도서 분류 선택</div>
-          </CardTitle>
-        </CardHeader>
+      <div className="px-6 space-y-6">
+        {/* 검색 */}
+        <CategorySearchBar value={searchTerm} onChange={setSearchTerm} />
 
-        <CardContent className="space-y-6">
-          {/* 검색 */}
-          <CategorySearchBar value={searchTerm} onChange={setSearchTerm} />
+        {/* 브레드크럼 */}
+        {!searchTerm && (
+          <CategoryNavigation
+            breadcrumbs={breadcrumbs}
+            onBreadcrumbClick={handleBreadcrumbClick}
+          />
+        )}
 
-          {/* 브레드크럼 */}
-          {!searchTerm && (
-            <CategoryNavigation
-              breadcrumbs={breadcrumbs}
-              onBreadcrumbClick={handleBreadcrumbClick}
-            />
-          )}
-
-          {/* 카테고리 그리드 */}
-          {visibleCategories.length > 0 ? (
-            <CategoryGrid
-              categories={visibleCategories}
-              onExploreClick={handleCategorySelect}
-              queryString={queryString}
-              hasChildren={hasChildren}
-              isNavigating={isNavigating}
-              navigatingTo={navigatingTo}
-            />
-          ) : (
-            <CategoryEmptyState searchTerm={searchTerm} />
-          )}
-        </CardContent>
-      </Card>
+        {/* 카테고리 그리드 */}
+        {visibleCategories.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {visibleCategories
+              .sort((a, b) => a.id - b.id)
+              .map((category) => (
+                <CategoryCard
+                  key={category.id}
+                  category={category}
+                  hasChildren={hasChildren(category.id)}
+                  onExploreClick={handleCategorySelect}
+                  queryString={queryString}
+                  isNavigating={isNavigating}
+                  navigatingTo={navigatingTo}
+                  subText={subText(category.id)}
+                />
+              ))}
+          </div>
+        ) : (
+          <CategoryEmptyState searchTerm={searchTerm} />
+        )}
+      </div>
     </div>
   );
 };

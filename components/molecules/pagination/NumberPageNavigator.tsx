@@ -68,9 +68,12 @@ export const NumberPageNavigator = ({
       ))}
 
       {/* 마지막 페이지 버튼 (마지막에서 3페이지 이상 떨어져 있을 때만 표시) */}
-      {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && (
+      {getPageNumbers()[getPageNumbers().length - 1] < totalPages && (
         <>
-          <span className="px-1">...</span>
+          {getPageNumbers()[getPageNumbers().length - 1] < totalPages - 1 && (
+            <span className="px-1">...</span>
+          )}
+
           <NaviPageNumberButton
             page={totalPages}
             onClick={() => goToPage(totalPages)}

@@ -1,5 +1,6 @@
 import {
   EMPTY_SEARCH_AFTER,
+  ITEMS_PER_PAGE,
   MIN_SEARCH_TERM_LENGTH,
   Pageable,
   SearchAfter,
@@ -7,14 +8,22 @@ import {
 import { get } from "./Fetcher";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "./ApiResponseConvertor";
-import { CATEGORY_QUERY_STRING_KEY } from "../querystring/CategoryId";
+import {
+  CATEGORY_LEVEL_QUERY_STRING_KEY,
+  CATEGORY_QUERY_STRING_KEY,
+} from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
 
 export interface SearchCondition {
   keyword?: string | null;
   bookIds?: string[];
   libraryId?: string;
-  categoryId?: string;
+  categoryCond: CategoryCondition | null;
+}
+
+export interface CategoryCondition {
+  categoryId: string | null;
+  categoryLevel: string | null;
 }
 
 export interface PagingResult {
@@ -22,12 +31,14 @@ export interface PagingResult {
   searchAfter: SearchAfter;
   totalElements: number;
   totalPage: number;
+  hasNext: boolean;
 }
 
 export interface SearchAfterResult {
   books: BookPreview[];
   searchAfter: SearchAfter;
   totalElements: number;
+  hasNext: boolean;
 }
 
 const EMPTY_PAGIN_RESULT: PagingResult = {
@@ -35,6 +46,7 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
   totalElements: 0,
   books: [],
   searchAfter: EMPTY_SEARCH_AFTER,
+  hasNext: false,
 };
 
 export const findBooksPreview = async (
@@ -61,6 +73,7 @@ export const findBooksPreview = async (
       lastLoanCount: json.lastLoanCount,
       lastBookId: json.lastBookId,
     },
+    hasNext: !json.books.last,
   };
 };
 
@@ -85,6 +98,7 @@ export const findBooksPreviewWithSA = async (
       lastLoanCount: json.lastLoanCount,
       lastBookId: json.lastBookId,
     },
+    hasNext: json.books.length === ITEMS_PER_PAGE,
   };
 };
 
@@ -97,7 +111,7 @@ const fetchBooksPreview = async (
 
 const BOOK_API_URL = process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books";
 function createApi(
-  { keyword, bookIds, libraryId, categoryId }: SearchCondition,
+  { keyword, bookIds, libraryId, categoryCond }: SearchCondition,
   pageCond: Pageable | SearchAfter
 ): string {
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
@@ -106,13 +120,24 @@ function createApi(
   if (isSearchAfter(pageCond) && pageCond.lastScore && !keyword) {
     throw new Error("관련성 검색은 keyword가 있어야 합니다.");
   }
+  if (
+    categoryCond &&
+    (!categoryCond.categoryId || !categoryCond.categoryLevel)
+  ) {
+    throw new Error("카테고리 검색 시 카테고리의 ID와 LEVEL은 필수입니다.");
+  }
   const url = new URL(BOOK_API_URL);
 
   if (keyword) url.searchParams.append("title", keyword);
   if (bookIds) url.searchParams.append("bookIds", bookIds.join(","));
   if (libraryId) url.searchParams.append("libraryId", libraryId);
-  if (categoryId)
-    url.searchParams.append(CATEGORY_QUERY_STRING_KEY, categoryId);
+  if (categoryCond && categoryCond.categoryId && categoryCond.categoryLevel) {
+    url.searchParams.append(CATEGORY_QUERY_STRING_KEY, categoryCond.categoryId);
+    url.searchParams.append(
+      CATEGORY_LEVEL_QUERY_STRING_KEY,
+      categoryCond.categoryLevel
+    );
+  }
 
   if (isPageable(pageCond)) appendPageableQuery(url, pageCond);
   if (isSearchAfter(pageCond)) appendSearchAfterQuery(pageCond, url);
