@@ -25,13 +25,15 @@
 <br>
 
 ### 책 검색 결과
-![image](https://github.com/user-attachments/assets/b03cf23c-35bf-4a34-b7e3-15c0ff258243)
+<img width="845" height="900" alt="image" src="https://github.com/user-attachments/assets/0e728197-c2ce-435e-b956-02a83dabbceb" />
+<br>
 
+### 카테고리 필터링 선택
+<img width="796" height="596" alt="image" src="https://github.com/user-attachments/assets/1d87752d-6257-45be-a205-580e398addca" />
 <br>
 
 ### 북카트
 ![image](https://github.com/user-attachments/assets/47fd3bfe-a152-4eb9-a782-68a982e6234c)
-
 <br>
 
 ### 도서관 재고 검색
