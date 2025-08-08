@@ -5,7 +5,7 @@ export const CATEGORY_LEVEL_QUERY_STRING_KEY = "categoryLevel";
 export const CATEGORY_HISTORY_QUERY_STRING_KEY = "categorySearchHistory";
 
 const categoryLevels: string[] = ["TOP", "MID", "LEAF"];
-const defaultCategoryLevel = categoryLevels[categoryLevels.length - 1];
+export const defaultCategoryLevel = categoryLevels[categoryLevels.length - 1];
 
 export function parseCategoryLevel(queryStrings: {
   [key: string]: string | string[] | undefined;
