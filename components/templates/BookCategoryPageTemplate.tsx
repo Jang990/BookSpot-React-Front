@@ -8,6 +8,8 @@ import {
   CATEGORY_QUERY_STRING_KEY,
   getCategoryLevel,
   LEVEL_LEAF,
+  LEVEL_MID,
+  LEVEL_TOP,
   parseCategoryHistory,
 } from "@/utils/querystring/CategoryId";
 import { CategorySearchBar } from "@/components/molecules/category/CategorySearchBar";
@@ -158,6 +160,21 @@ export const BookCategoryPageTemplate = () => {
     return params.toString();
   };
 
+  const subText = (categoryId: number): string => {
+    const level = getCurrentCategoryLevel();
+    const start = categoryId;
+    const end = calcEnd();
+
+    function calcEnd() {
+      if (searchTerm) return start;
+      if (level === LEVEL_TOP) return start + 99;
+      if (level === LEVEL_MID) return start + 9;
+      return start;
+    }
+
+    return start === end ? `해당 분류로 검색` : `${start}~${end} 범위 검색`;
+  };
+
   // 브레드크럼 클릭 핸들러
   const handleBreadcrumbClick = (index: number) => {
     if (index === -1) {
@@ -212,7 +229,7 @@ export const BookCategoryPageTemplate = () => {
                   queryString={queryString}
                   isNavigating={isNavigating}
                   navigatingTo={navigatingTo}
-                  subText="하위 카테고리 탐색"
+                  subText={subText(category.id)}
                 />
               ))}
           </div>
