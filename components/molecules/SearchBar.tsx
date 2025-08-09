@@ -8,6 +8,7 @@ import {
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { XButton } from "../atoms/button/icon/XButton";
 
 interface SearchProps {
   initialSearchTerm: string;
@@ -34,6 +35,10 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
       return;
     }
 
+    search(searchTerm);
+  };
+
+  function search(searchTerm: string) {
     startTransition(() => {
       const params = new URLSearchParams(searchParams as any);
       params.set("searchTerm", searchTerm);
@@ -42,6 +47,11 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
       params.delete(LAST_BOOK_ID_KEY);
       router.push(`?${params.toString()}`);
     });
+  }
+
+  const handleClear = () => {
+    setSearchTerm("");
+    search("");
   };
 
   // input 따로 뺄 것
@@ -59,12 +69,14 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button
-        type="submit"
-        className="absolute right-4 top-1/2 transform -translate-y-1/2"
-      >
-        <Search className="text-muted-foreground" size={24} />
-      </button>
+
+      <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3">
+        {searchTerm && <XButton onClick={handleClear} />}
+
+        <button type="submit">
+          <Search className="text-muted-foreground" size={24} />
+        </button>
+      </div>
     </form>
   );
 };
