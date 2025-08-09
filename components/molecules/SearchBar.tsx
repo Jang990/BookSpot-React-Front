@@ -23,8 +23,14 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 2자 미만 검색 불가 알림 필요
-    if (!searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH) {
-      alert(`${MIN_SEARCH_TERM_LENGTH}글자 이상 입력해주세요.`);
+    if (
+      searchTerm &&
+      searchTerm.length !== 0 &&
+      searchTerm.length < MIN_SEARCH_TERM_LENGTH
+    ) {
+      alert(
+        `검색어를 제거하거나 ${MIN_SEARCH_TERM_LENGTH}글자 이상 입력해주세요.`
+      );
       return;
     }
 
