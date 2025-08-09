@@ -8,6 +8,7 @@ import {
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
+import { XButton } from "../atoms/button/icon/XButton";
 
 interface SearchProps {
   initialSearchTerm: string;
@@ -23,11 +24,21 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // 2자 미만 검색 불가 알림 필요
-    if (!searchTerm || searchTerm.length < MIN_SEARCH_TERM_LENGTH) {
-      alert(`${MIN_SEARCH_TERM_LENGTH}글자 이상 입력해주세요.`);
+    if (
+      searchTerm &&
+      searchTerm.length !== 0 &&
+      searchTerm.length < MIN_SEARCH_TERM_LENGTH
+    ) {
+      alert(
+        `검색어를 제거하거나 ${MIN_SEARCH_TERM_LENGTH}글자 이상 입력해주세요.`
+      );
       return;
     }
 
+    search(searchTerm);
+  };
+
+  function search(searchTerm: string) {
     startTransition(() => {
       const params = new URLSearchParams(searchParams as any);
       params.set("searchTerm", searchTerm);
@@ -36,6 +47,11 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
       params.delete(LAST_BOOK_ID_KEY);
       router.push(`?${params.toString()}`);
     });
+  }
+
+  const handleClear = () => {
+    setSearchTerm("");
+    search("");
   };
 
   // input 따로 뺄 것
@@ -53,12 +69,14 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <button
-        type="submit"
-        className="absolute right-4 top-1/2 transform -translate-y-1/2"
-      >
-        <Search className="text-muted-foreground" size={24} />
-      </button>
+
+      <div className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center gap-3">
+        {searchTerm && <XButton onClick={handleClear} />}
+
+        <button type="submit">
+          <Search className="text-muted-foreground" size={24} />
+        </button>
+      </div>
     </form>
   );
 };
