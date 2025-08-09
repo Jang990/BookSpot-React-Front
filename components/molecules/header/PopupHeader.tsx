@@ -1,4 +1,4 @@
-import { CloseButton } from "@/components/atoms/button/icon/CloseButton";
+import { XButton } from "@/components/atoms/button/icon/XButton";
 import { CardTitleLabel } from "@/components/atoms/label/CardLabel";
 
 interface PopupHeaderProps {
@@ -13,7 +13,7 @@ export const PopupHeader = ({
   return (
     <div className="flex justify-between items-center mb-4">
       <CardTitleLabel text={headerName} />
-      <CloseButton onClick={onClosed} />
+      <XButton onClick={onClosed} />
     </div>
   );
 };

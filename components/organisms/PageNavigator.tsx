@@ -12,6 +12,8 @@ import {
   LAST_SCORE_KEY,
 } from "@/utils/querystring/SearchAfter";
 import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
+import { useEffect, useState } from "react";
+import { MobileNumberPageNavigator } from "../molecules/pagination/MobileNumberPageNavigator";
 
 interface PageNaviProps {
   totalPages: number | null;
@@ -27,6 +29,19 @@ export const PageNavigator = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 모바일 감지
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const pageParam = searchParams.get("page");
   const currentPage = pageParam ? parseInt(pageParam, 10) : 1;
@@ -74,20 +89,39 @@ export const PageNavigator = ({
         />
       ) : (
         <div>
-          <NumberPageNavigator
-            currentPage={currentPage}
-            totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
-            hasPrev={currentPage === 1}
-            hasNext={hasNext}
-            goToPage={goToPage}
-            clickPrev={() => {
-              goToPage(currentPage - 1);
-            }}
-            clickNext={() => {
-              if (currentPage === MAX_NUMBER_PAGE && hasNext) goToSearchAfter();
-              else goToPage(currentPage + 1);
-            }}
-          />
+          {isMobile ? (
+            <MobileNumberPageNavigator
+              currentPage={currentPage}
+              totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
+              hasPrev={currentPage === 1}
+              hasNext={hasNext}
+              goToPage={goToPage}
+              clickPrev={() => {
+                goToPage(currentPage - 1);
+              }}
+              clickNext={() => {
+                if (currentPage === MAX_NUMBER_PAGE && hasNext)
+                  goToSearchAfter();
+                else goToPage(currentPage + 1);
+              }}
+            />
+          ) : (
+            <NumberPageNavigator
+              currentPage={currentPage}
+              totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
+              hasPrev={currentPage === 1}
+              hasNext={hasNext}
+              goToPage={goToPage}
+              clickPrev={() => {
+                goToPage(currentPage - 1);
+              }}
+              clickNext={() => {
+                if (currentPage === MAX_NUMBER_PAGE && hasNext)
+                  goToSearchAfter();
+                else goToPage(currentPage + 1);
+              }}
+            />
+          )}
           {currentPage === MAX_NUMBER_PAGE && hasNext && (
             <div className="flex justify-center">
               <InfoPanel
