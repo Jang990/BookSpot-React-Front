@@ -9,7 +9,9 @@ export default async function PageNotFound() {
         <h1 className="mt-2 text-2xl font-bold text-gray-800">
           페이지를 찾을 수 없어요.
         </h1>
-        <HomePrimaryButton />
+        <div className="mt-4 flex justify-center gap-4">
+          <HomePrimaryButton />
+        </div>
       </div>
     </div>
   );

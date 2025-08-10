@@ -1,6 +1,7 @@
 "use client";
 
 import { HomePrimaryButton } from "@/components/atoms/button/HomePrimaryButton";
+import { RetryAmberButton } from "@/components/atoms/button/RetryAmberButton";
 import { ErrorImage } from "@/components/atoms/ErrorImage";
 import { useRouter } from "next/navigation";
 import { startTransition, useEffect } from "react";
@@ -28,7 +29,11 @@ export default function Error({
         <h2 className="mt-2 font-bold text-gray-800">
           잠시 후 다시 시도해주세요.
         </h2>
-        <HomePrimaryButton />
+
+        <div className="mt-4 flex justify-center gap-4">
+          <HomePrimaryButton />
+          <RetryAmberButton />
+        </div>
       </div>
     </div>
   );
