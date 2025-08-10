@@ -35,7 +35,9 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
         />
       </p>
       <div className="mt-auto pt-2">
-        <CardFooterLabel text={`📖 ${formatCount(book.loanCount, "회")}`} />
+        <CardFooterLabel
+          text={`📖 ${formatCount(book.loanCount, "회 대출")}`}
+        />
       </div>
     </div>
   );

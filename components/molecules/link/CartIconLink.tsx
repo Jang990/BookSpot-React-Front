@@ -23,7 +23,7 @@ export const CartIconLink = ({ href, cartSize: size }: CartIconLinkProps) => {
   }, [size]);
 
   return (
-    <Link href={href} className="text-primary hover:text-primary/80 relative">
+    <a href={href} className="text-primary hover:text-primary/80 relative">
       <ShoppingCart
         size={24}
         className={`${isAnimating ? "animate-bump" : ""}`}
@@ -35,6 +35,6 @@ export const CartIconLink = ({ href, cartSize: size }: CartIconLinkProps) => {
           className={`${isAnimating ? "animate-bump" : ""}`}
         />
       )}
-    </Link>
+    </a>
   );
 };

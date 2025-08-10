@@ -16,6 +16,7 @@ interface SearchProps {
   categoryId: number | null;
   bookQueryString?: string;
   initialSearchTerm: string;
+  totalElements: number;
 }
 
 export const BookSearchBar = async ({
@@ -23,18 +24,25 @@ export const BookSearchBar = async ({
   categoryId,
   bookQueryString,
   initialSearchTerm,
+  totalElements,
 }: SearchProps) => {
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex flex-wrap items-center justify-between">
+      <SearchBar initialSearchTerm={initialSearchTerm} />
+      <div className="grid grid-cols-[1fr_auto] gap-4 items-end w-full my-3">
+        <div className="flex flex-wrap justify-start gap-2">
           {await libraryFilterButton(libraryId)}
           {await categoryFilterButton(categoryId)}
         </div>
-        <div className="flex-1">{/* 빈 공간 */}</div>
-      </div>
 
-      <SearchBar initialSearchTerm={initialSearchTerm} />
+        <div className=" self-end justify-self-end pb-2 pe-2">
+          <span className="text-muted-foreground">
+            {totalElements >= 10_000
+              ? `10,000건 이상`
+              : `${totalElements.toLocaleString()} 건`}{" "}
+          </span>
+        </div>
+      </div>
     </div>
   );
 

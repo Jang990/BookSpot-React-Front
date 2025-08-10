@@ -54,6 +54,7 @@ export default async function Home({ searchParams }: Props) {
   let books: BookPreview[];
   let searchAfter: SearchAfter;
   let hasNext: boolean;
+  let totalElements = null;
 
   const hasCursorCond = lastLoanCount !== null && lastBookId !== null;
   const isOutOfPageNumber: boolean = page > MAX_NUMBER_PAGE;
@@ -79,12 +80,14 @@ export default async function Home({ searchParams }: Props) {
     totalPages = null;
     searchAfter = result.searchAfter;
     hasNext = result.hasNext;
+    totalElements = result.totalElements;
   } else {
     const result = await findBooksPreview(searchCond, pageable);
     books = result.books;
     totalPages = result.totalPage;
     searchAfter = result.searchAfter;
     hasNext = result.hasNext;
+    totalElements = result.totalElements;
   }
 
   return (
@@ -94,6 +97,7 @@ export default async function Home({ searchParams }: Props) {
         bookQueryString={toRawQueryString(await searchParams)}
         libraryId={libraryId}
         categoryId={categoryId}
+        totalElements={totalElements}
       />
 
       <BookPreviewList searchResults={books} />

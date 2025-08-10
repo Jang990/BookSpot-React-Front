@@ -13,6 +13,8 @@ import {
   setMapLocationProps,
 } from "@/utils/MapLocalStorage";
 import { LibrarySelectionMapTemplate } from "@/components/templates/LibrarySelectionMapTemplate";
+import { MapLimitInfo } from "@/components/organisms/MapLimitInfo";
+import { InfoPanel } from "@/components/molecules/InfoPanel";
 
 export default function LibrariesSelection() {
   const [libraries, setLibraries] = useState<LibraryMarkerInfo[]>([]);
@@ -60,6 +62,8 @@ export default function LibrariesSelection() {
           onBoundsChange={debouncedMapSearch}
         />
       </div>
+
+      <InfoPanel text="책을 검색하고 싶은 도서관 찾고, 클릭하면 등장하는 패널에서 '도서관 선택' 버튼을 눌러주세요." />
     </div>
   );
 }
