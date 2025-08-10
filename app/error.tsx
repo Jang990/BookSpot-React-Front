@@ -1,5 +1,6 @@
 "use client";
 
+import { ErrorImage } from "@/components/atoms/ErrorImage";
 import { useRouter } from "next/navigation";
 import { startTransition, useEffect } from "react";
 
@@ -18,12 +19,7 @@ export default function Error({
 
   return (
     <div className="flex flex-col items-center justify-center flex-grow text-center">
-      <img
-        src="/5xx.svg"
-        alt="5xx"
-        className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
-        style={{ aspectRatio: "1 / 1" }}
-      />
+      <ErrorImage src="/5xx.svg" alt="5xx" />
       <div>
         <h1 className="mt-2 text-2xl font-bold text-gray-800">
           서버에 문제가 발생했어요.
