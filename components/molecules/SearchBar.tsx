@@ -56,7 +56,7 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
 
   // input 따로 뺄 것
   return (
-    <form onSubmit={handleSubmit} className="relative mb-6">
+    <form onSubmit={handleSubmit} className="relative">
       <input
         name="search"
         type="text"
