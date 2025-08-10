@@ -6,6 +6,21 @@ export async function get(api: string) {
     },
   }).then((response) => {
     if (response.ok) return response.json();
-    throw new Error("Network response was not ok");
+    if (500 <= response.status) throw new ServerError();
+    throw new ClientError();
   });
+}
+
+export class ServerError extends Error {
+  constructor(message = "Server Error") {
+    super(message);
+    this.name = "ServerError";
+  }
+}
+
+export class ClientError extends Error {
+  constructor(message = "Server Error") {
+    super(message);
+    this.name = "ClientError";
+  }
 }
