@@ -1,5 +1,6 @@
 "use client";
 
+import { HomePrimaryButton } from "@/components/atoms/button/HomePrimaryButton";
 import { ErrorImage } from "@/components/atoms/ErrorImage";
 import { useRouter } from "next/navigation";
 import { startTransition, useEffect } from "react";
@@ -27,12 +28,7 @@ export default function Error({
         <h2 className="mt-2 font-bold text-gray-800">
           잠시 후 다시 시도해주세요.
         </h2>
-        <a
-          href="/"
-          className="mt-6 inline-block rounded-md bg-primary px-6 py-3 text-white hover:bg-primary-dark transition"
-        >
-          홈으로 돌아가기
-        </a>
+        <HomePrimaryButton />
       </div>
     </div>
   );

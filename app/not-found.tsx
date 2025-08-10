@@ -1,3 +1,4 @@
+import { HomePrimaryButton } from "@/components/atoms/button/HomePrimaryButton";
 import { ErrorImage } from "@/components/atoms/ErrorImage";
 
 export default async function PageNotFound() {
@@ -8,12 +9,7 @@ export default async function PageNotFound() {
         <h1 className="mt-2 text-2xl font-bold text-gray-800">
           페이지를 찾을 수 없어요.
         </h1>
-        <a
-          href="/"
-          className="mt-6 inline-block rounded-md bg-primary px-6 py-3 text-white hover:bg-primary-dark transition"
-        >
-          홈으로 돌아가기
-        </a>
+        <HomePrimaryButton />
       </div>
     </div>
   );
