@@ -8,6 +8,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { InfoPanel } from "@/components/molecules/InfoPanel";
 import { PageTitle } from "@/components/molecules/PageTitle";
 
+export const CART_EXPIRED_MONTH = 6;
 const MAX_CART_SIZE = 20;
 const FIRST_PAGE = 0;
 const CART_PAGEABLE: Pageable = {

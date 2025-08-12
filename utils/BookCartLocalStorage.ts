@@ -1,3 +1,5 @@
+import { CART_EXPIRED_MONTH } from "@/app/cart/page";
+
 export const STORAGE_NAME = "SELECTED_BOOK_IDS";
 
 export function findBookIds(): string[] {
@@ -27,6 +29,8 @@ export function clear(): void {
 }
 
 function save(element: string[]) {
+  const expires = new Date();
+  expires.setMonth(expires.getMonth() + CART_EXPIRED_MONTH);
   document.cookie = `${STORAGE_NAME}=${JSON.stringify(element)}; path=/`;
 }
 
