@@ -41,7 +41,10 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
 
   return (
     <div>
-      <PageTitle text="북카트" />
+      <div className="flex justify-between items-center">
+        <PageTitle text="북카트" />
+        <div className="text-muted-foreground pe-3">{`담은 책 : ${books.length} / ${MAX_CART_SIZE}`}</div>
+      </div>
       <div>
         {books.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-12">
