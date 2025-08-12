@@ -5,6 +5,8 @@ import { STORAGE_NAME } from "@/utils/BookCartLocalStorage";
 import { BookCartListTemplate } from "@/components/templates/BookCartListTemplate";
 import { BookCartPopup } from "@/components/organisms/BookCartPopup";
 import { BookPreview } from "@/types/BookPreview";
+import { InfoPanel } from "@/components/molecules/InfoPanel";
+import { PageTitle } from "@/components/molecules/PageTitle";
 
 const MAX_CART_SIZE = 20;
 const FIRST_PAGE = 0;
@@ -40,10 +42,16 @@ export default async function Cart({
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 sm:px-6 lg:px-8">
+    <div>
+      <PageTitle text="북카트" />
       <BookCartListTemplate books={books}></BookCartListTemplate>
 
-      <BookCartPopup></BookCartPopup>
+      <div className="pt-3">
+        <BookCartPopup></BookCartPopup>
+      </div>
+      <div className="pt-3">
+        <InfoPanel text="원하는 책을 찾아 북카트에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
+      </div>
     </div>
   );
 }

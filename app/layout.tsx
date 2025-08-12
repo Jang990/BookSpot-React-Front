@@ -21,10 +21,10 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen">
             <Header />
 
-            <div className="flex-1 bg-background py-12 px-4 sm:px-6 lg:px-8">
+            <div className="flex-1 bg-background pt-12 pb-8 px-4 sm:px-6 lg:px-8">
               <div className="max-w-6xl mx-auto">
                 <div className="w-full max-w-4xl mx-auto">
-                  <main className="py-8">{children}</main>
+                  <main className="pt-4">{children}</main>
                 </div>
               </div>
             </div>

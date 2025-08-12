@@ -43,7 +43,7 @@ export const NumberPageNavigator = ({
   return (
     <div className="flex justify-center items-center mt-8 space-x-2">
       {/* 이전 페이지 버튼 */}
-      <NaviOptionButton text="이전" onClick={clickPrev} disabled={hasPrev} />
+      <NaviOptionButton text="이전" onClick={clickPrev} disabled={!hasPrev} />
 
       {/* 첫 페이지 버튼 (현재 페이지가 4 이상일 때만 표시) */}
       {getPageNumbers()[0] > 1 && (
