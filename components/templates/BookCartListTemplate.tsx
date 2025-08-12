@@ -12,6 +12,7 @@ import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { SkeletonBookCard } from "../organisms/book/preview/SkeletonBookCard";
 import { MAX_CART_SIZE } from "@/utils/BookCartLocalStorage";
+import { SkeletonBookList } from "../organisms/SkeletonBookList";
 
 interface Props {
   bookIds: string[];
@@ -60,7 +61,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
         )}
       </div>
       <div>
-        {loading && <SkeletonBookCard />}
+        {loading && <SkeletonBookList />}
         {!loading && books.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-12">
             <ShoppingCart size={64} className="text-muted-foreground mb-4" />
