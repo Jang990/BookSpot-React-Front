@@ -13,6 +13,7 @@ import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { SkeletonBookCard } from "../organisms/book/preview/SkeletonBookCard";
 import { MAX_CART_SIZE } from "@/utils/BookCartLocalStorage";
 import { SkeletonBookList } from "../organisms/SkeletonBookList";
+import { InfoToast } from "../molecules/toast/InfoToast";
 
 interface Props {
   bookIds: string[];
@@ -28,6 +29,11 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
   const { removeFromCart } = useBookCart();
   const [books, setBooks] = useState<BookPreview[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "INFO" | "WARN";
+  } | null>(null);
 
   useEffect(() => {
     if (bookIds.length === 0) {
@@ -78,13 +84,24 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
                   <DeletablaBookInfo
                     key={book.id}
                     book={book}
-                    deleteBook={(bookId: string) => {
-                      removeFromCart(bookId);
-                      setBooks(books.filter((b) => b.id !== bookId));
+                    deleteBook={(book: BookPreview) => {
+                      removeFromCart(book.id);
+                      setBooks(books.filter((b) => b.id !== book.id));
+                      setToast({
+                        message: `'${book.title}'이 제거되었습니다.`,
+                        type: "INFO",
+                      });
                     }}
                   ></DeletablaBookInfo>
                 ))}
               </>
+            )}
+            {toast && (
+              <InfoToast
+                message={toast.message}
+                type={toast.type}
+                onClose={() => setToast(null)}
+              />
             )}
           </div>
         )}
