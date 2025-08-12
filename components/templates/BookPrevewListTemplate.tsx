@@ -21,10 +21,10 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
     setToast({ message, type });
   };
 
-  const handleAddToCart = (bookId: string) => {
+  const handleAddToCart = (book: BookPreview) => {
     try {
-      addToCart(bookId);
-      showToast("장바구니에 추가되었습니다.", "INFO");
+      addToCart(book.id);
+      showToast(`'${book.title}'이(가) 북카트에 추가되었습니다.`, "INFO");
     } catch (err) {
       if (err instanceof Error) {
         showToast(err.message, "WARN");

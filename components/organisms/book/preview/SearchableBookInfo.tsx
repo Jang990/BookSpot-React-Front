@@ -6,7 +6,7 @@ import { BookInfo } from "./BookInfo";
 
 interface SearchableBookInfoProps {
   book: BookPreview;
-  onClickAddBtn: (bookId: string) => void;
+  onClickAddBtn: (book: BookPreview) => void;
 }
 
 export const SearchableBookInfo = ({
@@ -17,7 +17,7 @@ export const SearchableBookInfo = ({
     <BookInfo
       key={book.id}
       book={book}
-      actionButtons={[<CartButton onClick={() => onClickAddBtn(book.id)} />]}
+      actionButtons={[<CartButton onClick={() => onClickAddBtn(book)} />]}
     />
   );
 };

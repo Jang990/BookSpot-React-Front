@@ -88,7 +88,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
                       removeFromCart(book.id);
                       setBooks(books.filter((b) => b.id !== book.id));
                       setToast({
-                        message: `'${book.title}'이 제거되었습니다.`,
+                        message: `'${book.title}'이(가) 제거되었습니다.`,
                         type: "INFO",
                       });
                     }}
