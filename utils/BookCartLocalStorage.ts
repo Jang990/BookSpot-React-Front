@@ -9,7 +9,9 @@ export function findBookIds(): string[] {
 
 export function addBookId(bookId: string): boolean {
   const cart = findBookIds();
-  if (cart.includes(bookId) || cart.length > MAX_CART_SIZE) return false;
+  if (cart.length === MAX_CART_SIZE) throw new Error("북카트가 가득 찼습니다.");
+  if (cart.includes(bookId))
+    throw new Error("북카트에 이미 존재하는 책입니다.");
 
   cart.push(bookId);
   save(cart);
