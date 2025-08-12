@@ -1,57 +1,14 @@
-import { Pageable } from "@/types/Pageable";
-import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { cookies } from "next/headers";
 import { STORAGE_NAME } from "@/utils/BookCartLocalStorage";
 import { BookCartListTemplate } from "@/components/templates/BookCartListTemplate";
-import { BookCartPopup } from "@/components/organisms/BookCartPopup";
-import { BookPreview } from "@/types/BookPreview";
-import { InfoPanel } from "@/components/molecules/InfoPanel";
-import { PageTitle } from "@/components/molecules/PageTitle";
 
-const MAX_CART_SIZE = 20;
-const FIRST_PAGE = 0;
-const CART_PAGEABLE: Pageable = {
-  pageNumber: FIRST_PAGE,
-  pageSize: MAX_CART_SIZE,
-};
-export default async function Cart({
-  searchParams,
-}: {
-  searchParams?: Promise<{ [key: string]: string | undefined }>;
-}) {
-  const params = await searchParams;
-  const keyword = params?.keyword ?? null;
-
+export default async function Cart() {
   const cookieVal = (await cookies()).get(STORAGE_NAME)?.value ?? "[]";
   const bookIds: string[] = JSON.parse(cookieVal);
 
-  const books = await findBookCartList(bookIds);
-
-  async function findBookCartList(bookIds: string[]): Promise<BookPreview[]> {
-    if (bookIds.length === 0) return Promise.resolve([]);
-    return (
-      await findBooksPreview(
-        {
-          keyword: keyword,
-          bookIds: bookIds,
-          categoryCond: null,
-        },
-        CART_PAGEABLE
-      )
-    ).books;
-  }
-
   return (
     <div>
-      <PageTitle text="북카트" />
-      <BookCartListTemplate books={books}></BookCartListTemplate>
-
-      <div className="pt-3">
-        <BookCartPopup></BookCartPopup>
-      </div>
-      <div className="pt-3">
-        <InfoPanel text="원하는 책을 찾아 북카트에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
-      </div>
+      <BookCartListTemplate bookIds={bookIds}></BookCartListTemplate>
     </div>
   );
 }
