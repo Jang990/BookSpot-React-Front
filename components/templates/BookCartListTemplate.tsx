@@ -11,12 +11,12 @@ import { PageTitle } from "../molecules/PageTitle";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { SkeletonBookCard } from "../organisms/book/preview/SkeletonBookCard";
+import { MAX_CART_SIZE } from "@/utils/BookCartLocalStorage";
 
 interface Props {
   bookIds: string[];
 }
 
-const MAX_CART_SIZE = 20;
 const FIRST_PAGE = 0;
 const CART_PAGEABLE: Pageable = {
   pageNumber: FIRST_PAGE,

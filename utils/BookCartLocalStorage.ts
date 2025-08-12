@@ -1,3 +1,4 @@
+export const MAX_CART_SIZE = 6;
 export const CART_EXPIRED_MONTH = 6;
 export const STORAGE_NAME = "SELECTED_BOOK_IDS";
 
@@ -8,7 +9,7 @@ export function findBookIds(): string[] {
 
 export function addBookId(bookId: string): boolean {
   const cart = findBookIds();
-  if (cart.includes(bookId)) return false;
+  if (cart.includes(bookId) || cart.length > MAX_CART_SIZE) return false;
 
   cart.push(bookId);
   save(cart);
