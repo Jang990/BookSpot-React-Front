@@ -10,6 +10,7 @@ import { InfoPanel } from "../molecules/InfoPanel";
 import { PageTitle } from "../molecules/PageTitle";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
+import { SkeletonBookCard } from "../organisms/book/preview/SkeletonBookCard";
 
 interface Props {
   bookIds: string[];
@@ -25,10 +26,14 @@ const CART_PAGEABLE: Pageable = {
 export const BookCartListTemplate = ({ bookIds }: Props) => {
   const { removeFromCart } = useBookCart();
   const [books, setBooks] = useState<BookPreview[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (bookIds.length === 0) setBooks([]);
-    else
+    if (bookIds.length === 0) {
+      setBooks([]);
+      setLoading(false);
+    } else {
+      setLoading(true);
       findBooksPreview(
         {
           keyword: null,
@@ -36,17 +41,34 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
           categoryCond: null,
         },
         CART_PAGEABLE
-      ).then((json) => setBooks(json.books));
+      )
+        .then((json) => setBooks(json.books))
+        .finally(() => setLoading(false));
+    }
   }, []);
 
   return (
     <div>
       <div className="flex justify-between items-center">
         <PageTitle text="북카트" />
-        <div className="text-muted-foreground pe-3">{`담은 책 : ${books.length} / ${MAX_CART_SIZE}`}</div>
+        {loading ? (
+          <div className="pe-3">
+            <div className="h-5 w-28 bg-gray-300 rounded animate-pulse"></div>
+          </div>
+        ) : (
+          <div className="text-muted-foreground pe-3">{`담은 책 : ${books.length} / ${MAX_CART_SIZE}`}</div>
+        )}
       </div>
       <div>
-        {books.length === 0 && (
+        {loading && (
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            {/* 스켈레톤 컴포넌트를 원하는 개수만큼 반복 출력 */}
+            {[...Array(6)].map((_, i) => (
+              <SkeletonBookCard key={i} />
+            ))}
+          </div>
+        )}
+        {!loading && books.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-12">
             <ShoppingCart size={64} className="text-muted-foreground mb-4" />
             <p className="text-xl text-muted-foreground">
@@ -54,7 +76,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
             </p>
           </div>
         )}
-        {books.length !== 0 && (
+        {!loading && books.length !== 0 && (
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {books.length !== 0 && (
               <>
