@@ -1,5 +1,4 @@
-import { CART_EXPIRED_MONTH } from "@/app/cart/page";
-
+export const CART_EXPIRED_MONTH = 6;
 export const STORAGE_NAME = "SELECTED_BOOK_IDS";
 
 export function findBookIds(): string[] {
