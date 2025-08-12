@@ -46,8 +46,12 @@ export default async function Cart({
       <PageTitle text="북카트" />
       <BookCartListTemplate books={books}></BookCartListTemplate>
 
-      <BookCartPopup></BookCartPopup>
-      <InfoPanel text="원하는 책을 찾아 북카트에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
+      <div className="pt-3">
+        <BookCartPopup></BookCartPopup>
+      </div>
+      <div className="pt-3">
+        <InfoPanel text="원하는 책을 찾아 북카트에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
+      </div>
     </div>
   );
 }
