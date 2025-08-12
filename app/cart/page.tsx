@@ -6,6 +6,7 @@ import { BookCartListTemplate } from "@/components/templates/BookCartListTemplat
 import { BookCartPopup } from "@/components/organisms/BookCartPopup";
 import { BookPreview } from "@/types/BookPreview";
 import { InfoPanel } from "@/components/molecules/InfoPanel";
+import { PageTitle } from "@/components/molecules/PageTitle";
 
 const MAX_CART_SIZE = 20;
 const FIRST_PAGE = 0;
@@ -41,7 +42,8 @@ export default async function Cart({
   }
 
   return (
-    <div className="min-h-screen bg-background px-4 sm:px-6 lg:px-8">
+    <div>
+      <PageTitle text="북카트" />
       <BookCartListTemplate books={books}></BookCartListTemplate>
 
       <BookCartPopup></BookCartPopup>
