@@ -15,7 +15,7 @@ interface ToastProps {
 export const InfoToast = ({
   message,
   onClose,
-  duration = 3000,
+  duration = 1500,
   type = "INFO",
 }: ToastProps) => {
   const [progress, setProgress] = useState(100);
