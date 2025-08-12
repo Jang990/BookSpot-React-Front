@@ -28,6 +28,8 @@ export const BookCategoryPageTemplate = () => {
   const [navigatingTo, setNavigatingTo] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  const moveDelay = 50;
+
   // 경로 업데이트 (URL 변경)
   const updatePath = (newPath: number[]) => {
     const params = new URLSearchParams(searchParams as any);
@@ -52,7 +54,7 @@ export const BookCategoryPageTemplate = () => {
     // 네비게이션 완료 후 상태 초기화
     setTimeout(() => {
       setNavigatingTo(null);
-    }, 75);
+    }, moveDelay);
   };
 
   // 1) level 결정: 100단위→1, 10단위→2, 개별→3
@@ -140,7 +142,7 @@ export const BookCategoryPageTemplate = () => {
       setTimeout(() => {
         const newPath = [...currentPath, categoryId];
         updatePath(newPath);
-      }, 75);
+      }, moveDelay);
     } else {
       // 최종 선택 - 카테고리 검색으로 이동
       window.location.href = `/?${queryString(categoryId)}`;

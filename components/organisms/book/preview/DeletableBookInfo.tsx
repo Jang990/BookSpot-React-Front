@@ -6,7 +6,7 @@ import { BookInfo } from "./BookInfo";
 
 interface DeletableBookInfo {
   book: BookPreview;
-  deleteBook: (id: string) => void;
+  deleteBook: (book: BookPreview) => void;
 }
 
 export const DeletablaBookInfo = ({ book, deleteBook }: DeletableBookInfo) => {
@@ -14,7 +14,7 @@ export const DeletablaBookInfo = ({ book, deleteBook }: DeletableBookInfo) => {
     <BookInfo
       key={book.id}
       book={book}
-      actionButtons={[<TrashButton onClick={() => deleteBook(book.id)} />]}
+      actionButtons={[<TrashButton onClick={() => deleteBook(book)} />]}
     />
   );
 };

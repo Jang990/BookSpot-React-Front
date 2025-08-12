@@ -27,23 +27,34 @@ export const MobileNumberPageNavigator = ({
   useEffect(() => {
     if (!scrollRef.current) return;
 
+    if (currentPage === 1) {
+      scrollRef.current.scrollTo({ left: 0, behavior: "smooth" });
+      return;
+    }
+
+    if (currentPage === totalPages) {
+      scrollRef.current.scrollTo({
+        left: scrollRef.current.scrollWidth,
+        behavior: "smooth",
+      });
+      return;
+    }
+
+    // 중앙 정렬 로직 (기존 코드)
     const buttons =
       scrollRef.current.querySelectorAll<HTMLDivElement>("div.flex-shrink-0");
-    const index = currentPage - 2; // 2부터 시작하니 -2
+    const index = currentPage - 2;
 
     if (index >= 0 && index < buttons.length) {
       const button = buttons[index];
       const container = scrollRef.current;
 
-      // 버튼과 컨테이너 절대 위치
       const buttonRect = button.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
 
-      // 버튼의 중앙 위치를 컨테이너 좌측 기준으로 환산
       const buttonCenter = buttonRect.left + buttonRect.width / 2;
       const containerLeft = containerRect.left;
 
-      // 스크롤할 위치 = 현재 scrollLeft + (버튼 중앙 - 컨테이너 왼쪽) - 컨테이너 절반 너비
       const scrollTo =
         container.scrollLeft +
         (buttonCenter - containerLeft) -

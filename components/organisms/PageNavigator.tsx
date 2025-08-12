@@ -93,7 +93,7 @@ export const PageNavigator = ({
             <MobileNumberPageNavigator
               currentPage={currentPage}
               totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
-              hasPrev={currentPage === 1}
+              hasPrev={currentPage > 1}
               hasNext={hasNext}
               goToPage={goToPage}
               clickPrev={() => {
@@ -109,7 +109,7 @@ export const PageNavigator = ({
             <NumberPageNavigator
               currentPage={currentPage}
               totalPages={Math.min(totalPages, MAX_NUMBER_PAGE)}
-              hasPrev={currentPage === 1}
+              hasPrev={currentPage > 1}
               hasNext={hasNext}
               goToPage={goToPage}
               clickPrev={() => {
