@@ -60,14 +60,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
         )}
       </div>
       <div>
-        {loading && (
-          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-            {/* 스켈레톤 컴포넌트를 원하는 개수만큼 반복 출력 */}
-            {[...Array(6)].map((_, i) => (
-              <SkeletonBookCard key={i} />
-            ))}
-          </div>
-        )}
+        {loading && <SkeletonBookCard />}
         {!loading && books.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-12">
             <ShoppingCart size={64} className="text-muted-foreground mb-4" />
