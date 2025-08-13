@@ -2,6 +2,7 @@ import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { OUT_OF_ZOOM_STOCK } from "@/types/LibraryStock";
 import { BookOpen, Search } from "lucide-react";
 import { CustomOverlayMap } from "react-kakao-maps-sdk";
+import { StockInfoCircle } from "./StockInfoCircle";
 
 interface LibraryMarkerProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -67,15 +68,11 @@ export const LibraryStockMarker = ({
 
         {/* 하단: 재고 정보 (원 형태) */}
         {isAvailableStockData && (
-          <div
-            className={`
-              w-10 h-10 rounded-full flex items-center justify-center shadow-md
-              text-xs font-bold transition-all duration-300
-              ${isHighlighted ? "bg-primary text-white" : "bg-white text-primary"}
-            `}
-          >
-            {availableCount} / {totalCount}
-          </div>
+          <StockInfoCircle
+            availableCount={availableCount}
+            totalCount={totalCount}
+            isHighlighted={isHighlighted}
+          />
         )}
 
         {/* 검색 중인 경우 */}
