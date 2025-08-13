@@ -54,8 +54,8 @@ export const GpsButton = ({ onClick }: GpsButtonProps) => {
         }
       },
       {
-        enableHighAccuracy: true,
-        timeout: 10000,
+        enableHighAccuracy: false,
+        timeout: 7000,
         maximumAge: 60000,
       }
     );
