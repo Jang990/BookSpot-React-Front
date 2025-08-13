@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const TIMEOUT_MS = 8_000;
+
 export class ApiClient {
   private baseUrl: string;
   constructor(baseUrl: string) {
@@ -11,6 +13,9 @@ export class ApiClient {
     const search = req.nextUrl.search;
     const url = this.baseUrl + pathname + search;
 
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
     try {
       // 외부 API로 통신
       const json = await fetch(url, {
@@ -18,7 +23,11 @@ export class ApiClient {
         headers: {
           "Content-Type": "application/json",
         },
+        signal: controller.signal,
       }).then((req) => req.json());
+
+      clearTimeout(timeout);
+
       return NextResponse.json(json);
     } catch (error) {
       return new NextResponse("server error", {

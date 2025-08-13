@@ -10,10 +10,10 @@ import { InfoPanel } from "../molecules/InfoPanel";
 import { PageTitle } from "../molecules/PageTitle";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
-import { SkeletonBookCard } from "../organisms/book/preview/SkeletonBookCard";
 import { MAX_CART_SIZE } from "@/utils/BookCartLocalStorage";
 import { SkeletonBookList } from "../organisms/SkeletonBookList";
 import { InfoToast } from "../molecules/toast/InfoToast";
+import { ErrorPage } from "../molecules/ErrorPage";
 
 interface Props {
   bookIds: string[];
@@ -29,6 +29,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
   const { removeFromCart } = useBookCart();
   const [books, setBooks] = useState<BookPreview[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   const [toast, setToast] = useState<{
     message: string;
@@ -50,11 +51,14 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
         CART_PAGEABLE
       )
         .then((json) => setBooks(json.books))
+        .catch(() => setIsError(true))
         .finally(() => setLoading(false));
     }
   }, []);
 
-  return (
+  return isError ? (
+    <ErrorPage />
+  ) : (
     <div>
       <div className="flex justify-between items-center">
         <PageTitle text="북카트" />
@@ -68,7 +72,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
       </div>
       <div>
         {loading && <SkeletonBookList />}
-        {!loading && books.length === 0 && (
+        {!loading && !isError && books.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-12">
             <ShoppingCart size={64} className="text-muted-foreground mb-4" />
             <p className="text-xl text-muted-foreground">
@@ -76,7 +80,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
             </p>
           </div>
         )}
-        {!loading && books.length !== 0 && (
+        {!loading && !isError && books.length !== 0 && (
           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
             {books.length !== 0 && (
               <>
