@@ -40,7 +40,7 @@ export const GpsButton = ({ onClick }: GpsButtonProps) => {
           switch (error.code) {
             case error.PERMISSION_DENIED:
               errorMessage =
-                "위치 접근 권한이 거부되었습니다. 위치 권한을 허용해주세요.";
+                "위치 접근 권한이 거부되었습니다. 브라우저에서 위치 권한을 허용해주세요.";
               break;
             case error.POSITION_UNAVAILABLE:
               errorMessage = "위치 정보를 사용할 수 없습니다. GPS를 켜주세요";

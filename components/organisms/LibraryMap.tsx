@@ -172,10 +172,11 @@ export const LibraryMap = ({
         <div className="relative w-full">
           <GpsButton
             onClick={(latitude: number, longitude: number) => {
+              // 위치는 항상 저장 -> CurrentLocationMarker 렌더링 보장
+              setCurrentLocation({ latitude, longitude });
               if (!mapRef.current) return;
-              const center = new kakao.maps.LatLng(latitude, longitude);
-              setCurrentLocation({ latitude: latitude, longitude: longitude });
-              mapRef.current.panTo(center); // 줌 레벨은 그대로
+              const center = new window.kakao.maps.LatLng(latitude, longitude);
+              mapRef.current.panTo(center);
             }}
           />
           <KakaoMap
