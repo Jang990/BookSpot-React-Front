@@ -165,7 +165,6 @@ export const LibrarySelectionMap = ({
       {scriptLoad && (
         <div className="relative w-full">
           <GpsButton
-            onError={onError}
             onClick={(latitude: number, longitude: number) => {
               if (!mapRef.current) return;
               const center = new kakao.maps.LatLng(latitude, longitude);

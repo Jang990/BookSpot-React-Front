@@ -1,4 +1,4 @@
-export const MAX_CART_SIZE = 6;
+export const MAX_CART_SIZE = 20;
 export const CART_EXPIRED_MONTH = 6;
 export const STORAGE_NAME = "SELECTED_BOOK_IDS";
 
