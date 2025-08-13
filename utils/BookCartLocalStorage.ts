@@ -33,7 +33,7 @@ export function clear(): void {
 function save(element: string[]) {
   const expires = new Date();
   expires.setMonth(expires.getMonth() + CART_EXPIRED_MONTH);
-  document.cookie = `${STORAGE_NAME}=${JSON.stringify(element)}; path=/`;
+  document.cookie = `${STORAGE_NAME}=${JSON.stringify(element)}; path=/; expires=${expires.toUTCString()}`;
 }
 
 function getCookie(name: string): string | undefined {
