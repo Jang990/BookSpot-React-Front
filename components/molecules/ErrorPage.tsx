@@ -2,7 +2,7 @@ import { HomePrimaryButton } from "../atoms/button/HomePrimaryButton";
 import { RetryAmberButton } from "../atoms/button/RetryAmberButton";
 import { ErrorImage } from "../atoms/ErrorImage";
 
-export const ErrorPageTemplate = () => {
+export const ErrorPage = () => {
   return (
     <div className="flex flex-col items-center justify-center flex-grow text-center">
       <ErrorImage src="/5xx.svg" alt="5xx" />

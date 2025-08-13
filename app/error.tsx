@@ -1,6 +1,6 @@
 "use client";
 
-import { ErrorPageTemplate } from "@/components/templates/ErrorPageTemplate";
+import { ErrorPage } from "@/components/molecules/ErrorPage";
 import { useEffect } from "react";
 
 export default function Error({
@@ -14,5 +14,5 @@ export default function Error({
     // console.error(error.message);
   }, [error]);
 
-  return <ErrorPageTemplate />;
+  return <ErrorPage />;
 }

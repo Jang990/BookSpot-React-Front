@@ -10,11 +10,10 @@ import { InfoPanel } from "../molecules/InfoPanel";
 import { PageTitle } from "../molecules/PageTitle";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
-import { SkeletonBookCard } from "../organisms/book/preview/SkeletonBookCard";
 import { MAX_CART_SIZE } from "@/utils/BookCartLocalStorage";
 import { SkeletonBookList } from "../organisms/SkeletonBookList";
 import { InfoToast } from "../molecules/toast/InfoToast";
-import { ErrorPageTemplate } from "./ErrorPageTemplate";
+import { ErrorPage } from "../molecules/ErrorPage";
 
 interface Props {
   bookIds: string[];
@@ -58,7 +57,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
   }, []);
 
   return isError ? (
-    <ErrorPageTemplate />
+    <ErrorPage />
   ) : (
     <div>
       <div className="flex justify-between items-center">
