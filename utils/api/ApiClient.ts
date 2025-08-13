@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const TIMEOUT_MS = 10_000;
+const TIMEOUT_MS = 8_000;
 
 export class ApiClient {
   private baseUrl: string;
