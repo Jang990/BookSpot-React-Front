@@ -37,5 +37,6 @@
 <br>
 
 ### 도서관 재고 검색
-![image](https://github.com/user-attachments/assets/be20bb48-87e2-45cf-9477-aae88f86f7be)
+<img width="1126" height="830" alt="image" src="https://github.com/user-attachments/assets/2e456b8d-5929-49f8-815d-380dab0e66fd" />
+
 
