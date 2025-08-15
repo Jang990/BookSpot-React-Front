@@ -88,9 +88,6 @@ export const LibraryMap = ({
   }
 
   const handleBoundsChanged = (map: any) => {
-    // 지도 참조 저장
-    mapRef.current = map;
-
     const bound = map.getBounds();
     const nw = bound.getNorthEast();
     const se = bound.getSouthWest();
@@ -194,6 +191,9 @@ export const LibraryMap = ({
             }}
             level={mapBound.clusterdLevel}
             onIdle={handleBoundsChanged}
+            onCreate={(map) => {
+              mapRef.current = map;
+            }}
           >
             <MarkerClusterer
               averageCenter={true}
