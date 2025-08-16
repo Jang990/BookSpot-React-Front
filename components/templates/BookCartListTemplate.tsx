@@ -14,6 +14,7 @@ import { MAX_CART_SIZE } from "@/utils/BookCartLocalStorage";
 import { SkeletonBookList } from "../organisms/SkeletonBookList";
 import { InfoToast } from "../molecules/toast/InfoToast";
 import { ErrorPage } from "../molecules/ErrorPage";
+import { SkeletonDiv } from "../atoms/SkeletonDiv";
 
 interface Props {
   bookIds: string[];
@@ -63,9 +64,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
       <div className="flex justify-between items-center">
         <PageTitle text="북카트" />
         {loading ? (
-          <div className="pe-3">
-            <div className="h-5 w-28 bg-gray-300 rounded animate-pulse"></div>
-          </div>
+          <SkeletonDiv height="h-5 " width="w-28" />
         ) : (
           <div className="text-muted-foreground pe-3">{`담은 책 : ${books.length} / ${MAX_CART_SIZE}`}</div>
         )}
