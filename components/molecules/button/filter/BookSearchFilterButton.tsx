@@ -24,7 +24,7 @@ export const BookSearchFilterButton = ({
   const delaySec = `${((hashCode(href) % 120) / 100).toFixed(2)}s`;
 
   return (
-    <Link href={href} className="mx-1 mb-1">
+    <Link href={href} className="m-1">
       <Button
         variant="ghost"
         size="sm"
