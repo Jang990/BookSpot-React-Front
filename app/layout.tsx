@@ -11,14 +11,20 @@ import { Metadata } from "next";
 // };
 
 export const metadata: Metadata = {
+  title: "북스팟 BookSpot | 도서관 책 검색 서비스",
+  description:
+    "북스팟(BookSpot) - 전국 도서관에 있는 책을 찾아보고, 내 주변 도서관에 있는지 확인해보세요.",
   verification: {
     google: "jdOCc7DZi51FcUZ5NpRyAILDnE4Uzb8WPzjiLdcvFtc",
   },
   other: {
     "naver-site-verification": "21bf14ebc189c29476ebbf9042dacd66e94ebdd0",
+    "og:site_name": "북스팟 BookSpot",
+    "og:title": "북스팟 BookSpot | 도서관 책 검색 서비스",
+    "og:description":
+      "북스팟(BookSpot) - 전국 도서관에 있는 책을 찾아보고, 내 주변 도서관에 있는지 확인해보세요.",
+    "og:url": "https://bookspot.store",
   },
-  description:
-    "전국 도서관의 책을 찾아보고, 가까운 도서관에서 소장하고 있는지 확인해보세요.",
 };
 
 export default function RootLayout({
