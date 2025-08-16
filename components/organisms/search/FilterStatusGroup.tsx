@@ -47,11 +47,6 @@ export const FilterStatusGroup = ({
         if (!mounted) return;
         setLibraryName(lib.name ?? null);
       })
-      .catch(() => {
-        if (!mounted) return;
-        setLibError(true);
-        setLibraryName(null);
-      })
       .finally(() => {
         if (!mounted) return;
         setLibLoading(false);
@@ -93,7 +88,11 @@ export const FilterStatusGroup = ({
             href={`libraries/map/select?${bookQueryString}`}
           />
         ) : libLoading ? (
-          <SkeletonDiv width="w-24" height="h-8" />
+          <SelectedFilterButton
+            text="불러오기..."
+            href={`libraries/map/select?${bookQueryString}`}
+            SelectedIcon={MapPin}
+          />
         ) : libError ? (
           // 에러면 제거된 상태로 되돌리는 href 제공 (fallback)
           <SelectedFilterButton
@@ -103,7 +102,7 @@ export const FilterStatusGroup = ({
           />
         ) : (
           <SelectedFilterButton
-            text={libraryName ?? "알 수 없는 도서관"}
+            text={libraryName ?? "도서관"}
             href={deleteLibraryHref()}
             SelectedIcon={MapPin}
           />
