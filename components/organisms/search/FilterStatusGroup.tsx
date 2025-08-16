@@ -1,6 +1,5 @@
 "use client";
 
-import { SkeletonDiv } from "@/components/atoms/SkeletonDiv";
 import { DefaultFilterButton } from "@/components/molecules/button/filter/DefaultFilterButton copy";
 import { SelectedFilterButton } from "@/components/molecules/button/filter/SelectedFilterButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
@@ -12,7 +11,7 @@ import {
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
 import { ListFilter, MapPin } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface FilterStatusGroupProps {
   libraryId: number | null;
@@ -20,6 +19,79 @@ interface FilterStatusGroupProps {
   bookQueryString?: string;
   totalElements: number;
 }
+
+export function useDragToScroll(ref: React.RefObject<HTMLElement>) {
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let startScroll = 0;
+    let pointerId: number | null = null;
+
+    const isInteractive = (target: EventTarget | null) => {
+      if (!(target instanceof Element)) return false;
+      return !!target.closest(
+        'a, button, input, textarea, select, label, [role="button"]'
+      );
+    };
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.button !== 0) return; // 왼쪽 버튼만
+      if (isInteractive(e.target)) return; // 링크/버튼 클릭 방해 금지
+
+      isDown = true;
+      pointerId = e.pointerId;
+      el.setPointerCapture?.(pointerId);
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+
+      // UX: grab 상태, 텍스트 선택 방지
+      el.style.cursor = "grabbing";
+      el.style.userSelect = "none";
+      el.style.touchAction = "pan-y"; // 세로 스크롤은 허용
+      e.preventDefault();
+    };
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      el.scrollLeft = startScroll - dx;
+    };
+
+    const endDrag = (e: PointerEvent) => {
+      if (!isDown) return;
+      isDown = false;
+      if (pointerId !== null) el.releasePointerCapture?.(pointerId);
+      pointerId = null;
+      el.style.cursor = "grab";
+      el.style.userSelect = "";
+      // touchAction는 남겨둬도 무해
+    };
+
+    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerup", endDrag);
+    el.addEventListener("pointercancel", endDrag);
+    el.addEventListener("pointerleave", endDrag);
+
+    // 초기 커서
+    el.style.cursor = "grab";
+
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", endDrag);
+      el.removeEventListener("pointercancel", endDrag);
+      el.removeEventListener("pointerleave", endDrag);
+      el.style.cursor = "";
+      el.style.userSelect = "";
+      el.style.touchAction = "";
+    };
+  }, [ref]);
+}
+
 export const FilterStatusGroup = ({
   libraryId,
   categoryId,
@@ -29,6 +101,9 @@ export const FilterStatusGroup = ({
   const [libraryName, setLibraryName] = useState<string | null>(null);
   const [libLoading, setLibLoading] = useState(false);
   const [libError, setLibError] = useState<boolean>(false);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  useDragToScroll(containerRef);
 
   useEffect(() => {
     let mounted = true;
@@ -79,8 +154,15 @@ export const FilterStatusGroup = ({
   }, [categoryId]);
 
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-4 items-end w-full my-3">
-      <div className="flex flex-wrap justify-start gap-2">
+    <div className="flex items-end justify-between w-full my-3 select-text">
+      <div
+        ref={containerRef}
+        className="flex items-center gap-1 flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-hide"
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+        }}
+      >
         {/* Library button */}
         {libraryId === null ? (
           <DefaultFilterButton
@@ -94,7 +176,6 @@ export const FilterStatusGroup = ({
             SelectedIcon={MapPin}
           />
         ) : libError ? (
-          // 에러면 제거된 상태로 되돌리는 href 제공 (fallback)
           <SelectedFilterButton
             text="도서관 정보 오류"
             href={deleteLibraryHref()}
@@ -123,10 +204,10 @@ export const FilterStatusGroup = ({
         )}
       </div>
 
-      <div className="self-end justify-self-end pb-2 pe-2">
+      <div className="ps-2 self-end justify-self-end pb-2 pe-2 flex-shrink-0 select-none">
         <span className="text-muted-foreground">
           {totalElements >= 10_000
-            ? `10,000건 이상`
+            ? `1만 건 이상`
             : `${totalElements.toLocaleString()} 건`}
         </span>
       </div>
