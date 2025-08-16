@@ -22,6 +22,7 @@ export const BookPreviewImage = ({ id, title, isbn13 }: BookImageProps) => {
           sizes="(max-width: 768px) 50vw, 33vw"
           className="object-contain"
           unoptimized
+          title="교보문고 페이지로 이동"
         />
       </div>
     </a>
