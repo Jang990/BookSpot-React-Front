@@ -1,4 +1,4 @@
-import { BookSearchBar } from "@/components/organisms/BookSearchBar";
+import { BookSearchBar } from "@/components/organisms/search/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { MAX_NUMBER_PAGE, Pageable, SearchAfter } from "@/types/Pageable";
 import {
