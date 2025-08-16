@@ -125,7 +125,7 @@ export const PageNavigator = ({
           {currentPage === MAX_NUMBER_PAGE && hasNext && (
             <div className="flex justify-center">
               <InfoPanel
-                text={`검색 품질을 위해 ${MAX_NUMBER_PAGE} 페이지 이후부터는 번호 선택이 불가능합니다. '다음' 버튼을 이용해 주세요.`}
+                text={`'다음' 버튼을 이용해 검색을 계속해 주세요. 검색 품질을 위해 ${MAX_NUMBER_PAGE} 페이지 이후부터는 '다음', '이전' 버튼만 지원됩니다. `}
               />
             </div>
           )}

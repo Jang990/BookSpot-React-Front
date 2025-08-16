@@ -6,7 +6,7 @@ interface DefaultFilterButtonProps {
   href: string;
 }
 
-export const DefaultFilterButton = async ({
+export const DefaultFilterButton = ({
   text,
   href,
 }: DefaultFilterButtonProps) => {

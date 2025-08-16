@@ -7,7 +7,7 @@ interface SelectedFilterButtonProps {
   SelectedIcon: LucideIcon;
 }
 
-export const SelectedFilterButton = async ({
+export const SelectedFilterButton = ({
   text,
   href,
   SelectedIcon,

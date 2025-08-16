@@ -82,9 +82,6 @@ export const LibrarySelectionMap = ({
   }
 
   const handleBoundsChanged = (map: any) => {
-    // 지도 참조 저장
-    mapRef.current = map;
-
     const bound = map.getBounds();
     const nw = bound.getNorthEast();
     const se = bound.getSouthWest();
@@ -166,9 +163,9 @@ export const LibrarySelectionMap = ({
         <div className="relative w-full">
           <GpsButton
             onClick={(latitude: number, longitude: number) => {
+              setCurrentLocation({ latitude: latitude, longitude: longitude });
               if (!mapRef.current) return;
               const center = new kakao.maps.LatLng(latitude, longitude);
-              setCurrentLocation({ latitude: latitude, longitude: longitude });
               mapRef.current.panTo(center); // 줌 레벨은 그대로
             }}
           />
@@ -187,6 +184,9 @@ export const LibrarySelectionMap = ({
             }}
             level={mapBound.clusterdLevel}
             onIdle={handleBoundsChanged}
+            onCreate={(map) => {
+              mapRef.current = map;
+            }}
           >
             <MarkerClusterer
               averageCenter={true}
