@@ -21,14 +21,29 @@ export const BookSearchFilterButton = ({
         variant="ghost"
         size="sm"
         className={`
-          text-xs hover:text-foreground
-          hover:bg-muted/50 transition-all duration-200 hover:scale-105
-          rounded border
-          ${selected ? "border-foreground" : "text-muted-foreground border-muted"}
+          text-xs transition-all duration-200 hover:scale-105
+          rounded-lg border-2 px-3 py-2
+          ${
+            selected
+              ? "border-primary bg-primary/10 shadow-sm text-primary"
+              : "border-muted text-muted-foreground"
+          }
+          hover:border-primary/50 
+          hover:text-primary
+          hover:bg-primary/5 hover:shadow-md
+          group
         `}
       >
-        <Icon className="mr-1 h-3 w-3 transition-transform hover:rotate-90" />
-        <span>{text}</span>
+        <Icon
+          className={`
+            mr-2 h-4 w-4 transition-all duration-200
+            ${selected ? "text-primary" : `group-hover:scale-110`}
+            group-hover:rotate-12
+          `}
+        />
+        <span className={`${selected ? "font-semibold" : "font-medium"}`}>
+          {text}
+        </span>
       </Button>
     </Link>
   );
