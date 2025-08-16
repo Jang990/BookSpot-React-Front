@@ -1,51 +1,27 @@
-import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
-import { SearchBar } from "../molecules/SearchBar";
-import { SelectedFilterButton } from "../molecules/button/filter/SelectedFilterButton";
-import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
-import { DefaultFilterButton } from "../molecules/button/filter/DefaultFilterButton copy";
+import { DefaultFilterButton } from "@/components/molecules/button/filter/DefaultFilterButton copy";
+import { SelectedFilterButton } from "@/components/molecules/button/filter/SelectedFilterButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
+import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
 } from "@/utils/querystring/CategoryId";
+import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
 import { ListFilter, MapPin } from "lucide-react";
 
-interface SearchProps {
+interface FilterStatusGroupProps {
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
-  initialSearchTerm: string;
   totalElements: number;
 }
-
-export const BookSearchBar = async ({
+export const FilterStatusGroup = async ({
   libraryId,
   categoryId,
   bookQueryString,
-  initialSearchTerm,
   totalElements,
-}: SearchProps) => {
-  return (
-    <div className="w-full">
-      <SearchBar initialSearchTerm={initialSearchTerm} />
-      <div className="grid grid-cols-[1fr_auto] gap-4 items-end w-full my-3">
-        <div className="flex flex-wrap justify-start gap-2">
-          {await libraryFilterButton(libraryId)}
-          {await categoryFilterButton(categoryId)}
-        </div>
-
-        <div className=" self-end justify-self-end pb-2 pe-2">
-          <span className="text-muted-foreground">
-            {totalElements >= 10_000
-              ? `10,000건 이상`
-              : `${totalElements.toLocaleString()} 건`}{" "}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-
+}: FilterStatusGroupProps) => {
   async function libraryFilterButton(libraryId: number | null) {
     return libraryId === null ? (
       <DefaultFilterButton
@@ -105,4 +81,21 @@ export const BookSearchBar = async ({
       return deleteCategoryParams.toString();
     }
   }
+
+  return (
+    <div className="grid grid-cols-[1fr_auto] gap-4 items-end w-full my-3">
+      <div className="flex flex-wrap justify-start gap-2">
+        {await libraryFilterButton(libraryId)}
+        {categoryFilterButton(categoryId)}
+      </div>
+
+      <div className=" self-end justify-self-end pb-2 pe-2">
+        <span className="text-muted-foreground">
+          {totalElements >= 10_000
+            ? `10,000건 이상`
+            : `${totalElements.toLocaleString()} 건`}{" "}
+        </span>
+      </div>
+    </div>
+  );
 };
