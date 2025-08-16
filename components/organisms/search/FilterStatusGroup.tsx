@@ -154,7 +154,7 @@ export const FilterStatusGroup = ({
   }, [categoryId]);
 
   return (
-    <div className="flex items-end justify-between w-full my-3 select-text">
+    <div className="flex items-end justify-between w-full my-1 mb-2 select-text">
       <div
         ref={containerRef}
         className="flex items-center gap-1 flex-nowrap whitespace-nowrap overflow-x-auto scrollbar-hide"

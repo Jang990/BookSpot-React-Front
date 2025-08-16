@@ -30,7 +30,7 @@ export const BookSearchFilterButton = ({
         size="sm"
         className={`
           text-xs transition-all duration-200 hover:scale-105
-          rounded-lg border-2 px-3 py-2
+          rounded-lg border-2 px-2 py-1
           ${selected ? "border-primary bg-primary/10 shadow-sm text-primary" : "border-muted text-muted-foreground"}
           hover:border-primary/50 
           hover:text-primary
