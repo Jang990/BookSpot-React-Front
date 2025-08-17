@@ -11,7 +11,7 @@ import { Metadata } from "next";
 // };
 
 export const metadata: Metadata = {
-  title: "북스팟 BookSpot | 도서관 책 검색 서비스",
+  title: "북스팟 BookSpot | 전국 도서관 책 검색 서비스",
   description:
     "북스팟(BookSpot) - 전국 도서관에 있는 책을 찾아보고, 내 주변 도서관에 있는지 확인해보세요.",
   verification: {
