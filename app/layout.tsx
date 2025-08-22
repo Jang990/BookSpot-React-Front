@@ -4,6 +4,7 @@ import { Footer } from "@/components/organisms/Footer";
 import "./globals.css";
 import type React from "react";
 import { Metadata } from "next";
+import { Gowun_Dodum } from "next/font/google";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -27,6 +28,11 @@ export const metadata: Metadata = {
   },
 };
 
+const gowunDodumFont = Gowun_Dodum({
+  weight: ["400"],
+  subsets: ["latin"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>
+      <body className={gowunDodumFont.className}>
         <BookCartProvider>
           <div className="flex flex-col min-h-screen">
             <Header />
