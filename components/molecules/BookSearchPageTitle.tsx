@@ -7,7 +7,7 @@ interface Props {
 
 export const BookSearchPageTitle = ({ searchTerm, totalElements }: Props) => {
   return (
-    <div className="ps-3 mt-4 mb-3 flex items-center justify-between overflow-hidden">
+    <div className="ps-3 mt-2 mb-3 flex items-center justify-between overflow-hidden">
       {/* 왼쪽 */}
       <div className="flex items-center overflow-hidden min-w-0">
         {searchTerm ? (
