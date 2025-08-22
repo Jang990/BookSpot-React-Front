@@ -17,7 +17,6 @@ interface FilterStatusGroupProps {
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
-  totalElements: number;
 }
 
 export function useDragToScroll(ref: React.RefObject<HTMLElement>) {
@@ -96,7 +95,6 @@ export const FilterStatusGroup = ({
   libraryId,
   categoryId,
   bookQueryString,
-  totalElements,
 }: FilterStatusGroupProps) => {
   const [libraryName, setLibraryName] = useState<string | null>(null);
   const [libLoading, setLibLoading] = useState(false);
@@ -202,14 +200,6 @@ export const FilterStatusGroup = ({
             SelectedIcon={ListFilter}
           />
         )}
-      </div>
-
-      <div className="ps-2 self-end justify-self-end pb-2 pe-2 flex-shrink-0 select-none">
-        <span className="text-muted-foreground">
-          {totalElements >= 10_000
-            ? `1만 건 이상`
-            : `${totalElements.toLocaleString()} 건`}
-        </span>
       </div>
     </div>
   );
