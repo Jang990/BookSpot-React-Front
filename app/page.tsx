@@ -25,6 +25,7 @@ import {
   parseCategoryLevel,
 } from "@/utils/querystring/CategoryId";
 import { parseLibraryId } from "@/utils/querystring/LibraryId";
+import { PageTitle } from "@/components/molecules/PageTitle";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -90,8 +91,13 @@ export default async function Home({ searchParams }: Props) {
     totalElements = result.totalElements;
   }
 
+  const emptySearchTerm = searchTerm === undefined || searchTerm.length === 0;
+
   return (
-    <>
+    <div>
+      <PageTitle
+        text={emptySearchTerm ? "역대 대출 도서" : `"${searchTerm}" 검색 결과`}
+      />
       <BookSearchBar
         initialSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
@@ -107,6 +113,6 @@ export default async function Home({ searchParams }: Props) {
         searchAfter={searchAfter}
         hasNext={hasNext}
       />
-    </>
+    </div>
   );
 }
