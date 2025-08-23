@@ -9,20 +9,20 @@ import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
-import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
 import { useSearchTerm } from "@/contexts/SearchTermContext";
 
-interface SearchProps {}
+interface SearchProps {
+  initSearchTerm: string | null;
+}
 
-export const SearchBar = ({}: SearchProps) => {
-  const { searchTerm, setSearchTerm, clearSearchTerm } = useSearchTerm();
+export const SearchBar = ({ initSearchTerm }: SearchProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const { searchTerm, setSearchTerm, clearSearchTerm } = useSearchTerm();
 
   useEffect(() => {
-    const initTerm = searchParams.get(SEARCH_TERM_KEY);
-    setSearchTerm(initTerm === null ? "" : initTerm);
+    setSearchTerm(initSearchTerm === null ? "" : initSearchTerm);
   }, []);
 
   // 검색 폼 제출 처리
