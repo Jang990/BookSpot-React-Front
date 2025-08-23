@@ -35,6 +35,15 @@ const queryString = (
   return params.toString();
 };
 
+const onClickCategory = (
+  router: AppRouterInstance,
+  searchParams: ReadonlyURLSearchParams,
+  categoryId: number,
+  categoryLevel: string
+) => {
+  router.push(`/?${queryString(searchParams, categoryId, categoryLevel)}`);
+};
+
 export const BookCategoryPageTemplate = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -163,7 +172,12 @@ export const BookCategoryPageTemplate = () => {
       }, moveDelay);
     } else {
       // 최종 선택 - 카테고리 검색으로 이동
-      window.location.href = `/?${queryString(searchParams, categoryId, getCurrentCategoryLevel())}`;
+      onClickCategory(
+        router,
+        searchParams,
+        categoryId,
+        getCurrentCategoryLevel()
+      );
     }
   };
 
@@ -238,10 +252,11 @@ export const BookCategoryPageTemplate = () => {
                   category={category}
                   hasChildren={hasChildren(category.id)}
                   onExploreClick={handleCategorySelect}
-                  queryString={(categoryId) => {
-                    return queryString(
+                  onClick={() => {
+                    onClickCategory(
+                      router,
                       searchParams,
-                      categoryId,
+                      category.id,
                       getCurrentCategoryLevel()
                     );
                   }}

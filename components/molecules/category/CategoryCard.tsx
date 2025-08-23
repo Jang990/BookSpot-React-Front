@@ -8,7 +8,7 @@ interface CategoryCardProps {
   category: BookCategory;
   hasChildren: boolean;
   onExploreClick: (categoryId: number) => void;
-  queryString: (categoryId: number) => void;
+  onClick: () => void;
   isNavigating?: boolean;
   navigatingTo?: number | null;
   subText: string;
@@ -18,7 +18,7 @@ export function CategoryCard({
   category,
   hasChildren,
   onExploreClick,
-  queryString,
+  onClick,
   isNavigating = false,
   navigatingTo,
   subText,
@@ -36,9 +36,7 @@ export function CategoryCard({
           {/* 메인 영역 - 카테고리로 이동 */}
           <div
             className="flex-1 p-4 cursor-pointer hover:bg-muted/50 transition-colors"
-            onClick={() => {
-              window.location.href = `/?${queryString(category.id)}`;
-            }}
+            onClick={onClick}
           >
             <div className="space-y-2">
               <div>
