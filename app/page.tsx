@@ -101,6 +101,7 @@ export default async function Home({ searchParams }: Props) {
         totalElements={totalElements}
       />
       <BookSearchBar
+        initSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
         libraryId={libraryId}
         categoryId={categoryId}
