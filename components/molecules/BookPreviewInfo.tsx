@@ -36,17 +36,21 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
       </p>
       <p>
         <CardFooterLabel text={`${book.publicationYear} · ${book.publisher}`} />
-        <CategoryLinkButton
-          text={
-            isUnknownCategory
-              ? "알 수 없음"
-              : `${categoryIdText(book.category.id)} · ${book.category.name}`
-          }
-          onClick={() => {
-            if (isUnknownCategory) return;
-            onClickCategory(router, searchParams, book.category.id, LEVEL_LEAF);
-          }}
-        />
+        {isUnknownCategory ? (
+          <CategoryLinkButton text={"알 수 없음"} onClick={() => {}} />
+        ) : (
+          <CategoryLinkButton
+            text={`${categoryIdText(book.category.id)} · ${book.category.name}`}
+            onClick={() => {
+              onClickCategory(
+                router,
+                searchParams,
+                book.category.id,
+                LEVEL_LEAF
+              );
+            }}
+          />
+        )}
       </p>
       <div className="mt-auto pt-2">
         <CardFooterLabel
