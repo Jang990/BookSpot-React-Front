@@ -6,16 +6,13 @@ import {
   CardTitleLabel,
 } from "../atoms/label/CardLabel";
 import { formatCount } from "@/utils/NumberFormatter";
+import { BookCategory } from "@/types/BookCategory";
 
 interface BookPreviewInfoProps {
   book: BookPreview;
 }
 
 export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
-  function categoryIdText(categoryId: string | number): string {
-    return categoryId.toString().padStart(3, "0");
-  }
-
   return (
     <div className="p-4 flex flex-col flex-grow">
       <CardTitleLabel text={book.title} />
@@ -24,15 +21,7 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
       </p>
       <p>
         <CardFooterLabel text={`${book.publicationYear} · ${book.publisher}`} />
-        <CardFooterLabel
-          text={
-            book.category == null ||
-            book.category.id == null ||
-            book.category.name == null
-              ? "알 수 없음"
-              : `${categoryIdText(book.category.id)} · ${book.category.name}`
-          }
-        />
+        <CategoryLinkButton category={book.category} />
       </p>
       <div className="mt-auto pt-2">
         <CardFooterLabel
@@ -40,5 +29,28 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
         />
       </div>
     </div>
+  );
+};
+
+interface CategoryLinkButtonProps {
+  category: BookCategory;
+}
+
+const CategoryLinkButton = ({ category }: CategoryLinkButtonProps) => {
+  function categoryIdText(categoryId: string | number): string {
+    return categoryId.toString().padStart(3, "0");
+  }
+
+  const isUnknownCategory =
+    category == null || category.id == null || category.name == null;
+
+  return (
+    <CardFooterLabel
+      text={
+        isUnknownCategory
+          ? "알 수 없음"
+          : `${categoryIdText(category.id)} · ${category.name}`
+      }
+    />
   );
 };
