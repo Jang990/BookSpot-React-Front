@@ -13,6 +13,15 @@ interface BookPreviewInfoProps {
 }
 
 export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
+  const isUnknownCategory =
+    book.category == null ||
+    book.category.id == null ||
+    book.category.name == null;
+
+  function categoryIdText(categoryId: string | number): string {
+    return categoryId.toString().padStart(3, "0");
+  }
+
   return (
     <div className="p-4 flex flex-col flex-grow">
       <CardTitleLabel text={book.title} />
@@ -21,7 +30,14 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
       </p>
       <p>
         <CardFooterLabel text={`${book.publicationYear} · ${book.publisher}`} />
-        <CategoryLinkButton category={book.category} />
+        <CategoryLinkButton
+          text={
+            isUnknownCategory
+              ? "알 수 없음"
+              : `${categoryIdText(book.category.id)} · ${book.category.name}`
+          }
+          onClick={() => {}}
+        />
       </p>
       <div className="mt-auto pt-2">
         <CardFooterLabel
@@ -33,24 +49,21 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
 };
 
 interface CategoryLinkButtonProps {
-  category: BookCategory;
+  text: string;
+  onClick: () => void;
 }
 
-const CategoryLinkButton = ({ category }: CategoryLinkButtonProps) => {
-  function categoryIdText(categoryId: string | number): string {
-    return categoryId.toString().padStart(3, "0");
-  }
-
-  const isUnknownCategory =
-    category == null || category.id == null || category.name == null;
-
+const CategoryLinkButton = ({ text, onClick }: CategoryLinkButtonProps) => {
   return (
-    <CardFooterLabel
-      text={
-        isUnknownCategory
-          ? "알 수 없음"
-          : `${categoryIdText(category.id)} · ${category.name}`
-      }
-    />
+    <button
+      type="button"
+      className="
+        text-xs border-primary bg-primary/10 
+        text-primary px-1 py-0.5
+      "
+      onClick={onClick}
+    >
+      <span className="font-medium">{text}</span>
+    </button>
   );
 };
