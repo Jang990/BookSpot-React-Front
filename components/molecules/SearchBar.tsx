@@ -7,7 +7,7 @@ import {
 } from "@/utils/querystring/SearchAfter";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useEffect, useRef, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
 import { useSearchTerm } from "@/contexts/SearchTermContext";
 
@@ -20,6 +20,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const { searchTerm, setSearchTerm, clearSearchTerm } = useSearchTerm();
+  const inputRef = useRef<HTMLInputElement>(null); // ref 추가
 
   useEffect(() => {
     setSearchTerm(initSearchTerm === null ? "" : initSearchTerm);
@@ -56,12 +57,14 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
 
   const handleClear = () => {
     clearSearchTerm();
+    inputRef.current?.focus();
   };
 
   // input 따로 뺄 것
   return (
     <form onSubmit={handleSubmit} className="relative">
       <input
+        ref={inputRef}
         name="search"
         type="text"
         placeholder="책 제목, 저자 또는 출판사를 입력하세요"
