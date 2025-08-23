@@ -208,5 +208,10 @@ export const FilterStatusGroup = ({
 };
 
 const WeeklyTop50BooksLink = () => {
-  return <LinkButton text="🔥 주간 대출 Top50" href="#" />;
+  return (
+    <LinkButton
+      text="🔥 주간 대출 Top50"
+      href="/books/rankings/weekly/all/all"
+    />
+  );
 };
