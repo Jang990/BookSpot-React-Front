@@ -30,7 +30,7 @@ export const BookSearchFilterButton = ({
         size="sm"
         className={`
           text-xs transition-all duration-200 hover:scale-105
-          rounded-lg border-2 px-2 py-1
+          rounded-lg border-2 px-1.5 py-1
           ${selected ? "border-primary bg-primary/10 shadow-sm text-primary" : "border-muted text-muted-foreground"}
           hover:border-primary/50 
           hover:text-primary
@@ -47,7 +47,7 @@ export const BookSearchFilterButton = ({
       >
         <Icon
           className={`
-            mr-2 h-4 w-4 transition-all duration-200
+            mr-0.5 h-4 w-4 transition-all duration-200
             ${selected ? "text-primary" : `group-hover:scale-110`}
             group-hover:rotate-12
           `}
