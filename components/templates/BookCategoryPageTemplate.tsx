@@ -35,7 +35,7 @@ const queryString = (
   return params.toString();
 };
 
-const onClickCategory = (
+export const onClickCategory = (
   router: AppRouterInstance,
   searchParams: ReadonlyURLSearchParams,
   categoryId: number,
