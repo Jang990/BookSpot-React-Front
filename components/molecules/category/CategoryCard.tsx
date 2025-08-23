@@ -8,7 +8,7 @@ interface CategoryCardProps {
   category: BookCategory;
   hasChildren: boolean;
   onExploreClick: (categoryId: number) => void;
-  queryString: (categoryId: number) => string;
+  queryString: (categoryId: number) => void;
   isNavigating?: boolean;
   navigatingTo?: number | null;
   subText: string;

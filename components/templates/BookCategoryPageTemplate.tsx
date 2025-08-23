@@ -1,7 +1,12 @@
 "use client";
 import { useState, useTransition } from "react";
 import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import {
   CATEGORY_HISTORY_QUERY_STRING_KEY,
   CATEGORY_LEVEL_QUERY_STRING_KEY,
@@ -16,6 +21,19 @@ import { CategorySearchBar } from "@/components/molecules/category/CategorySearc
 import { CategoryNavigation } from "@/components/molecules/category/CategoryNavigation";
 import { CategoryEmptyState } from "@/components/molecules/category/CategoryEmptyState";
 import { CategoryCard } from "../molecules/category/CategoryCard";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
+const queryString = (
+  searchParams: ReadonlyURLSearchParams,
+  categoryId: number,
+  categoryLevel: string
+): string => {
+  const params = new URLSearchParams(searchParams as any);
+  params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
+  params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryLevel);
+  params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
+  return params.toString();
+};
 
 export const BookCategoryPageTemplate = () => {
   const searchParams = useSearchParams();
@@ -145,21 +163,13 @@ export const BookCategoryPageTemplate = () => {
       }, moveDelay);
     } else {
       // 최종 선택 - 카테고리 검색으로 이동
-      window.location.href = `/?${queryString(categoryId)}`;
+      window.location.href = `/?${queryString(searchParams, categoryId, getCurrentCategoryLevel())}`;
     }
   };
 
   const getCurrentCategoryLevel = (): string => {
     if (searchTerm) return LEVEL_LEAF;
     return getCategoryLevel(currentPath.length);
-  };
-
-  const queryString = (categoryId: number): string => {
-    const params = new URLSearchParams(searchParams as any);
-    params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
-    params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, getCurrentCategoryLevel());
-    params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
-    return params.toString();
   };
 
   const subText = (categoryId: number): string => {
@@ -228,7 +238,13 @@ export const BookCategoryPageTemplate = () => {
                   category={category}
                   hasChildren={hasChildren(category.id)}
                   onExploreClick={handleCategorySelect}
-                  queryString={queryString}
+                  queryString={(categoryId) => {
+                    return queryString(
+                      searchParams,
+                      categoryId,
+                      getCurrentCategoryLevel()
+                    );
+                  }}
                   isNavigating={isNavigating}
                   navigatingTo={navigatingTo}
                   subText={subText(category.id)}
