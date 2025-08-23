@@ -5,18 +5,16 @@ interface SearchProps {
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
-  initialSearchTerm: string;
 }
 
 export const BookSearchBar = async ({
   libraryId,
   categoryId,
   bookQueryString,
-  initialSearchTerm,
 }: SearchProps) => {
   return (
     <div className="w-full">
-      <SearchBar initialSearchTerm={initialSearchTerm} />
+      <SearchBar />
       <FilterStatusGroup
         categoryId={categoryId}
         libraryId={libraryId}

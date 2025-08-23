@@ -7,16 +7,14 @@ import {
 } from "@/utils/querystring/SearchAfter";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
 import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
 import { useSearchTerm } from "@/contexts/SearchTermContext";
 
-interface SearchProps {
-  initialSearchTerm: string;
-}
+interface SearchProps {}
 
-export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
+export const SearchBar = ({}: SearchProps) => {
   const { searchTerm, setSearchTerm, clearSearchTerm } = useSearchTerm();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -58,7 +56,6 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
 
   const handleClear = () => {
     clearSearchTerm();
-    search("");
   };
 
   // input 따로 뺄 것
