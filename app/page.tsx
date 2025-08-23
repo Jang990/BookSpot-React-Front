@@ -25,6 +25,8 @@ import {
   parseCategoryLevel,
 } from "@/utils/querystring/CategoryId";
 import { parseLibraryId } from "@/utils/querystring/LibraryId";
+import { PageTitle } from "@/components/molecules/PageTitle";
+import { BookSearchPageTitle } from "@/components/molecules/BookSearchPageTitle";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -90,14 +92,18 @@ export default async function Home({ searchParams }: Props) {
     totalElements = result.totalElements;
   }
 
+  const emptySearchTerm = searchTerm === undefined || searchTerm.length === 0;
+
   return (
-    <>
+    <div>
+      <BookSearchPageTitle
+        searchTerm={emptySearchTerm ? null : searchTerm}
+        totalElements={totalElements}
+      />
       <BookSearchBar
-        initialSearchTerm={searchTerm}
         bookQueryString={toRawQueryString(await searchParams)}
         libraryId={libraryId}
         categoryId={categoryId}
-        totalElements={totalElements}
       />
 
       <BookPreviewList searchResults={books} />
@@ -107,6 +113,6 @@ export default async function Home({ searchParams }: Props) {
         searchAfter={searchAfter}
         hasNext={hasNext}
       />
-    </>
+    </div>
   );
 }

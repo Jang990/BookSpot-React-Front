@@ -4,6 +4,8 @@ import { Footer } from "@/components/organisms/Footer";
 import "./globals.css";
 import type React from "react";
 import { Metadata } from "next";
+import { Gowun_Dodum } from "next/font/google";
+import { SearchTermProvider } from "@/contexts/SearchTermContext";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -27,6 +29,11 @@ export const metadata: Metadata = {
   },
 };
 
+const gowunDodumFont = Gowun_Dodum({
+  weight: ["400"],
+  subsets: ["latin"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -34,21 +41,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>
+      <body className={gowunDodumFont.className}>
         <BookCartProvider>
-          <div className="flex flex-col min-h-screen">
-            <Header />
+          <SearchTermProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
 
-            <div className="flex-1 bg-background pt-12 pb-8 px-4 sm:px-6 lg:px-8">
-              <div className="max-w-6xl mx-auto">
-                <div className="w-full max-w-4xl mx-auto">
-                  <main className="pt-4">{children}</main>
+              <div className="flex-1 bg-background pt-12 pb-8 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-6xl mx-auto">
+                  <div className="w-full max-w-4xl mx-auto">
+                    <main className="pt-4">{children}</main>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <Footer />
-          </div>
+              <Footer />
+            </div>
+          </SearchTermProvider>
         </BookCartProvider>
       </body>
     </html>

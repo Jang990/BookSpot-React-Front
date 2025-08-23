@@ -6,12 +6,25 @@ import {
   CardTitleLabel,
 } from "../atoms/label/CardLabel";
 import { formatCount } from "@/utils/NumberFormatter";
+import { onClickCategory } from "../templates/BookCategoryPageTemplate";
+import { useRouter, useSearchParams } from "next/navigation";
+import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
+import { useSearchTerm } from "@/contexts/SearchTermContext";
 
 interface BookPreviewInfoProps {
   book: BookPreview;
 }
 
 export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { clearSearchTerm } = useSearchTerm();
+
+  const isUnknownCategory =
+    book.category == null ||
+    book.category.id == null ||
+    book.category.name == null;
+
   function categoryIdText(categoryId: string | number): string {
     return categoryId.toString().padStart(3, "0");
   }
@@ -24,15 +37,22 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
       </p>
       <p>
         <CardFooterLabel text={`${book.publicationYear} · ${book.publisher}`} />
-        <CardFooterLabel
-          text={
-            book.category == null ||
-            book.category.id == null ||
-            book.category.name == null
-              ? "알 수 없음"
-              : `${categoryIdText(book.category.id)} · ${book.category.name}`
-          }
-        />
+        {isUnknownCategory ? (
+          <CategoryLinkButton text={"알 수 없음"} onClick={() => {}} />
+        ) : (
+          <CategoryLinkButton
+            text={`${categoryIdText(book.category.id)} · ${book.category.name}`}
+            onClick={() => {
+              onClickCategory(
+                router,
+                searchParams,
+                book.category.id,
+                LEVEL_LEAF,
+                clearSearchTerm
+              );
+            }}
+          />
+        )}
       </p>
       <div className="mt-auto pt-2">
         <CardFooterLabel
@@ -40,5 +60,25 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
         />
       </div>
     </div>
+  );
+};
+
+interface CategoryLinkButtonProps {
+  text: string;
+  onClick: () => void;
+}
+
+const CategoryLinkButton = ({ text, onClick }: CategoryLinkButtonProps) => {
+  return (
+    <button
+      type="button"
+      className="
+        text-xs border-primary bg-primary/10 
+        text-primary px-1 py-0.5
+      "
+      onClick={onClick}
+    >
+      <span className="font-medium">{text}</span>
+    </button>
   );
 };
