@@ -6,10 +6,10 @@ import {
   CardTitleLabel,
 } from "../atoms/label/CardLabel";
 import { formatCount } from "@/utils/NumberFormatter";
-import { BookCategory } from "@/types/BookCategory";
 import { onClickCategory } from "../templates/BookCategoryPageTemplate";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
+import { useSearchTerm } from "@/contexts/SearchTermContext";
 
 interface BookPreviewInfoProps {
   book: BookPreview;
@@ -18,6 +18,7 @@ interface BookPreviewInfoProps {
 export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { clearSearchTerm } = useSearchTerm();
 
   const isUnknownCategory =
     book.category == null ||
@@ -46,7 +47,8 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
                 router,
                 searchParams,
                 book.category.id,
-                LEVEL_LEAF
+                LEVEL_LEAF,
+                clearSearchTerm
               );
             }}
           />

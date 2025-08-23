@@ -7,18 +7,25 @@ import {
 } from "@/utils/querystring/SearchAfter";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
+import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
+import { useSearchTerm } from "@/contexts/SearchTermContext";
 
 interface SearchProps {
   initialSearchTerm: string;
 }
 
 export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
+  const { searchTerm, setSearchTerm, clearSearchTerm } = useSearchTerm();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const initTerm = searchParams.get(SEARCH_TERM_KEY);
+    setSearchTerm(initTerm === null ? "" : initTerm);
+  }, []);
 
   // 검색 폼 제출 처리
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,7 +57,7 @@ export const SearchBar = ({ initialSearchTerm }: SearchProps) => {
   }
 
   const handleClear = () => {
-    setSearchTerm("");
+    clearSearchTerm();
     search("");
   };
 

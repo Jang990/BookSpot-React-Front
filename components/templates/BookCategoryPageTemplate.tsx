@@ -22,6 +22,8 @@ import { CategoryNavigation } from "@/components/molecules/category/CategoryNavi
 import { CategoryEmptyState } from "@/components/molecules/category/CategoryEmptyState";
 import { CategoryCard } from "../molecules/category/CategoryCard";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
+import { useSearchTerm } from "@/contexts/SearchTermContext";
 
 const queryString = (
   searchParams: ReadonlyURLSearchParams,
@@ -32,6 +34,7 @@ const queryString = (
   params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
   params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryLevel);
   params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
+  params.delete(SEARCH_TERM_KEY);
   return params.toString();
 };
 
@@ -39,8 +42,10 @@ export const onClickCategory = (
   router: AppRouterInstance,
   searchParams: ReadonlyURLSearchParams,
   categoryId: number,
-  categoryLevel: string
+  categoryLevel: string,
+  clearSearchTerm: () => void
 ) => {
+  clearSearchTerm();
   router.push(`/?${queryString(searchParams, categoryId, categoryLevel)}`);
 };
 
@@ -51,7 +56,8 @@ export const BookCategoryPageTemplate = () => {
 
   // URL에서 현재 경로 파싱
   const currentPath = parseCategoryHistory(searchParams);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // 둘은 다르다. 카테고리 검색에 사용되는 키워드
+  const { clearSearchTerm } = useSearchTerm(); // 책 검색에 사용되는 키워드
   const [navigatingTo, setNavigatingTo] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -176,7 +182,8 @@ export const BookCategoryPageTemplate = () => {
         router,
         searchParams,
         categoryId,
-        getCurrentCategoryLevel()
+        getCurrentCategoryLevel(),
+        clearSearchTerm
       );
     }
   };
@@ -257,7 +264,8 @@ export const BookCategoryPageTemplate = () => {
                       router,
                       searchParams,
                       category.id,
-                      getCurrentCategoryLevel()
+                      getCurrentCategoryLevel(),
+                      clearSearchTerm
                     );
                   }}
                   isNavigating={isNavigating}
