@@ -1,7 +1,12 @@
 "use client";
 import { useState, useTransition } from "react";
 import { BookCategory, CATEGORY_ARRAY } from "@/types/BookCategory";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import {
   CATEGORY_HISTORY_QUERY_STRING_KEY,
   CATEGORY_LEVEL_QUERY_STRING_KEY,
@@ -16,6 +21,33 @@ import { CategorySearchBar } from "@/components/molecules/category/CategorySearc
 import { CategoryNavigation } from "@/components/molecules/category/CategoryNavigation";
 import { CategoryEmptyState } from "@/components/molecules/category/CategoryEmptyState";
 import { CategoryCard } from "../molecules/category/CategoryCard";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
+import { useSearchTerm } from "@/contexts/SearchTermContext";
+
+const queryString = (
+  searchParams: ReadonlyURLSearchParams,
+  categoryId: number,
+  categoryLevel: string
+): string => {
+  const params = new URLSearchParams(searchParams as any);
+  params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
+  params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryLevel);
+  params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
+  params.delete(SEARCH_TERM_KEY);
+  return params.toString();
+};
+
+export const onClickCategory = (
+  router: AppRouterInstance,
+  searchParams: ReadonlyURLSearchParams,
+  categoryId: number,
+  categoryLevel: string,
+  clearSearchTerm: () => void
+) => {
+  clearSearchTerm();
+  router.push(`/?${queryString(searchParams, categoryId, categoryLevel)}`);
+};
 
 export const BookCategoryPageTemplate = () => {
   const searchParams = useSearchParams();
@@ -24,7 +56,8 @@ export const BookCategoryPageTemplate = () => {
 
   // URL에서 현재 경로 파싱
   const currentPath = parseCategoryHistory(searchParams);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(""); // 둘은 다르다. 카테고리 검색에 사용되는 키워드
+  const { clearSearchTerm } = useSearchTerm(); // 책 검색에 사용되는 키워드
   const [navigatingTo, setNavigatingTo] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -145,21 +178,19 @@ export const BookCategoryPageTemplate = () => {
       }, moveDelay);
     } else {
       // 최종 선택 - 카테고리 검색으로 이동
-      window.location.href = `/?${queryString(categoryId)}`;
+      onClickCategory(
+        router,
+        searchParams,
+        categoryId,
+        getCurrentCategoryLevel(),
+        clearSearchTerm
+      );
     }
   };
 
   const getCurrentCategoryLevel = (): string => {
     if (searchTerm) return LEVEL_LEAF;
     return getCategoryLevel(currentPath.length);
-  };
-
-  const queryString = (categoryId: number): string => {
-    const params = new URLSearchParams(searchParams as any);
-    params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
-    params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, getCurrentCategoryLevel());
-    params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
-    return params.toString();
   };
 
   const subText = (categoryId: number): string => {
@@ -228,7 +259,15 @@ export const BookCategoryPageTemplate = () => {
                   category={category}
                   hasChildren={hasChildren(category.id)}
                   onExploreClick={handleCategorySelect}
-                  queryString={queryString}
+                  onClick={() => {
+                    onClickCategory(
+                      router,
+                      searchParams,
+                      category.id,
+                      getCurrentCategoryLevel(),
+                      clearSearchTerm
+                    );
+                  }}
                   isNavigating={isNavigating}
                   navigatingTo={navigatingTo}
                   subText={subText(category.id)}
