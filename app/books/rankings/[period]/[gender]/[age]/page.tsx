@@ -1,11 +1,11 @@
-import {
-  PageTitlAndSubLabel,
-  PageTitle,
-} from "@/components/molecules/PageTitle";
+import { PageTitlAndSubLabel } from "@/components/molecules/PageTitle";
 import { RankingSearchButtons } from "@/components/organisms/ranking/RankingSearchButtons";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
-import { validateRankingConditions } from "@/types/BookRankings";
+import {
+  RankingPeriodMeta,
+  validateRankingConditions,
+} from "@/types/BookRankings";
 import { fetchBookRankings } from "@/utils/api/BookRankingApi";
 import { notFound } from "next/navigation";
 
@@ -24,14 +24,19 @@ export default async function RankingPage({
 
   const bookRankings: BookPreview[] = await fetchBookRankings(rankingParams);
 
+  const pagePeriodText =
+    rankingParams.period === RankingPeriodMeta.MONTHLY.value
+      ? RankingPeriodMeta.MONTHLY.text
+      : RankingPeriodMeta.WEEKLY.text;
+
   return (
     <div>
       <PageTitlAndSubLabel
-        title="🔥 주간 대출 Top50"
+        title={`🔥 ${pagePeriodText} 대출 Top50`}
         label={getWeeklyRankingPeriod(new Date())}
       />
       <RankingSearchButtons rankingConditions={rankingParams} />
-      <BookPreviewList searchResults={bookRankings} />;
+      <BookPreviewList searchResults={bookRankings} />
     </div>
   );
 }
