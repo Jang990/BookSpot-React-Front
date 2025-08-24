@@ -11,7 +11,7 @@ export const AGES = [
   "AGE_20_29",
   "AGE_30_39",
   "AGE_40_49",
-  "AGE_50_PLUS",
+  "AGE_50_UP",
 ] as const;
 export type RankingAge = (typeof AGES)[number];
 
