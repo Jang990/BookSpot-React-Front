@@ -1,12 +1,22 @@
+import { BookPreview, BookRanking } from "@/types/BookPreview";
 import { RankingConditions } from "@/types/BookRankings";
+import { get } from "./Fetcher";
+import { convertBookRanking } from "./ApiResponseConvertor";
 
 const BOOK_API_URL =
   process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books/rankings";
 
-export function createApi({ period, gender, age }: RankingConditions): string {
+function createApi({ period, gender, age }: RankingConditions): string {
   const url = new URL(BOOK_API_URL);
   url.searchParams.append("period", period.toString());
   url.searchParams.append("gender", gender.toString());
   url.searchParams.append("age", age.toString());
   return url.toString();
 }
+
+export const fetchBookRankings = async (
+  RankingConditions: RankingConditions
+): Promise<BookPreview[]> => {
+  const json = await get(createApi(RankingConditions));
+  return json.rankedBooks.map(convertBookRanking);
+};

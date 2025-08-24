@@ -20,6 +20,23 @@ export function convertBookPreview(content: any): BookPreview {
   };
 }
 
+export function convertBookRanking(content: any): BookPreview {
+  return {
+    id: content.id,
+    title: content.title ?? "제목 없음",
+    author: content.author ?? "Unknown",
+    isbn13: content.isbn13,
+    publicationYear: content.publicationYear ?? /* undefined */ 1111,
+    publisher: content.publisher ?? /* undefined */ "Unknown",
+    createdAt: content.createdAt,
+    category: content.category,
+
+    loanCount: content.loanIncrease,
+    // rank: content.rank,
+    // loanIncrease: content.loanIncrease,
+  };
+}
+
 export function convertLibrary(content: any): Library {
   return {
     id: content.libraryId,

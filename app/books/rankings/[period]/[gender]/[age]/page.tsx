@@ -1,4 +1,7 @@
+import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
+import { BookPreview } from "@/types/BookPreview";
 import { validateRankingConditions } from "@/types/BookRankings";
+import { fetchBookRankings } from "@/utils/api/BookRankingApi";
 import { notFound } from "next/navigation";
 
 export default async function RankingPage({
@@ -13,5 +16,7 @@ export default async function RankingPage({
     notFound();
   }
 
-  return <div>"Hello World!"</div>;
+  const bookRankings: BookPreview[] = await fetchBookRankings(rankingParams);
+
+  return <BookPreviewList searchResults={bookRankings} />;
 }
