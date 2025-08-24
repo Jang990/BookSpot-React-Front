@@ -9,11 +9,10 @@ import {
 import { fetchBookRankings } from "@/utils/api/BookRankingApi";
 import { notFound } from "next/navigation";
 
-export const BASE_URL = "/books/rankings";
 export default async function RankingPage({
   params,
 }: {
-  params: { period: string; gender: string; age: string };
+  params: Promise<{ period: string; gender: string; age: string }>;
 }) {
   const rawParams = await params;
   const rankingParams = validateRankingConditions(rawParams);

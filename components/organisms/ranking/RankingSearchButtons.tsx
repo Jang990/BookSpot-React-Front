@@ -1,5 +1,4 @@
 "use client";
-import { BASE_URL } from "@/app/books/rankings/[period]/[gender]/[age]/page";
 import { DropDownButton } from "@/components/molecules/button/filter/DropDownButton";
 import {
   RankingAge,
@@ -19,6 +18,7 @@ interface Props {
   rankingConditions: RankingConditions;
 }
 
+const BASE_URL = "/books/rankings";
 export const RankingSearchButtons = ({ rankingConditions }: Props) => {
   return (
     <div className="flex flex-wrap gap-2 mb-3">
