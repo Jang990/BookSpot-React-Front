@@ -5,10 +5,12 @@ import {
   RankingAge,
   RankingAgeMeta,
   RankingConditions,
+  RankingGender,
   RankingGenderMeta,
   RankingPeriod,
   RankingPeriodMeta,
   textAge,
+  textGender,
   textPeriod,
 } from "@/types/BookRankings";
 import { Users } from "lucide-react";
@@ -30,6 +32,22 @@ export const RankingSearchButtons = ({ rankingConditions }: Props) => {
           href: createPeriodUrl(period.value as RankingPeriod),
         }))}
       />
+
+      <DropDownButton
+        selected={true}
+        text={
+          rankingConditions.gender === RankingGenderMeta.ALL.value
+            ? "성별"
+            : textGender(rankingConditions.gender)
+        }
+        Icon={Users}
+        items={Object.values(RankingGenderMeta).map((gender) => ({
+          type: "link",
+          text: gender.text,
+          href: createGenderUrl(gender.value as RankingGender),
+        }))}
+      />
+
       <DropDownButton
         selected={true}
         text={
@@ -59,6 +77,14 @@ export const RankingSearchButtons = ({ rankingConditions }: Props) => {
     return createUrl({
       period: period,
       gender: rankingConditions.gender,
+      age: rankingConditions.age,
+    });
+  }
+
+  function createGenderUrl(gender: RankingGender): string {
+    return createUrl({
+      period: rankingConditions.period,
+      gender: gender,
       age: rankingConditions.age,
     });
   }
