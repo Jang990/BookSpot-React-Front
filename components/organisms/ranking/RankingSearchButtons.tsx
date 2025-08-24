@@ -6,8 +6,10 @@ import {
   RankingAgeMeta,
   RankingConditions,
   RankingGenderMeta,
+  RankingPeriod,
   RankingPeriodMeta,
   textAge,
+  textPeriod,
 } from "@/types/BookRankings";
 import { Users } from "lucide-react";
 
@@ -18,6 +20,16 @@ interface Props {
 export const RankingSearchButtons = ({ rankingConditions }: Props) => {
   return (
     <div className="flex flex-wrap gap-2 mb-2">
+      <DropDownButton
+        selected={true}
+        text={textPeriod(rankingConditions.period)}
+        Icon={Users}
+        items={Object.values(RankingPeriodMeta).map((period) => ({
+          type: "link",
+          text: period.text,
+          href: createPeriodUrl(period.value as RankingPeriod),
+        }))}
+      />
       <DropDownButton
         selected={true}
         text={
@@ -40,6 +52,14 @@ export const RankingSearchButtons = ({ rankingConditions }: Props) => {
       period: rankingConditions.period,
       gender: rankingConditions.gender,
       age,
+    });
+  }
+
+  function createPeriodUrl(period: RankingPeriod): string {
+    return createUrl({
+      period: period,
+      gender: rankingConditions.gender,
+      age: rankingConditions.age,
     });
   }
 
