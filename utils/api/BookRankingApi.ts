@@ -1,4 +1,4 @@
-import { BookPreview, BookRanking } from "@/types/BookPreview";
+import { BookPreview } from "@/types/BookPreview";
 import { RankingConditions } from "@/types/BookRankings";
 import { get } from "./Fetcher";
 import { convertBookRanking } from "./ApiResponseConvertor";

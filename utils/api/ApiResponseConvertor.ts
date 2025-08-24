@@ -17,6 +17,8 @@ export function convertBookPreview(content: any): BookPreview {
     loanCount: content.loanCount,
     category: content.category,
     createdAt: content.createdAt,
+
+    rank: null,
   };
 }
 
@@ -32,8 +34,7 @@ export function convertBookRanking(content: any): BookPreview {
     category: content.category,
 
     loanCount: content.loanIncrease,
-    // rank: content.rank,
-    // loanIncrease: content.loanIncrease,
+    rank: content.rank,
   };
 }
 
