@@ -17,11 +17,13 @@ export const BookSearchFilterButton = ({
   selected = false,
   isBlinking = false,
 }: ButtonProps) => {
+  // ================ 사용자에게 검색 결과가 많을 때 필터링 유도를 위한 깜빡거림 구현을 위해 놔뒀는데 지금은 안씀.
   // 강제: selected면 강조 비활성
   const effectiveHighlight = isBlinking && !selected;
 
   // 재현 가능한 delay 생성 (href나 index 기반). 0 ~ 1.2s 범위
   const delaySec = `${((hashCode(href) % 120) / 100).toFixed(2)}s`;
+  // =================
 
   return (
     <Link href={href} className="m-1">
@@ -47,14 +49,12 @@ export const BookSearchFilterButton = ({
       >
         <Icon
           className={`
-            mr-0.5 h-4 w-4 transition-all duration-200
+            mr-0.5 h-3 w-3 transition-all duration-200
             ${selected ? "text-primary" : `group-hover:scale-110`}
             group-hover:rotate-12
           `}
         />
-        <span className={`${selected ? "font-semibold" : "font-medium"}`}>
-          {text}
-        </span>
+        <span className="font-semibold">{text}</span>
       </Button>
     </Link>
   );
