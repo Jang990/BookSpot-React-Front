@@ -1,3 +1,4 @@
+import { InfoPanel } from "@/components/molecules/InfoPanel";
 import { PageTitlAndSubLabel } from "@/components/molecules/PageTitle";
 import { RankingSearchButtons } from "@/components/organisms/ranking/RankingSearchButtons";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
@@ -41,6 +42,10 @@ export default async function RankingPage({
       />
       <RankingSearchButtons rankingConditions={rankingParams} />
       <BookPreviewList searchResults={bookRankings} />
+
+      <div className="flex justify-center mt-3">
+        <InfoPanel text={`화~일요일, 매일 밤 10시 이후 최신화됩니다.`} />
+      </div>
     </div>
   );
 }
