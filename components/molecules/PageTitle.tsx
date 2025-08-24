@@ -11,3 +11,17 @@ export const PageTitle = ({ text }: Props) => {
     </div>
   );
 };
+
+interface TitleAndLabel {
+  title: string;
+  label: string;
+}
+
+export const PageTitlAndSubLabel = ({ title, label }: TitleAndLabel) => {
+  return (
+    <div className="flex justify-between items-center">
+      <PageTitle text={title} />
+      <div className="text-muted-foreground pe-3">{label}</div>
+    </div>
+  );
+};
