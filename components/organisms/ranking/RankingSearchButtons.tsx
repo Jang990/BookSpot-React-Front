@@ -21,7 +21,7 @@ interface Props {
 
 export const RankingSearchButtons = ({ rankingConditions }: Props) => {
   return (
-    <div className="flex flex-wrap gap-2 mb-2">
+    <div className="flex flex-wrap gap-2 mb-3">
       <DropDownButton
         selected={true}
         text={textPeriod(rankingConditions.period)}
