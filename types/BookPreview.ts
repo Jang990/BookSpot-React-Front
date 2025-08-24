@@ -11,4 +11,6 @@ export interface BookPreview {
   category: BookCategory;
   createdAt: string;
   image?: string;
+
+  rank: number | null;
 }

@@ -2,6 +2,7 @@
 
 import { DefaultFilterButton } from "@/components/molecules/button/filter/DefaultFilterButton copy";
 import { SelectedFilterButton } from "@/components/molecules/button/filter/SelectedFilterButton";
+import { LinkButton } from "@/components/molecules/button/LinkButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import {
@@ -200,7 +201,17 @@ export const FilterStatusGroup = ({
             SelectedIcon={ListFilter}
           />
         )}
+        <WeeklyTop50BooksLink />
       </div>
     </div>
+  );
+};
+
+const WeeklyTop50BooksLink = () => {
+  return (
+    <LinkButton
+      text="🔥 주간 대출 Top50"
+      href="/books/rankings/weekly/all/all"
+    />
   );
 };
