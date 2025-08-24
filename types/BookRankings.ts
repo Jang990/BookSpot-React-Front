@@ -1,19 +1,23 @@
-export const PERIODS = ["WEEKLY", "MONTHLY"] as const;
-export type RankingPeriod = (typeof PERIODS)[number];
+export enum RankingPeriod {
+  WEEKLY = "WEEKLY",
+  MONTHLY = "MONTHLY",
+}
 
-export const GENDERS = ["ALL", "MALE", "FEMALE"] as const;
-export type RankingGender = (typeof GENDERS)[number];
+export enum RankingGender {
+  ALL = "ALL",
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+}
 
-export const AGES = [
-  "ALL",
-  "AGE_0_14",
-  "AGE_15_19",
-  "AGE_20_29",
-  "AGE_30_39",
-  "AGE_40_49",
-  "AGE_50_UP",
-] as const;
-export type RankingAge = (typeof AGES)[number];
+export enum RankingAge {
+  ALL = "ALL",
+  AGE_0_14 = "AGE_0_14",
+  AGE_15_19 = "AGE_15_19",
+  AGE_20_29 = "AGE_20_29",
+  AGE_30_39 = "AGE_30_39",
+  AGE_40_49 = "AGE_40_49",
+  AGE_50_UP = "AGE_50_UP",
+}
 
 export type RankingConditions = {
   period: RankingPeriod;
@@ -26,13 +30,20 @@ export function validateRankingConditions(raw: {
   gender: string;
   age: string;
 }): RankingConditions | null {
-  const period = PERIODS.includes(raw.period.toUpperCase() as RankingPeriod)
+  // enum 값 배열로 만들기
+  const periods = Object.values(RankingPeriod);
+  const genders = Object.values(RankingGender);
+  const ages = Object.values(RankingAge);
+
+  const period = periods.includes(raw.period.toUpperCase() as RankingPeriod)
     ? (raw.period.toUpperCase() as RankingPeriod)
     : null;
-  const gender = GENDERS.includes(raw.gender.toUpperCase() as RankingGender)
+
+  const gender = genders.includes(raw.gender.toUpperCase() as RankingGender)
     ? (raw.gender.toUpperCase() as RankingGender)
     : null;
-  const age = AGES.includes(raw.age.toUpperCase() as RankingAge)
+
+  const age = ages.includes(raw.age.toUpperCase() as RankingAge)
     ? (raw.age.toUpperCase() as RankingAge)
     : null;
 
