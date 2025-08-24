@@ -13,7 +13,7 @@ import {
   textGender,
   textPeriod,
 } from "@/types/BookRankings";
-import { Users } from "lucide-react";
+import { Activity, Calendar, User } from "lucide-react";
 
 interface Props {
   rankingConditions: RankingConditions;
@@ -25,7 +25,7 @@ export const RankingSearchButtons = ({ rankingConditions }: Props) => {
       <DropDownButton
         selected={true}
         text={textPeriod(rankingConditions.period)}
-        Icon={Users}
+        Icon={Calendar}
         items={Object.values(RankingPeriodMeta).map((period) => ({
           type: "link",
           text: period.text,
@@ -40,7 +40,7 @@ export const RankingSearchButtons = ({ rankingConditions }: Props) => {
             ? "성별"
             : textGender(rankingConditions.gender)
         }
-        Icon={Users}
+        Icon={User}
         items={Object.values(RankingGenderMeta).map((gender) => ({
           type: "link",
           text: gender.text,
@@ -55,7 +55,7 @@ export const RankingSearchButtons = ({ rankingConditions }: Props) => {
             ? "나이"
             : textAge(rankingConditions.age)
         }
-        Icon={Users}
+        Icon={Activity}
         items={Object.values(RankingAgeMeta).map((age) => ({
           type: "link",
           text: age.text,
