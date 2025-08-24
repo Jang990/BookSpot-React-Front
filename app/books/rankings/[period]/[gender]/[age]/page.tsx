@@ -26,7 +26,7 @@ export default async function RankingPage({
     <div>
       <PageTitlAndSubLabel
         title="🔥 주간 대출 Top50"
-        label={getWeeklyRankingPeriod(new Date("2025-09-09"))}
+        label={getWeeklyRankingPeriod(new Date())}
       />
       <BookPreviewList searchResults={bookRankings} />;
     </div>
