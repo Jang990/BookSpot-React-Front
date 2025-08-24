@@ -2,12 +2,14 @@ import {
   PageTitlAndSubLabel,
   PageTitle,
 } from "@/components/molecules/PageTitle";
+import { RankingSearchButtons } from "@/components/organisms/ranking/RankingSearchButtons";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";
 import { validateRankingConditions } from "@/types/BookRankings";
 import { fetchBookRankings } from "@/utils/api/BookRankingApi";
 import { notFound } from "next/navigation";
 
+export const BASE_URL = "/books/rankings";
 export default async function RankingPage({
   params,
 }: {
@@ -28,6 +30,7 @@ export default async function RankingPage({
         title="🔥 주간 대출 Top50"
         label={getWeeklyRankingPeriod(new Date())}
       />
+      <RankingSearchButtons rankingConditions={rankingParams} />
       <BookPreviewList searchResults={bookRankings} />;
     </div>
   );
