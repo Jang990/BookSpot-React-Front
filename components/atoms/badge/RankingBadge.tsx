@@ -7,7 +7,7 @@ export const RankingBadge = ({ rank }: RankingBadgeProps) => {
     if (rank === 1) {
       return {
         bg: "bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-600",
-        text: "text-yellow-900",
+        text: "text-white",
         border: "border-yellow-300",
         shadow: "shadow-2xl shadow-yellow-400/50",
         glow: "drop-shadow-lg",
@@ -16,7 +16,7 @@ export const RankingBadge = ({ rank }: RankingBadgeProps) => {
     } else if (rank === 2) {
       return {
         bg: "bg-gradient-to-r from-gray-200 via-gray-300 to-gray-500",
-        text: "text-gray-800",
+        text: "text-white",
         border: "border-gray-200",
         shadow: "shadow-2xl shadow-gray-300/50",
         glow: "drop-shadow-lg",
@@ -25,7 +25,7 @@ export const RankingBadge = ({ rank }: RankingBadgeProps) => {
     } else if (rank === 3) {
       return {
         bg: "bg-gradient-to-r from-amber-400 via-amber-600 to-amber-800",
-        text: "text-amber-100",
+        text: "text-white",
         border: "border-amber-300",
         shadow: "shadow-2xl shadow-amber-500/50",
         glow: "drop-shadow-lg",
