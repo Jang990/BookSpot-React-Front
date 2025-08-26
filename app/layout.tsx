@@ -13,18 +13,18 @@ import { SearchTermProvider } from "@/contexts/SearchTermContext";
 // };
 
 export const metadata: Metadata = {
-  title: "북스팟 BookSpot | 전국 도서관 책 검색 서비스",
+  title: "북스팟(BookSpot) | 도서관 통합 검색, 책과 만나는 새로운 공간",
   description:
-    "북스팟(BookSpot) - 전국 도서관에 있는 책을 찾아보고, 내 주변 도서관에 있는지 확인해보세요.",
+    "책과 만나는 새로운 공간, BookSpot. 읽고 싶은 그 책, 어느 도서관에 있는지 지도에서 바로 찾아보세요.",
   verification: {
     google: "jdOCc7DZi51FcUZ5NpRyAILDnE4Uzb8WPzjiLdcvFtc",
   },
   other: {
     "naver-site-verification": "21bf14ebc189c29476ebbf9042dacd66e94ebdd0",
-    "og:site_name": "북스팟 BookSpot",
-    "og:title": "북스팟 BookSpot | 도서관 책 검색 서비스",
+    "og:site_name": "북스팟 (BookSpot)",
+    "og:title": "북스팟(BookSpot) | 도서관 통합 검색, 책과 만나는 새로운 공간",
     "og:description":
-      "북스팟(BookSpot) - 전국 도서관에 있는 책을 찾아보고, 내 주변 도서관에 있는지 확인해보세요.",
+      "책과 만나는 새로운 공간, BookSpot. 읽고 싶은 그 책, 어느 도서관에 있는지 지도에서 바로 찾아보세요.",
     "og:url": "https://bookspot.store",
   },
 };
