@@ -21,6 +21,8 @@ export const metadata: Metadata = {
   },
   other: {
     "naver-site-verification": "21bf14ebc189c29476ebbf9042dacd66e94ebdd0",
+    "google-adsense-account": "ca-pub-2464877662475864",
+
     "og:site_name": "북스팟 (BookSpot)",
     "og:title": "북스팟(BookSpot) | 도서관 통합 검색, 책과 만나는 새로운 공간",
     "og:description":
