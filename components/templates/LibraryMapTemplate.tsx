@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { LibraryMap } from "../organisms/LibraryMap";
 import { MapBound } from "@/types/MapBound";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
+import { LibraryStockMap } from "../organisms/map/TEMP_LibraryMap";
 
 export interface Props {
   booksInfo: BookPreview[];
@@ -23,7 +23,7 @@ export const LibraryMapTemplate = ({
     <div className="relative w-full flex items-center justify-center">
       {scriptLoadError && <div>잘못된 스크립트 오류입니다.</div>}
 
-      <LibraryMap
+      <LibraryStockMap
         booksInfo={booksInfo}
         mapBound={mapBound}
         libraryMarkerInfos={libraries}
