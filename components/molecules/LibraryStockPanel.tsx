@@ -1,19 +1,11 @@
 "use client";
 
-import {
-  ExternalLink,
-  Clock,
-  Calendar,
-  Check,
-  X,
-  Book,
-  Info,
-  MapPin,
-} from "lucide-react";
+import { X, Book, Info, MapPin, RefreshCw } from "lucide-react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
 import { useState } from "react";
 import { LibraryDetailContentPanel } from "./LibraryDetailContentPanel";
+import { BookLoanStatePanel } from "./panel/BookLoanStatePanel";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -41,11 +33,6 @@ export const LibraryStockPanel = ({
           stock.unavailableBookIds.includes(book.id)
       )
     : [];
-
-  // 각 책의 가용성 확인
-  const isBookAvailable = (bookId: string) => {
-    return stock?.availableBookIds.includes(bookId) || false;
-  };
 
   return (
     <div
@@ -109,59 +96,68 @@ export const LibraryStockPanel = ({
         style={{ maxHeight: "200px" }}
       >
         {activeTab === "books" ? (
-          <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">
-              도서 목록 ({allBooks.length})
-            </h3>
-            {allBooks.length > 0 ? (
-              <ul className="space-y-1.5">
-                {allBooks.map((book) => {
-                  const available = isBookAvailable(book.id);
-                  return (
-                    <li
-                      key={book.id}
-                      className={`
-                        flex items-start p-1.5 rounded-md text-sm
-                        ${available ? "bg-green-50" : "bg-red-50"}
-                      `}
-                    >
-                      <div
-                        className={`
-                          w-6 h-6 rounded-md flex items-center justify-center mr-2 flex-shrink-0
-                          ${available ? "bg-green-100" : "bg-red-100"}
-                        `}
-                      >
-                        {available ? (
-                          <Check size={12} className="text-green-600" />
-                        ) : (
-                          <X size={12} className="text-red-600" />
-                        )}
-                      </div>
-                      <div className="overflow-hidden">
-                        <p
-                          className={`
-                            font-medium truncate
-                            ${available ? "text-green-800" : "text-red-800"}
-                          `}
-                        >
-                          {book.title}
-                        </p>
-                        <p className="text-xs text-gray-500 truncate">
-                          {book.author} · {book.publicationYear}
-                        </p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="text-sm text-gray-500">도서 정보가 없습니다.</p>
-            )}
-          </div>
+          <BooksTap
+            books={allBooks}
+            availableBookIds={stock?.availableBookIds ?? []}
+            handleRefresh={() => {}}
+          />
         ) : (
           <LibraryDetailContentPanel library={library} />
         )}
       </div>
+    </div>
+  );
+};
+
+interface BooksTapProps {
+  books: BookPreview[];
+  availableBookIds: string[];
+  handleRefresh: () => void;
+}
+
+const BooksTap = ({
+  books,
+  availableBookIds = [],
+  handleRefresh,
+}: BooksTapProps) => {
+  return (
+    <div className="">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold ps-2 text-gray-700">
+            도서 목록
+          </h3>
+          <span className="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full font-medium">
+            전날 기준
+          </span>
+        </div>
+        <button
+          onClick={handleRefresh}
+          className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+          title="대출 가능여부 새로고침"
+        >
+          <RefreshCw size={16} />
+        </button>
+      </div>
+
+      {books.length > 0 ? (
+        <ul className="space-y-2">
+          {books.map((book: any, idx) => {
+            return (
+              <li key={idx}>
+                <BookLoanStatePanel
+                  book={book}
+                  isInLibrary={availableBookIds.includes(book.id)}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="text-sm text-gray-500 text-center py-4">
+          도서 정보가 없습니다.
+        </p>
+      )}
     </div>
   );
 };
