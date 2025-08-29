@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { LibraryDetailContentPanel } from "./LibraryDetailContentPanel";
 import { BookLoanStatePanel } from "./panel/BookLoanStatePanel";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
-import { createApi, fetchStocks } from "@/utils/api/LibraryBookStockApi";
+import { fetchStocks } from "@/utils/api/LibraryBookStockApi";
+import { refreshStock } from "@/utils/api/LibraryStockRefreshApi";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -15,6 +16,17 @@ interface LibraryStockPanelProps {
   onClose: () => void;
   isEntering: boolean;
   onMoveToLocation?: () => void;
+}
+
+function isToday(iso: string) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return false;
+  const now = new Date();
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
 }
 
 export const LibraryStockPanel = ({
@@ -69,6 +81,36 @@ export const LibraryStockPanel = ({
       );
     });
   }, [library.id]);
+
+  function handleRefresh() {
+    if (!stockInfos.some((info) => info.loanInfo !== null)) {
+      // refresh 대상 없음: loanInfo가 모두 null
+      return;
+    }
+
+    const targets = stockInfos.filter(
+      (info) =>
+        info.isInLibrary && info.loanInfo && !isToday(info.loanInfo.updatedAt)
+    );
+
+    if (targets.length === 0) return;
+
+    targets.forEach((info) => {
+      refreshStock({
+        stockId: info.loanInfo!.stockId,
+      })
+        .then((updated) => {
+          setLibraryBookStockInfos((prev) =>
+            prev.map((i) =>
+              i.bookId === updated.bookId ? { ...i, loanInfo: updated } : i
+            )
+          );
+        })
+        .catch((e) => {
+          console.error("refresh 실패:", e);
+        });
+    });
+  }
 
   return (
     <div
@@ -132,7 +174,7 @@ export const LibraryStockPanel = ({
         style={{ maxHeight: "200px" }}
       >
         {activeTab === "books" ? (
-          <BooksTap bookStockInfos={stockInfos} handleRefresh={() => {}} />
+          <BooksTap bookStockInfos={stockInfos} handleRefresh={handleRefresh} />
         ) : (
           <LibraryDetailContentPanel library={library} />
         )}
