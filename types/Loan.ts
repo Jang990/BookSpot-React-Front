@@ -1,4 +1,5 @@
 export interface LibraryBookStockInfo {
+  bookId: string;
   bookTitle: string;
   bookAuthor: string;
   bookPublicationYear: string;

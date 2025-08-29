@@ -6,6 +6,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { useState } from "react";
 import { LibraryDetailContentPanel } from "./LibraryDetailContentPanel";
 import { BookLoanStatePanel } from "./panel/BookLoanStatePanel";
+import { LibraryBookStockInfo } from "@/types/Loan";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -142,13 +143,18 @@ const BooksTap = ({
 
       {books.length > 0 ? (
         <ul className="space-y-2">
-          {books.map((book: any, idx) => {
+          {books.map((book: BookPreview, idx) => {
+            const stockInfo: LibraryBookStockInfo = {
+              bookId: book.id,
+              bookTitle: book.title,
+              bookAuthor: book.author,
+              bookPublicationYear: book.publicationYear,
+              isInLibrary: availableBookIds.includes(book.id),
+              loanInfo: null,
+            };
             return (
               <li key={idx}>
-                <BookLoanStatePanel
-                  book={book}
-                  isInLibrary={availableBookIds.includes(book.id)}
-                />
+                <BookLoanStatePanel libraryBookStockInfo={stockInfo} />
               </li>
             );
           })}
