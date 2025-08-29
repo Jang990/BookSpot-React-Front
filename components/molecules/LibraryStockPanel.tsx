@@ -182,82 +182,12 @@ const BooksTap = ({
       {books.length > 0 ? (
         <ul className="space-y-2">
           {books.map((book: any, idx) => {
-            const isInLibrary = availableBookIds.includes(book.id);
-            const loanInfo =
-              mockLoanStatus[((idx % 3) + 1) as keyof typeof mockLoanStatus];
-            const isLoanAvailable = isInLibrary && loanInfo?.available;
-
-            let status,
-              bgColor,
-              borderColor,
-              iconBg,
-              icon,
-              textColor,
-              badgeColor,
-              badgeText;
-
-            if (!isInLibrary) {
-              status = "미소장";
-              bgColor = "bg-gray-50";
-              borderColor = "border-gray-200";
-              iconBg = "bg-gray-100";
-              icon = <X size={16} className="text-gray-600" />;
-              textColor = "text-gray-800";
-              badgeColor = "bg-gray-100 text-gray-700";
-              badgeText = "미소장";
-            } else if (isLoanAvailable) {
-              status = "대출 가능";
-              bgColor = "bg-green-50";
-              borderColor = "border-green-200";
-              iconBg = "bg-green-100";
-              icon = <Check size={16} className="text-green-600" />;
-              textColor = "text-green-800";
-              badgeColor = "bg-green-100 text-green-700";
-              badgeText = "대출 가능";
-            } else {
-              status = "대출 중";
-              bgColor = "bg-yellow-50";
-              borderColor = "border-yellow-200";
-              iconBg = "bg-yellow-100";
-              icon = <BookOpen size={16} className="text-yellow-600" />;
-              textColor = "text-yellow-800";
-              badgeColor = "bg-yellow-100 text-yellow-700";
-              badgeText = "대출 중";
-            }
-
             return (
-              <li
-                key={book.id}
-                className={`
-                  flex items-start p-1.5 rounded-lg border transition-colors
-                  ${bgColor} ${borderColor}
-                `}
-              >
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${iconBg}`}
-                >
-                  {icon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`font-medium truncate text-sm ${textColor}`}>
-                    {book.title}
-                  </p>
-                  <p className="text-xs text-gray-600 truncate mb-0.5">
-                    {book.author} · {book.publicationYear}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs">
-                    <span
-                      className={`px-2 py-0.5 rounded-full font-medium ${badgeColor}`}
-                    >
-                      {badgeText}
-                    </span>
-                    {isInLibrary && loanInfo && (
-                      <span className="text-gray-500">
-                        {getTimeAgo(loanInfo.checkedAt)} 확인됨
-                      </span>
-                    )}
-                  </div>
-                </div>
+              <li key={idx}>
+                <BookLoanStatePanel
+                  book={book}
+                  isInLibrary={availableBookIds.includes(book.id)}
+                />
               </li>
             );
           })}
@@ -267,6 +197,92 @@ const BooksTap = ({
           도서 정보가 없습니다.
         </p>
       )}
+    </div>
+  );
+};
+
+interface BookLoanStatePanelProps {
+  isInLibrary: boolean;
+  book: BookPreview;
+}
+
+const BookLoanStatePanel = ({ isInLibrary, book }: BookLoanStatePanelProps) => {
+  const loanInfo =
+    mockLoanStatus[
+      ((Number.parseInt(book.id) % 3) + 1) as keyof typeof mockLoanStatus
+    ];
+  const isLoanAvailable = isInLibrary && loanInfo?.available;
+
+  let status,
+    bgColor,
+    borderColor,
+    iconBg,
+    icon,
+    textColor,
+    badgeColor,
+    badgeText;
+
+  if (!isInLibrary) {
+    status = "미소장";
+    bgColor = "bg-gray-50";
+    borderColor = "border-gray-200";
+    iconBg = "bg-gray-100";
+    icon = <X size={16} className="text-gray-600" />;
+    textColor = "text-gray-800";
+    badgeColor = "bg-gray-100 text-gray-700";
+    badgeText = "미소장";
+  } else if (isLoanAvailable) {
+    status = "대출 가능";
+    bgColor = "bg-green-50";
+    borderColor = "border-green-200";
+    iconBg = "bg-green-100";
+    icon = <Check size={16} className="text-green-600" />;
+    textColor = "text-green-800";
+    badgeColor = "bg-green-100 text-green-700";
+    badgeText = "대출 가능";
+  } else {
+    status = "대출 중";
+    bgColor = "bg-yellow-50";
+    borderColor = "border-yellow-200";
+    iconBg = "bg-yellow-100";
+    icon = <BookOpen size={16} className="text-yellow-600" />;
+    textColor = "text-yellow-800";
+    badgeColor = "bg-yellow-100 text-yellow-700";
+    badgeText = "대출 중";
+  }
+
+  return (
+    <div
+      className={`
+                  flex items-start p-1.5 rounded-lg border transition-colors
+                  ${bgColor} ${borderColor}
+                `}
+    >
+      <div
+        className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${iconBg}`}
+      >
+        {icon}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className={`font-medium truncate text-sm ${textColor}`}>
+          {book.title}
+        </p>
+        <p className="text-xs text-gray-600 truncate mb-0.5">
+          {book.author} · {book.publicationYear}
+        </p>
+        <div className="flex items-center gap-2 text-xs">
+          <span
+            className={`px-2 py-0.5 rounded-full font-medium ${badgeColor}`}
+          >
+            {badgeText}
+          </span>
+          {isInLibrary && loanInfo && (
+            <span className="text-gray-500">
+              {getTimeAgo(loanInfo.checkedAt)} 확인됨
+            </span>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
