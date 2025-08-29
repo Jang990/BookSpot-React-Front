@@ -6,8 +6,8 @@ import { BookPreview } from "@/types/BookPreview";
 import { useEffect, useState } from "react";
 import { LibraryDetailContentPanel } from "./LibraryDetailContentPanel";
 import { BookLoanStatePanel } from "./panel/BookLoanStatePanel";
-import { LibraryBookStockInfo } from "@/types/Loan";
-import { createApi } from "@/utils/api/LibraryBookStockApi";
+import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
+import { createApi, fetchStocks } from "@/utils/api/LibraryBookStockApi";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -27,7 +27,7 @@ export const LibraryStockPanel = ({
   const { library, stock } = libraryMarkerInfo;
   const [activeTab, setActiveTab] = useState<"books" | "info">("books");
 
-  const baseLibraryBookStockInfos: LibraryBookStockInfo[] = stock
+  const baseStockInfos: LibraryBookStockInfo[] = stock
     ? books
         .filter(
           (book) =>
@@ -43,17 +43,32 @@ export const LibraryStockPanel = ({
           loanInfo: null,
         }))
     : [];
-  const [stockInfos, setLibraryBookStockInfos] = useState<
-    LibraryBookStockInfo[]
-  >(baseLibraryBookStockInfos);
+  const [stockInfos, setLibraryBookStockInfos] =
+    useState<LibraryBookStockInfo[]>(baseStockInfos);
 
   useEffect(() => {
     if (!stock) return;
-    const api = createApi({
+
+    setLibraryBookStockInfos(baseStockInfos);
+
+    const inLibraryIds = baseStockInfos
+      .filter((info) => info.isInLibrary)
+      .map((info) => info.bookId);
+
+    if (inLibraryIds.length === 0) return;
+
+    fetchStocks({
       libraryId: library.id,
-      bookIds: stock.availableBookIds,
+      bookIds: inLibraryIds,
+    }).then((loanInfos: LoanInfo[]) => {
+      setLibraryBookStockInfos((prev) =>
+        prev.map((info) => {
+          const loan = loanInfos.find((l) => l.bookId === info.bookId);
+          return loan ? { ...info, loanInfo: loan } : info;
+        })
+      );
     });
-  }, [library, stock]);
+  }, [library.id, stock, books]);
 
   return (
     <div
