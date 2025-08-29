@@ -1,9 +1,6 @@
 "use client";
 
 import {
-  ExternalLink,
-  Clock,
-  Calendar,
   Check,
   X,
   Book,
@@ -213,17 +210,9 @@ const BookLoanStatePanel = ({ isInLibrary, book }: BookLoanStatePanelProps) => {
     ];
   const isLoanAvailable = isInLibrary && loanInfo?.available;
 
-  let status,
-    bgColor,
-    borderColor,
-    iconBg,
-    icon,
-    textColor,
-    badgeColor,
-    badgeText;
+  let bgColor, borderColor, iconBg, icon, textColor, badgeColor, badgeText;
 
   if (!isInLibrary) {
-    status = "미소장";
     bgColor = "bg-gray-50";
     borderColor = "border-gray-200";
     iconBg = "bg-gray-100";
@@ -232,7 +221,6 @@ const BookLoanStatePanel = ({ isInLibrary, book }: BookLoanStatePanelProps) => {
     badgeColor = "bg-gray-100 text-gray-700";
     badgeText = "미소장";
   } else if (isLoanAvailable) {
-    status = "대출 가능";
     bgColor = "bg-green-50";
     borderColor = "border-green-200";
     iconBg = "bg-green-100";
@@ -241,7 +229,6 @@ const BookLoanStatePanel = ({ isInLibrary, book }: BookLoanStatePanelProps) => {
     badgeColor = "bg-green-100 text-green-700";
     badgeText = "대출 가능";
   } else {
-    status = "대출 중";
     bgColor = "bg-yellow-50";
     borderColor = "border-yellow-200";
     iconBg = "bg-yellow-100";
