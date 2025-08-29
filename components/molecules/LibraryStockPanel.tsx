@@ -27,6 +27,26 @@ export const LibraryStockPanel = ({
   const { library, stock } = libraryMarkerInfo;
   const [activeTab, setActiveTab] = useState<"books" | "info">("books");
 
+  const baseLibraryBookStockInfos: LibraryBookStockInfo[] = stock
+    ? books
+        .filter(
+          (book) =>
+            stock.availableBookIds.includes(book.id) ||
+            stock.unavailableBookIds.includes(book.id)
+        )
+        .map((book) => ({
+          bookId: book.id,
+          bookTitle: book.title,
+          bookAuthor: book.author,
+          bookPublicationYear: book.publicationYear,
+          isInLibrary: stock.availableBookIds.includes(book.id),
+          loanInfo: null,
+        }))
+    : [];
+  const [stockInfos, setLibraryBookStockInfos] = useState<
+    LibraryBookStockInfo[]
+  >(baseLibraryBookStockInfos);
+
   useEffect(() => {
     if (!stock) return;
     const api = createApi({
@@ -34,27 +54,6 @@ export const LibraryStockPanel = ({
       bookIds: stock.availableBookIds,
     });
   }, [library, stock]);
-
-  const availableBookIds = stock?.availableBookIds ?? [];
-
-  const libraryBookStockInfos: LibraryBookStockInfo[] = stock
-    ? books
-        .filter(
-          (book) =>
-            stock.availableBookIds.includes(book.id) ||
-            stock.unavailableBookIds.includes(book.id)
-        )
-        .map((book: BookPreview) => {
-          return {
-            bookId: book.id,
-            bookTitle: book.title,
-            bookAuthor: book.author,
-            bookPublicationYear: book.publicationYear,
-            isInLibrary: availableBookIds.includes(book.id),
-            loanInfo: null,
-          };
-        })
-    : [];
 
   return (
     <div
@@ -118,10 +117,7 @@ export const LibraryStockPanel = ({
         style={{ maxHeight: "200px" }}
       >
         {activeTab === "books" ? (
-          <BooksTap
-            bookStockInfos={libraryBookStockInfos}
-            handleRefresh={() => {}}
-          />
+          <BooksTap bookStockInfos={stockInfos} handleRefresh={() => {}} />
         ) : (
           <LibraryDetailContentPanel library={library} />
         )}
