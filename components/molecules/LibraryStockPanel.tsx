@@ -3,10 +3,11 @@
 import { X, Book, Info, MapPin, RefreshCw } from "lucide-react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LibraryDetailContentPanel } from "./LibraryDetailContentPanel";
 import { BookLoanStatePanel } from "./panel/BookLoanStatePanel";
-import { LibraryBookStockInfo } from "@/types/Loan";
+import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
+import { createApi, fetchStocks } from "@/utils/api/LibraryBookStockApi";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -26,14 +27,48 @@ export const LibraryStockPanel = ({
   const { library, stock } = libraryMarkerInfo;
   const [activeTab, setActiveTab] = useState<"books" | "info">("books");
 
-  // 모든 책을 하나의 배열로 가져오기
-  const allBooks = stock
-    ? books.filter(
-        (book) =>
-          stock.availableBookIds.includes(book.id) ||
-          stock.unavailableBookIds.includes(book.id)
-      )
+  const baseStockInfos: LibraryBookStockInfo[] = stock
+    ? books
+        .filter(
+          (book) =>
+            stock.availableBookIds.includes(book.id) ||
+            stock.unavailableBookIds.includes(book.id)
+        )
+        .map((book) => ({
+          bookId: book.id,
+          bookTitle: book.title,
+          bookAuthor: book.author,
+          bookPublicationYear: book.publicationYear,
+          isInLibrary: stock.availableBookIds.includes(book.id),
+          loanInfo: null,
+        }))
     : [];
+  const [stockInfos, setLibraryBookStockInfos] =
+    useState<LibraryBookStockInfo[]>(baseStockInfos);
+
+  useEffect(() => {
+    if (!stock) return;
+
+    setLibraryBookStockInfos(baseStockInfos);
+
+    const inLibraryIds = baseStockInfos
+      .filter((info) => info.isInLibrary)
+      .map((info) => info.bookId);
+
+    if (inLibraryIds.length === 0) return;
+
+    fetchStocks({
+      libraryId: library.id,
+      bookIds: inLibraryIds,
+    }).then((loanInfos: LoanInfo[]) => {
+      setLibraryBookStockInfos((prev) =>
+        prev.map((info) => {
+          const loan = loanInfos.find((l) => l.bookId === info.bookId);
+          return loan ? { ...info, loanInfo: loan } : info;
+        })
+      );
+    });
+  }, [library.id, stock, books]);
 
   return (
     <div
@@ -97,11 +132,7 @@ export const LibraryStockPanel = ({
         style={{ maxHeight: "200px" }}
       >
         {activeTab === "books" ? (
-          <BooksTap
-            books={allBooks}
-            availableBookIds={stock?.availableBookIds ?? []}
-            handleRefresh={() => {}}
-          />
+          <BooksTap bookStockInfos={stockInfos} handleRefresh={() => {}} />
         ) : (
           <LibraryDetailContentPanel library={library} />
         )}
@@ -111,16 +142,11 @@ export const LibraryStockPanel = ({
 };
 
 interface BooksTapProps {
-  books: BookPreview[];
-  availableBookIds: string[];
+  bookStockInfos: LibraryBookStockInfo[];
   handleRefresh: () => void;
 }
 
-const BooksTap = ({
-  books,
-  availableBookIds = [],
-  handleRefresh,
-}: BooksTapProps) => {
+const BooksTap = ({ bookStockInfos: books, handleRefresh }: BooksTapProps) => {
   return (
     <div className="">
       <div className="flex items-center justify-between mb-3">
@@ -143,18 +169,10 @@ const BooksTap = ({
 
       {books.length > 0 ? (
         <ul className="space-y-2">
-          {books.map((book: BookPreview, idx) => {
-            const stockInfo: LibraryBookStockInfo = {
-              bookId: book.id,
-              bookTitle: book.title,
-              bookAuthor: book.author,
-              bookPublicationYear: book.publicationYear,
-              isInLibrary: availableBookIds.includes(book.id),
-              loanInfo: null,
-            };
+          {books.map((book: LibraryBookStockInfo, idx) => {
             return (
               <li key={idx}>
-                <BookLoanStatePanel libraryBookStockInfo={stockInfo} />
+                <BookLoanStatePanel libraryBookStockInfo={book} />
               </li>
             );
           })}
