@@ -1,9 +1,8 @@
-import { BookPreview } from "@/types/BookPreview";
+import { LibraryBookStockInfo } from "@/types/Loan";
 import { Check, TriangleAlert, X } from "lucide-react";
 
 interface BookLoanStatePanelProps {
-  isInLibrary: boolean;
-  book: BookPreview;
+  libraryBookStockInfo: LibraryBookStockInfo;
 }
 
 const mockLoanStatus = {
@@ -36,18 +35,18 @@ const getTimeAgo = (date: Date) => {
 };
 
 export const BookLoanStatePanel = ({
-  isInLibrary,
-  book,
+  libraryBookStockInfo: stockInfo,
 }: BookLoanStatePanelProps) => {
   const loanInfo =
     mockLoanStatus[
-      ((Number.parseInt(book.id) % 3) + 1) as keyof typeof mockLoanStatus
+      ((Number.parseInt(stockInfo.bookId) % 3) +
+        1) as keyof typeof mockLoanStatus
     ];
-  const isLoanAvailable = isInLibrary && loanInfo?.available;
+  const isLoanAvailable = stockInfo.isInLibrary && loanInfo?.available;
 
   let bgColor, borderColor, iconBg, icon, textColor, badgeColor, badgeText;
 
-  if (!isInLibrary) {
+  if (!stockInfo.isInLibrary) {
     bgColor = "bg-gray-50";
     borderColor = "border-gray-200";
     iconBg = "bg-gray-100";
@@ -87,10 +86,10 @@ export const BookLoanStatePanel = ({
       </div>
       <div className="flex-1 min-w-0">
         <p className={`font-medium truncate text-sm ${textColor}`}>
-          {book.title}
+          {stockInfo.bookTitle}
         </p>
         <p className="text-xs text-gray-600 truncate mb-0.5">
-          {book.author} · {book.publicationYear}
+          {stockInfo.bookAuthor} · {stockInfo.bookPublicationYear}
         </p>
         <div className="flex items-center gap-2 text-xs">
           <span
@@ -98,7 +97,7 @@ export const BookLoanStatePanel = ({
           >
             {badgeText}
           </span>
-          {isInLibrary && loanInfo && (
+          {stockInfo.isInLibrary && loanInfo && (
             <span className="text-gray-500">
               {getTimeAgo(loanInfo.checkedAt)} 확인됨
             </span>
