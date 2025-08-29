@@ -68,7 +68,7 @@ export const LibraryStockPanel = ({
         })
       );
     });
-  }, [library.id, stock, books]);
+  }, [library.id]);
 
   return (
     <div
@@ -169,9 +169,9 @@ const BooksTap = ({ bookStockInfos: books, handleRefresh }: BooksTapProps) => {
 
       {books.length > 0 ? (
         <ul className="space-y-2">
-          {books.map((book: LibraryBookStockInfo, idx) => {
+          {books.map((book: LibraryBookStockInfo) => {
             return (
-              <li key={idx}>
+              <li key={book.bookId}>
                 <BookLoanStatePanel libraryBookStockInfo={book} />
               </li>
             );
