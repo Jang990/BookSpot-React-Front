@@ -1,5 +1,5 @@
 import { BookPreview } from "@/types/BookPreview";
-import { BookOpen, Check, X } from "lucide-react";
+import { Check, TriangleAlert, X } from "lucide-react";
 
 interface BookLoanStatePanelProps {
   isInLibrary: boolean;
@@ -67,7 +67,7 @@ export const BookLoanStatePanel = ({
     bgColor = "bg-yellow-50";
     borderColor = "border-yellow-200";
     iconBg = "bg-yellow-100";
-    icon = <BookOpen size={16} className="text-yellow-600" />;
+    icon = <TriangleAlert size={16} className="text-yellow-600" />;
     textColor = "text-yellow-800";
     badgeColor = "bg-yellow-100 text-yellow-700";
     badgeText = "대출 중";
