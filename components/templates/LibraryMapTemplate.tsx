@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MapBound } from "@/types/MapBound";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
-import { LibraryStockMap } from "../organisms/map/TEMP_LibraryMap";
+import { LibraryStockMap } from "../organisms/map/LibraryMap";
 
 export interface Props {
   booksInfo: BookPreview[];

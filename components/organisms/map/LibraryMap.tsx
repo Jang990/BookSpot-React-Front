@@ -3,7 +3,7 @@ import { LibraryStockPanel } from "@/components/molecules/LibraryStockPanel";
 import { BookPreview } from "@/types/BookPreview";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { MapBound } from "@/types/MapBound";
-import { BaseLibraryMap } from "./TEMP_BaseLibraryMap";
+import { BaseLibraryMap } from "./BaseLibraryMap";
 import { LibraryMarker } from "@/components/molecules/LibararyMarker";
 import { LibrarySelectionPanel } from "@/components/molecules/LibrarySelectionPanel";
 
