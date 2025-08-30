@@ -57,6 +57,7 @@ export const LibraryStockPanel = ({
     : [];
   const [stockInfos, setLibraryBookStockInfos] =
     useState<LibraryBookStockInfo[]>(baseStockInfos);
+  const [isStockRefreshing, setIsStockRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     if (!stock) return;
@@ -82,7 +83,7 @@ export const LibraryStockPanel = ({
     });
   }, [library.id]);
 
-  function handleRefresh() {
+  async function handleRefresh() {
     if (!stockInfos.some((info) => info.loanInfo !== null)) {
       // refresh 대상 없음: loanInfo가 모두 null
       return;
@@ -94,22 +95,25 @@ export const LibraryStockPanel = ({
     );
 
     if (targets.length === 0) return;
+    setIsStockRefreshing(true);
 
-    targets.forEach((info) => {
-      refreshStock({
-        stockId: info.loanInfo!.stockId,
-      })
-        .then((updated) => {
-          setLibraryBookStockInfos((prev) =>
-            prev.map((i) =>
-              i.bookId === updated.bookId ? { ...i, loanInfo: updated } : i
-            )
-          );
+    try {
+      const updates = await Promise.all(
+        targets.map((info) => refreshStock({ stockId: info.loanInfo!.stockId }))
+      );
+
+      // loanInfo들을 종합해서 한 번에 반영
+      setLibraryBookStockInfos((prev) =>
+        prev.map((i) => {
+          const updated = updates.find((u) => u.bookId === i.bookId);
+          return updated ? { ...i, loanInfo: updated } : i;
         })
-        .catch((e) => {
-          console.error("refresh 실패:", e);
-        });
-    });
+      );
+    } catch (e) {
+      console.error("refresh 중 오류 발생:", e);
+    } finally {
+      setIsStockRefreshing(false);
+    }
   }
 
   return (
@@ -174,7 +178,11 @@ export const LibraryStockPanel = ({
         style={{ maxHeight: "200px" }}
       >
         {activeTab === "books" ? (
-          <BooksTap bookStockInfos={stockInfos} handleRefresh={handleRefresh} />
+          <BooksTap
+            bookStockInfos={stockInfos}
+            handleRefresh={handleRefresh}
+            isStockRefreshing={isStockRefreshing}
+          />
         ) : (
           <LibraryDetailContentPanel library={library} />
         )}
@@ -185,10 +193,15 @@ export const LibraryStockPanel = ({
 
 interface BooksTapProps {
   bookStockInfos: LibraryBookStockInfo[];
+  isStockRefreshing: boolean;
   handleRefresh: () => void;
 }
 
-const BooksTap = ({ bookStockInfos: books, handleRefresh }: BooksTapProps) => {
+const BooksTap = ({
+  bookStockInfos: books,
+  isStockRefreshing,
+  handleRefresh,
+}: BooksTapProps) => {
   return (
     <div className="">
       <div className="flex items-center justify-between mb-3">
@@ -204,8 +217,12 @@ const BooksTap = ({ bookStockInfos: books, handleRefresh }: BooksTapProps) => {
           onClick={handleRefresh}
           className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
           title="대출 가능여부 새로고침"
+          disabled={isStockRefreshing} // 새로고침 중엔 중복 클릭 방지
         >
-          <RefreshCw size={16} />
+          <RefreshCw
+            size={16}
+            className={isStockRefreshing ? "animate-spin" : ""}
+          />
         </button>
       </div>
 
