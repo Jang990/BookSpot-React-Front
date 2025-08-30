@@ -105,6 +105,7 @@ export const LibraryStockPanel = ({
       momentaryRefresh();
       return;
     }
+    setIsStockRefreshing(true);
 
     try {
       const updates = await Promise.all(
