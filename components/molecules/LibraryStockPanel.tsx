@@ -9,6 +9,7 @@ import { BookLoanStatePanel } from "./panel/BookLoanStatePanel";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
 import { fetchStocks } from "@/utils/api/LibraryBookStockApi";
 import { refreshStock } from "@/utils/api/LibraryStockRefreshApi";
+import { InfoPanel } from "./InfoPanel";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -243,6 +244,9 @@ const BooksTap = ({
               </li>
             );
           })}
+          <li>
+            <InfoPanel text="하루 전 대출 가능여부만 확인할 수 있습니다." />
+          </li>
         </ul>
       ) : (
         <p className="text-sm text-gray-500 text-center py-4">
