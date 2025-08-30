@@ -1,5 +1,5 @@
 import { convertLoanInfo } from "./ApiResponseConvertor";
-import { get, post } from "./Fetcher";
+import { post } from "./Fetcher";
 import { LoanInfo } from "@/types/Loan";
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 
 export async function refreshStock(props: Props): Promise<LoanInfo> {
   const json = await post(createApi(props));
-  return json.responses.map(convertLoanInfo);
+  return convertLoanInfo(json);
 }
 
 function createApi({ stockId }: Props): string {
