@@ -1,6 +1,7 @@
 import { BookPreview } from "@/types/BookPreview";
 import { Library } from "@/types/Library";
 import LibraryStock from "@/types/LibraryStock";
+import { LoanInfo } from "@/types/Loan";
 import {
   BookStockStatus,
   NearbyLibraryStock,
@@ -80,5 +81,15 @@ export function convertLibraryStock(content: any): LibraryStock {
     availableBookIds: content.availableBookIds,
     unavailableBookIds: content.unavailableBookIds,
     totalBooksCount: content.totalBooksCount,
+  };
+}
+
+export function convertLoanInfo(content: any): LoanInfo {
+  return {
+    stockId: content.stockId,
+    libraryId: content.libraryId,
+    bookId: content.bookId,
+    loanState: content.loanState,
+    updatedAt: content.stateUpdatedAt,
   };
 }

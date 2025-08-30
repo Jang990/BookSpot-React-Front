@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { MapBound } from "@/types/MapBound";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
-import { LibrarySelectionMap } from "../organisms/LibrarySelectionMap";
+import { LibrarySelectionMap } from "../organisms/map/LibraryMap";
 
 export interface Props {
   mapBound: MapBound;

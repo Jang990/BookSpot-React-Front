@@ -1,19 +1,14 @@
 "use client";
 
-import {
-  ExternalLink,
-  Clock,
-  Calendar,
-  Check,
-  X,
-  Book,
-  Info,
-  MapPin,
-} from "lucide-react";
+import { X, Book, Info, MapPin, RefreshCw } from "lucide-react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LibraryDetailContentPanel } from "./LibraryDetailContentPanel";
+import { BookLoanStatePanel } from "./panel/BookLoanStatePanel";
+import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
+import { fetchStocks } from "@/utils/api/LibraryBookStockApi";
+import { refreshStock } from "@/utils/api/LibraryStockRefreshApi";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -21,6 +16,17 @@ interface LibraryStockPanelProps {
   onClose: () => void;
   isEntering: boolean;
   onMoveToLocation?: () => void;
+}
+
+function isToday(iso: string) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return false;
+  const now = new Date();
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
 }
 
 export const LibraryStockPanel = ({
@@ -33,19 +39,90 @@ export const LibraryStockPanel = ({
   const { library, stock } = libraryMarkerInfo;
   const [activeTab, setActiveTab] = useState<"books" | "info">("books");
 
-  // 모든 책을 하나의 배열로 가져오기
-  const allBooks = stock
-    ? books.filter(
-        (book) =>
-          stock.availableBookIds.includes(book.id) ||
-          stock.unavailableBookIds.includes(book.id)
-      )
+  const baseStockInfos: LibraryBookStockInfo[] = stock
+    ? books
+        .filter(
+          (book) =>
+            stock.availableBookIds.includes(book.id) ||
+            stock.unavailableBookIds.includes(book.id)
+        )
+        .map((book) => ({
+          bookId: book.id,
+          bookTitle: book.title,
+          bookAuthor: book.author,
+          bookPublicationYear: book.publicationYear,
+          isInLibrary: stock.availableBookIds.includes(book.id),
+          loanInfo: null,
+        }))
     : [];
+  const [stockInfos, setLibraryBookStockInfos] =
+    useState<LibraryBookStockInfo[]>(baseStockInfos);
+  const [isStockRefreshing, setIsStockRefreshing] = useState<boolean>(false);
 
-  // 각 책의 가용성 확인
-  const isBookAvailable = (bookId: string) => {
-    return stock?.availableBookIds.includes(bookId) || false;
-  };
+  useEffect(() => {
+    if (!stock) return;
+
+    setLibraryBookStockInfos(baseStockInfos);
+
+    const inLibraryIds = baseStockInfos
+      .filter((info) => info.isInLibrary)
+      .map((info) => info.bookId);
+
+    if (inLibraryIds.length === 0) return;
+
+    fetchStocks({
+      libraryId: library.id,
+      bookIds: inLibraryIds,
+    }).then((loanInfos: LoanInfo[]) => {
+      setLibraryBookStockInfos((prev) =>
+        prev.map((info) => {
+          const loan = loanInfos.find((l) => l.bookId === info.bookId);
+          return loan ? { ...info, loanInfo: loan } : info;
+        })
+      );
+    });
+  }, [library.id]);
+
+  function momentaryRefresh(duration = 500) {
+    setIsStockRefreshing(true);
+    setTimeout(() => setIsStockRefreshing(false), duration);
+  }
+
+  async function handleRefresh() {
+    if (!stockInfos.some((info) => info.loanInfo !== null)) {
+      // refresh 대상 없음: loanInfo가 모두 null
+      momentaryRefresh();
+      return;
+    }
+
+    const targets = stockInfos.filter(
+      (info) =>
+        info.isInLibrary && info.loanInfo && !isToday(info.loanInfo.updatedAt)
+    );
+
+    if (targets.length === 0) {
+      momentaryRefresh();
+      return;
+    }
+
+    try {
+      const updates = await Promise.all(
+        targets.map((info) => refreshStock({ stockId: info.loanInfo!.stockId }))
+      );
+
+      // loanInfo들을 종합해서 한 번에 반영
+      setLibraryBookStockInfos((prev) =>
+        prev.map((i) => {
+          const updated = updates.find((u) => u.bookId === i.bookId);
+          return updated ? { ...i, loanInfo: updated } : i;
+        })
+      );
+    } catch (e) {
+      console.error("refresh 중 오류 발생:", e);
+    } finally {
+      setIsStockRefreshing(false);
+    }
+  }
 
   return (
     <div
@@ -109,59 +186,69 @@ export const LibraryStockPanel = ({
         style={{ maxHeight: "200px" }}
       >
         {activeTab === "books" ? (
-          <div>
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">
-              도서 목록 ({allBooks.length})
-            </h3>
-            {allBooks.length > 0 ? (
-              <ul className="space-y-1.5">
-                {allBooks.map((book) => {
-                  const available = isBookAvailable(book.id);
-                  return (
-                    <li
-                      key={book.id}
-                      className={`
-                        flex items-start p-1.5 rounded-md text-sm
-                        ${available ? "bg-green-50" : "bg-red-50"}
-                      `}
-                    >
-                      <div
-                        className={`
-                          w-6 h-6 rounded-md flex items-center justify-center mr-2 flex-shrink-0
-                          ${available ? "bg-green-100" : "bg-red-100"}
-                        `}
-                      >
-                        {available ? (
-                          <Check size={12} className="text-green-600" />
-                        ) : (
-                          <X size={12} className="text-red-600" />
-                        )}
-                      </div>
-                      <div className="overflow-hidden">
-                        <p
-                          className={`
-                            font-medium truncate
-                            ${available ? "text-green-800" : "text-red-800"}
-                          `}
-                        >
-                          {book.title}
-                        </p>
-                        <p className="text-xs text-gray-500 truncate">
-                          {book.author} · {book.publicationYear}
-                        </p>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="text-sm text-gray-500">도서 정보가 없습니다.</p>
-            )}
-          </div>
+          <BooksTap
+            bookStockInfos={stockInfos}
+            handleRefresh={handleRefresh}
+            isStockRefreshing={isStockRefreshing}
+          />
         ) : (
           <LibraryDetailContentPanel library={library} />
         )}
       </div>
+    </div>
+  );
+};
+
+interface BooksTapProps {
+  bookStockInfos: LibraryBookStockInfo[];
+  isStockRefreshing: boolean;
+  handleRefresh: () => void;
+}
+
+const BooksTap = ({
+  bookStockInfos: books,
+  isStockRefreshing,
+  handleRefresh,
+}: BooksTapProps) => {
+  return (
+    <div className="">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold ps-2 text-gray-700">
+            도서 목록
+          </h3>
+          <span className="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full font-medium">
+            전날 기준
+          </span>
+        </div>
+        <button
+          onClick={handleRefresh}
+          className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+          title="대출 가능여부 새로고침"
+          disabled={isStockRefreshing} // 새로고침 중엔 중복 클릭 방지
+        >
+          <RefreshCw
+            size={16}
+            className={isStockRefreshing ? "animate-spin" : ""}
+          />
+        </button>
+      </div>
+
+      {books.length > 0 ? (
+        <ul className="space-y-2">
+          {books.map((book: LibraryBookStockInfo) => {
+            return (
+              <li key={book.bookId}>
+                <BookLoanStatePanel libraryBookStockInfo={book} />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p className="text-sm text-gray-500 text-center py-4">
+          도서 정보가 없습니다.
+        </p>
+      )}
     </div>
   );
 };
