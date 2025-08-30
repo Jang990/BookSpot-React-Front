@@ -8,7 +8,10 @@ export class ApiClient {
     this.baseUrl = baseUrl;
   }
 
-  async get<T>(req: NextRequest): Promise<NextResponse> {
+  async request<T>(
+    req: NextRequest,
+    method: "GET" | "POST" | "PUT" | "DELETE" = "GET"
+  ): Promise<NextResponse> {
     const pathname = req.nextUrl.pathname;
     const search = req.nextUrl.search;
     const url = this.baseUrl + pathname + search;
@@ -17,14 +20,13 @@ export class ApiClient {
     const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     try {
-      // 외부 API로 통신
       const json = await fetch(url, {
-        method: "GET",
+        method,
         headers: {
           "Content-Type": "application/json",
         },
         signal: controller.signal,
-      }).then((req) => req.json());
+      }).then((res) => res.json());
 
       clearTimeout(timeout);
 
@@ -36,33 +38,12 @@ export class ApiClient {
     }
   }
 
-  // 필요 시 post, put, delete 등 추가
-  async post<T>(req: NextRequest): Promise<NextResponse> {
-    const pathname = req.nextUrl.pathname;
-    const search = req.nextUrl.search;
-    const url = this.baseUrl + pathname + search;
+  async get<T>(req: NextRequest) {
+    return this.request<T>(req, "GET");
+  }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-    try {
-      // 외부 API로 통신
-      const json = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        signal: controller.signal,
-      }).then((req) => req.json());
-
-      clearTimeout(timeout);
-
-      return NextResponse.json(json);
-    } catch (error) {
-      return new NextResponse("server error", {
-        status: 500,
-      });
-    }
+  async post<T>(req: NextRequest) {
+    return this.request<T>(req, "POST");
   }
 }
 
