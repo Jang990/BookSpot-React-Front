@@ -125,7 +125,7 @@ const LoanBadge = ({ loanInfo }: LoanBadgeProps) => {
       {hasLoanInfo ? (
         <>
           <span
-            className={`px-2 py-0.5 rounded-full font-medium border-2 ${badgeBorder} ${badgeColor}`}
+            className={`px-1 py-[1px] rounded-full border-2 ${badgeBorder} ${badgeColor}`}
           >
             {badgeText}
           </span>
