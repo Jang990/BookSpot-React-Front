@@ -83,9 +83,15 @@ export const LibraryStockPanel = ({
     });
   }, [library.id]);
 
+  function momentaryRefresh(duration = 500) {
+    setIsStockRefreshing(true);
+    setTimeout(() => setIsStockRefreshing(false), duration);
+  }
+
   async function handleRefresh() {
     if (!stockInfos.some((info) => info.loanInfo !== null)) {
       // refresh 대상 없음: loanInfo가 모두 null
+      momentaryRefresh();
       return;
     }
 
@@ -94,8 +100,10 @@ export const LibraryStockPanel = ({
         info.isInLibrary && info.loanInfo && !isToday(info.loanInfo.updatedAt)
     );
 
-    if (targets.length === 0) return;
-    setIsStockRefreshing(true);
+    if (targets.length === 0) {
+      momentaryRefresh();
+      return;
+    }
 
     try {
       const updates = await Promise.all(
