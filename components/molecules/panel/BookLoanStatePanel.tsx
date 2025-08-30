@@ -10,9 +10,13 @@ function getTimeAgo(dateStr: string): string {
   const date = new Date(dateStr);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
 
+  if (diffMinutes < 60) {
+    return `${diffMinutes}분 전`;
+  }
   if (diffHours < 24) {
     return `${diffHours}시간 전`;
   }
@@ -125,7 +129,7 @@ const LoanBadge = ({ loanInfo }: LoanBadgeProps) => {
       {hasLoanInfo ? (
         <>
           <span
-            className={`px-2 py-0.5 rounded-full font-medium border-2 ${badgeBorder} ${badgeColor}`}
+            className={`px-1 py-[1px] rounded-full border-2 ${badgeBorder} ${badgeColor}`}
           >
             {badgeText}
           </span>
