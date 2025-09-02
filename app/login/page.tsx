@@ -1,7 +1,7 @@
 import { GoogleLoginButton } from "@/components/molecules/button/login/GoogleLoginButton";
 import { KakaoLoginButton } from "@/components/molecules/button/login/KakaoLoginButton";
 import { NaverLoginButton } from "@/components/molecules/button/login/NaverLoginButton";
-import { Button } from "@/components/ui/button";
+import { OauthLoginButtonGroup } from "@/components/organisms/OauthLoginButtonGroup";
 
 export default async function LoginPage() {
   return (
@@ -18,11 +18,7 @@ export default async function LoginPage() {
             </p>
           </div>
 
-          <div className="space-y-4">
-            <NaverLoginButton />
-            <KakaoLoginButton />
-            <GoogleLoginButton />
-          </div>
+          <OauthLoginButtonGroup />
         </div>
       </div>
     </div>
