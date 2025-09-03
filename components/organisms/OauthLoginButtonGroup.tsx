@@ -1,4 +1,5 @@
 "use client";
+import { signIn } from "next-auth/react";
 import { GoogleLoginButton } from "@/components/molecules/button/login/GoogleLoginButton";
 import { KakaoLoginButton } from "@/components/molecules/button/login/KakaoLoginButton";
 import { NaverLoginButton } from "@/components/molecules/button/login/NaverLoginButton";
@@ -18,7 +19,7 @@ export const OauthLoginButtonGroup = () => {
       />
       <GoogleLoginButton
         onClick={() => {
-          console.log("구글 로그인");
+          signIn("google");
         }}
       />
     </div>
