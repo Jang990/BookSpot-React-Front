@@ -7,7 +7,7 @@ import { CartIconLink } from "../molecules/link/CartIconLink";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { User } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -49,7 +49,11 @@ const UserIconButton = () => {
           Icon={User}
           items={[
             { type: "link", text: "내 서재", href: "/library" },
-            { type: "button", text: "로그아웃", onClick: () => {} },
+            {
+              type: "button",
+              text: "로그아웃",
+              onClick: () => signOut(),
+            },
           ]}
         />
       ) : (
