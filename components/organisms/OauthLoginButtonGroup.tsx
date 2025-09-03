@@ -19,7 +19,7 @@ export const OauthLoginButtonGroup = () => {
       />
       <GoogleLoginButton
         onClick={() => {
-          signIn("google");
+          signIn("google", { redirectTo: "/" });
         }}
       />
     </div>
