@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { CartIconLink } from "../molecules/link/CartIconLink";
 import { useBookCart } from "@/contexts/BookCartContext";
+import { User } from "lucide-react";
+import IconDropDownButton from "./dropdown/IconDrowDown";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,7 +28,16 @@ export const Header = () => {
     >
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <BookSpotLogoButton />
-        <CartIconLink href="/cart" cartSize={cart.length} />
+        <div className="flex items-center gap-3">
+          <CartIconLink href="/cart" cartSize={cart.length} />
+          <IconDropDownButton
+            Icon={User}
+            items={[
+              { type: "link", text: "내 서재", href: "/library" },
+              { type: "button", text: "로그아웃", onClick: () => {} },
+            ]}
+          />
+        </div>
       </div>
     </header>
   );
