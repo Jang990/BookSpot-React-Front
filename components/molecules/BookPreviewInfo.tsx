@@ -15,8 +15,8 @@ interface BookPreviewInfoProps {
   book: BookPreview;
 }
 
-const DEAFULT_TITLE = "제목 없음";
-const DEFAULT_TEXT = "정보 없음";
+export const DEFAULT_TITLE = "제목 없음";
+export const DEFAULT_TEXT = "정보 없음";
 export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,7 +34,7 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
 
   return (
     <div className="p-4 flex flex-col flex-grow">
-      <CardTitleLabel text={book.title ?? DEAFULT_TITLE} />
+      <CardTitleLabel text={book.title ?? DEFAULT_TITLE} />
       <p className="mb-1">
         <CardSubLabel text={book.author ?? DEFAULT_TEXT} />
       </p>
