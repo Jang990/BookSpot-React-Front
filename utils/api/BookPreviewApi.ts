@@ -6,6 +6,7 @@ import {
   SearchAfter,
 } from "@/types/Pageable";
 import { get } from "./Fetcher";
+import { get as getTemp } from "./Request";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "./ApiResponseConvertor";
 import {
@@ -13,6 +14,7 @@ import {
   CATEGORY_QUERY_STRING_KEY,
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
+import { BookPagingApiSpec } from "@/types/ApiSpec";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -54,26 +56,41 @@ export const findBooksPreview = async (
   pageable: Pageable
 ): Promise<PagingResult> => {
   const keyword = searchCond.keyword;
-  // const isEmptyBookIds = !searchCond.bookIds || searchCond.bookIds.length === 0;
-  // const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     return EMPTY_PAGIN_RESULT;
   }
 
-  const json = await fetchBooksPreview(searchCond, pageable);
+  const response = await getTemp<BookPagingApiSpec>(
+    createApi(searchCond, pageable)
+  );
+
+  if (!response.ok) {
+    throw response.error;
+  }
+
+  const oriBookList = response.data?.books?.content ?? [];
+  const books: BookPreview[] = oriBookList.map(convertBookPreview);
+
+  const oriTotalElements = response.data?.books?.totalElements;
+  const totalElements = Number.isFinite(
+    Number(response.data?.books?.totalElements)
+  )
+    ? Number(oriTotalElements)
+    : 0;
+  const totalPage = Math.ceil(totalElements / ITEMS_PER_PAGE);
 
   return {
-    totalPage: json.books.totalPages,
-    totalElements: json.books.totalElements,
-    books: json.books.content.map(convertBookPreview),
+    books,
     searchAfter: {
-      lastScore: json.lastScore,
-      lastLoanCount: json.lastLoanCount,
-      lastBookId: json.lastBookId,
+      lastScore: response.data?.lastScore,
+      lastLoanCount: response.data?.lastLoanCount,
+      lastBookId: response.data?.lastBookId,
     },
-    hasNext: !json.books.last,
+    totalElements,
+    totalPage,
+    hasNext: books.length === ITEMS_PER_PAGE,
   };
 };
 
