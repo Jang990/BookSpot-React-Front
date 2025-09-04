@@ -4,7 +4,7 @@ import { RankingBadge } from "../atoms/badge/RankingBadge";
 
 interface BookImageProps {
   id: string;
-  title: string;
+  title: string | null;
   isbn13: string;
   rank: number | null;
 }
@@ -25,7 +25,7 @@ export const BookPreviewImage = ({
         {rank && <RankingBadge rank={rank} />}
         <Image
           src={imageUrl}
-          alt={title}
+          alt={title ?? "알 수 없는 책 제목"}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
           className="object-contain"
