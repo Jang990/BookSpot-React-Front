@@ -46,9 +46,9 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
   totalElements: 0,
   books: [],
   searchAfter: {
-    lastLoanCount: undefined,
-    lastScore: undefined,
-    lastBookId: undefined,
+    lastLoanCount: null,
+    lastScore: null,
+    lastBookId: null,
   },
   hasNext: false,
 };
@@ -56,9 +56,9 @@ const EMPTY_SEARCH_AFTER_RESULT: SearchAfterResult = {
   totalElements: 0,
   books: [],
   searchAfter: {
-    lastLoanCount: undefined,
-    lastScore: undefined,
-    lastBookId: undefined,
+    lastLoanCount: null,
+    lastScore: null,
+    lastBookId: null,
   },
   hasNext: false,
 };
@@ -175,13 +175,13 @@ function createApi(
 }
 
 function appendSearchAfterQuery(pageCond: SearchAfter, url: URL) {
-  if (pageCond.lastLoanCount !== undefined)
+  if (pageCond.lastLoanCount !== null)
     url.searchParams.append("lastLoanCount", pageCond.lastLoanCount.toString());
 
-  if (pageCond.lastBookId !== undefined)
+  if (pageCond.lastBookId !== null)
     url.searchParams.append("lastBookId", pageCond.lastBookId.toString());
 
-  if (pageCond.lastScore !== undefined)
+  if (pageCond.lastScore !== null)
     url.searchParams.append(LAST_SCORE_KEY, pageCond.lastScore.toString());
 }
 

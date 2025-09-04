@@ -1,17 +1,17 @@
 export interface BookPagingApiSpec {
-  books?: {
+  books: {
     content: any[];
     totalElements: number;
   };
-  lastScore?: string;
-  lastLoanCount?: number;
-  lastBookId?: number;
+  lastScore: string | null;
+  lastLoanCount: number | null;
+  lastBookId: number | null;
 }
 
 export interface BookSearchAfterApiSpec {
   books: any[];
-  lastScore?: string;
-  lastLoanCount?: number;
-  lastBookId?: number;
+  lastScore: string | null;
+  lastLoanCount: number | null;
+  lastBookId: number | null;
   totalElements: number;
 }

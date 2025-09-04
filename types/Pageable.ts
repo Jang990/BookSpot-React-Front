@@ -10,7 +10,7 @@ export interface Pageable {
 }
 
 export interface SearchAfter {
-  lastScore?: string;
-  lastLoanCount?: number;
-  lastBookId?: number;
+  lastScore: string | null;
+  lastLoanCount: number | null;
+  lastBookId: number | null;
 }
