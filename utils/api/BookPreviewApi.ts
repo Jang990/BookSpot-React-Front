@@ -6,7 +6,6 @@ import {
 } from "@/types/Pageable";
 import { get } from "./Request";
 import { BookPreview } from "@/types/BookPreview";
-import { convertBookPreview } from "./ApiResponseConvertor";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
@@ -83,15 +82,13 @@ export const findBooksPreview = async (
   }
 
   if (!response.data || !response.data.books) return EMPTY_PAGIN_RESULT;
-  const responseBooks = response.data.books;
-
-  const books: BookPreview[] = responseBooks.content.map(convertBookPreview);
-  const totalElements = responseBooks.totalElements;
+  const responseBooks = response.data.books.content;
+  const totalElements = response.data.books.totalElements;
   const totalPage = Math.ceil(totalElements / ITEMS_PER_PAGE);
 
   const responseData = response.data;
   return {
-    books,
+    books: responseBooks,
     searchAfter: {
       lastScore: responseData.lastScore,
       lastLoanCount: responseData.lastLoanCount,
@@ -99,7 +96,7 @@ export const findBooksPreview = async (
     },
     totalElements,
     totalPage,
-    hasNext: books.length === ITEMS_PER_PAGE,
+    hasNext: responseBooks.length === ITEMS_PER_PAGE,
   };
 };
 
@@ -125,10 +122,9 @@ export const findBooksPreviewWithSA = async (
   if (!response.data) return EMPTY_SEARCH_AFTER_RESULT;
 
   const responseData = response.data;
-  const books: BookPreview[] = responseData.books.map(convertBookPreview);
   return {
     totalElements: responseData.totalElements,
-    books,
+    books: responseData.books,
     searchAfter: {
       lastScore: responseData.lastScore,
       lastLoanCount: responseData.lastLoanCount,

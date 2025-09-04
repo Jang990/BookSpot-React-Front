@@ -1,6 +1,8 @@
+import { BookPreview } from "./BookPreview";
+
 export interface BookPagingApiSpec {
   books: {
-    content: any[];
+    content: BookPreview[];
     totalElements: number;
   };
   lastScore: string | null;
@@ -9,7 +11,7 @@ export interface BookPagingApiSpec {
 }
 
 export interface BookSearchAfterApiSpec {
-  books: any[];
+  books: BookPreview[];
   lastScore: string | null;
   lastLoanCount: number | null;
   lastBookId: number | null;

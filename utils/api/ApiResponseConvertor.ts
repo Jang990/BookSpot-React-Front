@@ -7,22 +7,6 @@ import {
   NearbyLibraryStock,
 } from "@/types/NearbyLibraryStock";
 
-export function convertBookPreview(content: any): BookPreview {
-  return {
-    id: content.id,
-    title: content.title ?? null,
-    isbn13: content.isbn13,
-    loanCount: content.loanCount,
-    createdAt: content.createdAt,
-    author: content.author ?? null,
-    publicationYear: content.publicationYear ?? null,
-    publisher: content.publisher ?? null,
-    category: content.category ?? null,
-
-    rank: null,
-  };
-}
-
 export function convertBookRanking(content: any): BookPreview {
   return {
     id: content.id,
