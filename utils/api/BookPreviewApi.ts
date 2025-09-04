@@ -5,8 +5,7 @@ import {
   Pageable,
   SearchAfter,
 } from "@/types/Pageable";
-import { get } from "./Fetcher";
-import { get as getTemp } from "./Request";
+import { get } from "./Request";
 import { BookPreview } from "@/types/BookPreview";
 import { convertBookPreview } from "./ApiResponseConvertor";
 import {
@@ -72,7 +71,7 @@ export const findBooksPreview = async (
     return EMPTY_PAGIN_RESULT;
   }
 
-  const response = await getTemp<BookPagingApiSpec>(
+  const response = await get<BookPagingApiSpec>(
     createApi(searchCond, pageable)
   );
 
@@ -115,7 +114,7 @@ export const findBooksPreviewWithSA = async (
     return EMPTY_PAGIN_RESULT;
   }
 
-  const response = await getTemp<BookSearchAfterApiSpec>(
+  const response = await get<BookSearchAfterApiSpec>(
     createApi(searchCond, searchAfter)
   );
 
@@ -137,13 +136,6 @@ export const findBooksPreviewWithSA = async (
     },
     hasNext: responseData.books.length === ITEMS_PER_PAGE,
   };
-};
-
-const fetchBooksPreview = async (
-  searchCond: SearchCondition,
-  pagingCond: Pageable | SearchAfter
-) => {
-  return get(createApi(searchCond, pagingCond));
 };
 
 const BOOK_API_URL = process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books";
