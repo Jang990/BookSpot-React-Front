@@ -1,6 +1,6 @@
 import LibraryStock from "@/types/LibraryStock";
-import { get } from "./Fetcher";
-import { convertLibraryStock } from "./ApiResponseConvertor";
+import { get } from "./common/Request";
+import { LibraryStocksApiSpec } from "@/types/ApiSpec";
 
 interface Props {
   libraryIds: string[];
@@ -14,12 +14,10 @@ export const fetchLibraryStock = async (
     throw new Error("필수 조건 누락");
   }
 
-  return get(createApi(props))
-    .then((content) => content.map(convertLibraryStock))
-    .then((stocks) => {
-      // console.log(stocks);
-      return stocks;
-    });
+  const response = await get<LibraryStocksApiSpec>(createApi(props));
+  if (!response.ok) throw response.error;
+  if (!response.data) return [];
+  return response.data.libraryStocks;
 };
 
 const STOCK_API_URL =

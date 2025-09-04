@@ -1,8 +1,8 @@
-import { NearbyLibraryStock } from "@/types/NearbyLibraryStock";
-import { get } from "./Fetcher";
+import { get } from "./common/Request";
 import { convertLibrary } from "./ApiResponseConvertor";
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
+import { LibraryResponse, NearByLibraryApiSpec } from "@/types/ApiSpec";
 
 interface Props {
   mapBound: MapBound;
@@ -15,8 +15,10 @@ interface SingleLibraryProps {
 export const fetchNearByLibraries = async ({
   mapBound,
 }: Props): Promise<Library[]> => {
-  const api: string = createApi(mapBound);
-  return get(api).then((content) => content.map(convertLibrary));
+  const response = await get<NearByLibraryApiSpec>(createApi(mapBound));
+  if (!response.ok) throw response.error;
+  if (!response.data) return [];
+  return response.data.libraries.map(convertLibrary);
 };
 
 const BOOK_API_URL =
@@ -37,5 +39,9 @@ export const fetchSingleLibrary = async ({
   libraryId,
 }: SingleLibraryProps): Promise<Library> => {
   const api: string = SINGLE_LIBRARY_API_URL.concat("/").concat(libraryId);
-  return get(api).then((content) => convertLibrary(content));
+  const response = await get<LibraryResponse>(api);
+
+  if (!response.ok) throw response.error;
+  if (!response.data) throw new Error("데이터가 없음");
+  return convertLibrary(response.data);
 };

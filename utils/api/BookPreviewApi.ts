@@ -1,18 +1,17 @@
 import {
-  EMPTY_SEARCH_AFTER,
   ITEMS_PER_PAGE,
   MIN_SEARCH_TERM_LENGTH,
   Pageable,
   SearchAfter,
 } from "@/types/Pageable";
-import { get } from "./Fetcher";
+import { get } from "./common/Request";
 import { BookPreview } from "@/types/BookPreview";
-import { convertBookPreview } from "./ApiResponseConvertor";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
+import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -45,7 +44,21 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
   totalPage: 0,
   totalElements: 0,
   books: [],
-  searchAfter: EMPTY_SEARCH_AFTER,
+  searchAfter: {
+    lastLoanCount: null,
+    lastScore: null,
+    lastBookId: null,
+  },
+  hasNext: false,
+};
+const EMPTY_SEARCH_AFTER_RESULT: SearchAfterResult = {
+  totalElements: 0,
+  books: [],
+  searchAfter: {
+    lastLoanCount: null,
+    lastScore: null,
+    lastBookId: null,
+  },
   hasNext: false,
 };
 
@@ -54,26 +67,36 @@ export const findBooksPreview = async (
   pageable: Pageable
 ): Promise<PagingResult> => {
   const keyword = searchCond.keyword;
-  // const isEmptyBookIds = !searchCond.bookIds || searchCond.bookIds.length === 0;
-  // const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     return EMPTY_PAGIN_RESULT;
   }
 
-  const json = await fetchBooksPreview(searchCond, pageable);
+  const response = await get<BookPagingApiSpec>(
+    createApi(searchCond, pageable)
+  );
 
+  if (!response.ok) {
+    throw response.error;
+  }
+
+  if (!response.data || !response.data.books) return EMPTY_PAGIN_RESULT;
+  const responseBooks = response.data.books.content;
+  const totalElements = response.data.books.totalElements;
+  const totalPage = Math.ceil(totalElements / ITEMS_PER_PAGE);
+
+  const responseData = response.data;
   return {
-    totalPage: json.books.totalPages,
-    totalElements: json.books.totalElements,
-    books: json.books.content.map(convertBookPreview),
+    books: responseBooks,
     searchAfter: {
-      lastScore: json.lastScore,
-      lastLoanCount: json.lastLoanCount,
-      lastBookId: json.lastBookId,
+      lastScore: responseData.lastScore,
+      lastLoanCount: responseData.lastLoanCount,
+      lastBookId: responseData.lastBookId,
     },
-    hasNext: !json.books.last,
+    totalElements,
+    totalPage,
+    hasNext: responseBooks.length === ITEMS_PER_PAGE,
   };
 };
 
@@ -88,25 +111,27 @@ export const findBooksPreviewWithSA = async (
     return EMPTY_PAGIN_RESULT;
   }
 
-  const json = await fetchBooksPreview(searchCond, searchAfter);
+  const response = await get<BookSearchAfterApiSpec>(
+    createApi(searchCond, searchAfter)
+  );
 
+  if (!response.ok) {
+    throw response.error;
+  }
+
+  if (!response.data) return EMPTY_SEARCH_AFTER_RESULT;
+
+  const responseData = response.data;
   return {
-    totalElements: json.totalElements,
-    books: json.books.map(convertBookPreview),
+    totalElements: responseData.totalElements,
+    books: responseData.books,
     searchAfter: {
-      lastScore: json.lastScore,
-      lastLoanCount: json.lastLoanCount,
-      lastBookId: json.lastBookId,
+      lastScore: responseData.lastScore,
+      lastLoanCount: responseData.lastLoanCount,
+      lastBookId: responseData.lastBookId,
     },
-    hasNext: json.books.length === ITEMS_PER_PAGE,
+    hasNext: responseData.books.length === ITEMS_PER_PAGE,
   };
-};
-
-const fetchBooksPreview = async (
-  searchCond: SearchCondition,
-  pagingCond: Pageable | SearchAfter
-) => {
-  return get(createApi(searchCond, pagingCond));
 };
 
 const BOOK_API_URL = process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books";
@@ -146,13 +171,13 @@ function createApi(
 }
 
 function appendSearchAfterQuery(pageCond: SearchAfter, url: URL) {
-  if (pageCond.lastLoanCount !== undefined)
+  if (pageCond.lastLoanCount !== null)
     url.searchParams.append("lastLoanCount", pageCond.lastLoanCount.toString());
 
-  if (pageCond.lastBookId !== undefined)
+  if (pageCond.lastBookId !== null)
     url.searchParams.append("lastBookId", pageCond.lastBookId.toString());
 
-  if (pageCond.lastScore !== undefined)
+  if (pageCond.lastScore !== null)
     url.searchParams.append(LAST_SCORE_KEY, pageCond.lastScore.toString());
 }
 
