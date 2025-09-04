@@ -10,14 +10,14 @@ import {
 export function convertBookPreview(content: any): BookPreview {
   return {
     id: content.id,
-    title: content.title ?? "제목 없음",
-    author: content.author ?? "Unknown",
+    title: content.title,
     isbn13: content.isbn13,
-    publicationYear: content.publicationYear ?? /* undefined */ 1111,
-    publisher: content.publisher ?? /* undefined */ "Unknown",
     loanCount: content.loanCount,
-    category: content.category,
     createdAt: content.createdAt,
+    author: content.author ?? null,
+    publicationYear: content.publicationYear ?? null,
+    publisher: content.publisher ?? null,
+    category: content.category ?? null,
 
     rank: null,
   };
@@ -26,13 +26,13 @@ export function convertBookPreview(content: any): BookPreview {
 export function convertBookRanking(content: any): BookPreview {
   return {
     id: content.id,
-    title: content.title ?? "제목 없음",
-    author: content.author ?? "Unknown",
+    title: content.title,
     isbn13: content.isbn13,
-    publicationYear: content.publicationYear ?? /* undefined */ 1111,
-    publisher: content.publisher ?? /* undefined */ "Unknown",
     createdAt: content.createdAt,
-    category: content.category,
+    author: content.author ?? null,
+    publicationYear: content.publicationYear ?? null,
+    publisher: content.publisher ?? null,
+    category: content.category ?? null,
 
     loanCount: content.loanIncrease,
     rank: content.rank,
