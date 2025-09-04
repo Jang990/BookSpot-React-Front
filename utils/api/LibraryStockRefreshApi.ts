@@ -1,4 +1,4 @@
-import { LoanRefreshResponseApiSpec } from "@/types/ApiSpec";
+import { LoanInfoResponseApiSpec } from "@/types/ApiSpec";
 import { post } from "./Request";
 import { LoanInfo } from "@/types/Loan";
 import { convertLoanInfo } from "./ApiResponseConvertor";
@@ -8,7 +8,7 @@ interface Props {
 }
 
 export async function refreshStock(props: Props): Promise<LoanInfo> {
-  const response = await post<LoanRefreshResponseApiSpec>(createApi(props));
+  const response = await post<LoanInfoResponseApiSpec>(createApi(props));
   if (!response.ok) throw response.error;
   if (!response.data) throw new Error("대출 정보 없음");
 

@@ -1,6 +1,7 @@
 import { LoanInfo } from "@/types/Loan";
 import { get } from "./Request";
 import { StockLoanStateApiSpec } from "@/types/ApiSpec";
+import { convertLoanInfo } from "./ApiResponseConvertor";
 
 interface Props {
   libraryId: string;
@@ -11,7 +12,7 @@ export async function fetchStocks(props: Props): Promise<LoanInfo[]> {
   const response = await get<StockLoanStateApiSpec>(createApi(props));
   if (!response.ok) throw response.error;
   if (!response.data) return [];
-  return response.data.responses;
+  return response.data.responses.map(convertLoanInfo);
 }
 
 export function createApi({ libraryId, bookIds }: Props): string {

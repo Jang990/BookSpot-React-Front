@@ -40,14 +40,14 @@ export interface NearByLibraryApiSpec {
 }
 
 export interface StockLoanStateApiSpec {
-  responses: LoanInfo[];
+  responses: LoanInfoResponseApiSpec[];
 }
 
 export interface LibraryStocksApiSpec {
   libraryStocks: LibraryStock[];
 }
 
-export interface LoanRefreshResponseApiSpec {
+export interface LoanInfoResponseApiSpec {
   stockId: string;
   libraryId: string;
   bookId: string;
