@@ -1,3 +1,4 @@
+import { LibraryResponse } from "@/types/ApiSpec";
 import { BookPreview, BookRankingPreview } from "@/types/BookPreview";
 import { Library } from "@/types/Library";
 import LibraryStock from "@/types/LibraryStock";
@@ -23,7 +24,7 @@ export function convertBookRanking(content: BookRankingPreview): BookPreview {
   };
 }
 
-export function convertLibrary(content: any): Library {
+export function convertLibrary(content: LibraryResponse): Library {
   return {
     id: content.libraryId,
     name: content.libraryName,
@@ -31,10 +32,10 @@ export function convertLibrary(content: any): Library {
       latitude: content.latitude,
       longitude: content.longitude,
     },
-    address: content.address,
-    homePage: content.homePage,
-    closedInfo: content.closedInfo,
-    operatingInfo: content.operatingInfo,
+    address: content.address ?? "",
+    homePage: content.homePage ?? "",
+    closedInfo: content.closedInfo ?? "",
+    operatingInfo: content.operatingInfo ?? "",
   };
 }
 

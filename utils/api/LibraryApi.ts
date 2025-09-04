@@ -1,8 +1,9 @@
-import { NearbyLibraryStock } from "@/types/NearbyLibraryStock";
 import { get } from "./Fetcher";
+import { get as getTemp } from "./Request";
 import { convertLibrary } from "./ApiResponseConvertor";
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
+import { NearByLibraryApiSpec } from "@/types/ApiSpec";
 
 interface Props {
   mapBound: MapBound;
@@ -15,8 +16,10 @@ interface SingleLibraryProps {
 export const fetchNearByLibraries = async ({
   mapBound,
 }: Props): Promise<Library[]> => {
-  const api: string = createApi(mapBound);
-  return get(api).then((content) => content.map(convertLibrary));
+  const response = await getTemp<NearByLibraryApiSpec>(createApi(mapBound));
+  if (!response.ok) throw response.error;
+  if (!response.data) return [];
+  return response.data.libraries.map(convertLibrary);
 };
 
 const BOOK_API_URL =
