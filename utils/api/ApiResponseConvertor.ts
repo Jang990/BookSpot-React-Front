@@ -1,4 +1,4 @@
-import { BookPreview } from "@/types/BookPreview";
+import { BookPreview, BookRankingPreview } from "@/types/BookPreview";
 import { Library } from "@/types/Library";
 import LibraryStock from "@/types/LibraryStock";
 import { LoanInfo } from "@/types/Loan";
@@ -7,7 +7,7 @@ import {
   NearbyLibraryStock,
 } from "@/types/NearbyLibraryStock";
 
-export function convertBookRanking(content: any): BookPreview {
+export function convertBookRanking(content: BookRankingPreview): BookPreview {
   return {
     id: content.id,
     title: content.title ?? null,
