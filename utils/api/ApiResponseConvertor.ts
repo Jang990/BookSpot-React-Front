@@ -10,7 +10,7 @@ import {
 export function convertBookPreview(content: any): BookPreview {
   return {
     id: content.id,
-    title: content.title,
+    title: content.title ?? null,
     isbn13: content.isbn13,
     loanCount: content.loanCount,
     createdAt: content.createdAt,
@@ -26,7 +26,7 @@ export function convertBookPreview(content: any): BookPreview {
 export function convertBookRanking(content: any): BookPreview {
   return {
     id: content.id,
-    title: content.title,
+    title: content.title ?? null,
     isbn13: content.isbn13,
     createdAt: content.createdAt,
     author: content.author ?? null,

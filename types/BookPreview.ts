@@ -2,7 +2,7 @@ import { BookCategory } from "./BookCategory";
 
 export interface BookPreview {
   id: string;
-  title: string;
+  title: string | null;
   isbn13: string;
   createdAt: string;
   loanCount: number;
