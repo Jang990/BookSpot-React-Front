@@ -60,15 +60,6 @@ export function TEMP_convertLibraryStock(content: any): NearbyLibraryStock {
   }
 }
 
-export function convertLibraryStock(content: any): LibraryStock {
-  return {
-    libraryId: content.libraryId,
-    availableBookIds: content.availableBookIds,
-    unavailableBookIds: content.unavailableBookIds,
-    totalBooksCount: content.totalBooksCount,
-  };
-}
-
 export function convertLoanInfo(content: any): LoanInfo {
   return {
     stockId: content.stockId,

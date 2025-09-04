@@ -1,4 +1,5 @@
 import { BookPreview, BookRankingPreview } from "./BookPreview";
+import LibraryStock from "./LibraryStock";
 import { LoanInfo } from "./Loan";
 
 export interface BookPagingApiSpec {
@@ -40,4 +41,8 @@ export interface NearByLibraryApiSpec {
 
 export interface StockLoanStateApiSpec {
   responses: LoanInfo[];
+}
+
+export interface LibraryStocksApiSpec {
+  libraryStocks: LibraryStock[];
 }
