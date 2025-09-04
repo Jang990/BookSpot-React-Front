@@ -1,5 +1,5 @@
 import { LoanInfo } from "@/types/Loan";
-import { get } from "./Request";
+import { get } from "./common/Request";
 import { StockLoanStateApiSpec } from "@/types/ApiSpec";
 import { convertLoanInfo } from "./ApiResponseConvertor";
 

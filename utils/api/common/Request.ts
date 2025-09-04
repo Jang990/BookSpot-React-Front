@@ -4,7 +4,7 @@ import {
   UnauthorizedError,
   RateLimitError,
   ServerError,
-} from "../api/Errors";
+} from "./Errors";
 
 type RequestResult<T> =
   | { ok: true; status: number; data?: T }

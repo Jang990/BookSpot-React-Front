@@ -1,6 +1,6 @@
 import { BookPreview } from "@/types/BookPreview";
 import { RankingConditions } from "@/types/BookRankings";
-import { get } from "./Request";
+import { get } from "./common/Request";
 import { convertBookRanking } from "./ApiResponseConvertor";
 import { BookRankingsApiSpec } from "@/types/ApiSpec";
 

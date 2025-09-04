@@ -1,4 +1,4 @@
-import { get } from "./Request";
+import { get } from "./common/Request";
 import { convertLibrary } from "./ApiResponseConvertor";
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";

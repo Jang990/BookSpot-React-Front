@@ -4,7 +4,7 @@ import {
   Pageable,
   SearchAfter,
 } from "@/types/Pageable";
-import { get } from "./Request";
+import { get } from "./common/Request";
 import { BookPreview } from "@/types/BookPreview";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,

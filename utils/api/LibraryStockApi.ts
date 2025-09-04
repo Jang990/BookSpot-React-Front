@@ -1,5 +1,5 @@
 import LibraryStock from "@/types/LibraryStock";
-import { get } from "./Request";
+import { get } from "./common/Request";
 import { LibraryStocksApiSpec } from "@/types/ApiSpec";
 
 interface Props {

@@ -1,5 +1,5 @@
 import { LoanInfoResponseApiSpec } from "@/types/ApiSpec";
-import { post } from "./Request";
+import { post } from "./common/Request";
 import { LoanInfo } from "@/types/Loan";
 import { convertLoanInfo } from "./ApiResponseConvertor";
 
