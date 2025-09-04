@@ -3,14 +3,13 @@ import { BookCategory } from "./BookCategory";
 export interface BookPreview {
   id: string;
   title: string;
-  author: string;
   isbn13: string;
-  publicationYear: string;
-  publisher: string;
-  loanCount: number;
-  category: BookCategory;
   createdAt: string;
-  image?: string;
+  loanCount: number;
+  author: string | null;
+  publicationYear: string | null;
+  publisher: string | null;
 
+  category: BookCategory | null;
   rank: number | null;
 }
