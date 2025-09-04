@@ -1,5 +1,4 @@
 import {
-  EMPTY_SEARCH_AFTER,
   ITEMS_PER_PAGE,
   MIN_SEARCH_TERM_LENGTH,
   Pageable,
@@ -46,7 +45,11 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
   totalPage: 0,
   totalElements: 0,
   books: [],
-  searchAfter: EMPTY_SEARCH_AFTER,
+  searchAfter: {
+    lastLoanCount: undefined,
+    lastScore: undefined,
+    lastBookId: undefined,
+  },
   hasNext: false,
 };
 const EMPTY_SEARCH_AFTER_RESULT: SearchAfterResult = {
@@ -79,23 +82,20 @@ export const findBooksPreview = async (
     throw response.error;
   }
 
-  const oriBookList = response.data?.books?.content ?? [];
-  const books: BookPreview[] = oriBookList.map(convertBookPreview);
+  if (!response.data || !response.data.books) return EMPTY_PAGIN_RESULT;
+  const responseBooks = response.data.books;
 
-  const oriTotalElements = response.data?.books?.totalElements;
-  const totalElements = Number.isFinite(
-    Number(response.data?.books?.totalElements)
-  )
-    ? Number(oriTotalElements)
-    : 0;
+  const books: BookPreview[] = responseBooks.content.map(convertBookPreview);
+  const totalElements = responseBooks.totalElements;
   const totalPage = Math.ceil(totalElements / ITEMS_PER_PAGE);
 
+  const responseData = response.data;
   return {
     books,
     searchAfter: {
-      lastScore: response.data?.lastScore,
-      lastLoanCount: response.data?.lastLoanCount,
-      lastBookId: response.data?.lastBookId,
+      lastScore: responseData.lastScore,
+      lastLoanCount: responseData.lastLoanCount,
+      lastBookId: responseData.lastBookId,
     },
     totalElements,
     totalPage,

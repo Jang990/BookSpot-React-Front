@@ -9,11 +9,6 @@ export interface Pageable {
   pageSize: number;
 }
 
-export const EMPTY_SEARCH_AFTER: SearchAfter = {
-  lastLoanCount: undefined,
-  lastBookId: undefined,
-};
-
 export interface SearchAfter {
   lastScore?: string;
   lastLoanCount?: number;
