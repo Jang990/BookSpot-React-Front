@@ -1,6 +1,6 @@
 import { BookPreview, BookRankingPreview } from "./BookPreview";
 import LibraryStock from "./LibraryStock";
-import { LoanInfo } from "./Loan";
+import { LoanInfo, LoanState } from "./Loan";
 
 export interface BookPagingApiSpec {
   books: {
@@ -45,4 +45,12 @@ export interface StockLoanStateApiSpec {
 
 export interface LibraryStocksApiSpec {
   libraryStocks: LibraryStock[];
+}
+
+export interface LoanRefreshResponseApiSpec {
+  stockId: string;
+  libraryId: string;
+  bookId: string;
+  stateUpdatedAt: string;
+  loanState: LoanState;
 }

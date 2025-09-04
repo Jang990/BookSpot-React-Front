@@ -1,7 +1,6 @@
-import { LibraryResponse } from "@/types/ApiSpec";
+import { LibraryResponse, LoanRefreshResponseApiSpec } from "@/types/ApiSpec";
 import { BookPreview, BookRankingPreview } from "@/types/BookPreview";
 import { Library } from "@/types/Library";
-import LibraryStock from "@/types/LibraryStock";
 import { LoanInfo } from "@/types/Loan";
 import {
   BookStockStatus,
@@ -60,7 +59,7 @@ export function TEMP_convertLibraryStock(content: any): NearbyLibraryStock {
   }
 }
 
-export function convertLoanInfo(content: any): LoanInfo {
+export function convertLoanInfo(content: LoanRefreshResponseApiSpec): LoanInfo {
   return {
     stockId: content.stockId,
     libraryId: content.libraryId,
