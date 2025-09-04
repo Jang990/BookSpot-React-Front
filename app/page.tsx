@@ -5,7 +5,7 @@ import {
   findBooksPreview,
   findBooksPreviewWithSA,
   SearchCondition,
-} from "@/utils/api/BookPreviewApi";
+} from "@/utils/api/BookPreviewApi_SSR";
 import {
   parseNumber,
   parseString,
