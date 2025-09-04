@@ -14,7 +14,7 @@ import {
   CATEGORY_QUERY_STRING_KEY,
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
-import { BookPagingApiSpec } from "@/types/ApiSpec";
+import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -48,6 +48,16 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
   totalElements: 0,
   books: [],
   searchAfter: EMPTY_SEARCH_AFTER,
+  hasNext: false,
+};
+const EMPTY_SEARCH_AFTER_RESULT: SearchAfterResult = {
+  totalElements: 0,
+  books: [],
+  searchAfter: {
+    lastLoanCount: undefined,
+    lastScore: undefined,
+    lastBookId: undefined,
+  },
   hasNext: false,
 };
 
@@ -105,17 +115,27 @@ export const findBooksPreviewWithSA = async (
     return EMPTY_PAGIN_RESULT;
   }
 
-  const json = await fetchBooksPreview(searchCond, searchAfter);
+  const response = await getTemp<BookSearchAfterApiSpec>(
+    createApi(searchCond, searchAfter)
+  );
 
+  if (!response.ok) {
+    throw response.error;
+  }
+
+  if (!response.data) return EMPTY_SEARCH_AFTER_RESULT;
+
+  const responseData = response.data;
+  const books: BookPreview[] = responseData.books.map(convertBookPreview);
   return {
-    totalElements: json.totalElements,
-    books: json.books.map(convertBookPreview),
+    totalElements: responseData.totalElements,
+    books,
     searchAfter: {
-      lastScore: json.lastScore,
-      lastLoanCount: json.lastLoanCount,
-      lastBookId: json.lastBookId,
+      lastScore: responseData.lastScore,
+      lastLoanCount: responseData.lastLoanCount,
+      lastBookId: responseData.lastBookId,
     },
-    hasNext: json.books.length === ITEMS_PER_PAGE,
+    hasNext: responseData.books.length === ITEMS_PER_PAGE,
   };
 };
 
