@@ -15,15 +15,17 @@ interface BookPreviewInfoProps {
   book: BookPreview;
 }
 
+const DEFAULT_TEXT = "정보 없음";
 export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { clearSearchTerm } = useSearchTerm();
 
-  const isUnknownCategory =
-    book.category == null ||
-    book.category.id == null ||
-    book.category.name == null;
+  function categoryText(): string {
+    if (book.category && book.category.id && book.category.name)
+      return `${categoryIdText(book.category.id)} · ${book.category.name}`;
+    else return DEFAULT_TEXT;
+  }
 
   function categoryIdText(categoryId: string | number): string {
     return categoryId.toString().padStart(3, "0");
@@ -33,16 +35,16 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
     <div className="p-4 flex flex-col flex-grow">
       <CardTitleLabel text={book.title} />
       <p className="mb-1">
-        <CardSubLabel text={book.author} />
+        <CardSubLabel text={book.author ?? DEFAULT_TEXT} />
       </p>
       <p>
-        <CardFooterLabel text={`${book.publicationYear} · ${book.publisher}`} />
-        {isUnknownCategory ? (
-          <CategoryLinkButton text={"알 수 없음"} onClick={() => {}} />
-        ) : (
-          <CategoryLinkButton
-            text={`${categoryIdText(book.category.id)} · ${book.category.name}`}
-            onClick={() => {
+        <CardFooterLabel
+          text={`${book.publicationYear ?? DEFAULT_TEXT} · ${book.publisher ?? DEFAULT_TEXT}`}
+        />
+        <CategoryLinkButton
+          text={categoryText()}
+          onClick={() => {
+            if (book.category && book.category.id && book.category.name)
               onClickCategory(
                 router,
                 searchParams,
@@ -50,9 +52,8 @@ export const BookPreviewInfo = ({ book }: BookPreviewInfoProps) => {
                 LEVEL_LEAF,
                 clearSearchTerm
               );
-            }}
-          />
-        )}
+          }}
+        />
       </p>
       <div className="mt-auto pt-2">
         <CardFooterLabel
