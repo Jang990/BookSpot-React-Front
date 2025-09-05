@@ -110,7 +110,9 @@ export const LibraryStockPanel = ({
 
     try {
       const updates = await Promise.all(
-        targets.map((info) => refreshStock({ stockId: info.loanInfo!.stockId }))
+        targets.map((info) =>
+          refreshStock({ stockId: info.loanInfo!.stockId, side: "client" })
+        )
       );
 
       // loanInfo들을 종합해서 한 번에 반영
