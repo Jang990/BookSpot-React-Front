@@ -23,11 +23,13 @@ async function safeParseBody(res: Response): Promise<any | undefined> {
   }
 }
 
-export class SsrApiClient {
+export class ApiClient {
   private baseUrl: string;
+  private side: "server" | "client";
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, side: "server" | "client") {
     this.baseUrl = baseUrl;
+    this.side = side;
   }
 
   private async fetchWithAuth<T>(
@@ -43,10 +45,12 @@ export class SsrApiClient {
       const headers = new Headers(init.headers ?? {});
       headers.set("Content-Type", "application/json");
 
-      const session = await auth();
-      const token = session?.backendToken;
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
+      if (this.side === "server") {
+        const session = await auth();
+        const token = session?.backendToken;
+        if (token) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
       }
 
       const res = await fetch(`${this.baseUrl}${path}`, {
@@ -117,5 +121,11 @@ export class SsrApiClient {
   }
 }
 
-const ssrApiClient = new SsrApiClient(process.env.NEXT_PUBLIC_API_SERVER_URL!);
-export default ssrApiClient;
+export const ssrApiClient = new ApiClient(
+  process.env.NEXT_PUBLIC_API_SERVER_URL!,
+  "server"
+);
+export const csrApiClient = new ApiClient(
+  process.env.NEXT_PUBLIC_FRONT_SERVER_URL!,
+  "client"
+);
