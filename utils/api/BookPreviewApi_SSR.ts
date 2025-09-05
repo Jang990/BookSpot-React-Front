@@ -11,7 +11,7 @@ import {
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
 import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
-import { ssrApiClient } from "./common/Request_TEMP";
+import { Side, ssrApiClient } from "./common/Request_TEMP";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -64,7 +64,8 @@ const EMPTY_SEARCH_AFTER_RESULT: SearchAfterResult = {
 
 export const findBooksPreview = async (
   searchCond: SearchCondition,
-  pageable: Pageable
+  pageable: Pageable,
+  side: Side
 ): Promise<PagingResult> => {
   const keyword = searchCond.keyword;
 

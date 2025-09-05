@@ -84,7 +84,7 @@ export default async function Home({ searchParams }: Props) {
     hasNext = result.hasNext;
     totalElements = result.totalElements;
   } else {
-    const result = await findBooksPreview(searchCond, pageable);
+    const result = await findBooksPreview(searchCond, pageable, "server");
     books = result.books;
     totalPages = result.totalPage;
     searchAfter = result.searchAfter;
