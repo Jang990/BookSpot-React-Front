@@ -22,7 +22,10 @@ export default async function RankingPage({
     notFound();
   }
 
-  const bookRankings: BookPreview[] = await fetchBookRankings(rankingParams);
+  const bookRankings: BookPreview[] = await fetchBookRankings(
+    rankingParams,
+    "server"
+  );
 
   const pagePeriodText =
     rankingParams.period === RankingPeriodMeta.MONTHLY.value

@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 const TIMEOUT_MS = 8_000;
@@ -12,6 +13,7 @@ export class ApiClient {
     req: NextRequest,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET"
   ): Promise<NextResponse> {
+    const session = await auth();
     const pathname = req.nextUrl.pathname;
     const search = req.nextUrl.search;
     const url = this.baseUrl + pathname + search;
@@ -24,6 +26,9 @@ export class ApiClient {
         method,
         headers: {
           "Content-Type": "application/json",
+          ...(session?.backendToken
+            ? { Authorization: `Bearer ${session.backendToken}` }
+            : {}),
         },
         signal: controller.signal,
       }).then((res) => res.json());

@@ -1,10 +1,11 @@
 import LibraryStock from "@/types/LibraryStock";
-import { get } from "./common/Request";
 import { LibraryStocksApiSpec } from "@/types/ApiSpec";
+import { getApiClient, Side } from "./common/Request";
 
 interface Props {
   libraryIds: string[];
   bookIds: string[];
+  side: Side;
 }
 
 export const fetchLibraryStock = async (
@@ -14,19 +15,27 @@ export const fetchLibraryStock = async (
     throw new Error("필수 조건 누락");
   }
 
-  const response = await get<LibraryStocksApiSpec>(createApi(props));
+  const response = await getApiClient(props.side).get<LibraryStocksApiSpec>(
+    createApiPath(props)
+  );
   if (!response.ok) throw response.error;
   if (!response.data) return [];
   return response.data.libraryStocks;
 };
 
-const STOCK_API_URL =
-  process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/libraries/stocks";
-function createApi({ libraryIds, bookIds }: Props): string {
-  const url = new URL(STOCK_API_URL);
-  url.searchParams.append("libraryIds", libraryIds.join(","));
-  url.searchParams.append("bookIds", bookIds.join(","));
-  return url.toString();
+const STOCK_API_URI = "/api/libraries/stocks";
+function createApiPath({ libraryIds, bookIds }: Props): string {
+  const params = new URLSearchParams();
+
+  if (libraryIds?.length) {
+    params.append("libraryIds", libraryIds.join(","));
+  }
+  if (bookIds?.length) {
+    params.append("bookIds", bookIds.join(","));
+  }
+
+  const query = params.toString();
+  return query ? `${STOCK_API_URI}?${query}` : STOCK_API_URI;
 }
 
 function isEmpty(array: string[]): boolean {

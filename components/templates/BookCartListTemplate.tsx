@@ -49,7 +49,8 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
           bookIds: bookIds,
           categoryCond: null,
         },
-        CART_PAGEABLE
+        CART_PAGEABLE,
+        "client"
       )
         .then((json) => setBooks(json.books))
         .catch(() => setIsError(true))

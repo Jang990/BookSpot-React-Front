@@ -36,6 +36,7 @@ export default function LibrariesSelection() {
   function findLibraries(bound: MapBound) {
     fetchNearByLibraries({
       mapBound: bound,
+      side: "client",
     }).then((responseLibraries) => {
       const emptyStockLibraries: LibraryMarkerInfo[] = responseLibraries.map(
         (library) => toEmptyStockLibrary(library)

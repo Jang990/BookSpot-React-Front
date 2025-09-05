@@ -39,7 +39,8 @@ export default function Libraries({
 
     findBooksPreview(
       { bookIds: bookIds, categoryCond: null },
-      { pageNumber: 0, pageSize: MAX_CART_SIZE }
+      { pageNumber: 0, pageSize: MAX_CART_SIZE },
+      "client"
     ).then((pageResult) => {
       setBooksInfo(pageResult.books);
     });
@@ -52,6 +53,7 @@ export default function Libraries({
 
     fetchNearByLibraries({
       mapBound: bound,
+      side: "client",
     })
       .then((responseLibraries) => {
         const emptyStockLibraries: LibraryMarkerInfo[] = responseLibraries.map(
@@ -94,18 +96,20 @@ export default function Libraries({
         )
           return;
 
-        fetchLibraryStock({ libraryIds: libraryIds, bookIds: bookIds }).then(
-          (libraryStocks) => {
-            setLibraries(
-              libraryStocks.map((libStock) => {
-                return {
-                  library: libraryMap.get(libStock.libraryId),
-                  stock: libStock,
-                } as LibraryMarkerInfo;
-              })
-            );
-          }
-        );
+        fetchLibraryStock({
+          libraryIds: libraryIds,
+          bookIds: bookIds,
+          side: "client",
+        }).then((libraryStocks) => {
+          setLibraries(
+            libraryStocks.map((libStock) => {
+              return {
+                library: libraryMap.get(libStock.libraryId),
+                stock: libStock,
+              } as LibraryMarkerInfo;
+            })
+          );
+        });
       });
   }, MAP_SEARCH_DELAY);
 
