@@ -116,7 +116,7 @@ export const FilterStatusGroup = ({
     setLibLoading(true);
     setLibError(false);
 
-    fetchSingleLibrary({ libraryId: libraryId.toString() })
+    fetchSingleLibrary({ libraryId: libraryId.toString(), side: "client" })
       .then((lib) => {
         if (!mounted) return;
         setLibraryName(lib.name ?? null);

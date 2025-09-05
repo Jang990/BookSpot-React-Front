@@ -53,6 +53,7 @@ export default function Libraries({
 
     fetchNearByLibraries({
       mapBound: bound,
+      side: "client",
     })
       .then((responseLibraries) => {
         const emptyStockLibraries: LibraryMarkerInfo[] = responseLibraries.map(
