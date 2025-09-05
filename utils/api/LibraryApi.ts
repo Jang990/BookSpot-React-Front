@@ -2,7 +2,7 @@ import { convertLibrary } from "./ApiResponseConvertor";
 import { MapBound } from "@/types/MapBound";
 import { Library } from "@/types/Library";
 import { LibraryResponse, NearByLibraryApiSpec } from "@/types/ApiSpec";
-import { getApiClient, Side } from "./common/Request_TEMP";
+import { getApiClient, Side } from "./common/Request";
 
 interface Props {
   mapBound: MapBound;

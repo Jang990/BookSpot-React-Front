@@ -11,7 +11,7 @@ import {
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
 import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
-import { getApiClient, Side } from "./common/Request_TEMP";
+import { getApiClient, Side } from "./common/Request";
 
 export interface SearchCondition {
   keyword?: string | null;

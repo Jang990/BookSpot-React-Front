@@ -1,7 +1,7 @@
 import { LoanInfoResponseApiSpec } from "@/types/ApiSpec";
 import { LoanInfo } from "@/types/Loan";
 import { convertLoanInfo } from "./ApiResponseConvertor";
-import { getApiClient, Side } from "./common/Request_TEMP";
+import { getApiClient, Side } from "./common/Request";
 
 interface Props {
   stockId: string;

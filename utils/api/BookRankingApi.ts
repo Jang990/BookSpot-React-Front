@@ -2,7 +2,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { RankingConditions } from "@/types/BookRankings";
 import { convertBookRanking } from "./ApiResponseConvertor";
 import { BookRankingsApiSpec } from "@/types/ApiSpec";
-import { getApiClient, Side } from "./common/Request_TEMP";
+import { getApiClient, Side } from "./common/Request";
 
 const BOOK_API_URL = "/api/books/rankings";
 

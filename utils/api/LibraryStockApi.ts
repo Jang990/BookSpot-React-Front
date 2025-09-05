@@ -1,6 +1,6 @@
 import LibraryStock from "@/types/LibraryStock";
 import { LibraryStocksApiSpec } from "@/types/ApiSpec";
-import { getApiClient, Side } from "./common/Request_TEMP";
+import { getApiClient, Side } from "./common/Request";
 
 interface Props {
   libraryIds: string[];
