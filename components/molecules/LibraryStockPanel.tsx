@@ -74,6 +74,7 @@ export const LibraryStockPanel = ({
     fetchStocks({
       libraryId: library.id,
       bookIds: inLibraryIds,
+      side: "client",
     }).then((loanInfos: LoanInfo[]) => {
       setLibraryBookStockInfos((prev) =>
         prev.map((info) => {

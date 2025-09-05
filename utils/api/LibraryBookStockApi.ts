@@ -1,27 +1,32 @@
 import { LoanInfo } from "@/types/Loan";
-import { get } from "./common/Request";
 import { StockLoanStateApiSpec } from "@/types/ApiSpec";
 import { convertLoanInfo } from "./ApiResponseConvertor";
+import { getApiClient, Side } from "./common/Request_TEMP";
 
 interface Props {
   libraryId: string;
   bookIds: string[];
+  side: Side;
 }
 
 export async function fetchStocks(props: Props): Promise<LoanInfo[]> {
-  const response = await get<StockLoanStateApiSpec>(createApi(props));
+  const response = await getApiClient(props.side).get<StockLoanStateApiSpec>(
+    createApiPath(props)
+  );
   if (!response.ok) throw response.error;
   if (!response.data) return [];
   return response.data.responses.map(convertLoanInfo);
 }
 
-export function createApi({ libraryId, bookIds }: Props): string {
-  const STOCK_API_URL =
-    process.env.NEXT_PUBLIC_FRONT_SERVER_URL +
-    `/api/libraries/${libraryId}/stocks/loan`;
+export function createApiPath({ libraryId, bookIds }: Props): string {
+  const baseUrl = `/api/libraries/${libraryId}/stocks/loan`;
 
-  const url = new URL(STOCK_API_URL);
-  url.searchParams.append("bookIds", bookIds.join(","));
+  const params = new URLSearchParams();
 
-  return url.toString();
+  if (bookIds?.length) {
+    params.append("bookIds", bookIds.join(","));
+  }
+
+  const query = params.toString();
+  return query ? `${baseUrl}?${query}` : baseUrl;
 }
