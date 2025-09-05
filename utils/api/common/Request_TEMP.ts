@@ -23,11 +23,12 @@ async function safeParseBody(res: Response): Promise<any | undefined> {
   }
 }
 
+export type Side = "server" | "client";
 export class ApiClient {
   private baseUrl: string;
-  private side: "server" | "client";
+  private side: Side;
 
-  constructor(baseUrl: string, side: "server" | "client") {
+  constructor(baseUrl: string, side: Side) {
     this.baseUrl = baseUrl;
     this.side = side;
   }
