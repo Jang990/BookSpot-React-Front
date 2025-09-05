@@ -39,7 +39,8 @@ export default function Libraries({
 
     findBooksPreview(
       { bookIds: bookIds, categoryCond: null },
-      { pageNumber: 0, pageSize: MAX_CART_SIZE }
+      { pageNumber: 0, pageSize: MAX_CART_SIZE },
+      "client"
     ).then((pageResult) => {
       setBooksInfo(pageResult.books);
     });
