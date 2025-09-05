@@ -73,11 +73,15 @@ export default async function Home({ searchParams }: Props) {
   };
 
   if (hasCursorCond && isOutOfPageNumber) {
-    const result = await findBooksPreviewWithSA(searchCond, {
-      lastScore: lastScore,
-      lastLoanCount: lastLoanCount,
-      lastBookId: lastBookId,
-    });
+    const result = await findBooksPreviewWithSA(
+      searchCond,
+      {
+        lastScore: lastScore,
+        lastLoanCount: lastLoanCount,
+        lastBookId: lastBookId,
+      },
+      "server"
+    );
     books = result.books;
     totalPages = null;
     searchAfter = result.searchAfter;

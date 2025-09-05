@@ -83,6 +83,7 @@ export class ApiClient {
         };
       }
       if (res.status >= 400 && res.status < 500) {
+        console.log(res);
         return { ok: false, status: res.status, error: new ClientError(body) };
       }
       return { ok: false, status: res.status, error: new ServerError(body) };
@@ -122,11 +123,14 @@ export class ApiClient {
   }
 }
 
-export const ssrApiClient = new ApiClient(
+const ssrApiClient = new ApiClient(
   process.env.NEXT_PUBLIC_API_SERVER_URL!,
   "server"
 );
-export const csrApiClient = new ApiClient(
+const csrApiClient = new ApiClient(
   process.env.NEXT_PUBLIC_FRONT_SERVER_URL!,
   "client"
 );
+export function getApiClient(side: Side) {
+  return side === "server" ? ssrApiClient : csrApiClient;
+}

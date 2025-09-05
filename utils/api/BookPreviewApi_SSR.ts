@@ -11,7 +11,7 @@ import {
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
 import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
-import { Side, ssrApiClient } from "./common/Request_TEMP";
+import { getApiClient, Side } from "./common/Request_TEMP";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -74,7 +74,7 @@ export const findBooksPreview = async (
     return EMPTY_PAGIN_RESULT;
   }
 
-  const response = await ssrApiClient.get<BookPagingApiSpec>(
+  const response = await getApiClient(side).get<BookPagingApiSpec>(
     createApiPath(searchCond, pageable)
   );
 
@@ -103,7 +103,8 @@ export const findBooksPreview = async (
 
 export const findBooksPreviewWithSA = async (
   searchCond: SearchCondition,
-  searchAfter: SearchAfter
+  searchAfter: SearchAfter,
+  side: Side
 ): Promise<SearchAfterResult> => {
   const keyword = searchCond.keyword;
 
@@ -112,7 +113,7 @@ export const findBooksPreviewWithSA = async (
     return EMPTY_PAGIN_RESULT;
   }
 
-  const response = await ssrApiClient.get<BookSearchAfterApiSpec>(
+  const response = await getApiClient(side).get<BookSearchAfterApiSpec>(
     createApiPath(searchCond, searchAfter)
   );
 
