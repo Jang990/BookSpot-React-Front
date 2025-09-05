@@ -96,18 +96,20 @@ export default function Libraries({
         )
           return;
 
-        fetchLibraryStock({ libraryIds: libraryIds, bookIds: bookIds }).then(
-          (libraryStocks) => {
-            setLibraries(
-              libraryStocks.map((libStock) => {
-                return {
-                  library: libraryMap.get(libStock.libraryId),
-                  stock: libStock,
-                } as LibraryMarkerInfo;
-              })
-            );
-          }
-        );
+        fetchLibraryStock({
+          libraryIds: libraryIds,
+          bookIds: bookIds,
+          side: "client",
+        }).then((libraryStocks) => {
+          setLibraries(
+            libraryStocks.map((libStock) => {
+              return {
+                library: libraryMap.get(libStock.libraryId),
+                stock: libStock,
+              } as LibraryMarkerInfo;
+            })
+          );
+        });
       });
   }, MAP_SEARCH_DELAY);
 
