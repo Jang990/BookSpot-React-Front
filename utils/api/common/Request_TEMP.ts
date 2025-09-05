@@ -132,5 +132,7 @@ const csrApiClient = new ApiClient(
   "client"
 );
 export function getApiClient(side: Side) {
+  if (side === undefined || side === null)
+    throw new Error("api 클라이언트 설정 오류");
   return side === "server" ? ssrApiClient : csrApiClient;
 }
