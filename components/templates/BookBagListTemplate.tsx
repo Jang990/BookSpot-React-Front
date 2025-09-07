@@ -40,22 +40,41 @@ export const BookBagListTemplate = ({}: Props) => {
     if (bag.length === 0) {
       setBooks([]);
       setLoading(false);
-    } else {
-      setLoading(true);
-      findBooksPreview(
-        {
-          keyword: null,
-          bookIds: bag,
-          categoryCond: null,
-        },
-        BAG_PAGEABLE,
-        "client"
-      )
-        .then((json) => setBooks(json.books))
-        .catch(() => setIsError(true))
-        .finally(() => setLoading(false));
+      return;
     }
-  }, [bag]);
+
+    setLoading(true);
+    findBooksPreview(
+      {
+        keyword: null,
+        bookIds: bag,
+        categoryCond: null,
+      },
+      BAG_PAGEABLE,
+      "client"
+    )
+      .then((json) => setBooks(json.books))
+      .catch(() => setIsError(true))
+      .finally(() => setLoading(false));
+  }, [isLoading]);
+
+  const handleRemoveBook = (book: BookPreview) => {
+    removeFromBag(book.id)
+      .then((isSuccess) => {
+        if (!isSuccess) throw new Error();
+        setBooks(books.filter((b) => b.id !== book.id));
+        setToast({
+          message: `'${book.title}'이(가) 제거되었습니다.`,
+          type: "INFO",
+        });
+      })
+      .catch((err) => {
+        setToast({
+          message: "알 수 없는 오류가 발생했습니다.",
+          type: "WARN",
+        });
+      });
+  };
 
   return isError ? (
     <ErrorPage />
@@ -87,23 +106,7 @@ export const BookBagListTemplate = ({}: Props) => {
                   <DeletablaBookInfo
                     key={book.id}
                     book={book}
-                    deleteBook={(book: BookPreview) => {
-                      removeFromBag(book.id)
-                        .then((isSuccess) => {
-                          if (!isSuccess) throw new Error();
-                          setBooks(books.filter((b) => b.id !== book.id));
-                          setToast({
-                            message: `'${book.title}'이(가) 제거되었습니다.`,
-                            type: "INFO",
-                          });
-                        })
-                        .catch((err) => {
-                          setToast({
-                            message: "알 수 없는 오류가 발생했습니다.",
-                            type: "WARN",
-                          });
-                        });
-                    }}
+                    deleteBook={handleRemoveBook}
                   ></DeletablaBookInfo>
                 ))}
               </>
