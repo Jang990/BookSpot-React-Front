@@ -16,9 +16,7 @@ import { InfoToast } from "../molecules/toast/InfoToast";
 import { ErrorPage } from "../molecules/ErrorPage";
 import { SkeletonDiv } from "../atoms/SkeletonDiv";
 
-interface Props {
-  bookIds: string[];
-}
+interface Props {}
 
 const FIRST_PAGE = 0;
 const BAG_PAGEABLE: Pageable = {
@@ -26,8 +24,8 @@ const BAG_PAGEABLE: Pageable = {
   pageSize: MAX_BAG_SIZE,
 };
 
-export const BookBagListTemplate = ({ bookIds }: Props) => {
-  const { removeFromBag } = useBag();
+export const BookBagListTemplate = ({}: Props) => {
+  const { bag, isLoading, removeFromBag } = useBag();
   const [books, setBooks] = useState<BookPreview[]>([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -38,7 +36,8 @@ export const BookBagListTemplate = ({ bookIds }: Props) => {
   } | null>(null);
 
   useEffect(() => {
-    if (bookIds.length === 0) {
+    if (isLoading) return;
+    if (bag.length === 0) {
       setBooks([]);
       setLoading(false);
     } else {
@@ -46,7 +45,7 @@ export const BookBagListTemplate = ({ bookIds }: Props) => {
       findBooksPreview(
         {
           keyword: null,
-          bookIds: bookIds,
+          bookIds: bag,
           categoryCond: null,
         },
         BAG_PAGEABLE,
@@ -56,7 +55,7 @@ export const BookBagListTemplate = ({ bookIds }: Props) => {
         .catch(() => setIsError(true))
         .finally(() => setLoading(false));
     }
-  }, []);
+  }, [bag]);
 
   return isError ? (
     <ErrorPage />
