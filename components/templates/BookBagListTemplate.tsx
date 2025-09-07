@@ -122,7 +122,7 @@ export const BookBagListTemplate = ({}: Props) => {
         )}
       </div>
       <div className="pt-3">
-        <BookBagPopup></BookBagPopup>
+        {bag.length > 0 && <BookBagPopup></BookBagPopup>}
       </div>
       <div className="pt-3">
         <InfoPanel text="원하는 책을 찾아 책가방에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
