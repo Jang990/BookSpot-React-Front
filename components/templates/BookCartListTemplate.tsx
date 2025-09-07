@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ShoppingCart } from "lucide-react";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
 import { useBookCart } from "@/contexts/BookCartContext";
-import { BookCartPopup } from "../organisms/BookCartPopup";
+import { BookBagPopup } from "../organisms/BookBagPopup";
 import { InfoPanel } from "../molecules/InfoPanel";
 import { PageTitle } from "../molecules/PageTitle";
 import { Pageable } from "@/types/Pageable";
@@ -111,7 +111,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
         )}
       </div>
       <div className="pt-3">
-        <BookCartPopup></BookCartPopup>
+        <BookBagPopup></BookBagPopup>
       </div>
       <div className="pt-3">
         <InfoPanel text="원하는 책을 찾아 북카트에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
