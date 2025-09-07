@@ -7,12 +7,12 @@ import { ConfirmPopup } from "../molecules/ConfirmPopup";
 import { useBag } from "@/contexts/BagContext";
 
 export const BookBagPopup = () => {
-  const { bag: cart, clearBag: clearCart } = useBag();
+  const { bag, clearBag } = useBag();
   const router = useRouter();
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   const handleFindLibraries = () => {
-    router.push(`/libraries/stock/search?bookIds=${cart.join(",")}`);
+    router.push(`/libraries/stock/search?bookIds=${bag.join(",")}`);
   };
 
   const handleClearBagClick = () => {
@@ -20,9 +20,10 @@ export const BookBagPopup = () => {
   };
 
   const handleConfirmClear = () => {
-    clearCart();
-    setShowConfirmPopup(false);
-    window.location.reload();
+    clearBag().finally(() => {
+      setShowConfirmPopup(false);
+      window.location.reload();
+    });
   };
 
   return (

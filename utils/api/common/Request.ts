@@ -121,6 +121,17 @@ export class ApiClient {
       timeoutMs
     );
   }
+
+  delete<T = any>(path: string, body?: any, timeoutMs?: number) {
+    return this.fetchWithAuth<T>(
+      path,
+      {
+        method: "DELETE",
+        body: body === undefined ? undefined : JSON.stringify(body),
+      },
+      timeoutMs
+    );
+  }
 }
 
 const ssrApiClient = new ApiClient(

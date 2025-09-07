@@ -27,7 +27,7 @@ const BAG_PAGEABLE: Pageable = {
 };
 
 export const BookBagListTemplate = ({ bookIds }: Props) => {
-  const { removeFromBag: removeFromCart } = useBag();
+  const { removeFromBag } = useBag();
   const [books, setBooks] = useState<BookPreview[]>([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -89,12 +89,21 @@ export const BookBagListTemplate = ({ bookIds }: Props) => {
                     key={book.id}
                     book={book}
                     deleteBook={(book: BookPreview) => {
-                      removeFromCart(book.id);
-                      setBooks(books.filter((b) => b.id !== book.id));
-                      setToast({
-                        message: `'${book.title}'이(가) 제거되었습니다.`,
-                        type: "INFO",
-                      });
+                      removeFromBag(book.id)
+                        .then((isSuccess) => {
+                          if (!isSuccess) throw new Error();
+                          setBooks(books.filter((b) => b.id !== book.id));
+                          setToast({
+                            message: `'${book.title}'이(가) 제거되었습니다.`,
+                            type: "INFO",
+                          });
+                        })
+                        .catch((err) => {
+                          setToast({
+                            message: "알 수 없는 오류가 발생했습니다.",
+                            type: "WARN",
+                          });
+                        });
                     }}
                   ></DeletablaBookInfo>
                 ))}
