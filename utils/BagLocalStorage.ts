@@ -37,9 +37,9 @@ export async function removeBookId(bookId: string): Promise<boolean> {
   return Promise.resolve(true);
 }
 
-export async function clear(): Promise<void> {
+export async function clear(): Promise<boolean> {
   save([]);
-  return Promise.resolve();
+  return Promise.resolve(true);
 }
 
 function save(element: string[]) {
