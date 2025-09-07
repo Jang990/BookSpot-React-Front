@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { STORAGE_NAME } from "@/utils/BookCartLocalStorage";
+import { STORAGE_NAME } from "@/utils/BagLocalStorage";
 import { BookBagListTemplate } from "@/components/templates/BookBagListTemplate";
 
 export default async function Cart() {

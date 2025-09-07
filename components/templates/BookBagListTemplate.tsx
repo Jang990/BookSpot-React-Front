@@ -10,7 +10,7 @@ import { InfoPanel } from "../molecules/InfoPanel";
 import { PageTitle } from "../molecules/PageTitle";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
-import { MAX_CART_SIZE } from "@/utils/BookCartLocalStorage";
+import { MAX_BAG_SIZE } from "@/utils/BagLocalStorage";
 import { SkeletonBookList } from "../organisms/SkeletonBookList";
 import { InfoToast } from "../molecules/toast/InfoToast";
 import { ErrorPage } from "../molecules/ErrorPage";
@@ -23,7 +23,7 @@ interface Props {
 const FIRST_PAGE = 0;
 const BAG_PAGEABLE: Pageable = {
   pageNumber: FIRST_PAGE,
-  pageSize: MAX_CART_SIZE,
+  pageSize: MAX_BAG_SIZE,
 };
 
 export const BookBagListTemplate = ({ bookIds }: Props) => {
@@ -67,7 +67,7 @@ export const BookBagListTemplate = ({ bookIds }: Props) => {
         {loading ? (
           <SkeletonDiv height="h-5 " width="w-28" />
         ) : (
-          <div className="text-muted-foreground pe-3">{`담은 책 : ${books.length} / ${MAX_CART_SIZE}`}</div>
+          <div className="text-muted-foreground pe-3">{`담은 책 : ${books.length} / ${MAX_BAG_SIZE}`}</div>
         )}
       </div>
       <div>

@@ -1,5 +1,5 @@
-export const MAX_CART_SIZE = 5;
-export const CART_EXPIRED_MONTH = 6;
+export const MAX_BAG_SIZE = 5;
+export const BAG_EXPIRED_MONTH = 6;
 export const STORAGE_NAME = "SELECTED_BOOK_IDS";
 
 export function findBookIds(): string[] {
@@ -9,9 +9,9 @@ export function findBookIds(): string[] {
 
 export function addBookId(bookId: string): boolean {
   const cart = findBookIds();
-  if (cart.length === MAX_CART_SIZE) throw new Error("북카트가 가득 찼습니다.");
+  if (cart.length === MAX_BAG_SIZE) throw new Error("책가빙이 가득 찼습니다.");
   if (cart.includes(bookId))
-    throw new Error("북카트에 이미 존재하는 책입니다.");
+    throw new Error("책가방에 이미 존재하는 책입니다.");
 
   cart.push(bookId);
   save(cart);
@@ -32,7 +32,7 @@ export function clear(): void {
 
 function save(element: string[]) {
   const expires = new Date();
-  expires.setMonth(expires.getMonth() + CART_EXPIRED_MONTH);
+  expires.setMonth(expires.getMonth() + BAG_EXPIRED_MONTH);
   document.cookie = `${STORAGE_NAME}=${JSON.stringify(element)}; path=/; expires=${expires.toUTCString()}`;
 }
 

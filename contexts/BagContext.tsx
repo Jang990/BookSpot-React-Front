@@ -6,7 +6,7 @@ import {
   addBookId,
   removeBookId,
   clear,
-} from "@/utils/BookCartLocalStorage";
+} from "@/utils/BagLocalStorage";
 import { createContext, useContext, useState, useEffect } from "react";
 
 type BagContextType = {
