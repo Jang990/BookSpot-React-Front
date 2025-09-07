@@ -2,12 +2,12 @@ import { CornerBadge } from "@/components/atoms/label/CornerBadge";
 import { Backpack, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface CartIconLinkProps {
+interface BagIconLinkProps {
   href: string;
   cartSize: number;
 }
 
-export const BagIconLink = ({ href, cartSize: size }: CartIconLinkProps) => {
+export const BagIconLink = ({ href, cartSize: size }: BagIconLinkProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
