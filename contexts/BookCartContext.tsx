@@ -9,7 +9,7 @@ import {
 } from "@/utils/BookCartLocalStorage";
 import { createContext, useContext, useState, useEffect } from "react";
 
-type BookCartContextType = {
+type BagContextType = {
   cart: string[];
   clearCart: () => void;
   findAllBookIds: () => string[];
@@ -17,20 +17,18 @@ type BookCartContextType = {
   removeFromCart: (bookId: string) => boolean;
 };
 
-const BookCartContext = createContext<BookCartContextType | undefined>(
-  undefined
-);
+const BagContext = createContext<BagContextType | undefined>(undefined);
 
 export const useBookCart = () => {
-  const context = useContext(BookCartContext);
+  const context = useContext(BagContext);
   if (!context) {
     throw new Error("useBookCart must be used within a BookCartProvider");
   }
   return context;
 };
 
-type BookCartProviderProps = { children: React.ReactNode };
-export const BookCartProvider = ({ children }: BookCartProviderProps) => {
+type BagProviderProps = { children: React.ReactNode };
+export const BagProvider = ({ children }: BagProviderProps) => {
   const [cart, setCart] = useState<string[]>([]);
 
   useEffect(() => {
@@ -63,10 +61,10 @@ export const BookCartProvider = ({ children }: BookCartProviderProps) => {
   };
 
   return (
-    <BookCartContext.Provider
+    <BagContext.Provider
       value={{ cart, clearCart, findAllBookIds, addToCart, removeFromCart }}
     >
       {children}
-    </BookCartContext.Provider>
+    </BagContext.Provider>
   );
 };

@@ -1,4 +1,4 @@
-import { BookCartProvider } from "@/contexts/BookCartContext";
+import { BagProvider } from "@/contexts/BookCartContext";
 import { Header } from "@/components/organisms/Header";
 import { Footer } from "@/components/organisms/Footer";
 import "./globals.css";
@@ -46,7 +46,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={gowunDodumFont.className}>
         <NextAuthProvider>
-          <BookCartProvider>
+          <BagProvider>
             <SearchTermProvider>
               <div className="flex flex-col min-h-screen">
                 <Header />
@@ -62,7 +62,7 @@ export default function RootLayout({
                 <Footer />
               </div>
             </SearchTermProvider>
-          </BookCartProvider>
+          </BagProvider>
         </NextAuthProvider>
       </body>
     </html>
