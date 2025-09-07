@@ -54,3 +54,7 @@ export interface LoanInfoResponseApiSpec {
   stateUpdatedAt: string;
   loanState: LoanState;
 }
+
+export interface UserBagResponseApiSpec {
+  bookIds: string[];
+}

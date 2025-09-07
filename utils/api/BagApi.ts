@@ -1,3 +1,4 @@
+import { UserBagResponseApiSpec } from "@/types/ApiSpec";
 import { getApiClient } from "./common/Request";
 
 const bagBookIdsApi = "/api/users/bag/books/ids";
@@ -9,13 +10,14 @@ const clearBagApi = "/api/users/bag/books";
  * @returns {Promise<string[]>} 책 ID 문자열 배열
  */
 export async function findBookIds(): Promise<string[]> {
-  const response = await getApiClient("client").get<string[]>(bagBookIdsApi);
+  const response =
+    await getApiClient("client").get<UserBagResponseApiSpec>(bagBookIdsApi);
 
   if (!response.ok) {
     throw response.error;
   }
 
-  if (response.data) return response.data;
+  if (response.data) return response.data.bookIds;
   else return [];
 }
 
