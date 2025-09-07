@@ -6,14 +6,6 @@ const nextConfig: NextConfig = {
   images: {
     domains: ["contents.kyobobook.co.kr"],
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path((?!auth).*)",
-        destination: process.env.NEXT_PUBLIC_API_SERVER_URL + "/api/:path*",
-      },
-    ];
-  },
 };
 
 export default nextConfig;
