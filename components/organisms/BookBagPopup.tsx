@@ -4,7 +4,7 @@ import { MapPin, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConfirmPopup } from "../molecules/ConfirmPopup";
-import { useBookCart } from "@/contexts/BookCartContext";
+import { useBookCart } from "@/contexts/BagContext";
 
 export const BookBagPopup = () => {
   const { cart, clearCart } = useBookCart();

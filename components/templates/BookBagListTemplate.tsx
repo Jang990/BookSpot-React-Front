@@ -4,7 +4,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { useEffect, useState } from "react";
 import { Backpack } from "lucide-react";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
-import { useBookCart } from "@/contexts/BookCartContext";
+import { useBookCart } from "@/contexts/BagContext";
 import { BookBagPopup } from "../organisms/BookBagPopup";
 import { InfoPanel } from "../molecules/InfoPanel";
 import { PageTitle } from "../molecules/PageTitle";

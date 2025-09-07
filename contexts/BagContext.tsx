@@ -27,8 +27,8 @@ export const useBookCart = () => {
   return context;
 };
 
-type BagProviderProps = { children: React.ReactNode };
-export const BagProvider = ({ children }: BagProviderProps) => {
+type BookCartProviderProps = { children: React.ReactNode };
+export const BagProvider = ({ children }: BookCartProviderProps) => {
   const [cart, setCart] = useState<string[]>([]);
 
   useEffect(() => {

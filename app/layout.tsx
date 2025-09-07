@@ -1,4 +1,4 @@
-import { BagProvider } from "@/contexts/BookCartContext";
+import { BagProvider } from "@/contexts/BagContext";
 import { Header } from "@/components/organisms/Header";
 import { Footer } from "@/components/organisms/Footer";
 import "./globals.css";

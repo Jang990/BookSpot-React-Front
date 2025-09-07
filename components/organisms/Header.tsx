@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
-import { useBookCart } from "@/contexts/BookCartContext";
+import { useBookCart } from "@/contexts/BagContext";
 import { User } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
 import { signOut, useSession } from "next-auth/react";
