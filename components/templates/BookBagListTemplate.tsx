@@ -2,7 +2,7 @@
 
 import { BookPreview } from "@/types/BookPreview";
 import { useEffect, useState } from "react";
-import { ShoppingCart } from "lucide-react";
+import { Backpack } from "lucide-react";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { BookBagPopup } from "../organisms/BookBagPopup";
@@ -21,12 +21,12 @@ interface Props {
 }
 
 const FIRST_PAGE = 0;
-const CART_PAGEABLE: Pageable = {
+const BAG_PAGEABLE: Pageable = {
   pageNumber: FIRST_PAGE,
   pageSize: MAX_CART_SIZE,
 };
 
-export const BookCartListTemplate = ({ bookIds }: Props) => {
+export const BookBagListTemplate = ({ bookIds }: Props) => {
   const { removeFromCart } = useBookCart();
   const [books, setBooks] = useState<BookPreview[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
           bookIds: bookIds,
           categoryCond: null,
         },
-        CART_PAGEABLE,
+        BAG_PAGEABLE,
         "client"
       )
         .then((json) => setBooks(json.books))
@@ -63,7 +63,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
   ) : (
     <div>
       <div className="flex justify-between items-center">
-        <PageTitle text="북카트" />
+        <PageTitle text="내 가방" />
         {loading ? (
           <SkeletonDiv height="h-5 " width="w-28" />
         ) : (
@@ -74,9 +74,9 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
         {loading && <SkeletonBookList />}
         {!loading && !isError && books.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-12">
-            <ShoppingCart size={64} className="text-muted-foreground mb-4" />
+            <Backpack size={96} className="text-muted-foreground mb-4" />
             <p className="text-xl text-muted-foreground">
-              북카트가 비어있습니다.
+              책가방이 비어있습니다.
             </p>
           </div>
         )}
@@ -114,7 +114,7 @@ export const BookCartListTemplate = ({ bookIds }: Props) => {
         <BookBagPopup></BookBagPopup>
       </div>
       <div className="pt-3">
-        <InfoPanel text="원하는 책을 찾아 북카트에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
+        <InfoPanel text="원하는 책을 찾아 책가방에 담고, ‘도서관 찾기’ 버튼을 눌러 소장 여부를 확인해 보세요." />
       </div>
     </div>
   );
