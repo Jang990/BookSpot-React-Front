@@ -21,10 +21,10 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
     setToast({ message, type });
   };
 
-  const handleAddToCart = (book: BookPreview) => {
+  const handleAddToBag = (book: BookPreview) => {
     try {
       addToCart(book.id);
-      showToast(`'${book.title}'이(가) 북카트에 추가되었습니다.`, "INFO");
+      showToast(`'${book.title}'이(가) 책가방에 추가되었습니다.`, "INFO");
     } catch (err) {
       if (err instanceof Error) {
         showToast(err.message, "WARN");
@@ -45,7 +45,7 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
               <SearchableBookInfo
                 key={book.id}
                 book={book}
-                onClickAddBtn={handleAddToCart}
+                onClickAddBtn={handleAddToBag}
               ></SearchableBookInfo>
             ))}
           </>
