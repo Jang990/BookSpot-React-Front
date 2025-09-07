@@ -11,7 +11,7 @@ interface BookPreviewListProps {
 }
 
 export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
-  const { addToBag: addToCart } = useBag();
+  const { addToBag } = useBag();
   const [toast, setToast] = useState<{
     message: string;
     type: "INFO" | "WARN";
@@ -23,7 +23,7 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
 
   const handleAddToBag = (book: BookPreview) => {
     try {
-      addToCart(book.id);
+      addToBag(book.id);
       showToast(`'${book.title}'이(가) 책가방에 추가되었습니다.`, "INFO");
     } catch (err) {
       if (err instanceof Error) {

@@ -12,7 +12,7 @@ import { signOut, useSession } from "next-auth/react";
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const { bag: cart } = useBag();
+  const { bag } = useBag();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,7 +30,7 @@ export const Header = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <BookSpotLogoButton />
         <div className="flex items-center gap-3">
-          <BagIconLink href="/cart" cartSize={cart.length} />
+          <BagIconLink href="/cart" cartSize={bag.length} />
 
           <UserIconButton />
         </div>

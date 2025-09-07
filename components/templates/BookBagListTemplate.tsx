@@ -27,7 +27,7 @@ const BAG_PAGEABLE: Pageable = {
 };
 
 export const BookBagListTemplate = ({ bookIds }: Props) => {
-  const { removeFromBag: removeFromCart } = useBag();
+  const { removeFromBag } = useBag();
   const [books, setBooks] = useState<BookPreview[]>([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -89,7 +89,7 @@ export const BookBagListTemplate = ({ bookIds }: Props) => {
                     key={book.id}
                     book={book}
                     deleteBook={(book: BookPreview) => {
-                      removeFromCart(book.id);
+                      removeFromBag(book.id);
                       setBooks(books.filter((b) => b.id !== book.id));
                       setToast({
                         message: `'${book.title}'이(가) 제거되었습니다.`,
