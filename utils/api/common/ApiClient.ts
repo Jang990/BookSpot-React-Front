@@ -50,6 +50,14 @@ export class ApiClient {
   async post<T>(req: NextRequest) {
     return this.request<T>(req, "POST");
   }
+
+  async put<T>(req: NextRequest) {
+    return this.request<T>(req, "PUT");
+  }
+
+  async delete<T>(req: NextRequest) {
+    return this.request<T>(req, "DELETE");
+  }
 }
 
 // 싱글톤 인스턴스
