@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
-import { useBookCart } from "@/contexts/BagContext";
+import { useBag } from "@/contexts/BagContext";
 import { User } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
 import { signOut, useSession } from "next-auth/react";
@@ -12,7 +12,7 @@ import { signOut, useSession } from "next-auth/react";
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
-  const { cart } = useBookCart();
+  const { bag: cart } = useBag();
 
   useEffect(() => {
     const handleScroll = () => {

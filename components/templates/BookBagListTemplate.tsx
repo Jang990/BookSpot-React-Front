@@ -4,7 +4,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { useEffect, useState } from "react";
 import { Backpack } from "lucide-react";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
-import { useBookCart } from "@/contexts/BagContext";
+import { useBag } from "@/contexts/BagContext";
 import { BookBagPopup } from "../organisms/BookBagPopup";
 import { InfoPanel } from "../molecules/InfoPanel";
 import { PageTitle } from "../molecules/PageTitle";
@@ -27,7 +27,7 @@ const BAG_PAGEABLE: Pageable = {
 };
 
 export const BookBagListTemplate = ({ bookIds }: Props) => {
-  const { removeFromCart } = useBookCart();
+  const { removeFromBag: removeFromCart } = useBag();
   const [books, setBooks] = useState<BookPreview[]>([]);
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);

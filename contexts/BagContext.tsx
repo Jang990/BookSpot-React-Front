@@ -10,16 +10,16 @@ import {
 import { createContext, useContext, useState, useEffect } from "react";
 
 type BagContextType = {
-  cart: string[];
-  clearCart: () => void;
+  bag: string[];
+  clearBag: () => void;
   findAllBookIds: () => string[];
-  addToCart: (bookId: string) => boolean;
-  removeFromCart: (bookId: string) => boolean;
+  addToBag: (bookId: string) => boolean;
+  removeFromBag: (bookId: string) => boolean;
 };
 
 const BagContext = createContext<BagContextType | undefined>(undefined);
 
-export const useBookCart = () => {
+export const useBag = () => {
   const context = useContext(BagContext);
   if (!context) {
     throw new Error("useBookCart must be used within a BookCartProvider");
@@ -29,15 +29,15 @@ export const useBookCart = () => {
 
 type BookCartProviderProps = { children: React.ReactNode };
 export const BagProvider = ({ children }: BookCartProviderProps) => {
-  const [cart, setCart] = useState<string[]>([]);
+  const [bag, setBag] = useState<string[]>([]);
 
   useEffect(() => {
     const bookCart = findAllBookIds();
-    if (bookCart.length > 0) setCart(bookCart);
+    if (bookCart.length > 0) setBag(bookCart);
   }, []);
 
-  const clearCart = () => {
-    setCart([]);
+  const clearBag = () => {
+    setBag([]);
     clear();
   };
 
@@ -45,16 +45,16 @@ export const BagProvider = ({ children }: BookCartProviderProps) => {
     return findBookIds();
   };
 
-  const addToCart = (targetId: string) => {
+  const addToBag = (targetId: string) => {
     const isSaved: boolean = addBookId(targetId);
-    if (isSaved) setCart((prevCart) => [...prevCart, targetId]);
+    if (isSaved) setBag((prevCart) => [...prevCart, targetId]);
     return isSaved;
   };
 
-  const removeFromCart = (targetId: string) => {
+  const removeFromBag = (targetId: string) => {
     const isRemoved: boolean = removeBookId(targetId);
     if (isRemoved)
-      setCart((prevCart) =>
+      setBag((prevCart) =>
         prevCart.filter((selectedId) => selectedId !== targetId)
       );
     return isRemoved;
@@ -62,7 +62,13 @@ export const BagProvider = ({ children }: BookCartProviderProps) => {
 
   return (
     <BagContext.Provider
-      value={{ cart, clearCart, findAllBookIds, addToCart, removeFromCart }}
+      value={{
+        bag: bag,
+        clearBag,
+        findAllBookIds,
+        addToBag,
+        removeFromBag,
+      }}
     >
       {children}
     </BagContext.Provider>

@@ -2,7 +2,7 @@
 import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { SearchableBookInfo } from "../organisms/book/preview/SearchableBookInfo";
-import { useBookCart } from "@/contexts/BagContext";
+import { useBag } from "@/contexts/BagContext";
 import { useState } from "react";
 import { InfoToast } from "../molecules/toast/InfoToast";
 
@@ -11,7 +11,7 @@ interface BookPreviewListProps {
 }
 
 export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
-  const { addToCart } = useBookCart();
+  const { addToBag: addToCart } = useBag();
   const [toast, setToast] = useState<{
     message: string;
     type: "INFO" | "WARN";
