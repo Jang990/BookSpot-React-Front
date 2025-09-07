@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
-import { CartIconLink } from "../molecules/link/CartIconLink";
+import { BagIconLink } from "../molecules/link/BagIconLink";
 import { useBookCart } from "@/contexts/BookCartContext";
 import { User } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
@@ -30,7 +30,7 @@ export const Header = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <BookSpotLogoButton />
         <div className="flex items-center gap-3">
-          <CartIconLink href="/cart" cartSize={cart.length} />
+          <BagIconLink href="/cart" cartSize={cart.length} />
 
           <UserIconButton />
         </div>

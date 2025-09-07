@@ -1,6 +1,5 @@
 import { CornerBadge } from "@/components/atoms/label/CornerBadge";
-import { ShoppingCart } from "lucide-react";
-import Link from "next/link";
+import { Backpack, ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface CartIconLinkProps {
@@ -8,7 +7,7 @@ interface CartIconLinkProps {
   cartSize: number;
 }
 
-export const CartIconLink = ({ href, cartSize: size }: CartIconLinkProps) => {
+export const BagIconLink = ({ href, cartSize: size }: CartIconLinkProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -24,10 +23,7 @@ export const CartIconLink = ({ href, cartSize: size }: CartIconLinkProps) => {
 
   return (
     <a href={href} className="text-primary hover:text-primary/80 relative">
-      <ShoppingCart
-        size={24}
-        className={`${isAnimating ? "animate-bump" : ""}`}
-      />
+      <Backpack size={24} className={`${isAnimating ? "animate-bump" : ""}`} />
 
       {size > 0 && (
         <CornerBadge
