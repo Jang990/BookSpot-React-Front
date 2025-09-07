@@ -9,7 +9,7 @@ export class ApiClient {
     this.baseUrl = baseUrl;
   }
 
-  async request<T>(
+  async request(
     req: NextRequest,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET"
   ): Promise<NextResponse> {
@@ -22,7 +22,7 @@ export class ApiClient {
     const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     try {
-      const json = await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -31,11 +31,17 @@ export class ApiClient {
             : {}),
         },
         signal: controller.signal,
-      }).then((res) => res.json());
+      });
 
       clearTimeout(timeout);
 
-      return NextResponse.json(json);
+      if (response.status === 204) {
+        return new NextResponse(null, { status: 204 });
+      }
+
+      const json = await response.json();
+
+      return NextResponse.json(json, { status: response.status });
     } catch (error) {
       return new NextResponse("server error", {
         status: 500,
@@ -43,20 +49,20 @@ export class ApiClient {
     }
   }
 
-  async get<T>(req: NextRequest) {
-    return this.request<T>(req, "GET");
+  async get(req: NextRequest) {
+    return this.request(req, "GET");
   }
 
-  async post<T>(req: NextRequest) {
-    return this.request<T>(req, "POST");
+  async post(req: NextRequest) {
+    return this.request(req, "POST");
   }
 
-  async put<T>(req: NextRequest) {
-    return this.request<T>(req, "PUT");
+  async put(req: NextRequest) {
+    return this.request(req, "PUT");
   }
 
-  async delete<T>(req: NextRequest) {
-    return this.request<T>(req, "DELETE");
+  async delete(req: NextRequest) {
+    return this.request(req, "DELETE");
   }
 }
 
