@@ -22,16 +22,16 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
   };
 
   const handleAddToBag = (book: BookPreview) => {
-    try {
-      addToBag(book.id);
-      showToast(`'${book.title}'이(가) 책가방에 추가되었습니다.`, "INFO");
-    } catch (err) {
-      if (err instanceof Error) {
-        showToast(err.message, "WARN");
-      } else {
-        showToast("알 수 없는 오류가 발생했습니다.", "WARN");
-      }
-    }
+    addToBag(book.id)
+      .then((isSuccess) => {
+        if (isSuccess)
+          showToast(`'${book.title}'이(가) 책가방에 추가되었습니다.`, "INFO");
+        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
+      })
+      .catch((err) => {
+        if (err instanceof Error) showToast(err.message, "WARN");
+        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
+      });
   };
 
   return (

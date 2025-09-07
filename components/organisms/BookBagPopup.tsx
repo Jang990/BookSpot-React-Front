@@ -20,9 +20,10 @@ export const BookBagPopup = () => {
   };
 
   const handleConfirmClear = () => {
-    clearBag();
-    setShowConfirmPopup(false);
-    window.location.reload();
+    clearBag().finally(() => {
+      setShowConfirmPopup(false);
+      window.location.reload();
+    });
   };
 
   return (
