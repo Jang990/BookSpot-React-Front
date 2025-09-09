@@ -1,14 +1,16 @@
 import { auth } from "@/auth";
 import { OauthLoginButtonGroup } from "@/components/organisms/OauthLoginButtonGroup";
+import { parseRedirectUri } from "@/utils/querystring/RedirectUri";
 import { redirect } from "next/navigation";
 
-export const REDIRECT_QUERY_STRING_KEY = "redirectUri";
-export default async function LoginPage({
-  searchParams,
-}: {
-  searchParams: { [REDIRECT_QUERY_STRING_KEY]?: string };
-}) {
-  const redirectUri = searchParams[REDIRECT_QUERY_STRING_KEY] ?? "/";
+type Props = {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+};
+
+export default async function LoginPage({ searchParams }: Props) {
+  const queryStrings = await searchParams;
+  const redirectUri = parseRedirectUri(queryStrings);
+
   const session = await auth();
   if (session) {
     redirect("/"); // 이미 로그인 → 루트로 이동

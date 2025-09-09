@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
 import { useBag } from "@/contexts/BagContext";
 import { UserCircle } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
 import { signOut, useSession } from "next-auth/react";
-import { REDIRECT_QUERY_STRING_KEY } from "@/app/login/page";
+import { REDIRECT_QUERY_STRING_KEY } from "@/utils/querystring/RedirectUri";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -42,11 +42,6 @@ export const Header = () => {
 const UserIconButton = () => {
   const { status } = useSession();
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  const currentUrl =
-    pathname + (searchParams.toString() ? `?${searchParams.toString()}` : "");
 
   return (
     <>
@@ -67,8 +62,10 @@ const UserIconButton = () => {
           type="button"
           aria-haspopup="menu"
           onClick={() => {
+            const { pathname, search } = window.location;
+            const currentUri = pathname + search;
             router.push(
-              `/login?${REDIRECT_QUERY_STRING_KEY}=${encodeURIComponent(currentUrl)}`
+              `/login?${REDIRECT_QUERY_STRING_KEY}=${encodeURIComponent(currentUri)}`
             );
           }}
           className={`inline-flex items-center justify-center p-2 rounded-full transition-transform duration-150 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-transparent`}
