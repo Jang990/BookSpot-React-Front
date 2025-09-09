@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
 import { useBag } from "@/contexts/BagContext";
-import { User } from "lucide-react";
+import { UserCircle } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
 import { signOut, useSession } from "next-auth/react";
 
@@ -46,7 +46,7 @@ const UserIconButton = () => {
     <>
       {status === "authenticated" ? (
         <IconDropDownButton
-          Icon={User}
+          Icon={UserCircle}
           items={[
             { type: "link", text: "내 서재", href: "/library" },
             {
@@ -66,7 +66,7 @@ const UserIconButton = () => {
           className={`inline-flex items-center justify-center p-2 rounded-full transition-transform duration-150 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-transparent`}
           title="로그인"
         >
-          <User size={24} className="text-primary" />
+          <UserCircle size={24} className="text-muted-foreground" />
         </button>
       )}
     </>
