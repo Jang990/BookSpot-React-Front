@@ -3,8 +3,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { SearchableBookInfo } from "../organisms/book/preview/SearchableBookInfo";
 import { useBag } from "@/contexts/BagContext";
-import { useState } from "react";
-import { InfoToast } from "../molecules/toast/InfoToast";
+import { useToast } from "@/contexts/ToastContext";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
@@ -12,14 +11,7 @@ interface BookPreviewListProps {
 
 export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
   const { addToBag } = useBag();
-  const [toast, setToast] = useState<{
-    message: string;
-    type: "INFO" | "WARN";
-  } | null>(null);
-
-  const showToast = (message: string, type: "INFO" | "WARN" = "INFO") => {
-    setToast({ message, type });
-  };
+  const { showToast } = useToast();
 
   const handleAddToBag = (book: BookPreview) => {
     addToBag(book.id)
@@ -51,14 +43,6 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
           </>
         )}
       </div>
-
-      {toast && (
-        <InfoToast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </div>
   );
 };

@@ -12,9 +12,9 @@ import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { MAX_BAG_SIZE } from "@/utils/BagLocalStorage";
 import { SkeletonBookList } from "../organisms/SkeletonBookList";
-import { InfoToast } from "../molecules/toast/InfoToast";
 import { ErrorPage } from "../molecules/ErrorPage";
 import { SkeletonDiv } from "../atoms/SkeletonDiv";
+import { useToast } from "@/contexts/ToastContext";
 
 interface Props {}
 
@@ -30,10 +30,7 @@ export const BookBagListTemplate = ({}: Props) => {
   const [loading, setLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  const [toast, setToast] = useState<{
-    message: string;
-    type: "INFO" | "WARN";
-  } | null>(null);
+  const { showToast } = useToast(); // useToast 훅 사용
 
   useEffect(() => {
     if (isLoading) return;
@@ -63,16 +60,10 @@ export const BookBagListTemplate = ({}: Props) => {
       .then((isSuccess) => {
         if (!isSuccess) throw new Error();
         setBooks(books.filter((b) => b.id !== book.id));
-        setToast({
-          message: `'${book.title}'이(가) 제거되었습니다.`,
-          type: "INFO",
-        });
+        showToast(`'${book.title}'이(가) 제거되었습니다.`, "INFO");
       })
       .catch((err) => {
-        setToast({
-          message: "알 수 없는 오류가 발생했습니다.",
-          type: "WARN",
-        });
+        showToast("알 수 없는 오류가 발생했습니다.", "WARN");
       });
   };
 
@@ -110,13 +101,6 @@ export const BookBagListTemplate = ({}: Props) => {
                   ></DeletablaBookInfo>
                 ))}
               </>
-            )}
-            {toast && (
-              <InfoToast
-                message={toast.message}
-                type={toast.type}
-                onClose={() => setToast(null)}
-              />
             )}
           </div>
         )}
