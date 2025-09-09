@@ -11,7 +11,7 @@ interface Props {
 export const OauthLoginButtonGroup = ({ redirectUri }: Props) => {
   return (
     <div className="space-y-4">
-      <NaverLoginButton
+      {/* <NaverLoginButton
         onClick={() => {
           console.log("네이버 로그인");
         }}
@@ -20,7 +20,7 @@ export const OauthLoginButtonGroup = ({ redirectUri }: Props) => {
         onClick={() => {
           console.log("카카오 로그인");
         }}
-      />
+      /> */}
       <GoogleLoginButton
         onClick={() => {
           signIn("google", { redirectTo: redirectUri });
