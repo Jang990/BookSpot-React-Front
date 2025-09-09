@@ -1,17 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
 import { useBag } from "@/contexts/BagContext";
 import { UserCircle } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
 import { signOut, useSession } from "next-auth/react";
+import { REDIRECT_QUERY_STRING_KEY } from "@/utils/querystring/RedirectUri";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const pathname = usePathname();
   const { bag } = useBag();
 
   useEffect(() => {
@@ -40,8 +40,9 @@ export const Header = () => {
 };
 
 const UserIconButton = () => {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
+
   return (
     <>
       {status === "authenticated" ? (
@@ -61,7 +62,11 @@ const UserIconButton = () => {
           type="button"
           aria-haspopup="menu"
           onClick={() => {
-            router.push("/login");
+            const { pathname, search } = window.location;
+            const currentUri = pathname + search;
+            router.push(
+              `/login?${REDIRECT_QUERY_STRING_KEY}=${encodeURIComponent(currentUri)}`
+            );
           }}
           className={`inline-flex items-center justify-center p-2 rounded-full transition-transform duration-150 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-transparent`}
           title="로그인"

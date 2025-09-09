@@ -1,9 +1,21 @@
-import { GoogleLoginButton } from "@/components/molecules/button/login/GoogleLoginButton";
-import { KakaoLoginButton } from "@/components/molecules/button/login/KakaoLoginButton";
-import { NaverLoginButton } from "@/components/molecules/button/login/NaverLoginButton";
+import { auth } from "@/auth";
 import { OauthLoginButtonGroup } from "@/components/organisms/OauthLoginButtonGroup";
+import { parseRedirectUri } from "@/utils/querystring/RedirectUri";
+import { redirect } from "next/navigation";
 
-export default async function LoginPage() {
+type Props = {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+};
+
+export default async function LoginPage({ searchParams }: Props) {
+  const queryStrings = await searchParams;
+  const redirectUri = parseRedirectUri(queryStrings);
+
+  const session = await auth();
+  if (session) {
+    redirect("/"); // 이미 로그인 → 루트로 이동
+  }
+
   return (
     <div
       className="flex items-center justify-center p-4"
@@ -18,7 +30,7 @@ export default async function LoginPage() {
             </p>
           </div>
 
-          <OauthLoginButtonGroup />
+          <OauthLoginButtonGroup redirectUri={redirectUri} />
         </div>
       </div>
     </div>

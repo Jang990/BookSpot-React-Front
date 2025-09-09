@@ -4,7 +4,11 @@ import { GoogleLoginButton } from "@/components/molecules/button/login/GoogleLog
 import { KakaoLoginButton } from "@/components/molecules/button/login/KakaoLoginButton";
 import { NaverLoginButton } from "@/components/molecules/button/login/NaverLoginButton";
 
-export const OauthLoginButtonGroup = () => {
+interface Props {
+  redirectUri: string;
+}
+
+export const OauthLoginButtonGroup = ({ redirectUri }: Props) => {
   return (
     <div className="space-y-4">
       <NaverLoginButton
@@ -19,7 +23,7 @@ export const OauthLoginButtonGroup = () => {
       />
       <GoogleLoginButton
         onClick={() => {
-          signIn("google", { redirectTo: "/" });
+          signIn("google", { redirectTo: redirectUri });
         }}
       />
     </div>
