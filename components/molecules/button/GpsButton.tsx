@@ -1,6 +1,6 @@
 import { Loader2, MapPin, X } from "lucide-react";
 import { useState } from "react";
-import { InfoToast } from "../toast/InfoToast";
+import { useToast } from "@/contexts/ToastContext";
 
 interface GpsButtonProps {
   onClick: (latitude: number, longitude: number) => void;
@@ -8,17 +8,11 @@ interface GpsButtonProps {
 
 export const GpsButton = ({ onClick }: GpsButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [toast, setToast] = useState<{ message: string; type: "WARN" } | null>(
-    null
-  );
+  const { showToast } = useToast();
 
   const handleGetCurrentLocation = () => {
     if (!navigator.geolocation) {
-      setToast({
-        message: "GPS를 지원하지 않는 브라우저입니다.",
-        type: "WARN",
-      });
-
+      showToast("GPS를 지원하지 않는 브라우저입니다.", "WARN");
       return;
     }
 
@@ -30,7 +24,7 @@ export const GpsButton = ({ onClick }: GpsButtonProps) => {
         setIsLoading(false);
       },
       (error) => {
-        setToast({ message: findErrorMessage(error), type: "WARN" });
+        showToast(findErrorMessage(error), "WARN");
         setIsLoading(false);
 
         function findErrorMessage(error: GeolocationPositionError): string {
@@ -75,13 +69,6 @@ export const GpsButton = ({ onClick }: GpsButtonProps) => {
           <MapPin className="w-5 h-5" />
         )}
       </button>
-      {toast && (
-        <InfoToast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </>
   );
 };
