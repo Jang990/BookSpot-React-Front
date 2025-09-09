@@ -70,20 +70,14 @@ export const BagProvider = ({ children }: BagProviderProps) => {
   };
 
   const addToBag = async (targetId: string): Promise<boolean> => {
-    try {
-      const isSuccess = session
-        ? await BagApi.addBookId(targetId)
-        : await BagCookie.addBookId(targetId);
+    const isSuccess = session
+      ? await BagApi.addBookId(targetId)
+      : await BagCookie.addBookId(targetId);
 
-      if (isSuccess) {
-        setBag((prev) => [...prev, targetId]);
-      }
-      return isSuccess;
-    } catch (error) {
-      console.error(error); // Cookie 또는 API에서 throw한 에러 처리
-      alert(error instanceof Error ? error.message : "오류가 발생했습니다.");
-      return false;
+    if (isSuccess) {
+      setBag((prev) => [...prev, targetId]);
     }
+    return isSuccess;
   };
 
   const removeFromBag = async (targetId: string): Promise<boolean> => {
