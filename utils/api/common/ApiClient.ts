@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 const TIMEOUT_MS = 8_000;
@@ -8,10 +9,11 @@ export class ApiClient {
     this.baseUrl = baseUrl;
   }
 
-  async request<T>(
+  async request(
     req: NextRequest,
     method: "GET" | "POST" | "PUT" | "DELETE" = "GET"
   ): Promise<NextResponse> {
+    const session = await auth();
     const pathname = req.nextUrl.pathname;
     const search = req.nextUrl.search;
     const url = this.baseUrl + pathname + search;
@@ -20,17 +22,26 @@ export class ApiClient {
     const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     try {
-      const json = await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
+          ...(session?.backendToken
+            ? { Authorization: `Bearer ${session.backendToken}` }
+            : {}),
         },
         signal: controller.signal,
-      }).then((res) => res.json());
+      });
 
       clearTimeout(timeout);
 
-      return NextResponse.json(json);
+      if (response.status === 204) {
+        return new NextResponse(null, { status: 204 });
+      }
+
+      const json = await response.json();
+
+      return NextResponse.json(json, { status: response.status });
     } catch (error) {
       return new NextResponse("server error", {
         status: 500,
@@ -38,12 +49,20 @@ export class ApiClient {
     }
   }
 
-  async get<T>(req: NextRequest) {
-    return this.request<T>(req, "GET");
+  async get(req: NextRequest) {
+    return this.request(req, "GET");
   }
 
-  async post<T>(req: NextRequest) {
-    return this.request<T>(req, "POST");
+  async post(req: NextRequest) {
+    return this.request(req, "POST");
+  }
+
+  async put(req: NextRequest) {
+    return this.request(req, "PUT");
+  }
+
+  async delete(req: NextRequest) {
+    return this.request(req, "DELETE");
   }
 }
 

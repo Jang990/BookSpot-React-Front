@@ -1,4 +1,4 @@
-import { BookCartProvider } from "@/contexts/BookCartContext";
+import { BagProvider } from "@/contexts/BagContext";
 import { Header } from "@/components/organisms/Header";
 import { Footer } from "@/components/organisms/Footer";
 import "./globals.css";
@@ -6,6 +6,8 @@ import type React from "react";
 import { Metadata } from "next";
 import { Gowun_Dodum } from "next/font/google";
 import { SearchTermProvider } from "@/contexts/SearchTermContext";
+import NextAuthProvider from "@/contexts/NextAuthProvider";
+import { ToastProvider } from "@/contexts/ToastContext";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -13,7 +15,7 @@ import { SearchTermProvider } from "@/contexts/SearchTermContext";
 // };
 
 export const metadata: Metadata = {
-  title: "북스팟(BookSpot) | 도서관 통합 검색, 책과 만나는 새로운 공간",
+  title: "로컬 북스팟(BookSpot) | 도서관 통합 검색, 책과 만나는 새로운 공간",
   description:
     "책과 만나는 새로운 공간, BookSpot. 읽고 싶은 그 책, 어느 도서관에 있는지 지도에서 바로 찾아보세요.",
   verification: {
@@ -44,23 +46,27 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={gowunDodumFont.className}>
-        <BookCartProvider>
-          <SearchTermProvider>
-            <div className="flex flex-col min-h-screen">
-              <Header />
+        <NextAuthProvider>
+          <BagProvider>
+            <SearchTermProvider>
+              <ToastProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Header />
 
-              <div className="flex-1 bg-background pt-12 pb-8 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-6xl mx-auto">
-                  <div className="w-full max-w-4xl mx-auto">
-                    <main className="pt-4">{children}</main>
+                  <div className="flex-1 bg-background pt-12 pb-8 px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-6xl mx-auto">
+                      <div className="w-full max-w-4xl mx-auto">
+                        <main className="pt-4">{children}</main>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <Footer />
-            </div>
-          </SearchTermProvider>
-        </BookCartProvider>
+                  <Footer />
+                </div>
+              </ToastProvider>
+            </SearchTermProvider>
+          </BagProvider>
+        </NextAuthProvider>
       </body>
     </html>
   );

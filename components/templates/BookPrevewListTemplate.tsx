@@ -2,36 +2,28 @@
 import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { SearchableBookInfo } from "../organisms/book/preview/SearchableBookInfo";
-import { useBookCart } from "@/contexts/BookCartContext";
-import { useState } from "react";
-import { InfoToast } from "../molecules/toast/InfoToast";
+import { useBag } from "@/contexts/BagContext";
+import { useToast } from "@/contexts/ToastContext";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
 }
 
 export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
-  const { addToCart } = useBookCart();
-  const [toast, setToast] = useState<{
-    message: string;
-    type: "INFO" | "WARN";
-  } | null>(null);
+  const { addToBag } = useBag();
+  const { showToast } = useToast();
 
-  const showToast = (message: string, type: "INFO" | "WARN" = "INFO") => {
-    setToast({ message, type });
-  };
-
-  const handleAddToCart = (book: BookPreview) => {
-    try {
-      addToCart(book.id);
-      showToast(`'${book.title}'이(가) 북카트에 추가되었습니다.`, "INFO");
-    } catch (err) {
-      if (err instanceof Error) {
-        showToast(err.message, "WARN");
-      } else {
-        showToast("알 수 없는 오류가 발생했습니다.", "WARN");
-      }
-    }
+  const handleAddToBag = (book: BookPreview) => {
+    addToBag(book.id)
+      .then((isSuccess) => {
+        if (isSuccess)
+          showToast(`'${book.title}'이(가) 책가방에 추가되었습니다.`, "INFO");
+        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
+      })
+      .catch((err) => {
+        if (err instanceof Error) showToast(err.message, "WARN");
+        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
+      });
   };
 
   return (
@@ -45,20 +37,12 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
               <SearchableBookInfo
                 key={book.id}
                 book={book}
-                onClickAddBtn={handleAddToCart}
+                onClickAddBtn={handleAddToBag}
               ></SearchableBookInfo>
             ))}
           </>
         )}
       </div>
-
-      {toast && (
-        <InfoToast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
     </div>
   );
 };

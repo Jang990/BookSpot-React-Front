@@ -1,8 +1,8 @@
 export interface LibraryBookStockInfo {
   bookId: string;
-  bookTitle: string;
-  bookAuthor: string;
-  bookPublicationYear: string;
+  bookTitle: string | null;
+  bookAuthor: string | null;
+  bookPublicationYear: string | null;
   isInLibrary: boolean;
   loanInfo: LoanInfo | null;
 }

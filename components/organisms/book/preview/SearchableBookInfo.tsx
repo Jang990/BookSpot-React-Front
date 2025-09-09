@@ -1,6 +1,6 @@
 "use client";
 
-import { CartButton } from "@/components/atoms/button/icon/CartButton";
+import { BagButton } from "@/components/atoms/button/icon/BagButton";
 import { BookPreview } from "@/types/BookPreview";
 import { BookInfo } from "./BookInfo";
 
@@ -17,7 +17,7 @@ export const SearchableBookInfo = ({
     <BookInfo
       key={book.id}
       book={book}
-      actionButtons={[<CartButton onClick={() => onClickAddBtn(book)} />]}
+      actionButtons={[<BagButton onClick={() => onClickAddBtn(book)} />]}
     />
   );
 };

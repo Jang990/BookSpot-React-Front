@@ -10,6 +10,9 @@ import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
 import { fetchStocks } from "@/utils/api/LibraryBookStockApi";
 import { refreshStock } from "@/utils/api/LibraryStockRefreshApi";
 import { InfoPanel } from "./InfoPanel";
+import { UnauthorizedError } from "@/utils/api/common/Errors";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/contexts/ToastContext";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -30,6 +33,8 @@ function isToday(iso: string) {
   );
 }
 
+const REFRESH_AUTH_ERROR_MESSAGE =
+  "대출 현황 조회는 로그인이 필요한 기능입니다.";
 export const LibraryStockPanel = ({
   libraryMarkerInfo,
   books,
@@ -39,6 +44,8 @@ export const LibraryStockPanel = ({
 }: LibraryStockPanelProps) => {
   const { library, stock } = libraryMarkerInfo;
   const [activeTab, setActiveTab] = useState<"books" | "info">("books");
+  const { status } = useSession();
+  const { showToast } = useToast();
 
   const baseStockInfos: LibraryBookStockInfo[] = stock
     ? books
@@ -74,6 +81,7 @@ export const LibraryStockPanel = ({
     fetchStocks({
       libraryId: library.id,
       bookIds: inLibraryIds,
+      side: "client",
     }).then((loanInfos: LoanInfo[]) => {
       setLibraryBookStockInfos((prev) =>
         prev.map((info) => {
@@ -84,12 +92,19 @@ export const LibraryStockPanel = ({
     });
   }, [library.id]);
 
+  /** 기간 동안 refresh 아이콘 동작 */
   function momentaryRefresh(duration = 500) {
     setIsStockRefreshing(true);
     setTimeout(() => setIsStockRefreshing(false), duration);
   }
 
   async function handleRefresh() {
+    if (status !== "authenticated") {
+      momentaryRefresh();
+      showToast(REFRESH_AUTH_ERROR_MESSAGE, "WARN");
+      return;
+    }
+
     if (!stockInfos.some((info) => info.loanInfo !== null)) {
       // refresh 대상 없음: loanInfo가 모두 null
       momentaryRefresh();
@@ -109,7 +124,9 @@ export const LibraryStockPanel = ({
 
     try {
       const updates = await Promise.all(
-        targets.map((info) => refreshStock({ stockId: info.loanInfo!.stockId }))
+        targets.map((info) =>
+          refreshStock({ stockId: info.loanInfo!.stockId, side: "client" })
+        )
       );
 
       // loanInfo들을 종합해서 한 번에 반영
@@ -121,6 +138,13 @@ export const LibraryStockPanel = ({
       );
     } catch (e) {
       console.error("refresh 중 오류 발생:", e);
+
+      if (e instanceof UnauthorizedError) {
+        showToast(REFRESH_AUTH_ERROR_MESSAGE, "WARN");
+        return;
+      }
+
+      showToast("알 수 없는 오류가 발생했습니다", "WARN");
     } finally {
       setIsStockRefreshing(false);
     }

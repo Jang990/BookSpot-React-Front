@@ -73,18 +73,22 @@ export default async function Home({ searchParams }: Props) {
   };
 
   if (hasCursorCond && isOutOfPageNumber) {
-    const result = await findBooksPreviewWithSA(searchCond, {
-      lastScore: lastScore === null ? undefined : lastScore,
-      lastLoanCount: lastLoanCount,
-      lastBookId: lastBookId,
-    });
+    const result = await findBooksPreviewWithSA(
+      searchCond,
+      {
+        lastScore: lastScore,
+        lastLoanCount: lastLoanCount,
+        lastBookId: lastBookId,
+      },
+      "server"
+    );
     books = result.books;
     totalPages = null;
     searchAfter = result.searchAfter;
     hasNext = result.hasNext;
     totalElements = result.totalElements;
   } else {
-    const result = await findBooksPreview(searchCond, pageable);
+    const result = await findBooksPreview(searchCond, pageable, "server");
     books = result.books;
     totalPages = result.totalPage;
     searchAfter = result.searchAfter;

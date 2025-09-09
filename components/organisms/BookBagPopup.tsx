@@ -4,25 +4,26 @@ import { MapPin, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ConfirmPopup } from "../molecules/ConfirmPopup";
-import { useBookCart } from "@/contexts/BookCartContext";
+import { useBag } from "@/contexts/BagContext";
 
-export const BookCartPopup = () => {
-  const { cart, clearCart } = useBookCart();
+export const BookBagPopup = () => {
+  const { bag, clearBag } = useBag();
   const router = useRouter();
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
 
   const handleFindLibraries = () => {
-    router.push(`/libraries/stock/search?bookIds=${cart.join(",")}`);
+    router.push(`/libraries/stock/search?bookIds=${bag.join(",")}`);
   };
 
-  const handleClearCartClick = () => {
+  const handleClearBagClick = () => {
     setShowConfirmPopup(true);
   };
 
   const handleConfirmClear = () => {
-    clearCart();
-    setShowConfirmPopup(false);
-    window.location.reload();
+    clearBag().finally(() => {
+      setShowConfirmPopup(false);
+      window.location.reload();
+    });
   };
 
   return (
@@ -37,16 +38,16 @@ export const BookCartPopup = () => {
         </button>
 
         <button
-          onClick={handleClearCartClick}
+          onClick={handleClearBagClick}
           className="bg-red-600 text-white px-6 py-3 rounded-full hover:bg-red-700 transition-colors flex items-center"
         >
           <Trash2 className="mr-2" size={20} />
-          카트 비우기
+          가방 비우기
         </button>
       </div>
       <ConfirmPopup
-        title="북카트 비우기"
-        message="북카트의 모든 책을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
+        title="책가방 비우기"
+        message="책가방의 모든 책을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
         confirmText="비우기"
         cancelText="취소"
         onConfirm={handleConfirmClear}

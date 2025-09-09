@@ -1,10 +1,10 @@
-import { ShoppingCart } from "lucide-react";
+import { Backpack } from "lucide-react";
 
-interface BookCartProps {
+interface BookBagProps {
   onClick: () => void;
 }
 
-export const CartButton = ({ onClick }: BookCartProps) => {
+export const BagButton = ({ onClick }: BookBagProps) => {
   return (
     <button
       onClick={(e) => {
@@ -12,9 +12,9 @@ export const CartButton = ({ onClick }: BookCartProps) => {
         onClick();
       }}
       className="bg-primary text-primary-foreground p-1.5 rounded-full hover:bg-primary/80 transition-colors animate-in zoom-in-50 duration-200 active:scale-90"
-      title="북카트에 담기"
+      title="책가방에 담기"
     >
-      <ShoppingCart size={20} />
+      <Backpack size={20} />
     </button>
   );
 };

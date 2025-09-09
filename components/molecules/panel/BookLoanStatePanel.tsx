@@ -1,6 +1,7 @@
 import { SkeletonDiv } from "@/components/atoms/SkeletonDiv";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
 import { Check, TriangleAlert, X } from "lucide-react";
+import { DEFAULT_TEXT, DEFAULT_TITLE } from "../BookPreviewInfo";
 
 interface BookLoanStatePanelProps {
   libraryBookStockInfo: LibraryBookStockInfo;
@@ -71,6 +72,10 @@ export const BookLoanStatePanel = ({
     textColor = "text-red-800";
   }
 
+  function subInfoLabelText(): string {
+    return `${stockInfo.bookAuthor ?? DEFAULT_TEXT} · ${stockInfo.bookPublicationYear ?? DEFAULT_TEXT}`;
+  }
+
   return (
     <div
       className={`
@@ -85,10 +90,10 @@ export const BookLoanStatePanel = ({
       </div>
       <div className="flex-1 min-w-0">
         <p className={`font-medium truncate text-sm ${textColor}`}>
-          {stockInfo.bookTitle}
+          {stockInfo.bookTitle ?? DEFAULT_TITLE}
         </p>
         <p className="text-xs text-gray-600 truncate mb-0.5">
-          {stockInfo.bookAuthor} · {stockInfo.bookPublicationYear}
+          {subInfoLabelText()}
         </p>
         {stockInfo.isInLibrary && <LoanBadge loanInfo={stockInfo.loanInfo} />}
       </div>

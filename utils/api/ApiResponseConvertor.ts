@@ -1,45 +1,29 @@
-import { BookPreview } from "@/types/BookPreview";
+import { LibraryResponse, LoanInfoResponseApiSpec } from "@/types/ApiSpec";
+import { BookPreview, BookRankingPreview } from "@/types/BookPreview";
 import { Library } from "@/types/Library";
-import LibraryStock from "@/types/LibraryStock";
 import { LoanInfo } from "@/types/Loan";
 import {
   BookStockStatus,
   NearbyLibraryStock,
 } from "@/types/NearbyLibraryStock";
 
-export function convertBookPreview(content: any): BookPreview {
+export function convertBookRanking(content: BookRankingPreview): BookPreview {
   return {
     id: content.id,
-    title: content.title ?? "제목 없음",
-    author: content.author ?? "Unknown",
+    title: content.title ?? null,
     isbn13: content.isbn13,
-    publicationYear: content.publicationYear ?? /* undefined */ 1111,
-    publisher: content.publisher ?? /* undefined */ "Unknown",
-    loanCount: content.loanCount,
-    category: content.category,
     createdAt: content.createdAt,
-
-    rank: null,
-  };
-}
-
-export function convertBookRanking(content: any): BookPreview {
-  return {
-    id: content.id,
-    title: content.title ?? "제목 없음",
-    author: content.author ?? "Unknown",
-    isbn13: content.isbn13,
-    publicationYear: content.publicationYear ?? /* undefined */ 1111,
-    publisher: content.publisher ?? /* undefined */ "Unknown",
-    createdAt: content.createdAt,
-    category: content.category,
+    author: content.author ?? null,
+    publicationYear: content.publicationYear ?? null,
+    publisher: content.publisher ?? null,
+    category: content.category ?? null,
 
     loanCount: content.loanIncrease,
     rank: content.rank,
   };
 }
 
-export function convertLibrary(content: any): Library {
+export function convertLibrary(content: LibraryResponse): Library {
   return {
     id: content.libraryId,
     name: content.libraryName,
@@ -47,10 +31,10 @@ export function convertLibrary(content: any): Library {
       latitude: content.latitude,
       longitude: content.longitude,
     },
-    address: content.address,
-    homePage: content.homePage,
-    closedInfo: content.closedInfo,
-    operatingInfo: content.operatingInfo,
+    address: content.address ?? "",
+    homePage: content.homePage ?? "",
+    closedInfo: content.closedInfo ?? "",
+    operatingInfo: content.operatingInfo ?? "",
   };
 }
 
@@ -75,16 +59,7 @@ export function TEMP_convertLibraryStock(content: any): NearbyLibraryStock {
   }
 }
 
-export function convertLibraryStock(content: any): LibraryStock {
-  return {
-    libraryId: content.libraryId,
-    availableBookIds: content.availableBookIds,
-    unavailableBookIds: content.unavailableBookIds,
-    totalBooksCount: content.totalBooksCount,
-  };
-}
-
-export function convertLoanInfo(content: any): LoanInfo {
+export function convertLoanInfo(content: LoanInfoResponseApiSpec): LoanInfo {
   return {
     stockId: content.stockId,
     libraryId: content.libraryId,

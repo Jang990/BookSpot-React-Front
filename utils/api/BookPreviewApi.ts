@@ -1,18 +1,17 @@
 import {
-  EMPTY_SEARCH_AFTER,
   ITEMS_PER_PAGE,
   MIN_SEARCH_TERM_LENGTH,
   Pageable,
   SearchAfter,
 } from "@/types/Pageable";
-import { get } from "./Fetcher";
 import { BookPreview } from "@/types/BookPreview";
-import { convertBookPreview } from "./ApiResponseConvertor";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
   CATEGORY_QUERY_STRING_KEY,
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
+import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
+import { getApiClient, Side } from "./common/Request";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -45,41 +44,67 @@ const EMPTY_PAGIN_RESULT: PagingResult = {
   totalPage: 0,
   totalElements: 0,
   books: [],
-  searchAfter: EMPTY_SEARCH_AFTER,
+  searchAfter: {
+    lastLoanCount: null,
+    lastScore: null,
+    lastBookId: null,
+  },
+  hasNext: false,
+};
+const EMPTY_SEARCH_AFTER_RESULT: SearchAfterResult = {
+  totalElements: 0,
+  books: [],
+  searchAfter: {
+    lastLoanCount: null,
+    lastScore: null,
+    lastBookId: null,
+  },
   hasNext: false,
 };
 
 export const findBooksPreview = async (
   searchCond: SearchCondition,
-  pageable: Pageable
+  pageable: Pageable,
+  side: Side
 ): Promise<PagingResult> => {
   const keyword = searchCond.keyword;
-  // const isEmptyBookIds = !searchCond.bookIds || searchCond.bookIds.length === 0;
-  // const isTooShortKeyword = keyword && keyword.length < MIN_SEARCH_TERM_LENGTH;
 
   // 방어: 키워드 없거나 길이 2 미만이면 빈배열, 0페이지
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     return EMPTY_PAGIN_RESULT;
   }
 
-  const json = await fetchBooksPreview(searchCond, pageable);
+  const response = await getApiClient(side).get<BookPagingApiSpec>(
+    createApiPath(searchCond, pageable)
+  );
 
+  if (!response.ok) {
+    throw response.error;
+  }
+
+  if (!response.data || !response.data.books) return EMPTY_PAGIN_RESULT;
+  const responseBooks = response.data.books.content;
+  const totalElements = response.data.books.totalElements;
+  const totalPage = Math.ceil(totalElements / ITEMS_PER_PAGE);
+
+  const responseData = response.data;
   return {
-    totalPage: json.books.totalPages,
-    totalElements: json.books.totalElements,
-    books: json.books.content.map(convertBookPreview),
+    books: responseBooks,
     searchAfter: {
-      lastScore: json.lastScore,
-      lastLoanCount: json.lastLoanCount,
-      lastBookId: json.lastBookId,
+      lastScore: responseData.lastScore,
+      lastLoanCount: responseData.lastLoanCount,
+      lastBookId: responseData.lastBookId,
     },
-    hasNext: !json.books.last,
+    totalElements,
+    totalPage,
+    hasNext: responseBooks.length === ITEMS_PER_PAGE,
   };
 };
 
 export const findBooksPreviewWithSA = async (
   searchCond: SearchCondition,
-  searchAfter: SearchAfter
+  searchAfter: SearchAfter,
+  side: Side
 ): Promise<SearchAfterResult> => {
   const keyword = searchCond.keyword;
 
@@ -88,29 +113,31 @@ export const findBooksPreviewWithSA = async (
     return EMPTY_PAGIN_RESULT;
   }
 
-  const json = await fetchBooksPreview(searchCond, searchAfter);
+  const response = await getApiClient(side).get<BookSearchAfterApiSpec>(
+    createApiPath(searchCond, searchAfter)
+  );
 
+  if (!response.ok) {
+    throw response.error;
+  }
+
+  if (!response.data) return EMPTY_SEARCH_AFTER_RESULT;
+
+  const responseData = response.data;
   return {
-    totalElements: json.totalElements,
-    books: json.books.map(convertBookPreview),
+    totalElements: responseData.totalElements,
+    books: responseData.books,
     searchAfter: {
-      lastScore: json.lastScore,
-      lastLoanCount: json.lastLoanCount,
-      lastBookId: json.lastBookId,
+      lastScore: responseData.lastScore,
+      lastLoanCount: responseData.lastLoanCount,
+      lastBookId: responseData.lastBookId,
     },
-    hasNext: json.books.length === ITEMS_PER_PAGE,
+    hasNext: responseData.books.length === ITEMS_PER_PAGE,
   };
 };
 
-const fetchBooksPreview = async (
-  searchCond: SearchCondition,
-  pagingCond: Pageable | SearchAfter
-) => {
-  return get(createApi(searchCond, pagingCond));
-};
-
-const BOOK_API_URL = process.env.NEXT_PUBLIC_FRONT_SERVER_URL + "/api/books";
-function createApi(
+export const BOOK_API_PATH = "/api/books";
+function createApiPath(
   { keyword, bookIds, libraryId, categoryCond }: SearchCondition,
   pageCond: Pageable | SearchAfter
 ): string {
@@ -126,39 +153,42 @@ function createApi(
   ) {
     throw new Error("카테고리 검색 시 카테고리의 ID와 LEVEL은 필수입니다.");
   }
-  const url = new URL(BOOK_API_URL);
 
-  if (keyword) url.searchParams.append("title", keyword);
-  if (bookIds) url.searchParams.append("bookIds", bookIds.join(","));
-  if (libraryId) url.searchParams.append("libraryId", libraryId);
-  if (categoryCond && categoryCond.categoryId && categoryCond.categoryLevel) {
-    url.searchParams.append(CATEGORY_QUERY_STRING_KEY, categoryCond.categoryId);
-    url.searchParams.append(
-      CATEGORY_LEVEL_QUERY_STRING_KEY,
-      categoryCond.categoryLevel
-    );
+  const params = new URLSearchParams();
+
+  if (keyword) params.append("title", keyword);
+  if (bookIds) params.append("bookIds", bookIds.join(","));
+  if (libraryId) params.append("libraryId", libraryId);
+  if (categoryCond?.categoryId && categoryCond?.categoryLevel) {
+    params.append(CATEGORY_QUERY_STRING_KEY, categoryCond.categoryId);
+    params.append(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryCond.categoryLevel);
   }
 
-  if (isPageable(pageCond)) appendPageableQuery(url, pageCond);
-  if (isSearchAfter(pageCond)) appendSearchAfterQuery(pageCond, url);
+  if (isPageable(pageCond)) appendPageableQueryParams(params, pageCond);
+  if (isSearchAfter(pageCond)) appendSearchAfterQueryParams(params, pageCond);
 
-  return url.toString();
+  const query = params.toString();
+  return query ? `${BOOK_API_PATH}?${query}` : BOOK_API_PATH;
 }
 
-function appendSearchAfterQuery(pageCond: SearchAfter, url: URL) {
-  if (pageCond.lastLoanCount !== undefined)
-    url.searchParams.append("lastLoanCount", pageCond.lastLoanCount.toString());
-
-  if (pageCond.lastBookId !== undefined)
-    url.searchParams.append("lastBookId", pageCond.lastBookId.toString());
-
-  if (pageCond.lastScore !== undefined)
-    url.searchParams.append(LAST_SCORE_KEY, pageCond.lastScore.toString());
+function appendSearchAfterQueryParams(
+  params: URLSearchParams,
+  pageCond: SearchAfter
+) {
+  if (pageCond.lastLoanCount !== null)
+    params.append("lastLoanCount", pageCond.lastLoanCount.toString());
+  if (pageCond.lastBookId !== null)
+    params.append("lastBookId", pageCond.lastBookId.toString());
+  if (pageCond.lastScore !== null)
+    params.append(LAST_SCORE_KEY, pageCond.lastScore.toString());
 }
 
-function appendPageableQuery(url: URL, pageCond: Pageable) {
-  url.searchParams.append("page", pageCond.pageNumber.toString());
-  url.searchParams.append("size", pageCond.pageSize.toString());
+function appendPageableQueryParams(
+  params: URLSearchParams,
+  pageCond: Pageable
+) {
+  params.append("page", pageCond.pageNumber.toString());
+  params.append("size", pageCond.pageSize.toString());
 }
 
 function isPageable(x: Pageable | SearchAfter): x is Pageable {
