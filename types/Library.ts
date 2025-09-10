@@ -8,4 +8,5 @@ export interface Library {
   homePage: string;
   closedInfo: string;
   operatingInfo: string;
+  supportsLoanStatus: boolean;
 }
