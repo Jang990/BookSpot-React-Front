@@ -213,6 +213,7 @@ export const LibraryStockPanel = ({
       >
         {activeTab === "books" ? (
           <BooksTap
+            supportsLoanStatus={library.supportsLoanStatus}
             bookStockInfos={stockInfos}
             handleRefresh={handleRefresh}
             isStockRefreshing={isStockRefreshing}
@@ -226,12 +227,14 @@ export const LibraryStockPanel = ({
 };
 
 interface BooksTapProps {
+  supportsLoanStatus: boolean;
   bookStockInfos: LibraryBookStockInfo[];
   isStockRefreshing: boolean;
   handleRefresh: () => void;
 }
 
 const BooksTap = ({
+  supportsLoanStatus,
   bookStockInfos: books,
   isStockRefreshing,
   handleRefresh,
