@@ -15,7 +15,7 @@ import { ToastProvider } from "@/contexts/ToastContext";
 // };
 
 export const metadata: Metadata = {
-  title: "로컬 북스팟(BookSpot) | 도서관 통합 검색, 책과 만나는 새로운 공간",
+  title: "북스팟(BookSpot) | 도서관 통합 검색, 책과 만나는 새로운 공간",
   description:
     "책과 만나는 새로운 공간, BookSpot. 읽고 싶은 그 책, 어느 도서관에 있는지 지도에서 바로 찾아보세요.",
   verification: {
