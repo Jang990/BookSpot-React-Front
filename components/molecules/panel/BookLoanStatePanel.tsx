@@ -2,6 +2,12 @@ import { SkeletonDiv } from "@/components/atoms/SkeletonDiv";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
 import { Check, TriangleAlert, X } from "lucide-react";
 import { DEFAULT_TEXT, DEFAULT_TITLE } from "../BookPreviewInfo";
+import {
+  GrayBadge,
+  GreenBadge,
+  RedBadge,
+  YellowBadge,
+} from "@/components/atoms/badge/TextLabelBadge";
 
 interface BookLoanStatePanelProps {
   libraryBookStockInfo: LibraryBookStockInfo;
@@ -106,37 +112,26 @@ interface LoanBadgeProps {
 }
 
 const LoanBadge = ({ loanInfo }: LoanBadgeProps) => {
-  let badgeBorder, badgeColor, badgeText;
   const hasLoanInfo = loanInfo !== null;
   const loanState = loanInfo?.loanState;
 
+  let badgeElement = null;
+
   if (hasLoanInfo && loanState === "LOANABLE") {
-    badgeBorder = "border-green-200";
-    badgeColor = "bg-green-100 text-green-700";
-    badgeText = "대출 가능";
+    badgeElement = <GreenBadge text="대출 가능" />;
   } else if (hasLoanInfo && loanState === "ON_LOAN") {
-    badgeBorder = "border-yellow-200";
-    badgeColor = "bg-yellow-100 text-yellow-700";
-    badgeText = "대출 중";
+    badgeElement = <YellowBadge text="대출 중" />;
   } else if (hasLoanInfo && loanState === "ERROR") {
-    badgeBorder = "border-red-200";
-    badgeColor = "bg-red-100 text-red-700";
-    badgeText = "도서 오류(관리자 문의)";
+    badgeElement = <RedBadge text="도서 오류(관리자 문의)" />;
   } else if (hasLoanInfo && loanState === "UNKNOWN") {
-    badgeBorder = "border-gray-200";
-    badgeColor = "bg-gray-100 text-gray-700";
-    badgeText = "미확인";
+    badgeElement = <GrayBadge text="미확인" />;
   }
 
   return (
     <div className="flex items-center gap-2 text-xs">
       {hasLoanInfo ? (
         <>
-          <span
-            className={`px-1 py-[1px] rounded-full border-2 ${badgeBorder} ${badgeColor}`}
-          >
-            {badgeText}
-          </span>
+          {badgeElement}
           {loanState !== "UNKNOWN" && (
             <span className="text-gray-500">
               {getTimeAgo(loanInfo.updatedAt)} 확인됨
