@@ -1,6 +1,6 @@
 import { SkeletonDiv } from "@/components/atoms/SkeletonDiv";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
-import { Check, TriangleAlert, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { DEFAULT_TEXT, DEFAULT_TITLE } from "../BookPreviewInfo";
 import {
   GrayBadge,
@@ -44,39 +44,17 @@ function getTimeAgo(dateStr: string): string {
 export const BookLoanStatePanel = ({
   libraryBookStockInfo: stockInfo,
 }: BookLoanStatePanelProps) => {
-  let bgColor, borderColor, iconBg, icon, textColor;
-
-  const hasLoanInfo = stockInfo.loanInfo !== null;
-  const loanState = stockInfo.loanInfo?.loanState;
-
-  if (!stockInfo.isInLibrary) {
-    bgColor = "bg-gray-50";
-    borderColor = "border-gray-200";
-    iconBg = "bg-gray-100";
-    icon = <X size={16} className="text-gray-600" />;
-    textColor = "text-gray-800";
-  } else if (hasLoanInfo && loanState === "LOANABLE") {
-    bgColor = "bg-green-50";
-    borderColor = "border-green-200";
-    iconBg = "bg-green-100";
-    icon = <Check size={16} className="text-green-600" />;
-    textColor = "text-green-800";
-  } else if (
-    hasLoanInfo &&
-    (loanState === "ON_LOAN" || loanState === "UNKNOWN")
-  ) {
-    bgColor = "bg-yellow-50";
-    borderColor = "border-yellow-200";
-    iconBg = "bg-yellow-100";
-    icon = <TriangleAlert size={16} className="text-yellow-600" />;
-    textColor = "text-yellow-800";
-  } else if (hasLoanInfo && loanState === "ERROR") {
-    bgColor = "bg-red-50";
-    borderColor = "border-red-200";
-    iconBg = "bg-red-100";
-    icon = <X size={16} className="text-red-600" />;
-    textColor = "text-red-800";
-  }
+  const bgColor = stockInfo.isInLibrary ? "bg-green-50" : "bg-red-50";
+  const borderColor = stockInfo.isInLibrary
+    ? "border-green-200"
+    : "border-red-200";
+  const iconBg = stockInfo.isInLibrary ? "bg-green-100" : "bg-red-100";
+  const icon = stockInfo.isInLibrary ? (
+    <Check size={16} className="text-green-600" />
+  ) : (
+    <X size={16} className="text-red-600" />
+  );
+  const textColor = stockInfo.isInLibrary ? "text-green-800" : "text-red-800";
 
   function subInfoLabelText(): string {
     return `${stockInfo.bookAuthor ?? DEFAULT_TEXT} · ${stockInfo.bookPublicationYear ?? DEFAULT_TEXT}`;
