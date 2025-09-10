@@ -79,7 +79,9 @@ export const BookLoanStatePanel = ({
         <p className="text-xs text-gray-600 truncate mb-0.5">
           {subInfoLabelText()}
         </p>
-        {stockInfo.isInLibrary && <LoanBadge loanInfo={stockInfo.loanInfo} />}
+        {stockInfo.isInLibrary && (
+          <LoanStatusLine loanInfo={stockInfo.loanInfo} />
+        )}
       </div>
     </div>
   );
@@ -89,7 +91,7 @@ interface LoanBadgeProps {
   loanInfo: LoanInfo | null;
 }
 
-const LoanBadge = ({ loanInfo }: LoanBadgeProps) => {
+const LoanStatusLine = ({ loanInfo }: LoanBadgeProps) => {
   const hasLoanInfo = loanInfo !== null;
   const loanState = loanInfo?.loanState;
 

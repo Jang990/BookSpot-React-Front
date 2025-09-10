@@ -253,17 +253,12 @@ const BooksTap = ({
             <YellowBadge text="조회 제한" icon={<X />} />
           )}
         </div>
-        <button
-          onClick={handleRefresh}
-          className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-          title="대출 가능여부 새로고침"
-          disabled={isStockRefreshing} // 새로고침 중엔 중복 클릭 방지
-        >
-          <RefreshCw
-            size={16}
-            className={isStockRefreshing ? "animate-spin" : ""}
+        {supportsLoanStatus && (
+          <StockRefreshButton
+            isStockRefreshing={isStockRefreshing}
+            handleRefresh={handleRefresh}
           />
-        </button>
+        )}
       </div>
 
       {books.length > 0 ? (
@@ -285,5 +280,29 @@ const BooksTap = ({
         </p>
       )}
     </div>
+  );
+};
+
+interface StockRefreshButtonPros {
+  isStockRefreshing: boolean;
+  handleRefresh: () => void;
+}
+
+const StockRefreshButton = ({
+  isStockRefreshing,
+  handleRefresh,
+}: StockRefreshButtonPros) => {
+  return (
+    <button
+      onClick={handleRefresh}
+      className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+      title="대출 가능여부 새로고침"
+      disabled={isStockRefreshing} // 새로고침 중엔 중복 클릭 방지
+    >
+      <RefreshCw
+        size={16}
+        className={isStockRefreshing ? "animate-spin" : ""}
+      />
+    </button>
   );
 };
