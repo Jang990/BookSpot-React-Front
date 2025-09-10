@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Book, Info, MapPin, RefreshCw } from "lucide-react";
+import { X, Book, Info, MapPin, RefreshCw, Check } from "lucide-react";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { BookPreview } from "@/types/BookPreview";
 import { useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import { InfoPanel } from "./InfoPanel";
 import { UnauthorizedError } from "@/utils/api/common/Errors";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/contexts/ToastContext";
+import { GreenBadge, YellowBadge } from "../atoms/badge/TextLabelBadge";
 
 interface LibraryStockPanelProps {
   libraryMarkerInfo: LibraryMarkerInfo;
@@ -244,11 +245,13 @@ const BooksTap = ({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold ps-2 text-gray-700">
-            도서 목록
+            대출 현황
           </h3>
-          <span className="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full font-medium">
-            전날 기준
-          </span>
+          {supportsLoanStatus ? (
+            <GreenBadge text="조회 가능" icon={<Check />} />
+          ) : (
+            <YellowBadge text="조회 제한" icon={<X />} />
+          )}
         </div>
         <button
           onClick={handleRefresh}
