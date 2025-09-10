@@ -253,10 +253,12 @@ const BooksTap = ({
             <YellowBadge text="조회 제한" icon={<X />} />
           )}
         </div>
-        <StockRefreshButton
-          isStockRefreshing={isStockRefreshing}
-          handleRefresh={handleRefresh}
-        />
+        {supportsLoanStatus && (
+          <StockRefreshButton
+            isStockRefreshing={isStockRefreshing}
+            handleRefresh={handleRefresh}
+          />
+        )}
       </div>
 
       {books.length > 0 ? (
