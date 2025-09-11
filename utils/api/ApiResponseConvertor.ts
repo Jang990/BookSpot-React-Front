@@ -67,5 +67,6 @@ export function convertLoanInfo(content: LoanInfoResponseApiSpec): LoanInfo {
     bookId: content.bookId,
     loanState: content.loanState,
     updatedAt: content.stateUpdatedAt,
+    subjectCode: content.subjectCode,
   };
 }
