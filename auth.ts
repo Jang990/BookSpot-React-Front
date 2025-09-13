@@ -1,6 +1,7 @@
 import NextAuth, { Account } from "next-auth";
 import Google from "next-auth/providers/google";
 import Naver from "next-auth/providers/naver";
+import Kakao from "next-auth/providers/kakao";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -12,6 +13,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     Naver({
       clientId: process.env.NAVER_CLIENT_ID,
       clientSecret: process.env.NAVER_CLIENT_SECRET,
+    }),
+    Kakao({
+      clientId: process.env.KAKAO_CLIENT_ID,
+      clientSecret: process.env.KAKAO_CLIENT_SECRET,
     }),
   ],
 
@@ -73,7 +78,7 @@ const getTokenForProvider = (account: Account): string | undefined => {
     case "google":
       return account.id_token;
     case "naver":
-      // case "kakao":
+    case "kakao":
       return account.access_token;
     default:
       // 지원하지 않는 provider에 대한 예외 처리
