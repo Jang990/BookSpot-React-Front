@@ -54,6 +54,7 @@ export interface LoanInfoResponseApiSpec {
   bookId: string;
   stateUpdatedAt: string;
   loanState: LoanState;
+  subjectCode: string | null;
 }
 
 export interface UserBagResponseApiSpec {

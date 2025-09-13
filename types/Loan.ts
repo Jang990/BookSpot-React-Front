@@ -15,4 +15,5 @@ export interface LoanInfo {
   bookId: string;
   loanState: LoanState;
   updatedAt: string;
+  subjectCode: string | null;
 }

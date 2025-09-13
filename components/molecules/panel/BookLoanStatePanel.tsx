@@ -60,6 +60,11 @@ export const BookLoanStatePanel = ({
     return `${stockInfo.bookAuthor ?? DEFAULT_TEXT} · ${stockInfo.bookPublicationYear ?? DEFAULT_TEXT}`;
   }
 
+  const subjectCodeText =
+    stockInfo.loanInfo == null
+      ? undefined
+      : (stockInfo.loanInfo.subjectCode ?? "알 수 없음");
+
   return (
     <div
       className={`
@@ -73,9 +78,11 @@ export const BookLoanStatePanel = ({
         {icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`font-medium truncate text-sm ${textColor}`}>
-          {stockInfo.bookTitle ?? DEFAULT_TITLE}
-        </p>
+        <TitleAndSubTitle
+          title={stockInfo.bookTitle ?? DEFAULT_TITLE}
+          titleTextColor={textColor}
+          subTitle={subjectCodeText}
+        />
         <p className="text-xs text-gray-600 truncate mb-0.5">
           {subInfoLabelText()}
         </p>
@@ -123,6 +130,36 @@ const LoanStatusLine = ({ loanInfo }: LoanBadgeProps) => {
           <SkeletonDiv width="w-12" height="h-4" />
           <SkeletonDiv width="w-12" height="h-4" />
         </>
+      )}
+    </div>
+  );
+};
+
+interface Props {
+  title: string;
+  titleTextColor?: string;
+  subTitle?: string;
+}
+
+export const TitleAndSubTitle = ({
+  title,
+  titleTextColor,
+  subTitle,
+}: Props) => {
+  return (
+    <div className="flex items-center justify-between overflow-hidden">
+      {/* 왼쪽 */}
+      <div className="flex items-center overflow-hidden min-w-0 ">
+        <h1 className={`font-medium text-sm truncate ${titleTextColor}`}>
+          {title}
+        </h1>
+      </div>
+
+      {/* 오른쪽 결과 수 */}
+      {subTitle && (
+        <div className="px-2 self-end justify-self-end flex-shrink-0 select-none">
+          <span className="text-sm text-muted-foreground">{subTitle}</span>
+        </div>
       )}
     </div>
   );
