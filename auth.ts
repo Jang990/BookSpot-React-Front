@@ -1,5 +1,6 @@
-import NextAuth from "next-auth";
+import NextAuth, { Account } from "next-auth";
 import Google from "next-auth/providers/google";
+import Naver from "next-auth/providers/naver";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
@@ -7,6 +8,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    Naver({
+      clientId: process.env.NAVER_CLIENT_ID,
+      clientSecret: process.env.NAVER_CLIENT_SECRET,
     }),
   ],
 
@@ -21,7 +26,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ idToken: account.id_token }),
+              body: JSON.stringify({
+                provider: account.provider,
+                token: getTokenForProvider(account),
+              }),
             }
           );
 
@@ -54,3 +62,21 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
   },
 });
+
+/**
+ * NextAuth의 Account 객체에서 provider에 따라 적절한 인증 토큰을 반환합니다.
+ * @param account - NextAuth의 Account 객체
+ * @returns provider에 맞는 인증 토큰 (id_token 또는 access_token)
+ */
+const getTokenForProvider = (account: Account): string | undefined => {
+  switch (account.provider) {
+    case "google":
+      return account.id_token;
+    case "naver":
+      // case "kakao":
+      return account.access_token;
+    default:
+      // 지원하지 않는 provider에 대한 예외 처리
+      throw new Error(`Unsupported provider: ${account.provider}`);
+  }
+};
