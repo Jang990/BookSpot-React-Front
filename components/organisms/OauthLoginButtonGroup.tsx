@@ -16,11 +16,11 @@ export const OauthLoginButtonGroup = ({ redirectUri }: Props) => {
           signIn("naver", { redirectTo: redirectUri });
         }}
       />
-      {/* <KakaoLoginButton
+      <KakaoLoginButton
         onClick={() => {
-          console.log("카카오 로그인");
+          signIn("kakao", { redirectTo: redirectUri });
         }}
-      /> */}
+      />
       <GoogleLoginButton
         onClick={() => {
           signIn("google", { redirectTo: redirectUri });
