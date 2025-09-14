@@ -35,6 +35,7 @@ export function convertLibrary(content: LibraryResponse): Library {
     homePage: content.homePage ?? "",
     closedInfo: content.closedInfo ?? "",
     operatingInfo: content.operatingInfo ?? "",
+    supportsLoanStatus: content.supportsLoanStatus,
   };
 }
 
@@ -66,5 +67,6 @@ export function convertLoanInfo(content: LoanInfoResponseApiSpec): LoanInfo {
     bookId: content.bookId,
     loanState: content.loanState,
     updatedAt: content.stateUpdatedAt,
+    subjectCode: content.subjectCode,
   };
 }

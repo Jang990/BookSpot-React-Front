@@ -1,7 +1,13 @@
 import { SkeletonDiv } from "@/components/atoms/SkeletonDiv";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
-import { Check, TriangleAlert, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { DEFAULT_TEXT, DEFAULT_TITLE } from "../BookPreviewInfo";
+import {
+  GrayBadge,
+  GreenBadge,
+  RedBadge,
+  YellowBadge,
+} from "@/components/atoms/badge/TextLabelBadge";
 
 interface BookLoanStatePanelProps {
   libraryBookStockInfo: LibraryBookStockInfo;
@@ -38,43 +44,26 @@ function getTimeAgo(dateStr: string): string {
 export const BookLoanStatePanel = ({
   libraryBookStockInfo: stockInfo,
 }: BookLoanStatePanelProps) => {
-  let bgColor, borderColor, iconBg, icon, textColor;
-
-  const hasLoanInfo = stockInfo.loanInfo !== null;
-  const loanState = stockInfo.loanInfo?.loanState;
-
-  if (!stockInfo.isInLibrary) {
-    bgColor = "bg-gray-50";
-    borderColor = "border-gray-200";
-    iconBg = "bg-gray-100";
-    icon = <X size={16} className="text-gray-600" />;
-    textColor = "text-gray-800";
-  } else if (hasLoanInfo && loanState === "LOANABLE") {
-    bgColor = "bg-green-50";
-    borderColor = "border-green-200";
-    iconBg = "bg-green-100";
-    icon = <Check size={16} className="text-green-600" />;
-    textColor = "text-green-800";
-  } else if (
-    hasLoanInfo &&
-    (loanState === "ON_LOAN" || loanState === "UNKNOWN")
-  ) {
-    bgColor = "bg-yellow-50";
-    borderColor = "border-yellow-200";
-    iconBg = "bg-yellow-100";
-    icon = <TriangleAlert size={16} className="text-yellow-600" />;
-    textColor = "text-yellow-800";
-  } else if (hasLoanInfo && loanState === "ERROR") {
-    bgColor = "bg-red-50";
-    borderColor = "border-red-200";
-    iconBg = "bg-red-100";
-    icon = <X size={16} className="text-red-600" />;
-    textColor = "text-red-800";
-  }
+  const bgColor = stockInfo.isInLibrary ? "bg-green-50" : "bg-red-50";
+  const borderColor = stockInfo.isInLibrary
+    ? "border-green-200"
+    : "border-red-200";
+  const iconBg = stockInfo.isInLibrary ? "bg-green-100" : "bg-red-100";
+  const icon = stockInfo.isInLibrary ? (
+    <Check size={16} className="text-green-600" />
+  ) : (
+    <X size={16} className="text-red-600" />
+  );
+  const textColor = stockInfo.isInLibrary ? "text-green-800" : "text-red-800";
 
   function subInfoLabelText(): string {
     return `${stockInfo.bookAuthor ?? DEFAULT_TEXT} · ${stockInfo.bookPublicationYear ?? DEFAULT_TEXT}`;
   }
+
+  const subjectCodeText =
+    stockInfo.loanInfo == null
+      ? undefined
+      : (stockInfo.loanInfo.subjectCode ?? "알 수 없음");
 
   return (
     <div
@@ -89,13 +78,17 @@ export const BookLoanStatePanel = ({
         {icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`font-medium truncate text-sm ${textColor}`}>
-          {stockInfo.bookTitle ?? DEFAULT_TITLE}
-        </p>
+        <TitleAndSubTitle
+          title={stockInfo.bookTitle ?? DEFAULT_TITLE}
+          titleTextColor={textColor}
+          subTitle={subjectCodeText}
+        />
         <p className="text-xs text-gray-600 truncate mb-0.5">
           {subInfoLabelText()}
         </p>
-        {stockInfo.isInLibrary && <LoanBadge loanInfo={stockInfo.loanInfo} />}
+        {stockInfo.isInLibrary && (
+          <LoanStatusLine loanInfo={stockInfo.loanInfo} />
+        )}
       </div>
     </div>
   );
@@ -105,38 +98,27 @@ interface LoanBadgeProps {
   loanInfo: LoanInfo | null;
 }
 
-const LoanBadge = ({ loanInfo }: LoanBadgeProps) => {
-  let badgeBorder, badgeColor, badgeText;
+const LoanStatusLine = ({ loanInfo }: LoanBadgeProps) => {
   const hasLoanInfo = loanInfo !== null;
   const loanState = loanInfo?.loanState;
 
+  let badgeElement = null;
+
   if (hasLoanInfo && loanState === "LOANABLE") {
-    badgeBorder = "border-green-200";
-    badgeColor = "bg-green-100 text-green-700";
-    badgeText = "대출 가능";
+    badgeElement = <GreenBadge text="대출 가능" />;
   } else if (hasLoanInfo && loanState === "ON_LOAN") {
-    badgeBorder = "border-yellow-200";
-    badgeColor = "bg-yellow-100 text-yellow-700";
-    badgeText = "대출 중";
+    badgeElement = <YellowBadge text="대출 중" />;
   } else if (hasLoanInfo && loanState === "ERROR") {
-    badgeBorder = "border-red-200";
-    badgeColor = "bg-red-100 text-red-700";
-    badgeText = "도서 오류(관리자 문의)";
+    badgeElement = <RedBadge text="도서 오류(관리자 문의)" />;
   } else if (hasLoanInfo && loanState === "UNKNOWN") {
-    badgeBorder = "border-gray-200";
-    badgeColor = "bg-gray-100 text-gray-700";
-    badgeText = "미확인";
+    badgeElement = <GrayBadge text="미확인" />;
   }
 
   return (
     <div className="flex items-center gap-2 text-xs">
       {hasLoanInfo ? (
         <>
-          <span
-            className={`px-1 py-[1px] rounded-full border-2 ${badgeBorder} ${badgeColor}`}
-          >
-            {badgeText}
-          </span>
+          {badgeElement}
           {loanState !== "UNKNOWN" && (
             <span className="text-gray-500">
               {getTimeAgo(loanInfo.updatedAt)} 확인됨
@@ -148,6 +130,36 @@ const LoanBadge = ({ loanInfo }: LoanBadgeProps) => {
           <SkeletonDiv width="w-12" height="h-4" />
           <SkeletonDiv width="w-12" height="h-4" />
         </>
+      )}
+    </div>
+  );
+};
+
+interface Props {
+  title: string;
+  titleTextColor?: string;
+  subTitle?: string;
+}
+
+export const TitleAndSubTitle = ({
+  title,
+  titleTextColor,
+  subTitle,
+}: Props) => {
+  return (
+    <div className="flex items-center justify-between overflow-hidden">
+      {/* 왼쪽 */}
+      <div className="flex items-center overflow-hidden min-w-0 ">
+        <h1 className={`font-medium text-sm truncate ${titleTextColor}`}>
+          {title}
+        </h1>
+      </div>
+
+      {/* 오른쪽 결과 수 */}
+      {subTitle && (
+        <div className="px-2 self-end justify-self-end flex-shrink-0 select-none">
+          <span className="text-sm text-muted-foreground">{subTitle}</span>
+        </div>
       )}
     </div>
   );

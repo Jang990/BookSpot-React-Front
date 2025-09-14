@@ -33,6 +33,7 @@ export interface LibraryResponse {
   homePage: string | null;
   closedInfo: string | null;
   operatingInfo: string | null;
+  supportsLoanStatus: boolean;
 }
 
 export interface NearByLibraryApiSpec {
@@ -53,6 +54,7 @@ export interface LoanInfoResponseApiSpec {
   bookId: string;
   stateUpdatedAt: string;
   loanState: LoanState;
+  subjectCode: string | null;
 }
 
 export interface UserBagResponseApiSpec {
