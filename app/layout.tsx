@@ -31,6 +31,19 @@ export const metadata: Metadata = {
       "책과 만나는 새로운 공간, BookSpot. 읽고 싶은 그 책, 어느 도서관에 있는지 지도에서 바로 찾아보세요.",
     "og:url": "https://bookspot.store",
   },
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon.ico", type: "image/x-icon" }, // fallback
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+    other: [
+      { rel: "icon", url: "/android-chrome-192x192.png", sizes: "192x192" },
+      { rel: "icon", url: "/android-chrome-512x512.png", sizes: "512x512" },
+      { rel: "manifest", url: "/site.webmanifest" },
+    ],
+  },
 };
 
 const gowunDodumFont = Gowun_Dodum({
