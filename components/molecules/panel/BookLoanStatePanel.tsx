@@ -10,6 +10,7 @@ import {
 } from "@/components/atoms/badge/TextLabelBadge";
 
 interface BookLoanStatePanelProps {
+  supportsLoanStatus: boolean;
   libraryBookStockInfo: LibraryBookStockInfo;
 }
 
@@ -42,6 +43,7 @@ function getTimeAgo(dateStr: string): string {
 }
 
 export const BookLoanStatePanel = ({
+  supportsLoanStatus,
   libraryBookStockInfo: stockInfo,
 }: BookLoanStatePanelProps) => {
   const bgColor = stockInfo.isInLibrary ? "bg-green-50" : "bg-red-50";
@@ -86,7 +88,7 @@ export const BookLoanStatePanel = ({
         <p className="text-xs text-gray-600 truncate mb-0.5">
           {subInfoLabelText()}
         </p>
-        {stockInfo.isInLibrary && (
+        {stockInfo.isInLibrary && supportsLoanStatus && (
           <LoanStatusLine loanInfo={stockInfo.loanInfo} />
         )}
       </div>

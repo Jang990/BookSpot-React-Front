@@ -264,7 +264,10 @@ const BooksTap = ({
           {books.map((book: LibraryBookStockInfo) => {
             return (
               <li key={book.bookId}>
-                <BookLoanStatePanel libraryBookStockInfo={book} />
+                <BookLoanStatePanel
+                  libraryBookStockInfo={book}
+                  supportsLoanStatus={supportsLoanStatus}
+                />
               </li>
             );
           })}
