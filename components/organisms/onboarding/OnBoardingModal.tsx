@@ -57,8 +57,8 @@ export function OnboardingModal() {
   const currentStepData = steps[currentStep];
 
   return (
-    <div className="fixed inset-0 bg-background flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-sm bg-card border-border">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <Card className="w-full max-w-md bg-card border-border">
         <CardContent className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
