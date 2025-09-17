@@ -247,10 +247,8 @@ const BooksTap = ({
           <h3 className="text-sm font-semibold ps-2 text-gray-700">
             {supportsLoanStatus ? "대출 현황" : "도서 목록"}
           </h3>
-          {supportsLoanStatus ? (
+          {supportsLoanStatus && (
             <GreenBadge text="조회 가능" icon={<Check />} />
-          ) : (
-            <YellowBadge text="조회 제한" icon={<X />} />
           )}
         </div>
         {supportsLoanStatus && (
