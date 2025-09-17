@@ -213,12 +213,21 @@ export const LibraryStockPanel = ({
         style={{ maxHeight: "200px" }}
       >
         {activeTab === "books" ? (
-          <BooksTap
-            supportsLoanStatus={library.supportsLoanStatus}
-            bookStockInfos={stockInfos}
-            handleRefresh={handleRefresh}
-            isStockRefreshing={isStockRefreshing}
-          />
+          library.supportsLoanStatus ? (
+            <BooksTapLoan
+              supportsLoanStatus={library.supportsLoanStatus}
+              bookStockInfos={stockInfos}
+              handleRefresh={handleRefresh}
+              isStockRefreshing={isStockRefreshing}
+            />
+          ) : (
+            <BooksTapBasic
+              supportsLoanStatus={library.supportsLoanStatus}
+              bookStockInfos={stockInfos}
+              handleRefresh={handleRefresh}
+              isStockRefreshing={isStockRefreshing}
+            />
+          )
         ) : (
           <LibraryDetailContentPanel library={library} />
         )}
@@ -234,8 +243,43 @@ interface BooksTapProps {
   handleRefresh: () => void;
 }
 
-const BooksTap = ({
-  supportsLoanStatus,
+const BooksTapBasic = ({ bookStockInfos: books }: BooksTapProps) => {
+  return (
+    <div className="">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold ps-2 text-gray-700">
+            도서 목록
+          </h3>
+        </div>
+      </div>
+
+      {books.length > 0 ? (
+        <ul className="space-y-2">
+          {books.map((book: LibraryBookStockInfo) => {
+            return (
+              <li key={book.bookId}>
+                <BookLoanStatePanel
+                  libraryBookStockInfo={book}
+                  supportsLoanStatus={false}
+                />
+              </li>
+            );
+          })}
+          <li>
+            <InfoPanel text="도서 카드를 클릭해서 해당 도서관의 대출 현황을 파악해보세요." />
+          </li>
+        </ul>
+      ) : (
+        <p className="text-sm text-gray-500 text-center py-4">
+          도서 정보가 없습니다.
+        </p>
+      )}
+    </div>
+  );
+};
+
+const BooksTapLoan = ({
   bookStockInfos: books,
   isStockRefreshing,
   handleRefresh,
@@ -247,18 +291,12 @@ const BooksTap = ({
           <h3 className="text-sm font-semibold ps-2 text-gray-700">
             대출 현황
           </h3>
-          {supportsLoanStatus ? (
-            <GreenBadge text="조회 가능" icon={<Check />} />
-          ) : (
-            <YellowBadge text="조회 제한" icon={<X />} />
-          )}
+          <GreenBadge text="조회 가능" icon={<Check />} />
         </div>
-        {supportsLoanStatus && (
-          <StockRefreshButton
-            isStockRefreshing={isStockRefreshing}
-            handleRefresh={handleRefresh}
-          />
-        )}
+        <StockRefreshButton
+          isStockRefreshing={isStockRefreshing}
+          handleRefresh={handleRefresh}
+        />
       </div>
 
       {books.length > 0 ? (
@@ -266,7 +304,10 @@ const BooksTap = ({
           {books.map((book: LibraryBookStockInfo) => {
             return (
               <li key={book.bookId}>
-                <BookLoanStatePanel libraryBookStockInfo={book} />
+                <BookLoanStatePanel
+                  libraryBookStockInfo={book}
+                  supportsLoanStatus={true}
+                />
               </li>
             );
           })}
