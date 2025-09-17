@@ -245,7 +245,7 @@ const BooksTap = ({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold ps-2 text-gray-700">
-            대출 현황
+            {supportsLoanStatus ? "대출 현황" : "도서 목록"}
           </h3>
           {supportsLoanStatus ? (
             <GreenBadge text="조회 가능" icon={<Check />} />
