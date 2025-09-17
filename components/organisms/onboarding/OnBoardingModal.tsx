@@ -28,7 +28,7 @@ export function OnboardingModal() {
   const { showOnboarding, completeOnboarding, closeOnboarding } =
     useOnboarding();
 
-  const isOpen = true;
+  const isOpen = showOnboarding;
   const onClose = closeOnboarding;
   const onComplete = completeOnboarding;
 
