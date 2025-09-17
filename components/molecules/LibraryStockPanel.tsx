@@ -269,7 +269,11 @@ const BooksTap = ({
             );
           })}
           <li>
-            <InfoPanel text="하루 전 대출 가능여부만 확인할 수 있습니다." />
+            {supportsLoanStatus ? (
+              <InfoPanel text="하루 전 대출 가능여부만 확인할 수 있습니다." />
+            ) : (
+              <InfoPanel text="도서 카드를 클릭해서 해당 도서관의 대출 현황을 파악해보세요." />
+            )}
           </li>
         </ul>
       ) : (
