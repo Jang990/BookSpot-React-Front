@@ -8,6 +8,7 @@ import { Gowun_Dodum } from "next/font/google";
 import { SearchTermProvider } from "@/contexts/SearchTermContext";
 import NextAuthProvider from "@/contexts/NextAuthProvider";
 import { ToastProvider } from "@/contexts/ToastContext";
+import { OnboardingModal } from "@/components/organisms/onboarding/OnBoardingModal";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -76,6 +77,7 @@ export default function RootLayout({
 
                   <Footer />
                 </div>
+                <OnboardingModal />
               </ToastProvider>
             </SearchTermProvider>
           </BagProvider>
