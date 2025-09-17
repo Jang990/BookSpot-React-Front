@@ -214,7 +214,7 @@ export const LibraryStockPanel = ({
       >
         {activeTab === "books" ? (
           library.supportsLoanStatus ? (
-            <BooksTap
+            <BooksTapLoan
               supportsLoanStatus={library.supportsLoanStatus}
               bookStockInfos={stockInfos}
               handleRefresh={handleRefresh}
@@ -279,7 +279,7 @@ const BooksTapBasic = ({ bookStockInfos: books }: BooksTapProps) => {
   );
 };
 
-const BooksTap = ({
+const BooksTapLoan = ({
   supportsLoanStatus,
   bookStockInfos: books,
   isStockRefreshing,
