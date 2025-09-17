@@ -243,29 +243,15 @@ interface BooksTapProps {
   handleRefresh: () => void;
 }
 
-const BooksTapBasic = ({
-  supportsLoanStatus,
-  bookStockInfos: books,
-  isStockRefreshing,
-  handleRefresh,
-}: BooksTapProps) => {
+const BooksTapBasic = ({ bookStockInfos: books }: BooksTapProps) => {
   return (
     <div className="">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold ps-2 text-gray-700">
-            {supportsLoanStatus ? "대출 현황" : "도서 목록"}
+            도서 목록
           </h3>
-          {supportsLoanStatus && (
-            <GreenBadge text="조회 가능" icon={<Check />} />
-          )}
         </div>
-        {supportsLoanStatus && (
-          <StockRefreshButton
-            isStockRefreshing={isStockRefreshing}
-            handleRefresh={handleRefresh}
-          />
-        )}
       </div>
 
       {books.length > 0 ? (
@@ -275,17 +261,13 @@ const BooksTapBasic = ({
               <li key={book.bookId}>
                 <BookLoanStatePanel
                   libraryBookStockInfo={book}
-                  supportsLoanStatus={supportsLoanStatus}
+                  supportsLoanStatus={false}
                 />
               </li>
             );
           })}
           <li>
-            {supportsLoanStatus ? (
-              <InfoPanel text="하루 전 대출 가능여부만 확인할 수 있습니다." />
-            ) : (
-              <InfoPanel text="도서 카드를 클릭해서 해당 도서관의 대출 현황을 파악해보세요." />
-            )}
+            <InfoPanel text="도서 카드를 클릭해서 해당 도서관의 대출 현황을 파악해보세요." />
           </li>
         </ul>
       ) : (
