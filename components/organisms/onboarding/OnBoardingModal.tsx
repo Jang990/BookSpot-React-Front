@@ -10,17 +10,17 @@ const steps = [
   {
     id: 1,
     title: "읽고 싶은 책을 찾으세요",
-    image: "/onboarding/onboarding-1.png",
+    image: "/onboarding/onboarding-1.webp",
   },
   {
     id: 2,
     title: "제목을 클릭하고, 파란색 버튼을 누르세요",
-    image: "/onboarding/onboarding-2.png",
+    image: "/onboarding/onboarding-2.webp",
   },
   {
     id: 3,
     title: "책을 소장하고 있는 도서관을 찾아보세요",
-    image: "/onboarding/onboarding-3.png",
+    image: "/onboarding/onboarding-3.webp",
   },
 ];
 
