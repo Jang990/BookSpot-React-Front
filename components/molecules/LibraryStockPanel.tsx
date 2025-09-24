@@ -275,7 +275,7 @@ const BooksTapBasic = ({
             );
           })}
           <li>
-            <InfoPanel text="도서 카드를 클릭해서 해당 도서관의 대출 현황을 파악해보세요." />
+            <InfoPanel text="몇몇 도서관은 직접 들어가서 도서관을 선택하거나, 제목을 직접 검색해야 합니다." />
           </li>
         </ul>
       ) : (
