@@ -57,6 +57,7 @@ export const LibraryStockPanel = ({
         )
         .map((book) => ({
           bookId: book.id,
+          bookIsbn13: book.isbn13,
           bookTitle: book.title,
           bookAuthor: book.author,
           bookPublicationYear: book.publicationYear,
@@ -219,6 +220,7 @@ export const LibraryStockPanel = ({
               bookStockInfos={stockInfos}
               handleRefresh={handleRefresh}
               isStockRefreshing={isStockRefreshing}
+              isbnSearchPattern={library.isbnSearchPattern}
             />
           ) : (
             <BooksTapBasic
@@ -226,6 +228,7 @@ export const LibraryStockPanel = ({
               bookStockInfos={stockInfos}
               handleRefresh={handleRefresh}
               isStockRefreshing={isStockRefreshing}
+              isbnSearchPattern={library.isbnSearchPattern}
             />
           )
         ) : (
@@ -241,9 +244,13 @@ interface BooksTapProps {
   bookStockInfos: LibraryBookStockInfo[];
   isStockRefreshing: boolean;
   handleRefresh: () => void;
+  isbnSearchPattern: string | null;
 }
 
-const BooksTapBasic = ({ bookStockInfos: books }: BooksTapProps) => {
+const BooksTapBasic = ({
+  bookStockInfos: books,
+  isbnSearchPattern,
+}: BooksTapProps) => {
   return (
     <div className="">
       <div className="flex items-center justify-between mb-3">
@@ -262,12 +269,13 @@ const BooksTapBasic = ({ bookStockInfos: books }: BooksTapProps) => {
                 <BookLoanStatePanel
                   libraryBookStockInfo={book}
                   supportsLoanStatus={false}
+                  isbnSearchPattern={isbnSearchPattern}
                 />
               </li>
             );
           })}
           <li>
-            <InfoPanel text="도서 카드를 클릭해서 해당 도서관의 대출 현황을 파악해보세요." />
+            <InfoPanel text="몇몇 도서관은 직접 들어가서 도서관을 선택하거나, 제목을 직접 검색해야 합니다." />
           </li>
         </ul>
       ) : (
@@ -283,6 +291,7 @@ const BooksTapLoan = ({
   bookStockInfos: books,
   isStockRefreshing,
   handleRefresh,
+  isbnSearchPattern,
 }: BooksTapProps) => {
   return (
     <div className="">
@@ -307,6 +316,7 @@ const BooksTapLoan = ({
                 <BookLoanStatePanel
                   libraryBookStockInfo={book}
                   supportsLoanStatus={true}
+                  isbnSearchPattern={isbnSearchPattern}
                 />
               </li>
             );

@@ -1,6 +1,6 @@
 import { SkeletonDiv } from "@/components/atoms/SkeletonDiv";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
-import { Check, X } from "lucide-react";
+import { Check, ExternalLink, X } from "lucide-react";
 import { DEFAULT_TEXT, DEFAULT_TITLE } from "../BookPreviewInfo";
 import {
   GrayBadge,
@@ -12,6 +12,7 @@ import {
 interface BookLoanStatePanelProps {
   supportsLoanStatus: boolean;
   libraryBookStockInfo: LibraryBookStockInfo;
+  isbnSearchPattern: string | null;
 }
 
 function getTimeAgo(dateStr: string): string {
@@ -45,6 +46,7 @@ function getTimeAgo(dateStr: string): string {
 export const BookLoanStatePanel = ({
   supportsLoanStatus,
   libraryBookStockInfo: stockInfo,
+  isbnSearchPattern,
 }: BookLoanStatePanelProps) => {
   const bgColor = stockInfo.isInLibrary ? "bg-green-50" : "bg-red-50";
   const borderColor = stockInfo.isInLibrary
@@ -67,31 +69,38 @@ export const BookLoanStatePanel = ({
       ? undefined
       : (stockInfo.loanInfo.subjectCode ?? "알 수 없음");
 
+  const isbnSearchLink =
+    isbnSearchPattern && `${isbnSearchPattern}${stockInfo.bookIsbn13}`;
   return (
     <div
       className={`
-                  flex items-start p-1.5 rounded-lg border transition-colors
-                  ${bgColor} ${borderColor}
-                `}
+          rounded-lg border transition-colors
+          ${bgColor} ${borderColor}
+        `}
     >
-      <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${iconBg}`}
-      >
-        {icon}
+      <div className="flex items-start p-1.5">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${iconBg}`}
+        >
+          {icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <TitleAndSubTitle
+            title={stockInfo.bookTitle ?? DEFAULT_TITLE}
+            titleTextColor={textColor}
+            subTitle={subjectCodeText}
+          />
+          <p className="text-xs text-gray-600 truncate mb-0.5">
+            {subInfoLabelText()}
+          </p>
+          {stockInfo.isInLibrary && supportsLoanStatus && (
+            <LoanStatusLine loanInfo={stockInfo.loanInfo} />
+          )}
+        </div>
       </div>
-      <div className="flex-1 min-w-0">
-        <TitleAndSubTitle
-          title={stockInfo.bookTitle ?? DEFAULT_TITLE}
-          titleTextColor={textColor}
-          subTitle={subjectCodeText}
-        />
-        <p className="text-xs text-gray-600 truncate mb-0.5">
-          {subInfoLabelText()}
-        </p>
-        {stockInfo.isInLibrary && supportsLoanStatus && (
-          <LoanStatusLine loanInfo={stockInfo.loanInfo} />
-        )}
-      </div>
+      {isbnSearchLink && (
+        <LibrarySearchExternalButton isbnSearchLink={isbnSearchLink} />
+      )}
     </div>
   );
 };
@@ -163,6 +172,26 @@ export const TitleAndSubTitle = ({
           <span className="text-sm text-muted-foreground">{subTitle}</span>
         </div>
       )}
+    </div>
+  );
+};
+
+interface LibrarySearchExternalButtonProps {
+  isbnSearchLink: string;
+}
+
+const LibrarySearchExternalButton = ({
+  isbnSearchLink,
+}: LibrarySearchExternalButtonProps) => {
+  return (
+    <div className="border-t border-gray-200/50 px-1.5 py-0.5 hover:text-gray-800 hover:bg-primary/10">
+      <button
+        onClick={() => window.open(isbnSearchLink, "_blank")}
+        className="w-full text-xs text-gray-600 flex items-center justify-center gap-1 py-1 rounded transition-colors"
+      >
+        <ExternalLink size={12} />
+        도서관에서 확인하기
+      </button>
     </div>
   );
 };

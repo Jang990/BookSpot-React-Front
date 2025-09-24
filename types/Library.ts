@@ -9,4 +9,5 @@ export interface Library {
   closedInfo: string;
   operatingInfo: string;
   supportsLoanStatus: boolean;
+  isbnSearchPattern: string | null;
 }

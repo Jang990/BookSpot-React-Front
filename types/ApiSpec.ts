@@ -34,6 +34,7 @@ export interface LibraryResponse {
   closedInfo: string | null;
   operatingInfo: string | null;
   supportsLoanStatus: boolean;
+  isbnSearchPattern: string | null;
 }
 
 export interface NearByLibraryApiSpec {
