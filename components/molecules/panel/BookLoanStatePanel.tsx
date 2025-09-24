@@ -12,6 +12,7 @@ import {
 interface BookLoanStatePanelProps {
   supportsLoanStatus: boolean;
   libraryBookStockInfo: LibraryBookStockInfo;
+  isbnSearchPattern: string | null;
 }
 
 function getTimeAgo(dateStr: string): string {
@@ -45,6 +46,7 @@ function getTimeAgo(dateStr: string): string {
 export const BookLoanStatePanel = ({
   supportsLoanStatus,
   libraryBookStockInfo: stockInfo,
+  isbnSearchPattern,
 }: BookLoanStatePanelProps) => {
   const bgColor = stockInfo.isInLibrary ? "bg-green-50" : "bg-red-50";
   const borderColor = stockInfo.isInLibrary
