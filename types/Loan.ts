@@ -1,5 +1,6 @@
 export interface LibraryBookStockInfo {
   bookId: string;
+  bookIsbn13: string;
   bookTitle: string | null;
   bookAuthor: string | null;
   bookPublicationYear: string | null;

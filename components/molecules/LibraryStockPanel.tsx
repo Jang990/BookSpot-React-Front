@@ -57,6 +57,7 @@ export const LibraryStockPanel = ({
         )
         .map((book) => ({
           bookId: book.id,
+          bookIsbn13: book.isbn13,
           bookTitle: book.title,
           bookAuthor: book.author,
           bookPublicationYear: book.publicationYear,

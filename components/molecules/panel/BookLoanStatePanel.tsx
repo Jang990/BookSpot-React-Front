@@ -69,8 +69,13 @@ export const BookLoanStatePanel = ({
       ? undefined
       : (stockInfo.loanInfo.subjectCode ?? "알 수 없음");
 
+  const isbnSearchLink =
+    isbnSearchPattern && `${isbnSearchPattern}${stockInfo.bookIsbn13}`;
   return (
     <div
+      onClick={() => {
+        if (isbnSearchLink) window.open(isbnSearchLink, "_blank");
+      }}
       className={`
                   flex items-start p-1.5 rounded-lg border transition-colors
                   ${bgColor} ${borderColor}
