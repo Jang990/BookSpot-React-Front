@@ -1,6 +1,6 @@
 import { SkeletonDiv } from "@/components/atoms/SkeletonDiv";
 import { LibraryBookStockInfo, LoanInfo } from "@/types/Loan";
-import { Check, X } from "lucide-react";
+import { Check, ExternalLink, X } from "lucide-react";
 import { DEFAULT_TEXT, DEFAULT_TITLE } from "../BookPreviewInfo";
 import {
   GrayBadge,
@@ -73,32 +73,42 @@ export const BookLoanStatePanel = ({
     isbnSearchPattern && `${isbnSearchPattern}${stockInfo.bookIsbn13}`;
   return (
     <div
-      onClick={() => {
-        if (isbnSearchLink) window.open(isbnSearchLink, "_blank");
-      }}
       className={`
-                  flex items-start p-1.5 rounded-lg border transition-colors
-                  ${bgColor} ${borderColor}
-                `}
+          rounded-lg border transition-colors
+          ${bgColor} ${borderColor}
+        `}
     >
-      <div
-        className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${iconBg}`}
-      >
-        {icon}
+      <div className="flex items-start p-1.5">
+        <div
+          className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 flex-shrink-0 ${iconBg}`}
+        >
+          {icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <TitleAndSubTitle
+            title={stockInfo.bookTitle ?? DEFAULT_TITLE}
+            titleTextColor={textColor}
+            subTitle={subjectCodeText}
+          />
+          <p className="text-xs text-gray-600 truncate mb-0.5">
+            {subInfoLabelText()}
+          </p>
+          {stockInfo.isInLibrary && supportsLoanStatus && (
+            <LoanStatusLine loanInfo={stockInfo.loanInfo} />
+          )}
+        </div>
       </div>
-      <div className="flex-1 min-w-0">
-        <TitleAndSubTitle
-          title={stockInfo.bookTitle ?? DEFAULT_TITLE}
-          titleTextColor={textColor}
-          subTitle={subjectCodeText}
-        />
-        <p className="text-xs text-gray-600 truncate mb-0.5">
-          {subInfoLabelText()}
-        </p>
-        {stockInfo.isInLibrary && supportsLoanStatus && (
-          <LoanStatusLine loanInfo={stockInfo.loanInfo} />
-        )}
-      </div>
+      {isbnSearchLink && (
+        <div className="border-t border-gray-200/50 px-1.5 py-0.5 hover:text-gray-800 hover:bg-primary/10">
+          <button
+            onClick={() => window.open(isbnSearchLink, "_blank")}
+            className="w-full text-xs text-gray-600 flex items-center justify-center gap-1 py-1 rounded transition-colors"
+          >
+            <ExternalLink size={12} />
+            도서관에서 확인하기
+          </button>
+        </div>
+      )}
     </div>
   );
 };
