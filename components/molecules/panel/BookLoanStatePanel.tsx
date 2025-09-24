@@ -99,15 +99,7 @@ export const BookLoanStatePanel = ({
         </div>
       </div>
       {isbnSearchLink && (
-        <div className="border-t border-gray-200/50 px-1.5 py-0.5 hover:text-gray-800 hover:bg-primary/10">
-          <button
-            onClick={() => window.open(isbnSearchLink, "_blank")}
-            className="w-full text-xs text-gray-600 flex items-center justify-center gap-1 py-1 rounded transition-colors"
-          >
-            <ExternalLink size={12} />
-            도서관에서 확인하기
-          </button>
-        </div>
+        <LibrarySearchExternalButton isbnSearchLink={isbnSearchLink} />
       )}
     </div>
   );
@@ -180,6 +172,26 @@ export const TitleAndSubTitle = ({
           <span className="text-sm text-muted-foreground">{subTitle}</span>
         </div>
       )}
+    </div>
+  );
+};
+
+interface LibrarySearchExternalButtonProps {
+  isbnSearchLink: string;
+}
+
+const LibrarySearchExternalButton = ({
+  isbnSearchLink,
+}: LibrarySearchExternalButtonProps) => {
+  return (
+    <div className="border-t border-gray-200/50 px-1.5 py-0.5 hover:text-gray-800 hover:bg-primary/10">
+      <button
+        onClick={() => window.open(isbnSearchLink, "_blank")}
+        className="w-full text-xs text-gray-600 flex items-center justify-center gap-1 py-1 rounded transition-colors"
+      >
+        <ExternalLink size={12} />
+        도서관에서 확인하기
+      </button>
     </div>
   );
 };
