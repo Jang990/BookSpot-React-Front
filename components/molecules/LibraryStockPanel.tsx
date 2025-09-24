@@ -57,6 +57,7 @@ export const LibraryStockPanel = ({
         )
         .map((book) => ({
           bookId: book.id,
+          bookIsbn13: book.isbn13,
           bookTitle: book.title,
           bookAuthor: book.author,
           bookPublicationYear: book.publicationYear,
@@ -219,6 +220,7 @@ export const LibraryStockPanel = ({
               bookStockInfos={stockInfos}
               handleRefresh={handleRefresh}
               isStockRefreshing={isStockRefreshing}
+              isbnSearchPattern={library.isbnSearchPattern}
             />
           ) : (
             <BooksTapBasic
@@ -226,6 +228,7 @@ export const LibraryStockPanel = ({
               bookStockInfos={stockInfos}
               handleRefresh={handleRefresh}
               isStockRefreshing={isStockRefreshing}
+              isbnSearchPattern={library.isbnSearchPattern}
             />
           )
         ) : (
@@ -241,9 +244,13 @@ interface BooksTapProps {
   bookStockInfos: LibraryBookStockInfo[];
   isStockRefreshing: boolean;
   handleRefresh: () => void;
+  isbnSearchPattern: string | null;
 }
 
-const BooksTapBasic = ({ bookStockInfos: books }: BooksTapProps) => {
+const BooksTapBasic = ({
+  bookStockInfos: books,
+  isbnSearchPattern,
+}: BooksTapProps) => {
   return (
     <div className="">
       <div className="flex items-center justify-between mb-3">
@@ -262,6 +269,7 @@ const BooksTapBasic = ({ bookStockInfos: books }: BooksTapProps) => {
                 <BookLoanStatePanel
                   libraryBookStockInfo={book}
                   supportsLoanStatus={false}
+                  isbnSearchPattern={isbnSearchPattern}
                 />
               </li>
             );
@@ -283,6 +291,7 @@ const BooksTapLoan = ({
   bookStockInfos: books,
   isStockRefreshing,
   handleRefresh,
+  isbnSearchPattern,
 }: BooksTapProps) => {
   return (
     <div className="">
@@ -307,6 +316,7 @@ const BooksTapLoan = ({
                 <BookLoanStatePanel
                   libraryBookStockInfo={book}
                   supportsLoanStatus={true}
+                  isbnSearchPattern={isbnSearchPattern}
                 />
               </li>
             );

@@ -36,6 +36,7 @@ export function convertLibrary(content: LibraryResponse): Library {
     closedInfo: content.closedInfo ?? "",
     operatingInfo: content.operatingInfo ?? "",
     supportsLoanStatus: content.supportsLoanStatus,
+    isbnSearchPattern: content.isbnSearchPattern,
   };
 }
 
