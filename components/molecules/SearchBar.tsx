@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
 import { useSearchTerm } from "@/contexts/SearchTermContext";
+import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
 
 interface SearchProps {
   initSearchTerm: string | null;
@@ -51,13 +52,16 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
       params.delete(PAGE_QUERY_STRING_KEY);
       params.delete(LAST_LOAN_COUNT_KEY);
       params.delete(LAST_BOOK_ID_KEY);
-      router.push(`?${params.toString()}`);
+      router.push(`/books?${params.toString()}`);
     });
   }
 
   const handleClear = () => {
     clearSearchTerm();
     inputRef.current?.focus();
+    const params = new URLSearchParams(searchParams as any);
+    params.delete(SEARCH_TERM_KEY);
+    router.push(`/books??${params.toString()}`);
   };
 
   // input 따로 뺄 것

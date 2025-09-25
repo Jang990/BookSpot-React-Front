@@ -18,7 +18,7 @@ export const SelectLibraryButton = ({
   const queryString = (): string => {
     const params = new URLSearchParams(searchParams as any);
     params.set(LIBRARY_QUERY_STRING_KEY, libraryId);
-    params.delete(SEARCH_TERM_KEY);
+    // params.delete(SEARCH_TERM_KEY);
     deletePaginationOptions(params);
     return params.toString();
   };
@@ -27,7 +27,7 @@ export const SelectLibraryButton = ({
     <div className="py-1">
       <Button
         onClick={() => {
-          router.push(`/?${queryString()}`);
+          router.push(`/books?${queryString()}`);
         }}
         className="w-full"
       >
