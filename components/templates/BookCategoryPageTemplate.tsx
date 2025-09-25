@@ -34,7 +34,7 @@ const queryString = (
   params.set(CATEGORY_QUERY_STRING_KEY, String(categoryId));
   params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryLevel);
   params.delete(CATEGORY_HISTORY_QUERY_STRING_KEY);
-  params.delete(SEARCH_TERM_KEY);
+  // params.delete(SEARCH_TERM_KEY);
   return params.toString();
 };
 
@@ -45,7 +45,7 @@ export const onClickCategory = (
   categoryLevel: string,
   clearSearchTerm: () => void
 ) => {
-  clearSearchTerm();
+  // clearSearchTerm();
   router.push(
     `/books/?${queryString(searchParams, categoryId, categoryLevel)}`
   );
