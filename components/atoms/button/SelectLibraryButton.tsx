@@ -27,7 +27,7 @@ export const SelectLibraryButton = ({
     <div className="py-1">
       <Button
         onClick={() => {
-          router.push(`/?${queryString()}`);
+          router.push(`/books?${queryString()}`);
         }}
         className="w-full"
       >
