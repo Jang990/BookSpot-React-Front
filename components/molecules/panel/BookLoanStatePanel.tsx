@@ -49,6 +49,9 @@ export const BookLoanStatePanel = ({
   isbnSearchPattern,
 }: BookLoanStatePanelProps) => {
   const bgColor = stockInfo.isInLibrary ? "bg-green-50" : "bg-red-50";
+  const hoverColor = stockInfo.isInLibrary
+    ? "hover:bg-green-100"
+    : "hover:bg-red-100";
   const borderColor = stockInfo.isInLibrary
     ? "border-green-200"
     : "border-red-200";
@@ -99,7 +102,10 @@ export const BookLoanStatePanel = ({
         </div>
       </div>
       {isbnSearchLink && (
-        <LibrarySearchExternalButton isbnSearchLink={isbnSearchLink} />
+        <LibrarySearchExternalButton
+          isbnSearchLink={isbnSearchLink}
+          hoverColor={hoverColor}
+        />
       )}
     </div>
   );
@@ -178,13 +184,17 @@ export const TitleAndSubTitle = ({
 
 interface LibrarySearchExternalButtonProps {
   isbnSearchLink: string;
+  hoverColor: string;
 }
 
 const LibrarySearchExternalButton = ({
   isbnSearchLink,
+  hoverColor,
 }: LibrarySearchExternalButtonProps) => {
   return (
-    <div className="border-t border-gray-200/50 px-1.5 py-0.5 hover:text-gray-800 hover:bg-primary/10">
+    <div
+      className={`border-t border-gray-200/50 px-1.5 py-0.5 hover:text-gray-800 ${hoverColor}`}
+    >
       <button
         onClick={() => window.open(isbnSearchLink, "_blank")}
         className="w-full text-xs text-gray-600 flex items-center justify-center gap-1 py-1 rounded transition-colors"
