@@ -5,7 +5,14 @@ import { findBooksPreview, SearchCondition } from "@/utils/api/BookPreviewApi";
 import { toRawQueryString } from "@/utils/querystring/QueryString";
 import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
 import { TitleAndSubButton } from "@/components/molecules/TitleAndSubButton";
-import { CATEGORY_ARRAY } from "@/types/BookCategory";
+import { POPULAR_CATEGORY_IDS } from "@/types/BookCategory";
+
+/*
+랜덤 렌더링 과정이 있기 때문에 스태틱으로 빌드 할 수 없음
+CDN 캐싱이 안되서 로딩과정이 백엔드 API 요청과정만큼 증가하지만, 
+랜덤으로 컨텐츠를 보여줘서 UX가 좋아질 가능성은 있음.
+*/
+export const dynamic = "force-dynamic";
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -18,8 +25,8 @@ export default async function Home({ searchParams }: Props) {
   };
 
   function getRandomPopularCategoryId(): number {
-    const index = Math.floor(Math.random() * CATEGORY_ARRAY.length);
-    return CATEGORY_ARRAY[index].id;
+    const index = Math.floor(Math.random() * POPULAR_CATEGORY_IDS.length);
+    return POPULAR_CATEGORY_IDS[index];
   }
   const randomCategoryId = getRandomPopularCategoryId();
 
