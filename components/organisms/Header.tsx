@@ -49,7 +49,7 @@ const UserIconButton = () => {
         <IconDropDownButton
           Icon={UserCircle}
           items={[
-            { type: "link", text: "내 서재", href: "/library" },
+            { type: "link", text: "내 서재", href: "/me/libraries" },
             {
               type: "button",
               text: "로그아웃",
