@@ -1,110 +1,50 @@
 import { BookSearchBar } from "@/components/organisms/search/BookSearchBar";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
-import { MAX_NUMBER_PAGE, Pageable, SearchAfter } from "@/types/Pageable";
-import {
-  findBooksPreview,
-  findBooksPreviewWithSA,
-  SearchCondition,
-} from "@/utils/api/BookPreviewApi";
-import {
-  parseNumber,
-  parseString,
-  toRawQueryString,
-} from "@/utils/querystring/QueryString";
-import { PageNavigator } from "@/components/organisms/PageNavigator";
-import { parseSearchTerm } from "@/utils/querystring/SearchTerm";
-import { parsePage } from "@/utils/querystring/PageNumber";
-import {
-  LAST_BOOK_ID_KEY,
-  LAST_LOAN_COUNT_KEY,
-  LAST_SCORE_KEY,
-} from "@/utils/querystring/SearchAfter";
-import { BookPreview } from "@/types/BookPreview";
-import {
-  parseCategoryId,
-  parseCategoryLevel,
-} from "@/utils/querystring/CategoryId";
-import { parseLibraryId } from "@/utils/querystring/LibraryId";
-import { PageTitle } from "@/components/molecules/PageTitle";
-import { BookSearchPageTitle } from "@/components/molecules/BookSearchPageTitle";
+import { Pageable } from "@/types/Pageable";
+import { findBooksPreview, SearchCondition } from "@/utils/api/BookPreviewApi";
+import { toRawQueryString } from "@/utils/querystring/QueryString";
+import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
 import { TitleAndSubButton } from "@/components/molecules/TitleAndSubButton";
-
-const ITEMS_PER_PAGE = 12;
+import { CATEGORY_ARRAY } from "@/types/BookCategory";
 
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export default async function Home({ searchParams }: Props) {
-  const queryStrings = await searchParams;
-
-  const searchTerm = parseSearchTerm(queryStrings);
-  const page = parsePage(queryStrings);
-  const libraryId = parseLibraryId(queryStrings);
-  const categoryId = parseCategoryId(queryStrings);
-  const categoryLevel = parseCategoryLevel(queryStrings);
-
-  const lastBookId = parseNumber(queryStrings, LAST_BOOK_ID_KEY);
-  const lastLoanCount = parseNumber(queryStrings, LAST_LOAN_COUNT_KEY);
-  const lastScore = parseString(queryStrings, LAST_SCORE_KEY);
-
-  const pageable: Pageable = {
-    pageNumber: page - 1,
-    pageSize: ITEMS_PER_PAGE,
+  const recommendPageable: Pageable = {
+    pageNumber: 0,
+    pageSize: 6,
   };
 
-  let totalPages: number | null;
-  let books: BookPreview[];
-  let searchAfter: SearchAfter;
-  let hasNext: boolean;
-  let totalElements = null;
-
-  const hasCursorCond = lastLoanCount !== null && lastBookId !== null;
-  const isOutOfPageNumber: boolean = page > MAX_NUMBER_PAGE;
-  const searchCond: SearchCondition = {
-    keyword: searchTerm,
-    libraryId: libraryId?.toString(),
-    categoryCond:
-      categoryId === null
-        ? null
-        : {
-            categoryId: categoryId.toString(),
-            categoryLevel: categoryLevel,
-          },
-  };
-
-  if (hasCursorCond && isOutOfPageNumber) {
-    const result = await findBooksPreviewWithSA(
-      searchCond,
-      {
-        lastScore: lastScore,
-        lastLoanCount: lastLoanCount,
-        lastBookId: lastBookId,
-      },
-      "server"
-    );
-    books = result.books;
-    totalPages = null;
-    searchAfter = result.searchAfter;
-    hasNext = result.hasNext;
-    totalElements = result.totalElements;
-  } else {
-    const result = await findBooksPreview(searchCond, pageable, "server");
-    books = result.books;
-    totalPages = result.totalPage;
-    searchAfter = result.searchAfter;
-    hasNext = result.hasNext;
-    totalElements = result.totalElements;
+  function getRandomPopularCategoryId(): number {
+    const index = Math.floor(Math.random() * CATEGORY_ARRAY.length);
+    return CATEGORY_ARRAY[index].id;
   }
+  const randomCategoryId = getRandomPopularCategoryId();
+
+  const searchCond: SearchCondition = {
+    categoryCond: {
+      categoryId: randomCategoryId.toString(),
+      categoryLevel: LEVEL_LEAF,
+    },
+  };
+
+  const result = await findBooksPreview(
+    searchCond,
+    recommendPageable,
+    "server"
+  );
+  const books = result.books;
 
   return (
     <div>
       <div className="mt-2">
         <BookSearchBar
-          initSearchTerm={searchTerm}
+          initSearchTerm={null}
           bookQueryString={toRawQueryString(await searchParams)}
-          libraryId={libraryId}
-          categoryId={categoryId}
+          libraryId={null}
+          categoryId={null}
         />
       </div>
 
@@ -112,7 +52,7 @@ export default async function Home({ searchParams }: Props) {
         <TitleAndSubButton
           title="이런 책 어때요?"
           subButtonText="더보기"
-          navigateTo={"/"}
+          categoryId={randomCategoryId}
         />
 
         <BookPreviewList searchResults={books} />

@@ -1,18 +1,20 @@
 "use client";
 import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ReadonlyURLSearchParams, useRouter } from "next/navigation";
+import { onClickCategory } from "../templates/BookCategoryPageTemplate";
+import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
 
 interface Props {
   title: string;
   subButtonText?: string;
-  navigateTo: string;
+  categoryId: number;
 }
 
 export const TitleAndSubButton = ({
   title,
   subButtonText = "더보기",
-  navigateTo,
+  categoryId,
 }: Props) => {
   const router = useRouter();
 
@@ -28,7 +30,13 @@ export const TitleAndSubButton = ({
         <SubButton
           text={subButtonText}
           onClick={() => {
-            router.push(navigateTo);
+            onClickCategory(
+              router,
+              new ReadonlyURLSearchParams(),
+              categoryId,
+              LEVEL_LEAF,
+              () => {}
+            );
           }}
         />
       </div>
