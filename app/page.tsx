@@ -27,6 +27,7 @@ import {
 import { parseLibraryId } from "@/utils/querystring/LibraryId";
 import { PageTitle } from "@/components/molecules/PageTitle";
 import { BookSearchPageTitle } from "@/components/molecules/BookSearchPageTitle";
+import { TitleAndSubButton } from "@/components/molecules/TitleAndSubButton";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -96,28 +97,26 @@ export default async function Home({ searchParams }: Props) {
     totalElements = result.totalElements;
   }
 
-  const emptySearchTerm = searchTerm === undefined || searchTerm.length === 0;
-
   return (
     <div>
-      <BookSearchPageTitle
-        searchTerm={emptySearchTerm ? null : searchTerm}
-        totalElements={totalElements}
-      />
-      <BookSearchBar
-        initSearchTerm={searchTerm}
-        bookQueryString={toRawQueryString(await searchParams)}
-        libraryId={libraryId}
-        categoryId={categoryId}
-      />
+      <div className="mt-2">
+        <BookSearchBar
+          initSearchTerm={searchTerm}
+          bookQueryString={toRawQueryString(await searchParams)}
+          libraryId={libraryId}
+          categoryId={categoryId}
+        />
+      </div>
 
-      <BookPreviewList searchResults={books} />
+      <div className="mt-5">
+        <TitleAndSubButton
+          title="이런 책 어때요?"
+          subButtonText="더보기"
+          navigateTo={"/"}
+        />
 
-      <PageNavigator
-        totalPages={totalPages}
-        searchAfter={searchAfter}
-        hasNext={hasNext}
-      />
+        <BookPreviewList searchResults={books} />
+      </div>
     </div>
   );
 }
