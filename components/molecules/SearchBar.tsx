@@ -51,7 +51,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
       params.delete(PAGE_QUERY_STRING_KEY);
       params.delete(LAST_LOAN_COUNT_KEY);
       params.delete(LAST_BOOK_ID_KEY);
-      router.push(`?${params.toString()}`);
+      router.push(`/books?${params.toString()}`);
     });
   }
 

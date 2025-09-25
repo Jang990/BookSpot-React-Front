@@ -46,7 +46,9 @@ export const onClickCategory = (
   clearSearchTerm: () => void
 ) => {
   clearSearchTerm();
-  router.push(`/?${queryString(searchParams, categoryId, categoryLevel)}`);
+  router.push(
+    `/books/?${queryString(searchParams, categoryId, categoryLevel)}`
+  );
 };
 
 export const BookCategoryPageTemplate = () => {
