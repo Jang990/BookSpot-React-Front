@@ -136,7 +136,7 @@ export const FilterStatusGroup = ({
     const params = new URLSearchParams(bookQueryString ?? "");
     params.delete(LIBRARY_QUERY_STRING_KEY);
     deletePaginationOptions(params);
-    return `/?${params.toString()}`;
+    return `/books/?${params.toString()}`;
   };
 
   const deleteCategoryParams = () => {
@@ -197,7 +197,7 @@ export const FilterStatusGroup = ({
         ) : (
           <SelectedFilterButton
             text={`${String(category.id).padStart(3, "0")}.${category.name}`}
-            href={`/?${deleteCategoryParams()}`}
+            href={`/books/?${deleteCategoryParams()}`}
             SelectedIcon={ListFilter}
           />
         )}
