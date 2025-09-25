@@ -6,7 +6,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { X } from "lucide-react";
 import { useOnboarding } from "@/contexts/OnBoarding";
 
-const steps = [
+interface OnBoardinStep {
+  id: number;
+  title: string;
+  image: string;
+  description?: string[];
+}
+
+const steps: OnBoardinStep[] = [
   {
     id: 1,
     title: "읽고 싶은 책을 찾으세요",
@@ -19,8 +26,12 @@ const steps = [
   },
   {
     id: 3,
-    title: "책을 소장하고 있는 도서관을 찾아보세요",
+    title: "소장하고 있는 도서관을 찾아보세요",
     image: "/onboarding/onboarding-3.webp",
+    description: [
+      "😅 1인 개발이라 부족할 수 있어요",
+      "오류나 개선 정보는 페이지 하단 이메일로 보내주세요!",
+    ],
   },
 ];
 
@@ -108,11 +119,14 @@ export function OnboardingModal() {
             <h3 className="text-lg font-semibold text-foreground mb-2">
               {currentStepData.title}
             </h3>
-            {/* {currentStepData.description && (
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {currentStepData.description}
+            {currentStepData.description?.map((desc, idx) => (
+              <p
+                key={idx}
+                className="text-muted-foreground text-sm leading-relaxed"
+              >
+                {desc}
               </p>
-            )} */}
+            ))}
           </div>
 
           {/* Navigation Buttons */}
