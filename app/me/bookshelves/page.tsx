@@ -34,7 +34,6 @@ export default function BookshelvesPage() {
       alert("최대 5개의 책장만 만들 수 있습니다.");
       return;
     }
-
     if (newShelfName.trim() === "") {
       alert("책장 이름을 입력해주세요.");
       return;
@@ -60,11 +59,10 @@ export default function BookshelvesPage() {
       return;
     }
 
-    const updatedBookshelves = bookshelves.map((shelf) =>
+    const updated = bookshelves.map((shelf) =>
       shelf.id === editingShelf.id ? { ...shelf, name: editName.trim() } : shelf
     );
-
-    setBookshelves(updatedBookshelves);
+    setBookshelves(updated);
     setEditingShelf(null);
     setEditName("");
   };
@@ -81,42 +79,17 @@ export default function BookshelvesPage() {
           <div>
             <h1 className="text-3xl font-bold text-foreground mb-2">내 책장</h1>
             <p className="text-muted-foreground">
-              {bookshelves.length}/5개의 책장을 사용 중입니다
+              {bookshelves.length}/5개의 책장을 사용 중
             </p>
           </div>
-          <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-            <DialogTrigger asChild>
-              <Button
-                disabled={bookshelves.length >= 5}
-                className="flex items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />새 책장 만들기
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>새 책장 만들기</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                <Input
-                  placeholder="책장 이름을 입력하세요"
-                  value={newShelfName}
-                  onChange={(e) => setNewShelfName(e.target.value)}
-                  maxLength={50}
-                  onKeyDown={(e) => e.key === "Enter" && createNewBookshelf()}
-                />
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowCreateDialog(false)}
-                  >
-                    취소
-                  </Button>
-                  <Button onClick={createNewBookshelf}>만들기</Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <CreateBookshelfDialog
+            open={showCreateDialog}
+            onOpenChange={setShowCreateDialog}
+            newShelfName={newShelfName}
+            setNewShelfName={setNewShelfName}
+            onCreate={createNewBookshelf}
+            disabled={bookshelves.length >= 5}
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -154,12 +127,11 @@ export default function BookshelvesPage() {
                   <GrayBadge text={shelf.isPublic ? "공개" : "비공개"} />
                 </div>
               </CardHeader>
-
               <CardContent>
                 <Link href={`/bookshelves/${shelf.id}`}>
                   {shelf.thumbnailIsbns.length > 0 ? (
                     <div className="grid grid-cols-3 gap-2 h-24">
-                      {shelf.thumbnailIsbns.map((isbn, index) => (
+                      {shelf.thumbnailIsbns.map((isbn) => (
                         <div
                           key={isbn}
                           className="relative bg-muted rounded overflow-hidden"
@@ -211,32 +183,100 @@ export default function BookshelvesPage() {
           </div>
         )}
 
-        <Dialog
-          open={!!editingShelf}
-          onOpenChange={() => setEditingShelf(null)}
-        >
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>책장 이름 변경</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <Input
-                placeholder="새 책장 이름을 입력하세요"
-                value={editName}
-                onChange={(e) => setEditName(e.target.value)}
-                maxLength={50}
-                onKeyDown={(e) => e.key === "Enter" && updateBookshelfName()}
-              />
-              <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setEditingShelf(null)}>
-                  취소
-                </Button>
-                <Button onClick={updateBookshelfName}>변경</Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <EditBookshelfDialog
+          editingShelf={editingShelf}
+          editName={editName}
+          setEditName={setEditName}
+          onUpdate={updateBookshelfName}
+          onClose={() => setEditingShelf(null)}
+        />
       </div>
     </div>
   );
 }
+
+const CreateBookshelfDialog = ({
+  open,
+  onOpenChange,
+  newShelfName,
+  setNewShelfName,
+  onCreate,
+  disabled,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  newShelfName: string;
+  setNewShelfName: (v: string) => void;
+  onCreate: () => void;
+  disabled: boolean;
+}) => {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button disabled={disabled} className="flex items-center gap-2">
+          <Plus className="w-4 h-4" />
+          책장 추가
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>책장 만들기</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+          <Input
+            placeholder="책장 이름을 입력하세요"
+            value={newShelfName}
+            onChange={(e) => setNewShelfName(e.target.value)}
+            maxLength={50}
+            onKeyDown={(e) => e.key === "Enter" && onCreate()}
+          />
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              취소
+            </Button>
+            <Button onClick={onCreate}>만들기</Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const EditBookshelfDialog = ({
+  editingShelf,
+  editName,
+  setEditName,
+  onUpdate,
+  onClose,
+}: {
+  editingShelf: BookshelfSummary | null;
+  editName: string;
+  setEditName: (v: string) => void;
+  onUpdate: () => void;
+  onClose: () => void;
+}) => {
+  return (
+    <Dialog open={!!editingShelf} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>책장 이름 변경</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4 py-4">
+          <Input
+            placeholder="새 책장 이름을 입력하세요"
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            maxLength={50}
+            onKeyDown={(e) => e.key === "Enter" && onUpdate()}
+          />
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={onClose}>
+              취소
+            </Button>
+            <Button onClick={onUpdate}>변경</Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
