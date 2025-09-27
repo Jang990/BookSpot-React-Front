@@ -82,7 +82,7 @@ export default function BookshelvesPage() {
               {bookshelves.length}/5개의 책장을 사용 중
             </p>
           </div>
-          <CreateBookshelfDialog
+          <CreateBookshelfButton
             open={showCreateDialog}
             onOpenChange={setShowCreateDialog}
             newShelfName={newShelfName}
@@ -94,79 +94,7 @@ export default function BookshelvesPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookshelves.map((shelf) => (
-            <Card
-              key={shelf.id}
-              className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
-            >
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
-                    <CardTitle className="text-lg font-semibold truncate hover:text-primary transition-colors">
-                      {shelf.name}
-                    </CardTitle>
-                  </Link>
-                  <div className="flex items-center gap-1">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => startEditing(shelf)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <Edit3 className="w-3 h-3" />
-                    </Button>
-                    {shelf.isPublic ? (
-                      <Globe className="w-4 h-4 text-green-600" />
-                    ) : (
-                      <Lock className="w-4 h-4 text-gray-500" />
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Book className="w-4 h-4" />
-                  <span>{shelf.bookCount}권</span>
-                  <GrayBadge text={shelf.isPublic ? "공개" : "비공개"} />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <Link href={`/bookshelves/${shelf.id}`}>
-                  {shelf.thumbnailIsbns.length > 0 ? (
-                    <div className="grid grid-cols-3 gap-2 h-24">
-                      {shelf.thumbnailIsbns.map((isbn) => (
-                        <div
-                          key={isbn}
-                          className="relative bg-muted rounded overflow-hidden"
-                        >
-                          <Image
-                            src={`https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn}.jpg`}
-                            alt={"책 표지"}
-                            fill
-                            className="object-cover"
-                            unoptimized
-                          />
-                        </div>
-                      ))}
-                      {Array.from({
-                        length: 3 - shelf.thumbnailIsbns.length,
-                      }).map((_, index) => (
-                        <div
-                          key={`empty-${index}`}
-                          className="bg-muted rounded flex items-center justify-center"
-                        >
-                          <Book className="w-4 h-4 text-muted-foreground" />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="h-24 bg-muted rounded flex items-center justify-center">
-                      <div className="text-center text-muted-foreground">
-                        <Book className="w-8 h-8 mx-auto mb-1" />
-                        <p className="text-xs">책이 없습니다</p>
-                      </div>
-                    </div>
-                  )}
-                </Link>
-              </CardContent>
-            </Card>
+            <BookshelfCard key={shelf.id} shelf={shelf} onEdit={startEditing} />
           ))}
         </div>
 
@@ -195,7 +123,106 @@ export default function BookshelvesPage() {
   );
 }
 
-const CreateBookshelfDialog = ({
+export const BookshelfCard = ({
+  shelf,
+  onEdit,
+}: {
+  shelf: BookshelfSummary;
+  onEdit: (shelf: BookshelfSummary) => void;
+}) => {
+  return (
+    <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+      <BookshelfCardHeader shelf={shelf} onEdit={onEdit} />
+      <BookshelfCardContent shelf={shelf} />
+    </Card>
+  );
+};
+
+const BookshelfCardHeader = ({
+  shelf,
+  onEdit,
+}: {
+  shelf: BookshelfSummary;
+  onEdit: (shelf: BookshelfSummary) => void;
+}) => {
+  return (
+    <CardHeader className="pb-3">
+      <div className="flex items-center justify-between">
+        <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
+          <CardTitle className="text-lg font-semibold truncate hover:text-primary transition-colors">
+            {shelf.name}
+          </CardTitle>
+        </Link>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onEdit(shelf)}
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <Edit3 className="w-3 h-3" />
+          </Button>
+          {shelf.isPublic ? (
+            <Globe className="w-4 h-4 text-green-600" />
+          ) : (
+            <Lock className="w-4 h-4 text-gray-500" />
+          )}
+        </div>
+      </div>
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Book className="w-4 h-4" />
+        <span>{shelf.bookCount}권</span>
+        <GrayBadge text={shelf.isPublic ? "공개" : "비공개"} />
+      </div>
+    </CardHeader>
+  );
+};
+
+const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
+  return (
+    <CardContent>
+      <Link href={`/bookshelves/${shelf.id}`}>
+        {shelf.thumbnailIsbns.length > 0 ? (
+          <div className="grid grid-cols-3 gap-2 h-24">
+            {shelf.thumbnailIsbns.map((isbn) => (
+              <div
+                key={isbn}
+                className="relative bg-muted rounded overflow-hidden"
+              >
+                <Image
+                  src={`https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn}.jpg`}
+                  alt="책 표지"
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+            ))}
+            {Array.from({ length: 3 - shelf.thumbnailIsbns.length }).map(
+              (_, index) => (
+                <div
+                  key={`empty-${index}`}
+                  className="bg-muted rounded flex items-center justify-center"
+                >
+                  <Book className="w-4 h-4 text-muted-foreground" />
+                </div>
+              )
+            )}
+          </div>
+        ) : (
+          <div className="h-24 bg-muted rounded flex items-center justify-center">
+            <div className="text-center text-muted-foreground">
+              <Book className="w-8 h-8 mx-auto mb-1" />
+              <p className="text-xs">책이 없습니다</p>
+            </div>
+          </div>
+        )}
+      </Link>
+    </CardContent>
+  );
+};
+
+const CreateBookshelfButton = ({
   open,
   onOpenChange,
   newShelfName,
