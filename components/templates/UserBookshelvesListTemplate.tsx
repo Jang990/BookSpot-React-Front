@@ -13,10 +13,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { BookshelfSummary } from "@/types/Bookshelf";
-import { Plus, Book, Lock, Globe, Edit3 } from "lucide-react";
+import { Plus, Book, Edit3 } from "lucide-react";
 import Image from "next/image";
 import { getBookshelfSummaries } from "@/lib/mock-data";
-import { GrayBadge } from "@/components/atoms/badge/TextLabelBadge";
+import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>(
@@ -162,17 +162,16 @@ const BookshelfCardHeader = ({
           >
             <Edit3 className="w-3 h-3" />
           </Button>
-          {shelf.isPublic ? (
-            <Globe className="w-4 h-4 text-green-600" />
-          ) : (
-            <Lock className="w-4 h-4 text-gray-500" />
-          )}
         </div>
       </div>
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Book className="w-4 h-4" />
         <span>{shelf.bookCount}권</span>
-        <GrayBadge text={shelf.isPublic ? "공개" : "비공개"} />
+        {shelf.isPublic ? (
+          <GreenBadge text="공개" />
+        ) : (
+          <GrayBadge text="비공개" />
+        )}
       </div>
     </CardHeader>
   );
