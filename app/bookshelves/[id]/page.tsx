@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { mockBookshelves } from "@/lib/mock-data";
 import { ArrowLeft, Settings, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
