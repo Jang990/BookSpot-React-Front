@@ -1,4 +1,4 @@
-import { Bookshelf } from "@/types/Bookshelf";
+import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
 import { BookshelfSummaryListResponseApiSpec as BookshelvesSummaryResponseApiSpec } from "@/types/ApiSpec";
 
@@ -39,8 +39,8 @@ const createBookshelfDetailApiPath = (shelfId: string) => {
 export const fetchBookshelfDetail = async ({
   shelfId,
   side,
-}: BookshelfDetailProps): Promise<Bookshelf | null> => {
-  const response = await getApiClient(side).get<Bookshelf>(
+}: BookshelfDetailProps): Promise<BookshelfDetailResponseSpec | null> => {
+  const response = await getApiClient(side).get<BookshelfDetailResponseSpec>(
     createBookshelfDetailApiPath(shelfId)
   );
 
