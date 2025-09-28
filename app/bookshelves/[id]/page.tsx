@@ -40,7 +40,7 @@ export default function BookshelfDetailPage() {
 
   const handleDeleteBookshelf = () => {
     // In a real app, this would delete from backend
-    router.push("/bookshelves");
+    router.push("/me/bookshelves");
   };
 
   if (!bookshelf) {
@@ -51,9 +51,7 @@ export default function BookshelfDetailPage() {
           <h2 className="text-xl font-semibold mb-2">
             책장을 찾을 수 없습니다
           </h2>
-          <Button onClick={() => router.push("/bookshelves")}>
-            책장 목록으로 돌아가기
-          </Button>
+          <Button onClick={() => router.back()}>돌아가기</Button>
         </div>
       </div>
     );
@@ -68,7 +66,7 @@ export default function BookshelfDetailPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/bookshelves")}
+              onClick={() => router.back()}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
