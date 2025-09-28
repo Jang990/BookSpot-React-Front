@@ -1,5 +1,5 @@
 import type { BookPreview } from "@/types/BookPreview";
-import type { Bookshelf, BookshelfSummary } from "@/types/Bookshelf";
+import type { Bookshelf } from "@/types/Bookshelf";
 
 export const mockBooks: BookPreview[] = [
   {
@@ -90,14 +90,3 @@ export const mockBookshelves: Bookshelf[] = [
     books: [],
   },
 ];
-
-export const getBookshelfSummaries = (): BookshelfSummary[] => {
-  return mockBookshelves.map((shelf) => ({
-    id: shelf.id,
-    name: shelf.name,
-    bookCount: shelf.books.length,
-    createdAt: shelf.createdAt,
-    isPublic: shelf.isPublic,
-    thumbnailIsbns: shelf.books.map((b) => b.id).slice(0, 4),
-  }));
-};

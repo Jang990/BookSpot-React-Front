@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,19 +15,25 @@ import {
 import type { BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book, Edit3 } from "lucide-react";
 import Image from "next/image";
-import { getBookshelfSummaries } from "@/lib/mock-data";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
+import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 
 export const UserBookshelvesListTemplate = () => {
-  const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>(
-    getBookshelfSummaries()
-  );
+  const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [newShelfName, setNewShelfName] = useState("");
   const [editingShelf, setEditingShelf] = useState<BookshelfSummary | null>(
     null
   );
   const [editName, setEditName] = useState("");
+
+  useEffect(() => {
+    fetchUserBookshelvesSummary({ userId: "1", side: "client" }).then(
+      (data) => {
+        setBookshelves(data.bookshelvesSummary);
+      }
+    );
+  }, []);
 
   const createNewBookshelf = () => {
     if (bookshelves.length >= 5) {
@@ -45,7 +51,7 @@ export const UserBookshelvesListTemplate = () => {
       bookCount: 0,
       createdAt: new Date().toISOString(),
       isPublic: false,
-      thumbnailIsbns: [],
+      thumbnailImageIsbn: [],
     };
 
     setBookshelves([...bookshelves, newShelf]);
@@ -181,9 +187,9 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
   return (
     <CardContent>
       <Link href={`/bookshelves/${shelf.id}`}>
-        {shelf.thumbnailIsbns.length > 0 ? (
+        {shelf.thumbnailImageIsbn.length > 0 ? (
           <div className="grid grid-cols-3 gap-2 h-24">
-            {shelf.thumbnailIsbns.map((isbn) => (
+            {shelf.thumbnailImageIsbn.map((isbn) => (
               <div
                 key={isbn}
                 className="relative bg-muted rounded overflow-hidden"
@@ -197,7 +203,7 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
                 />
               </div>
             ))}
-            {Array.from({ length: 3 - shelf.thumbnailIsbns.length }).map(
+            {Array.from({ length: 3 - shelf.thumbnailImageIsbn.length }).map(
               (_, index) => (
                 <div
                   key={`empty-${index}`}
