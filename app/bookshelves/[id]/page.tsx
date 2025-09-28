@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { mockBookshelves, mockBooks } from "@/lib/mock-data";
+import { mockBookshelves } from "@/lib/mock-data";
 import { ArrowLeft, Settings, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
-import { BookPreview } from "@/types/BookPreview";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
 import { Bookshelf } from "@/types/Bookshelf";
 import { BookshelfSettingsDialog } from "@/components/organisms/popup/BookShelfSettingsDialog";
@@ -23,26 +22,6 @@ export default function BookshelfDetailPage() {
       setBookshelf(shelf);
     }
   }, [params.id]);
-
-  const addBookToShelf = (book: BookPreview) => {
-    if (!bookshelf) return;
-
-    if (bookshelf.books.length >= 50) {
-      alert("책장에는 최대 50권까지만 저장할 수 있습니다.");
-      return;
-    }
-
-    if (bookshelf.books.some((b) => b.id === book.id)) {
-      alert("이미 책장에 있는 책입니다.");
-      return;
-    }
-
-    const updatedBookshelf = {
-      ...bookshelf,
-      books: [...bookshelf.books, book],
-    };
-    setBookshelf(updatedBookshelf);
-  };
 
   const removeBookFromShelf = (bookId: string) => {
     if (!bookshelf) return;
