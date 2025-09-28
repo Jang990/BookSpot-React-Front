@@ -12,7 +12,7 @@ export const mockBooks: BookPreview[] = [
     publicationYear: "2013",
     publisher: "인사이트",
     category: { id: 1, name: "프로그래밍" },
-    rank: 1,
+    rank: null,
   },
   {
     id: "2",
@@ -24,7 +24,7 @@ export const mockBooks: BookPreview[] = [
     publicationYear: "2018",
     publisher: "인사이트",
     category: { id: 1, name: "프로그래밍" },
-    rank: 2,
+    rank: null,
   },
   {
     id: "3",
@@ -36,7 +36,7 @@ export const mockBooks: BookPreview[] = [
     publicationYear: "2019",
     publisher: "한빛미디어",
     category: { id: 1, name: "프로그래밍" },
-    rank: 3,
+    rank: null,
   },
   {
     id: "4",
