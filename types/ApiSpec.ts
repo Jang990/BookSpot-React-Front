@@ -1,4 +1,5 @@
 import { BookPreview, BookRankingPreview } from "./BookPreview";
+import { BookshelfSummary } from "./Bookshelf";
 import LibraryStock from "./LibraryStock";
 import { LoanInfo, LoanState } from "./Loan";
 
@@ -60,4 +61,17 @@ export interface LoanInfoResponseApiSpec {
 
 export interface UserBagResponseApiSpec {
   bookIds: string[];
+}
+
+export interface BookshelfSummaryListResponseApiSpec {
+  bookshelvesSummary: BookshelfSummary[];
+}
+
+export interface BookshelfDetailResponseSpec {
+  id: string;
+  name: string;
+  bookCount: number;
+  createdAt: string;
+  isPublic: boolean;
+  books: BookPreview[];
 }

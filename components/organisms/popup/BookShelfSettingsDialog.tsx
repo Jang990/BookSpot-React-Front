@@ -11,16 +11,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Trash2 } from "lucide-react";
-import { Bookshelf } from "@/types/Bookshelf";
+import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
 interface BookshelfSettingsDialogProps {
-  bookshelf: Bookshelf;
+  bookshelf: BookshelfDetailResponseSpec;
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: (updatedBookshelf: Bookshelf) => void;
+  onUpdate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
   onDelete: () => void;
 }
 

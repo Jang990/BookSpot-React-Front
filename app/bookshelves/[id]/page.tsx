@@ -3,24 +3,30 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { mockBookshelves } from "@/lib/mock-data";
 import { ArrowLeft, Settings, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
-import { Bookshelf } from "@/types/Bookshelf";
 import { BookshelfSettingsDialog } from "@/components/organisms/popup/BookShelfSettingsDialog";
+import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
+import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 
 export default function BookshelfDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [bookshelf, setBookshelf] = useState<Bookshelf | null>(null);
+  const [bookshelf, setBookshelf] =
+    useState<BookshelfDetailResponseSpec | null>(null);
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    const shelf = mockBookshelves.find((s) => s.id === params.id);
-    if (shelf) {
-      setBookshelf(shelf);
-    }
+    if (!params.id) setBookshelf(null);
+    else
+      fetchBookshelfDetail({
+        shelfId: params.id.toString(),
+        side: "client",
+      }).then((data) => {
+        if (data) setBookshelf(data);
+        else setBookshelf(null);
+      });
   }, [params.id]);
 
   const removeBookFromShelf = (bookId: string) => {
@@ -33,7 +39,9 @@ export default function BookshelfDetailPage() {
     setBookshelf(updatedBookshelf);
   };
 
-  const handleUpdateBookshelf = (updatedBookshelf: Bookshelf) => {
+  const handleUpdateBookshelf = (
+    updatedBookshelf: BookshelfDetailResponseSpec
+  ) => {
     setBookshelf(updatedBookshelf);
     // In a real app, this would also update the backend
   };
