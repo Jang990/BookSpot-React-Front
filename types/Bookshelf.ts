@@ -6,7 +6,7 @@ export interface BookshelfSummary {
   bookCount: number;
   createdAt: string;
   isPublic: boolean;
-  thumbnailIsbns: string[]; // 최대 4개의 책 표지를 보여주기 위한 배열
+  thumbnailImageIsbn: string[]; // 최대 4개의 책 표지를 보여주기 위한 배열
 }
 
 export interface Bookshelf {
