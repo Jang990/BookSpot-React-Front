@@ -9,6 +9,7 @@ import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
 import { Bookshelf } from "@/types/Bookshelf";
 import { BookshelfSettingsDialog } from "@/components/organisms/popup/BookShelfSettingsDialog";
+import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
 
 export default function BookshelfDetailPage() {
   const params = useParams();
@@ -17,10 +18,15 @@ export default function BookshelfDetailPage() {
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    const shelf = mockBookshelves.find((s) => s.id === params.id);
-    if (shelf) {
-      setBookshelf(shelf);
-    }
+    if (!params.id) setBookshelf(null);
+    else
+      fetchBookshelfDetail({
+        shelfId: params.id.toString(),
+        side: "client",
+      }).then((data) => {
+        if (data) setBookshelf(data);
+        else setBookshelf(null);
+      });
   }, [params.id]);
 
   const removeBookFromShelf = (bookId: string) => {

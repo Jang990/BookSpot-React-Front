@@ -1,3 +1,4 @@
+import { Bookshelf } from "@/types/Bookshelf";
 import { getApiClient, Side } from "./common/Request";
 import { BookshelfSummaryListResponseApiSpec as BookshelvesSummaryResponseApiSpec } from "@/types/ApiSpec";
 
@@ -22,5 +23,28 @@ export const fetchUserBookshelvesSummary = async ({
 
   if (!response.ok) throw response.error;
   if (!response.data) return { bookshelvesSummary: [] };
+  return response.data;
+};
+
+// 책장 상세정보
+interface BookshelfDetailProps {
+  shelfId: string;
+  side: Side;
+}
+
+const createBookshelfDetailApiPath = (shelfId: string) => {
+  return `/api/shelves/${shelfId}`;
+};
+
+export const fetchBookshelfDetail = async ({
+  shelfId,
+  side,
+}: BookshelfDetailProps): Promise<Bookshelf | null> => {
+  const response = await getApiClient(side).get<Bookshelf>(
+    createBookshelfDetailApiPath(shelfId)
+  );
+
+  if (!response.ok) throw response.error;
+  if (!response.data) return null;
   return response.data;
 };
