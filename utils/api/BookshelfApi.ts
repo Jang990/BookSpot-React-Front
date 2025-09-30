@@ -76,9 +76,29 @@ export const deleteBookshelf = async ({
   shelfId: string;
   side: Side;
 }): Promise<BookshelfDetailResponseSpec> => {
-  console.log(shelfId);
   const response = await getApiClient(side).delete<BookshelfDetailResponseSpec>(
     `/api/users/shelves/${shelfId}`
+  );
+
+  if (!response.ok) throw response.error;
+  if (!response.data) throw new Error("데이터가 존재하지 않음");
+  return response.data;
+};
+
+interface BookshelfUpdateProps {
+  shelfId: string;
+  creationRequest: { name: string; isPublic: boolean };
+  side: Side;
+}
+
+export const updateBookshelf = async ({
+  shelfId,
+  creationRequest,
+  side,
+}: BookshelfUpdateProps): Promise<BookshelfDetailResponseSpec> => {
+  const response = await getApiClient(side).PATCH<BookshelfDetailResponseSpec>(
+    `/api/users/shelves/${shelfId}`,
+    creationRequest
   );
 
   if (!response.ok) throw response.error;
