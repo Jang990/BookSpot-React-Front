@@ -21,17 +21,29 @@ export class ApiClient {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
+    const requestOptions: RequestInit = {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(session?.backendToken
+          ? { Authorization: `Bearer ${session.backendToken}` }
+          : {}),
+      },
+      signal: controller.signal,
+    };
+
+    // GET이나 DELETE가 아니라면 BODY에 값이 있을 때 값을 넣어줌
+    if (method !== "GET" && method !== "DELETE") {
+      try {
+        const body = await req.json();
+        requestOptions.body = JSON.stringify(body);
+      } catch (error) {
+        // 본문이 비어있거나, JSON 형식이 아닐 경우 => 본문 없이 요청
+      }
+    }
+
     try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          ...(session?.backendToken
-            ? { Authorization: `Bearer ${session.backendToken}` }
-            : {}),
-        },
-        signal: controller.signal,
-      });
+      const response = await fetch(url, requestOptions);
 
       clearTimeout(timeout);
 
