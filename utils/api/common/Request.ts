@@ -132,6 +132,17 @@ export class ApiClient {
       timeoutMs
     );
   }
+
+  PATCH<T = any>(path: string, body?: any, timeoutMs?: number) {
+    return this.fetchWithAuth<T>(
+      path,
+      {
+        method: "PATCH",
+        body: body === undefined ? undefined : JSON.stringify(body),
+      },
+      timeoutMs
+    );
+  }
 }
 
 const ssrApiClient = new ApiClient(
