@@ -145,7 +145,9 @@ export const BookshelfSettingsDialog = ({
             <Button variant="outline" onClick={handleClose}>
               취소
             </Button>
-            <Button onClick={handleSave}>저장</Button>
+            <Button disabled={!name} onClick={handleSave}>
+              저장
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>
