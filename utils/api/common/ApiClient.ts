@@ -11,7 +11,7 @@ export class ApiClient {
 
   async request(
     req: NextRequest,
-    method: "GET" | "POST" | "PUT" | "DELETE" = "GET"
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET"
   ): Promise<NextResponse> {
     const session = await auth();
     const pathname = req.nextUrl.pathname;
@@ -75,6 +75,10 @@ export class ApiClient {
 
   async delete(req: NextRequest) {
     return this.request(req, "DELETE");
+  }
+
+  async patch(req: NextRequest) {
+    return this.request(req, "PATCH");
   }
 }
 

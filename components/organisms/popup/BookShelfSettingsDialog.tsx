@@ -15,7 +15,7 @@ import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { deleteBookshelf } from "@/utils/api/BookshelfApi";
+import { deleteBookshelf, updateBookshelf } from "@/utils/api/BookshelfApi";
 
 interface BookshelfSettingsDialogProps {
   bookshelf: BookshelfDetailResponseSpec;
@@ -43,14 +43,14 @@ export const BookshelfSettingsDialog = ({
       return;
     }
 
-    const updatedBookshelf = {
-      ...bookshelf,
-      name: name.trim(),
-      isPublic,
-    };
-
-    onUpdate(updatedBookshelf);
-    onClose();
+    updateBookshelf({
+      shelfId: shelfId,
+      creationRequest: { name: name, isPublic: isPublic },
+      side: "client",
+    }).then((response) => {
+      onUpdate(response);
+      onClose();
+    });
   };
 
   const handleDelete = () => {
@@ -145,7 +145,9 @@ export const BookshelfSettingsDialog = ({
             <Button variant="outline" onClick={handleClose}>
               취소
             </Button>
-            <Button onClick={handleSave}>저장</Button>
+            <Button disabled={!name} onClick={handleSave}>
+              저장
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>

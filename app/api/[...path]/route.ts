@@ -16,3 +16,7 @@ export const PUT = async (req: NextRequest) => {
 export const DELETE = async (req: NextRequest) => {
   return await apiClient.delete(req);
 };
+
+export const PATCH = async (req: NextRequest) => {
+  return await apiClient.patch(req);
+};
