@@ -48,3 +48,23 @@ export const fetchBookshelfDetail = async ({
   if (!response.data) return null;
   return response.data;
 };
+
+// 책장 상세정보
+interface BookshelfCreationProps {
+  creationRequest: { name: string; isPublic: boolean };
+  side: Side;
+}
+
+export const createBookshelf = async ({
+  creationRequest,
+  side,
+}: BookshelfCreationProps): Promise<BookshelfDetailResponseSpec> => {
+  const response = await getApiClient(side).post<BookshelfDetailResponseSpec>(
+    "/api/users/shelves",
+    creationRequest
+  );
+
+  if (!response.ok) throw response.error;
+  if (!response.data) throw new Error("데이터가 존재하지 않음");
+  return response.data;
+};
