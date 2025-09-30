@@ -15,6 +15,7 @@ import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { deleteBookshelf } from "@/utils/api/BookshelfApi";
 
 interface BookshelfSettingsDialogProps {
   bookshelf: BookshelfDetailResponseSpec;
@@ -31,6 +32,7 @@ export const BookshelfSettingsDialog = ({
   onUpdate,
   onDelete,
 }: BookshelfSettingsDialogProps) => {
+  const [shelfId, setShelfId] = useState(bookshelf.id);
   const [name, setName] = useState(bookshelf.name);
   const [isPublic, setIsPublic] = useState(bookshelf.isPublic);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -52,12 +54,16 @@ export const BookshelfSettingsDialog = ({
   };
 
   const handleDelete = () => {
-    onDelete();
-    onClose();
-    setShowDeleteConfirm(false);
+    deleteBookshelf({ shelfId: shelfId, side: "client" }).then(() => {
+      handleClose();
+      setShowDeleteConfirm(false);
+      onDelete();
+      onClose();
+    });
   };
 
   const handleClose = () => {
+    setShelfId("0");
     setName(bookshelf.name);
     setIsPublic(bookshelf.isPublic);
     setShowDeleteConfirm(false);
