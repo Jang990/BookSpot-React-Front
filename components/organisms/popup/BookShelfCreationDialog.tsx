@@ -63,10 +63,7 @@ export const BookshelfCreationDialog = ({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>책장 설정</DialogTitle>
-          <DialogDescription>
-            책장의 이름과 공개 설정을 변경할 수 있습니다.
-          </DialogDescription>
+          <DialogTitle>책장 추가</DialogTitle>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
