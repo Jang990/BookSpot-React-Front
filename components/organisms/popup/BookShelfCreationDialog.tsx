@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,11 +19,6 @@ interface BookshelfSettingsDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onCreate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
-}
-
-export interface ShelfCreationRequest {
-  name: string;
-  isPublic: boolean;
 }
 
 export const BookshelfCreationDialog = ({

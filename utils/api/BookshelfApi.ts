@@ -1,6 +1,7 @@
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
 import { BookshelfSummaryListResponseApiSpec as BookshelvesSummaryResponseApiSpec } from "@/types/ApiSpec";
+import { ShelfCreationRequest } from "@/types/Bookshelf";
 
 interface UserBookshelvesProps {
   userId: string;
@@ -51,7 +52,7 @@ export const fetchBookshelfDetail = async ({
 
 // 책장 생성 정보
 interface BookshelfCreationProps {
-  creationRequest: { name: string; isPublic: boolean };
+  creationRequest: ShelfCreationRequest;
   side: Side;
 }
 
@@ -87,7 +88,7 @@ export const deleteBookshelf = async ({
 
 interface BookshelfUpdateProps {
   shelfId: string;
-  creationRequest: { name: string; isPublic: boolean };
+  creationRequest: ShelfCreationRequest;
   side: Side;
 }
 
