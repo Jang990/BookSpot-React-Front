@@ -49,7 +49,7 @@ export const fetchBookshelfDetail = async ({
   return response.data;
 };
 
-// 책장 상세정보
+// 책장 생성 정보
 interface BookshelfCreationProps {
   creationRequest: { name: string; isPublic: boolean };
   side: Side;
@@ -62,6 +62,23 @@ export const createBookshelf = async ({
   const response = await getApiClient(side).post<BookshelfDetailResponseSpec>(
     "/api/users/shelves",
     creationRequest
+  );
+
+  if (!response.ok) throw response.error;
+  if (!response.data) throw new Error("데이터가 존재하지 않음");
+  return response.data;
+};
+
+export const deleteBookshelf = async ({
+  shelfId,
+  side,
+}: {
+  shelfId: string;
+  side: Side;
+}): Promise<BookshelfDetailResponseSpec> => {
+  console.log(shelfId);
+  const response = await getApiClient(side).delete<BookshelfDetailResponseSpec>(
+    `/api/users/shelves/${shelfId}`
   );
 
   if (!response.ok) throw response.error;
