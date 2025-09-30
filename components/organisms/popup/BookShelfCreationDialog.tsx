@@ -26,7 +26,7 @@ export interface ShelfCreationRequest {
   isPublic: boolean;
 }
 
-export const BookshelfSettingsDialog = ({
+export const BookshelfCreationDialog = ({
   isOpen,
   onClose,
   onCreate: onCreate,

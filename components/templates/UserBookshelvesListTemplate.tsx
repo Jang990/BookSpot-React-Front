@@ -10,13 +10,13 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import type { BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book, Edit3 } from "lucide-react";
 import Image from "next/image";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
+import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -88,14 +88,14 @@ export const UserBookshelvesListTemplate = () => {
               {bookshelves.length}/5개의 책장을 사용 중
             </p>
           </div>
-          <CreateBookshelfButton
-            open={showCreateDialog}
-            onOpenChange={setShowCreateDialog}
-            newShelfName={newShelfName}
-            setNewShelfName={setNewShelfName}
-            onCreate={createNewBookshelf}
+          <Button
             disabled={bookshelves.length >= 5}
-          />
+            onClick={() => setShowCreateDialog(true)}
+            className="flex items-center gap-2"
+          >
+            <Plus className="w-4 h-4" />
+            책장 추가
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -123,6 +123,15 @@ export const UserBookshelvesListTemplate = () => {
           setEditName={setEditName}
           onUpdate={updateBookshelfName}
           onClose={() => setEditingShelf(null)}
+        />
+        <BookshelfCreationDialog
+          isOpen={showCreateDialog}
+          onClose={() => {
+            setShowCreateDialog(false);
+          }}
+          onCreate={(shelf) => {
+            console.log(shelf);
+          }}
         />
       </div>
     </div>
@@ -224,53 +233,6 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
         )}
       </Link>
     </CardContent>
-  );
-};
-
-const CreateBookshelfButton = ({
-  open,
-  onOpenChange,
-  newShelfName,
-  setNewShelfName,
-  onCreate,
-  disabled,
-}: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  newShelfName: string;
-  setNewShelfName: (v: string) => void;
-  onCreate: () => void;
-  disabled: boolean;
-}) => {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button disabled={disabled} className="flex items-center gap-2">
-          <Plus className="w-4 h-4" />
-          책장 추가
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>책장 만들기</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4 py-4">
-          <Input
-            placeholder="책장 이름을 입력하세요"
-            value={newShelfName}
-            onChange={(e) => setNewShelfName(e.target.value)}
-            maxLength={50}
-            onKeyDown={(e) => e.key === "Enter" && onCreate()}
-          />
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              취소
-            </Button>
-            <Button onClick={onCreate}>만들기</Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
   );
 };
 
