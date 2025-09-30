@@ -21,7 +21,6 @@ import { BookshelfCreationDialog } from "../organisms/popup/BookshelfCreationDia
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [newShelfName, setNewShelfName] = useState("");
   const [editingShelf, setEditingShelf] = useState<BookshelfSummary | null>(
     null
   );
@@ -34,30 +33,6 @@ export const UserBookshelvesListTemplate = () => {
       }
     );
   }, []);
-
-  const createNewBookshelf = () => {
-    if (bookshelves.length >= 5) {
-      alert("최대 5개의 책장만 만들 수 있습니다.");
-      return;
-    }
-    if (newShelfName.trim() === "") {
-      alert("책장 이름을 입력해주세요.");
-      return;
-    }
-
-    const newShelf: BookshelfSummary = {
-      id: `shelf-${Date.now()}`,
-      name: newShelfName.trim(),
-      bookCount: 0,
-      createdAt: new Date().toISOString(),
-      isPublic: false,
-      thumbnailImageIsbn: [],
-    };
-
-    setBookshelves([...bookshelves, newShelf]);
-    setNewShelfName("");
-    setShowCreateDialog(false);
-  };
 
   const updateBookshelfName = () => {
     if (!editingShelf || editName.trim() === "") {
@@ -111,9 +86,6 @@ export const UserBookshelvesListTemplate = () => {
             <p className="text-muted-foreground mb-6">
               첫 번째 책장을 만들어보세요
             </p>
-            <Button onClick={() => setShowCreateDialog(true)}>
-              <Plus className="w-4 h-4 mr-2" />첫 책장 만들기
-            </Button>
           </div>
         )}
 
@@ -130,7 +102,17 @@ export const UserBookshelvesListTemplate = () => {
             setShowCreateDialog(false);
           }}
           onCreate={(shelf) => {
-            console.log(shelf);
+            const newShelf: BookshelfSummary = {
+              id: shelf.id,
+              name: shelf.name,
+              bookCount: shelf.bookCount,
+              createdAt: shelf.createdAt,
+              isPublic: shelf.isPublic,
+              thumbnailImageIsbn: [],
+            };
+
+            setBookshelves([...bookshelves, newShelf]);
+            setShowCreateDialog(false);
           }}
         />
       </div>

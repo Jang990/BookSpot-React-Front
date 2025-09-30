@@ -14,11 +14,12 @@ import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { createBookshelf } from "@/utils/api/BookshelfApi";
 
 interface BookshelfSettingsDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (updatedBookshelf: ShelfCreationRequest) => void;
+  onCreate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
 }
 
 export interface ShelfCreationRequest {
@@ -43,8 +44,13 @@ export const BookshelfCreationDialog = ({
       return;
     }
 
-    onCreate({ name: name, isPublic: isPublic });
-    onClose();
+    createBookshelf({
+      creationRequest: { name: name, isPublic: isPublic },
+      side: "client",
+    }).then((response) => {
+      onCreate(response);
+      onClose();
+    });
   };
 
   const handleClose = () => {
