@@ -47,7 +47,7 @@ export const UserBookshelvesListTemplate = () => {
     setDialogType(null);
   };
 
-  // 책장 이름 업데이트 로직 (이제 새 이름을 인자로 받음)
+  // 책장 이름 업데이트
   const updateBookshelfName = (newShelf: BookshelfDetailResponseSpec) => {
     if (!selectedShelf) return;
 
@@ -65,7 +65,7 @@ export const UserBookshelvesListTemplate = () => {
     handleCloseDialog(); // 다이얼로그 닫기
   };
 
-  // 책장 삭제 로직
+  // 책장 삭제
   const deleteBookshelf = () => {
     if (!selectedShelf) return;
     setBookshelves(
@@ -203,7 +203,7 @@ const BookshelfCardHeader = ({
             items={[
               {
                 icon: <Edit className="h-4 w-4" />,
-                label: "책장 수정",
+                label: "책장 설정",
                 onClick: () => onEdit(shelf),
               },
               {
