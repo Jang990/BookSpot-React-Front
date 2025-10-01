@@ -56,7 +56,7 @@ export const UserBookshelvesListTemplate = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+      <div>
         <PageTitleAndButton
           title="내 책장"
           subLabel={`${bookshelves.length} / 5개 사용중`}
@@ -65,7 +65,6 @@ export const UserBookshelvesListTemplate = () => {
           btnDisabled={bookshelves.length >= 5}
           onClickBtn={() => setShowCreateDialog(true)}
         />
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookshelves.map((shelf) => (
             <BookshelfCard key={shelf.id} shelf={shelf} onEdit={startEditing} />

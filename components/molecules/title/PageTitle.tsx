@@ -34,7 +34,7 @@ export const TitleAndSubLabel = ({
 }) => {
   return (
     <div>
-      <div className="mb-2">
+      <div className="mb-1">
         <Title title={title} />
       </div>
       <SubLabel subLabel={subLabel} />
@@ -77,22 +77,24 @@ export const PageTitleAndButton = ({
   onClickBtn,
 }: TitleAndButtonProps) => {
   return (
-    <div className="flex items-end justify-between mb-8 p-1">
-      {subLabel ? (
-        <TitleAndSubLabel title={title} subLabel={subLabel} />
-      ) : (
-        <Title title={title} />
-      )}
+    <div className="p-4">
+      <div className="flex items-end justify-between">
+        {subLabel ? (
+          <TitleAndSubLabel title={title} subLabel={subLabel} />
+        ) : (
+          <Title title={title} />
+        )}
 
-      <div className="pb-1">
-        <Button
-          disabled={btnDisabled}
-          onClick={() => onClickBtn()}
-          className="flex items-center gap-2 pe-3"
-        >
-          {btnIcon}
-          {btnText}
-        </Button>
+        <div className="pb-1">
+          <Button
+            disabled={btnDisabled}
+            onClick={() => onClickBtn()}
+            className="flex items-center gap-2 pe-3"
+          >
+            {btnIcon}
+            {btnText}
+          </Button>
+        </div>
       </div>
     </div>
   );
