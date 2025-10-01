@@ -11,8 +11,9 @@ import {
 } from "@/components/ui/dialog";
 import { ShelfSettingOptions } from "./BookShelfSettingsDialog";
 import { useEffect, useState } from "react";
+import { deleteBookshelf } from "@/utils/api/BookshelfApi";
 
-const DELETE_CONFIRMATION_TEXT = "삭제하기"; // 오타 방지를 위해 상수로 관리
+const DELETE_CONFIRMATION_TEXT = "삭제하기";
 export const DeleteBookshelfDialog = ({
   isOpen,
   shelf,
@@ -24,10 +25,7 @@ export const DeleteBookshelfDialog = ({
   onDelete: () => void;
   onClose: () => void;
 }) => {
-  // 2. 사용자가 입력하는 텍스트를 관리할 state 추가
   const [confirmationText, setConfirmationText] = useState("");
-
-  // 3. 다이얼로그가 열릴 때마다 입력창을 초기화하는 로직 추가
   useEffect(() => {
     if (isOpen) {
       setConfirmationText("");
@@ -36,8 +34,11 @@ export const DeleteBookshelfDialog = ({
 
   if (!isOpen || !shelf) return null;
 
-  // 4. 입력된 텍스트와 확인 텍스트가 일치하는지 확인
-  const isDeleteButtonEnabled = confirmationText === DELETE_CONFIRMATION_TEXT;
+  const deleteShelf = () => {
+    deleteBookshelf({ shelfId: shelf.id, side: "client" }).then(() => {
+      onDelete();
+    });
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -45,9 +46,8 @@ export const DeleteBookshelfDialog = ({
         <DialogHeader>
           <DialogTitle>책장 삭제</DialogTitle>
           <DialogDescription className="pt-2">
-            이 작업은 되돌릴 수 없습니다. '{shelf.name}' 책장을 영구적으로
-            삭제하려면, 아래에{" "}
-            <b className="text-red-500">{DELETE_CONFIRMATION_TEXT}</b>를
+            이 작업은 되돌릴 수 없습니다. '{shelf.name}' 책장을 영구 삭제하려면,
+            아래에 <b className="text-red-500">{DELETE_CONFIRMATION_TEXT}</b>를
             입력해주세요.
           </DialogDescription>
         </DialogHeader>
@@ -68,9 +68,9 @@ export const DeleteBookshelfDialog = ({
           </Button>
           <Button
             variant="destructive"
-            onClick={onDelete}
+            onClick={deleteShelf}
             // 6. 텍스트가 일치할 때만 버튼 활성화
-            disabled={!isDeleteButtonEnabled}
+            disabled={confirmationText !== DELETE_CONFIRMATION_TEXT}
           >
             삭제
           </Button>

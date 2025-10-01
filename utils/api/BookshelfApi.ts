@@ -76,14 +76,13 @@ export const deleteBookshelf = async ({
 }: {
   shelfId: string;
   side: Side;
-}): Promise<BookshelfDetailResponseSpec> => {
+}): Promise<void> => {
   const response = await getApiClient(side).delete<BookshelfDetailResponseSpec>(
     `/api/users/shelves/${shelfId}`
   );
 
   if (!response.ok) throw response.error;
-  if (!response.data) throw new Error("데이터가 존재하지 않음");
-  return response.data;
+  return;
 };
 
 interface BookshelfUpdateProps {
