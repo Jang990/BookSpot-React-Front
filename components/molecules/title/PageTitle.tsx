@@ -1,3 +1,4 @@
+import { CommonIconButton } from "@/components/atoms/button/icon/CommonIconButton";
 import { Button } from "@/components/ui/button";
 import React from "react";
 
@@ -84,14 +85,11 @@ export const PageTitleAndButton = ({
         )}
 
         <div>
-          <Button
-            variant="ghost"
-            size="sm"
+          <CommonIconButton
+            icon={btnIcon}
             onClick={onClickBtn}
             disabled={btnDisabled}
-          >
-            {btnIcon}
-          </Button>
+          />
         </div>
       </div>
     </div>

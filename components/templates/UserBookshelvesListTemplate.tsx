@@ -18,6 +18,7 @@ import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { PageTitleAndButton } from "../molecules/title/PageTitle";
+import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -148,9 +149,10 @@ const BookshelfCardHeader = ({
             e.preventDefault();
           }}
         >
-          <Button variant="ghost" size="sm" onClick={() => onEdit(shelf)}>
-            <MoreVertical className="w-3 h-3" />
-          </Button>
+          <CommonIconButton
+            icon={<MoreVertical className="w-3 h-3" />}
+            onClick={() => onEdit(shelf)}
+          />
         </div>
       </div>
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
