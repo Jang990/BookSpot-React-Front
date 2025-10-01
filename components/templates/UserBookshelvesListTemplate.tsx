@@ -128,9 +128,7 @@ export const UserBookshelvesListTemplate = () => {
           onClose={() => {
             setShowCreateDialog(false);
           }}
-          onCreate={(shelf) => {
-            addNewShelfToUiList(shelf);
-          }}
+          onCreate={addNewShelfToUiList}
         />
         <BookshelfSettingsDialog
           bookshelf={selectedShelf ?? undefined}
