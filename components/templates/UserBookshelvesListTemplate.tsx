@@ -146,10 +146,8 @@ const BookshelfCardHeader = ({
 }) => {
   return (
     <CardHeader className="pb-3">
-      <div className="flex items-center justify-between">
-        <CardTitle className="text-lg font-semibold truncate">
-          {shelf.name}
-        </CardTitle>
+      <div className="flex items-start justify-between">
+        <CardTitle className="text-lg font-semibold">{shelf.name}</CardTitle>
         <div
           className="flex items-center gap-1"
           onClick={(e) => {
@@ -157,12 +155,7 @@ const BookshelfCardHeader = ({
             e.preventDefault();
           }}
         >
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onEdit(shelf)}
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-          >
+          <Button variant="ghost" size="sm" onClick={() => onEdit(shelf)}>
             <MoreVertical className="w-3 h-3" />
           </Button>
         </div>
