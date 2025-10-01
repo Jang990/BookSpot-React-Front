@@ -1,5 +1,5 @@
 import { InfoPanel } from "@/components/molecules/InfoPanel";
-import { PageTitlAndSubLabel } from "@/components/molecules/PageTitle";
+import { PageTitlAndSubLabel } from "@/components/molecules/title/PageTitle";
 import { RankingSearchButtons } from "@/components/organisms/ranking/RankingSearchButtons";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { BookPreview } from "@/types/BookPreview";

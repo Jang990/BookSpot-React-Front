@@ -7,7 +7,7 @@ import { DeletablaBookInfo } from "@/components/organisms/book/preview/Deletable
 import { useBag } from "@/contexts/BagContext";
 import { BookBagPopup } from "../organisms/BookBagPopup";
 import { InfoPanel } from "../molecules/InfoPanel";
-import { PageTitle } from "../molecules/PageTitle";
+import { PageTitle } from "../molecules/title/PageTitle";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { MAX_BAG_SIZE } from "@/utils/BagLocalStorage";
