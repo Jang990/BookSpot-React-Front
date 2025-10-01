@@ -17,7 +17,7 @@ import { Switch } from "@/components/ui/switch";
 import { updateBookshelf } from "@/utils/api/BookshelfApi";
 
 interface BookshelfSettingsDialogProps {
-  bookshelf: ShelfSettingOptions;
+  bookshelf?: ShelfSettingOptions;
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
@@ -35,6 +35,8 @@ export const BookshelfSettingsDialog = ({
   onClose,
   onUpdate,
 }: BookshelfSettingsDialogProps) => {
+  if (!bookshelf || !isOpen) return null;
+
   const [shelfId, setShelfId] = useState(bookshelf.id);
   const [name, setName] = useState(bookshelf.name);
   const [isPublic, setIsPublic] = useState(bookshelf.isPublic);

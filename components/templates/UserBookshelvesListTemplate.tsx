@@ -21,19 +21,17 @@ import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDia
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { PageTitleAndButton } from "../molecules/title/PageTitle";
 import { CommonIconDropdown } from "../atoms/button/icon/CommonIconButton";
+import { BookshelfSettingsDialog } from "../organisms/popup/BookShelfSettingsDialog";
+import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [editingShelf, setEditingShelf] = useState<BookshelfSummary | null>(
-    null
-  );
-  const [editName, setEditName] = useState("");
 
-  const [deletingShelf, setDeletingShelf] = useState<BookshelfSummary | null>(
+  const [selectedShelf, setSelectedShelf] = useState<BookshelfSummary | null>(
     null
   );
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [dialogType, setDialogType] = useState<"edit" | "delete" | null>(null);
 
   useEffect(() => {
     fetchUserBookshelvesSummary({ userId: "1", side: "client" }).then(
@@ -43,43 +41,49 @@ export const UserBookshelvesListTemplate = () => {
     );
   }, []);
 
-  const updateBookshelfName = () => {
-    if (!editingShelf || editName.trim() === "") {
-      alert("책장 이름을 입력해주세요.");
-      return;
-    }
+  // 다이얼로그를 닫고 상태를 초기화하는 공통 함수
+  const handleCloseDialog = () => {
+    setSelectedShelf(null);
+    setDialogType(null);
+  };
+
+  // 책장 이름 업데이트 로직 (이제 새 이름을 인자로 받음)
+  const updateBookshelfName = (newShelf: BookshelfDetailResponseSpec) => {
+    if (!selectedShelf) return;
 
     const updated = bookshelves.map((shelf) =>
-      shelf.id === editingShelf.id ? { ...shelf, name: editName.trim() } : shelf
+      shelf.id === selectedShelf.id
+        ? {
+            ...shelf,
+            name: newShelf.name.trim(),
+            isPublic: newShelf.isPublic,
+            createdAt: newShelf.createdAt,
+          }
+        : shelf
     );
     setBookshelves(updated);
-    setEditingShelf(null);
-    setEditName("");
+    handleCloseDialog(); // 다이얼로그 닫기
   };
 
-  const startEditing = (shelf: BookshelfSummary) => {
-    setEditingShelf(shelf);
-    setEditName(shelf.name);
-  };
-
-  // 삭제 시작 함수 (어떤 책장을 삭제할지 상태에 저장하고, 다이얼로그를 염)
-  const startDeleting = (shelf: BookshelfSummary) => {
-    setDeletingShelf(shelf);
-    setShowDeleteDialog(true);
-  };
-
-  // 삭제 로직
+  // 책장 삭제 로직
   const deleteBookshelf = () => {
-    if (!deletingShelf) return;
-
-    // deletingShelf의 id와 다른 책장들만 남김
+    if (!selectedShelf) return;
     setBookshelves(
-      bookshelves.filter((shelf) => shelf.id !== deletingShelf.id)
+      bookshelves.filter((shelf) => shelf.id !== selectedShelf.id)
     );
+    handleCloseDialog(); // 다이얼로그 닫기
+  };
 
-    // 다이얼로그 닫고, 삭제할 책장 정보 초기화
-    setShowDeleteDialog(false);
-    setDeletingShelf(null);
+  // 수정 시작 함수
+  const startEditing = (shelf: BookshelfSummary) => {
+    setSelectedShelf(shelf);
+    setDialogType("edit");
+  };
+
+  // 삭제 시작 함수
+  const startDeleting = (shelf: BookshelfSummary) => {
+    setSelectedShelf(shelf);
+    setDialogType("delete");
   };
 
   return (
@@ -113,13 +117,6 @@ export const UserBookshelvesListTemplate = () => {
           </div>
         )}
 
-        <EditBookshelfDialog
-          editingShelf={editingShelf}
-          editName={editName}
-          setEditName={setEditName}
-          onUpdate={updateBookshelfName}
-          onClose={() => setEditingShelf(null)}
-        />
         <BookshelfCreationDialog
           isOpen={showCreateDialog}
           onClose={() => {
@@ -139,14 +136,17 @@ export const UserBookshelvesListTemplate = () => {
             setShowCreateDialog(false);
           }}
         />
+        <BookshelfSettingsDialog
+          bookshelf={selectedShelf ?? undefined}
+          isOpen={dialogType === "edit"}
+          onClose={handleCloseDialog}
+          onUpdate={updateBookshelfName}
+        />
         <DeleteBookshelfDialog
-          isOpen={showDeleteDialog}
-          shelf={deletingShelf}
+          isOpen={dialogType === "delete"}
+          shelf={selectedShelf}
           onDelete={deleteBookshelf}
-          onClose={() => {
-            setShowDeleteDialog(false);
-            setDeletingShelf(null);
-          }}
+          onClose={handleCloseDialog}
         />
       </div>
     </div>
@@ -265,45 +265,6 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
         </div>
       )}
     </CardContent>
-  );
-};
-
-const EditBookshelfDialog = ({
-  editingShelf,
-  editName,
-  setEditName,
-  onUpdate,
-  onClose,
-}: {
-  editingShelf: BookshelfSummary | null;
-  editName: string;
-  setEditName: (v: string) => void;
-  onUpdate: () => void;
-  onClose: () => void;
-}) => {
-  return (
-    <Dialog open={!!editingShelf} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>책장 이름 변경</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4 py-4">
-          <Input
-            placeholder="새 책장 이름을 입력하세요"
-            value={editName}
-            onChange={(e) => setEditName(e.target.value)}
-            maxLength={50}
-            onKeyDown={(e) => e.key === "Enter" && onUpdate()}
-          />
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={onClose}>
-              취소
-            </Button>
-            <Button onClick={onUpdate}>변경</Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
   );
 };
 
