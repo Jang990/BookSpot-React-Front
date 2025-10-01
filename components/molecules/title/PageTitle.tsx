@@ -33,7 +33,7 @@ export const TitleAndSubLabel = ({
   subLabel: string;
 }) => {
   return (
-    <div className="p-4 pb-5">
+    <div>
       <div className="mb-2">
         <Title title={title} />
       </div>
@@ -51,7 +51,9 @@ export const PageTitlAndSubLabel = ({ title, label }: TitleAndLabel) => {
   return (
     <div className="flex justify-between items-center">
       <PageTitle text={title} />
-      <div className="text-muted-foreground pe-3">{label}</div>
+      <div className="pe-3">
+        <SubLabel subLabel={label} />
+      </div>
     </div>
   );
 };
@@ -75,21 +77,23 @@ export const PageTitleAndButton = ({
   onClickBtn,
 }: TitleAndButtonProps) => {
   return (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex items-end justify-between mb-8 p-1">
       {subLabel ? (
         <TitleAndSubLabel title={title} subLabel={subLabel} />
       ) : (
-        <PageTitle text={title} />
+        <Title title={title} />
       )}
 
-      <Button
-        disabled={btnDisabled}
-        onClick={() => onClickBtn()}
-        className="flex items-center gap-2 me-2"
-      >
-        {btnIcon}
-        {btnText}
-      </Button>
+      <div className="pb-1">
+        <Button
+          disabled={btnDisabled}
+          onClick={() => onClickBtn()}
+          className="flex items-center gap-2 pe-3"
+        >
+          {btnIcon}
+          {btnText}
+        </Button>
+      </div>
     </div>
   );
 };
