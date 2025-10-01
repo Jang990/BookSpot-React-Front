@@ -46,9 +46,8 @@ export const DeleteBookshelfDialog = ({
         <DialogHeader>
           <DialogTitle>책장 삭제</DialogTitle>
           <DialogDescription className="pt-2">
-            이 작업은 되돌릴 수 없습니다. '{shelf.name}' 책장을 영구 삭제하려면,
-            아래에 <b className="text-red-500">{DELETE_CONFIRMATION_TEXT}</b>를
-            입력해주세요.
+            <b className="text-red-500">{DELETE_CONFIRMATION_TEXT}</b>를
+            입력해서 '{shelf.name}' 책장을 영구 삭제하세요.
           </DialogDescription>
         </DialogHeader>
 
