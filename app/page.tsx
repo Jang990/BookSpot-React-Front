@@ -4,7 +4,7 @@ import { Pageable } from "@/types/Pageable";
 import { findBooksPreview, SearchCondition } from "@/utils/api/BookPreviewApi";
 import { toRawQueryString } from "@/utils/querystring/QueryString";
 import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
-import { TitleAndSubButton } from "@/components/molecules/TitleAndSubButton";
+import { TitleAndSubButton } from "@/components/molecules/title/TitleAndSubButton";
 import { POPULAR_CATEGORY_IDS } from "@/types/BookCategory";
 
 /*

@@ -17,6 +17,8 @@ import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
+import { PageTitleAndButton } from "../molecules/title/PageTitle";
+import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -55,24 +57,14 @@ export const UserBookshelvesListTemplate = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">내 책장</h1>
-            <p className="text-muted-foreground">
-              {bookshelves.length}/5개의 책장을 사용 중
-            </p>
-          </div>
-          <Button
-            disabled={bookshelves.length >= 5}
-            onClick={() => setShowCreateDialog(true)}
-            className="flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4" />
-            책장 추가
-          </Button>
-        </div>
-
+      <div>
+        <PageTitleAndButton
+          title="내 책장"
+          subLabel={`${bookshelves.length} / 5개 사용중`}
+          btnIcon={<Plus onClick={() => console.log("HelloWorld!")} />}
+          btnDisabled={bookshelves.length >= 5}
+          onClickBtn={() => setShowCreateDialog(true)}
+        />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookshelves.map((shelf) => (
             <BookshelfCard key={shelf.id} shelf={shelf} onEdit={startEditing} />
@@ -157,9 +149,10 @@ const BookshelfCardHeader = ({
             e.preventDefault();
           }}
         >
-          <Button variant="ghost" size="sm" onClick={() => onEdit(shelf)}>
-            <MoreVertical className="w-3 h-3" />
-          </Button>
+          <CommonIconButton
+            icon={<MoreVertical className="w-3 h-3" />}
+            onClick={() => onEdit(shelf)}
+          />
         </div>
       </div>
       <div className="flex items-center gap-2 text-sm text-muted-foreground">

@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
 import { ReadonlyURLSearchParams, useRouter } from "next/navigation";
-import { onClickCategory } from "../templates/BookCategoryPageTemplate";
+import { onClickCategory } from "@/components/templates/BookCategoryPageTemplate";
 import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
 
 interface Props {
