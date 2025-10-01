@@ -1,3 +1,6 @@
+export const MAX_SHELF_NAME_LENGTH = 50;
+export const MAX_USER_SHELF_SIZE = 5;
+
 export interface BookshelfSummary {
   id: string;
   name: string;

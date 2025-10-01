@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { BookshelfSummary } from "@/types/Bookshelf";
+import { MAX_USER_SHELF_SIZE, type BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book, MoreVertical, Edit, Trash2 } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
@@ -82,9 +82,9 @@ export const UserBookshelvesListTemplate = () => {
       <div>
         <PageTitleAndButton
           title="내 책장"
-          subLabel={`${bookshelves.length} / 5개 사용중`}
+          subLabel={`${bookshelves.length} / ${MAX_USER_SHELF_SIZE}개 사용중`}
           btnIcon={<Plus onClick={() => console.log("HelloWorld!")} />}
-          btnDisabled={bookshelves.length >= 5}
+          btnDisabled={bookshelves.length >= MAX_USER_SHELF_SIZE}
           onClickBtn={() => setShowCreateDialog(true)}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

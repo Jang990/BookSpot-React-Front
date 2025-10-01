@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { updateBookshelf } from "@/utils/api/BookshelfApi";
+import { MAX_SHELF_NAME_LENGTH } from "@/types/Bookshelf";
 
 interface BookshelfSettingsDialogProps {
   bookshelf?: ShelfSettingOptions;
@@ -66,7 +67,10 @@ export const BookshelfSettingsDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>책장 설정</DialogTitle>
           <DialogDescription>
@@ -77,7 +81,7 @@ export const BookshelfSettingsDialog = ({
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              이름
+              책장 이름
             </Label>
             <Input
               id="name"
@@ -85,7 +89,7 @@ export const BookshelfSettingsDialog = ({
               onChange={(e) => setName(e.target.value)}
               className="col-span-3"
               placeholder="책장 이름을 입력하세요"
-              maxLength={50}
+              maxLength={MAX_SHELF_NAME_LENGTH}
             />
           </div>
 
