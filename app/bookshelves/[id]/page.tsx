@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Settings, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
-import { BookshelfSettingsDialog } from "@/components/organisms/popup/BookshelfSettingsDialog";
+import { BookshelfSettingsDialog } from "@/components/organisms/popup/BookShelfSettingsDialog";
 import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 

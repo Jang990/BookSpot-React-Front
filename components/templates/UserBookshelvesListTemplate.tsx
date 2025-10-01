@@ -16,7 +16,7 @@ import { Plus, Book, Edit3 } from "lucide-react";
 import Image from "next/image";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
-import { BookshelfCreationDialog } from "../organisms/popup/BookshelfCreationDialog";
+import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
