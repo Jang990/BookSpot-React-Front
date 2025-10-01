@@ -12,13 +12,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { BookshelfSummary } from "@/types/Bookshelf";
-import { Plus, Book, MoreVertical } from "lucide-react";
+import { Plus, Book, MoreVertical, Edit, Trash, Trash2 } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { PageTitleAndButton } from "../molecules/title/PageTitle";
-import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
+import { CommonIconDropdown } from "../atoms/button/icon/CommonIconButton";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -149,9 +149,20 @@ const BookshelfCardHeader = ({
             e.preventDefault();
           }}
         >
-          <CommonIconButton
+          <CommonIconDropdown
             icon={<MoreVertical className="w-3 h-3" />}
-            onClick={() => onEdit(shelf)}
+            items={[
+              {
+                icon: <Edit className="h-4 w-4" />,
+                label: "책장 수정",
+                onClick: () => onEdit(shelf),
+              },
+              {
+                icon: <Trash2 className="h-4 w-4" />,
+                label: "책장 삭제",
+                onClick: () => onEdit(shelf),
+              },
+            ]}
           />
         </div>
       </div>

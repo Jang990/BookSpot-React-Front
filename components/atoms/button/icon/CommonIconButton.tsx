@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -5,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import React from "react";
+import React, { useState } from "react";
 
 export const CommonIconButton = ({
   icon,
@@ -37,25 +38,35 @@ interface IconDropdown {
 }
 
 export const CommonIconDropdown = ({ icon, items }: IconDropdown) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm">
           {icon}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {items.map((item, index) => (
-          <DropdownMenuItem
-            key={index}
-            onClick={item.onClick}
-            disabled={item.disabled}
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            {item.icon}
-            <span>{item.label}</span>
-          </DropdownMenuItem>
-        ))}
+        {items.map((item, index) => {
+          const handleSelect = (e: Event) => {
+            e.preventDefault();
+            item.onClick();
+            setIsOpen(false);
+          };
+
+          return (
+            <DropdownMenuItem
+              key={index}
+              onSelect={handleSelect}
+              disabled={item.disabled}
+              className="flex items-center gap-3 cursor-pointer"
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );
