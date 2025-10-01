@@ -135,7 +135,6 @@ export default function BookshelfDetailPage() {
           isOpen={showSettings}
           onClose={() => setShowSettings(false)}
           onUpdate={handleUpdateBookshelf}
-          onDelete={handleDeleteBookshelf}
         />
       </div>
     </div>

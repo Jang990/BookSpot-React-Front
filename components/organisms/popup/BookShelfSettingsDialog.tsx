@@ -10,19 +10,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Trash2 } from "lucide-react";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { deleteBookshelf, updateBookshelf } from "@/utils/api/BookshelfApi";
+import { updateBookshelf } from "@/utils/api/BookshelfApi";
 
 interface BookshelfSettingsDialogProps {
   bookshelf: ShelfSettingOptions;
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
-  onDelete: () => void;
 }
 
 export interface ShelfSettingOptions {
@@ -36,12 +34,10 @@ export const BookshelfSettingsDialog = ({
   isOpen,
   onClose,
   onUpdate,
-  onDelete,
 }: BookshelfSettingsDialogProps) => {
   const [shelfId, setShelfId] = useState(bookshelf.id);
   const [name, setName] = useState(bookshelf.name);
   const [isPublic, setIsPublic] = useState(bookshelf.isPublic);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleSave = () => {
     if (name.trim() === "") {
@@ -59,20 +55,10 @@ export const BookshelfSettingsDialog = ({
     });
   };
 
-  const handleDelete = () => {
-    deleteBookshelf({ shelfId: shelfId, side: "client" }).then(() => {
-      handleClose();
-      setShowDeleteConfirm(false);
-      onDelete();
-      onClose();
-    });
-  };
-
   const handleClose = () => {
     setShelfId("0");
     setName(bookshelf.name);
     setIsPublic(bookshelf.isPublic);
-    setShowDeleteConfirm(false);
     onClose();
   };
 
@@ -121,32 +107,6 @@ export const BookshelfSettingsDialog = ({
         </div>
 
         <DialogFooter className="flex justify-between">
-          <div>
-            {!showDeleteConfirm ? (
-              <Button
-                variant="destructive"
-                onClick={() => setShowDeleteConfirm(true)}
-                className="flex items-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                삭제
-              </Button>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button variant="destructive" size="sm" onClick={handleDelete}>
-                  확인
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowDeleteConfirm(false)}
-                >
-                  취소
-                </Button>
-              </div>
-            )}
-          </div>
-
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleClose}>
               취소
