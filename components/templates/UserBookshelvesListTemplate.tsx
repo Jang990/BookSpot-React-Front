@@ -182,7 +182,13 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
         <div className="grid grid-cols-3 gap-2 h-24">
           {shelf.thumbnailImageIsbn.map((isbn) => (
             <div key={isbn}>
-              <BookPreviewImage id={shelf.id} isbn13={isbn} height="h-24" />
+              <BookPreviewImage
+                id={shelf.id}
+                isbn13={isbn}
+                height="h-24"
+                title={null}
+                rank={null}
+              />
             </div>
           ))}
           {Array.from({ length: 3 - shelf.thumbnailImageIsbn.length }).map(

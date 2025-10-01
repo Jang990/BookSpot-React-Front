@@ -1,13 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
 import { RankingBadge } from "../atoms/badge/RankingBadge";
 
 interface BookImageProps {
   id: string;
-  height?: string;
-  title?: string;
+  height?: "h-64" | "h-24";
+  title: string | null;
   isbn13: string;
-  rank?: number;
+  rank?: number | null;
 }
 
 export const BookPreviewImage = ({
