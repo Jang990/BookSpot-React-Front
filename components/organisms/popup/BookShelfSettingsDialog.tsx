@@ -18,11 +18,17 @@ import { Switch } from "@/components/ui/switch";
 import { deleteBookshelf, updateBookshelf } from "@/utils/api/BookshelfApi";
 
 interface BookshelfSettingsDialogProps {
-  bookshelf: BookshelfDetailResponseSpec;
+  bookshelf: ShelfSettingOptions;
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
   onDelete: () => void;
+}
+
+export interface ShelfSettingOptions {
+  id: string;
+  name: string;
+  isPublic: boolean;
 }
 
 export const BookshelfSettingsDialog = ({

@@ -127,7 +127,11 @@ export default function BookshelfDetailPage() {
         )}
 
         <BookshelfSettingsDialog
-          bookshelf={bookshelf}
+          bookshelf={{
+            id: bookshelf.id,
+            name: bookshelf.name,
+            isPublic: bookshelf.isPublic,
+          }}
           isOpen={showSettings}
           onClose={() => setShowSettings(false)}
           onUpdate={handleUpdateBookshelf}
