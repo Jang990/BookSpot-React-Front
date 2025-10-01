@@ -147,7 +147,7 @@ const BookshelfCardHeader = ({
   return (
     <CardHeader className="pb-3">
       <div className="flex items-center justify-between">
-        <CardTitle className="text-lg font-semibold truncate hover:text-primary transition-colors">
+        <CardTitle className="text-lg font-semibold truncate">
           {shelf.name}
         </CardTitle>
         <div
