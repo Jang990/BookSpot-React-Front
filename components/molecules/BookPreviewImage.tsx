@@ -4,13 +4,15 @@ import { RankingBadge } from "../atoms/badge/RankingBadge";
 
 interface BookImageProps {
   id: string;
-  title: string | null;
+  height?: string;
+  title?: string;
   isbn13: string;
-  rank: number | null;
+  rank?: number;
 }
 
 export const BookPreviewImage = ({
   id,
+  height,
   title,
   isbn13,
   rank,
@@ -21,11 +23,11 @@ export const BookPreviewImage = ({
       target="_blank"
       href={`https://search.kyobobook.co.kr/search?keyword=${isbn13}`}
     >
-      <div className="relative h-64 bg-muted">
+      <div className={`relative bg-muted ${height ?? "h-64"}`}>
         {rank && <RankingBadge rank={rank} />}
         <Image
           src={imageUrl}
-          alt={title ?? "알 수 없는 책 제목"}
+          alt={title ?? "교보문고 페이지로 이동"}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
           className="object-contain"

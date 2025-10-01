@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/dialog";
 import type { BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book, MoreVertical } from "lucide-react";
-import Image from "next/image";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
+import { BookPreviewImage } from "../molecules/BookPreviewImage";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -181,17 +181,8 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
       {shelf.thumbnailImageIsbn.length > 0 ? (
         <div className="grid grid-cols-3 gap-2 h-24">
           {shelf.thumbnailImageIsbn.map((isbn) => (
-            <div
-              key={isbn}
-              className="relative bg-muted rounded overflow-hidden"
-            >
-              <Image
-                src={`https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn}.jpg`}
-                alt="책 표지"
-                fill
-                className="object-cover"
-                unoptimized
-              />
+            <div key={isbn}>
+              <BookPreviewImage id={shelf.id} isbn13={isbn} height="h-24" />
             </div>
           ))}
           {Array.from({ length: 3 - shelf.thumbnailImageIsbn.length }).map(
