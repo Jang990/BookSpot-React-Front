@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { BookshelfSummary } from "@/types/Bookshelf";
-import { Plus, Book, Edit3 } from "lucide-react";
+import { Plus, Book, MoreVertical } from "lucide-react";
 import Image from "next/image";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
@@ -157,7 +157,7 @@ const BookshelfCardHeader = ({
             onClick={() => onEdit(shelf)}
             className="opacity-0 group-hover:opacity-100 transition-opacity"
           >
-            <Edit3 className="w-3 h-3" />
+            <MoreVertical className="w-3 h-3" />
           </Button>
         </div>
       </div>
