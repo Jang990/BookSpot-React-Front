@@ -12,11 +12,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { BookshelfSummary } from "@/types/Bookshelf";
-import { Plus, Book, Edit3 } from "lucide-react";
-import Image from "next/image";
+import { Plus, Book, MoreVertical } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
+import { BookPreviewImage } from "../molecules/BookPreviewImage";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -128,10 +128,12 @@ export const BookshelfCard = ({
   onEdit: (shelf: BookshelfSummary) => void;
 }) => {
   return (
-    <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-      <BookshelfCardHeader shelf={shelf} onEdit={onEdit} />
-      <BookshelfCardContent shelf={shelf} />
-    </Card>
+    <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
+      <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+        <BookshelfCardHeader shelf={shelf} onEdit={onEdit} />
+        <BookshelfCardContent shelf={shelf} />
+      </Card>
+    </Link>
   );
 };
 
@@ -144,20 +146,19 @@ const BookshelfCardHeader = ({
 }) => {
   return (
     <CardHeader className="pb-3">
-      <div className="flex items-center justify-between">
-        <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
-          <CardTitle className="text-lg font-semibold truncate hover:text-primary transition-colors">
-            {shelf.name}
-          </CardTitle>
-        </Link>
-        <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onEdit(shelf)}
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <Edit3 className="w-3 h-3" />
+      <div className="flex items-start justify-between">
+        <CardTitle className="text-lg font-semibold line-clamp-2">
+          {shelf.name}
+        </CardTitle>
+        <div
+          className="flex items-center gap-1"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+        >
+          <Button variant="ghost" size="sm" onClick={() => onEdit(shelf)}>
+            <MoreVertical className="w-3 h-3" />
           </Button>
         </div>
       </div>
@@ -177,43 +178,39 @@ const BookshelfCardHeader = ({
 const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
   return (
     <CardContent>
-      <Link href={`/bookshelves/${shelf.id}`}>
-        {shelf.thumbnailImageIsbn.length > 0 ? (
-          <div className="grid grid-cols-3 gap-2 h-24">
-            {shelf.thumbnailImageIsbn.map((isbn) => (
-              <div
-                key={isbn}
-                className="relative bg-muted rounded overflow-hidden"
-              >
-                <Image
-                  src={`https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn}.jpg`}
-                  alt="책 표지"
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
-            ))}
-            {Array.from({ length: 3 - shelf.thumbnailImageIsbn.length }).map(
-              (_, index) => (
-                <div
-                  key={`empty-${index}`}
-                  className="bg-muted rounded flex items-center justify-center"
-                >
-                  <Book className="w-4 h-4 text-muted-foreground" />
-                </div>
-              )
-            )}
-          </div>
-        ) : (
-          <div className="h-24 bg-muted rounded flex items-center justify-center">
-            <div className="text-center text-muted-foreground">
-              <Book className="w-8 h-8 mx-auto mb-1" />
-              <p className="text-xs">책이 없습니다</p>
+      {shelf.thumbnailImageIsbn.length > 0 ? (
+        <div className="grid grid-cols-3 gap-2 h-24">
+          {shelf.thumbnailImageIsbn.map((isbn) => (
+            <div key={isbn}>
+              <BookPreviewImage
+                id={shelf.id}
+                isbn13={isbn}
+                height="h-24"
+                title={null}
+                rank={null}
+                clickDisabled
+              />
             </div>
+          ))}
+          {Array.from({ length: 3 - shelf.thumbnailImageIsbn.length }).map(
+            (_, index) => (
+              <div
+                key={`empty-${index}`}
+                className="bg-muted rounded flex items-center justify-center"
+              >
+                <Book className="w-4 h-4 text-muted-foreground" />
+              </div>
+            )
+          )}
+        </div>
+      ) : (
+        <div className="h-24 bg-muted rounded flex items-center justify-center">
+          <div className="text-center text-muted-foreground">
+            <Book className="w-8 h-8 mx-auto mb-1" />
+            <p className="text-xs">책이 없습니다</p>
           </div>
-        )}
-      </Link>
+        </div>
+      )}
     </CardContent>
   );
 };
