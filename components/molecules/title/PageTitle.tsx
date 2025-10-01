@@ -5,12 +5,22 @@ interface Props {
   text: string;
 }
 
+const Title = ({ title }: { title: string }) => {
+  return (
+    <h1 className="text-2xl font-semibold text-gray-800 select-none">
+      {title}
+    </h1>
+  );
+};
+
+const SubLabel = ({ subLabel }: { subLabel: string }) => {
+  return <p className="text-muted-foreground">{subLabel}</p>;
+};
+
 export const PageTitle = ({ text }: Props) => {
   return (
     <div className="p-4 pb-5">
-      <h1 className="text-2xl font-semibold text-gray-800 select-none">
-        {text}
-      </h1>
+      <Title title={text} />
     </div>
   );
 };
@@ -24,10 +34,10 @@ export const TitleAndSubLabel = ({
 }) => {
   return (
     <div className="p-4 pb-5">
-      <h1 className="text-2xl font-semibold text-gray-800 select-none mb-2">
-        {title}
-      </h1>
-      <p className="text-muted-foreground">{subLabel}</p>
+      <div className="mb-2">
+        <Title title={title} />
+      </div>
+      <SubLabel subLabel={subLabel} />
     </div>
   );
 };
