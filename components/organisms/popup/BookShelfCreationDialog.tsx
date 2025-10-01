@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { createBookshelf } from "@/utils/api/BookshelfApi";
+import { MAX_SHELF_NAME_LENGTH } from "@/types/Bookshelf";
 
 interface BookshelfSettingsDialogProps {
   isOpen: boolean;
@@ -71,7 +72,7 @@ export const BookshelfCreationDialog = ({
               onChange={(e) => setName(e.target.value)}
               className="col-span-3"
               placeholder="책장 이름을 입력하세요"
-              maxLength={50}
+              maxLength={MAX_SHELF_NAME_LENGTH}
             />
           </div>
 
