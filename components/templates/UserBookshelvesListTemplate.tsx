@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -27,6 +29,11 @@ export const UserBookshelvesListTemplate = () => {
     null
   );
   const [editName, setEditName] = useState("");
+
+  const [deletingShelf, setDeletingShelf] = useState<BookshelfSummary | null>(
+    null
+  );
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     fetchUserBookshelvesSummary({ userId: "1", side: "client" }).then(
@@ -55,6 +62,26 @@ export const UserBookshelvesListTemplate = () => {
     setEditName(shelf.name);
   };
 
+  // 삭제 시작 함수 (어떤 책장을 삭제할지 상태에 저장하고, 다이얼로그를 염)
+  const startDeleting = (shelf: BookshelfSummary) => {
+    setDeletingShelf(shelf);
+    setShowDeleteDialog(true);
+  };
+
+  // 삭제 로직
+  const deleteBookshelf = () => {
+    if (!deletingShelf) return;
+
+    // deletingShelf의 id와 다른 책장들만 남김
+    setBookshelves(
+      bookshelves.filter((shelf) => shelf.id !== deletingShelf.id)
+    );
+
+    // 다이얼로그 닫고, 삭제할 책장 정보 초기화
+    setShowDeleteDialog(false);
+    setDeletingShelf(null);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div>
@@ -67,7 +94,12 @@ export const UserBookshelvesListTemplate = () => {
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookshelves.map((shelf) => (
-            <BookshelfCard key={shelf.id} shelf={shelf} onEdit={startEditing} />
+            <BookshelfCard
+              key={shelf.id}
+              shelf={shelf}
+              onEdit={startEditing}
+              onDelete={startDeleting}
+            />
           ))}
         </div>
 
@@ -107,6 +139,15 @@ export const UserBookshelvesListTemplate = () => {
             setShowCreateDialog(false);
           }}
         />
+        <DeleteBookshelfDialog
+          isOpen={showDeleteDialog}
+          shelf={deletingShelf}
+          onDelete={deleteBookshelf}
+          onClose={() => {
+            setShowDeleteDialog(false);
+            setDeletingShelf(null);
+          }}
+        />
       </div>
     </div>
   );
@@ -115,14 +156,20 @@ export const UserBookshelvesListTemplate = () => {
 export const BookshelfCard = ({
   shelf,
   onEdit,
+  onDelete,
 }: {
   shelf: BookshelfSummary;
   onEdit: (shelf: BookshelfSummary) => void;
+  onDelete: (shelf: BookshelfSummary) => void;
 }) => {
   return (
     <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
       <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-        <BookshelfCardHeader shelf={shelf} onEdit={onEdit} />
+        <BookshelfCardHeader
+          shelf={shelf}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
         <BookshelfCardContent shelf={shelf} />
       </Card>
     </Link>
@@ -132,9 +179,11 @@ export const BookshelfCard = ({
 const BookshelfCardHeader = ({
   shelf,
   onEdit,
+  onDelete,
 }: {
   shelf: BookshelfSummary;
   onEdit: (shelf: BookshelfSummary) => void;
+  onDelete: (shelf: BookshelfSummary) => void;
 }) => {
   return (
     <CardHeader className="pb-3">
@@ -160,7 +209,7 @@ const BookshelfCardHeader = ({
               {
                 icon: <Trash2 className="h-4 w-4" />,
                 label: "책장 삭제",
-                onClick: () => onEdit(shelf),
+                onClick: () => onDelete(shelf),
               },
             ]}
           />
@@ -253,6 +302,74 @@ const EditBookshelfDialog = ({
             <Button onClick={onUpdate}>변경</Button>
           </div>
         </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const DELETE_CONFIRMATION_TEXT = "삭제하기"; // 오타 방지를 위해 상수로 관리
+const DeleteBookshelfDialog = ({
+  isOpen,
+  shelf,
+  onDelete,
+  onClose,
+}: {
+  isOpen: boolean;
+  shelf: BookshelfSummary | null;
+  onDelete: () => void;
+  onClose: () => void;
+}) => {
+  // 2. 사용자가 입력하는 텍스트를 관리할 state 추가
+  const [confirmationText, setConfirmationText] = useState("");
+
+  // 3. 다이얼로그가 열릴 때마다 입력창을 초기화하는 로직 추가
+  useEffect(() => {
+    if (isOpen) {
+      setConfirmationText("");
+    }
+  }, [isOpen]);
+
+  if (!isOpen || !shelf) return null;
+
+  // 4. 입력된 텍스트와 확인 텍스트가 일치하는지 확인
+  const isDeleteButtonEnabled = confirmationText === DELETE_CONFIRMATION_TEXT;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>책장 삭제</DialogTitle>
+          <DialogDescription className="pt-2">
+            이 작업은 되돌릴 수 없습니다. '{shelf.name}' 책장을 영구적으로
+            삭제하려면, 아래에{" "}
+            <b className="text-red-500">{DELETE_CONFIRMATION_TEXT}</b>를
+            입력해주세요.
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* 5. 텍스트 입력창 추가 */}
+        <div className="py-2">
+          <Input
+            value={confirmationText}
+            onChange={(e) => setConfirmationText(e.target.value)}
+            placeholder={DELETE_CONFIRMATION_TEXT}
+            autoComplete="off"
+          />
+        </div>
+
+        <DialogFooter className="flex justify-end gap-2">
+          <Button variant="outline" onClick={onClose}>
+            취소
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={onDelete}
+            // 6. 텍스트가 일치할 때만 버튼 활성화
+            disabled={!isDeleteButtonEnabled}
+          >
+            삭제
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
