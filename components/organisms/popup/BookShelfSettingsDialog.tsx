@@ -10,19 +10,24 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Trash2 } from "lucide-react";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { deleteBookshelf, updateBookshelf } from "@/utils/api/BookshelfApi";
+import { updateBookshelf } from "@/utils/api/BookshelfApi";
+import { MAX_SHELF_NAME_LENGTH } from "@/types/Bookshelf";
 
 interface BookshelfSettingsDialogProps {
-  bookshelf: BookshelfDetailResponseSpec;
+  bookshelf?: ShelfSettingOptions;
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
-  onDelete: () => void;
+}
+
+export interface ShelfSettingOptions {
+  id: string;
+  name: string;
+  isPublic: boolean;
 }
 
 export const BookshelfSettingsDialog = ({
@@ -30,12 +35,12 @@ export const BookshelfSettingsDialog = ({
   isOpen,
   onClose,
   onUpdate,
-  onDelete,
 }: BookshelfSettingsDialogProps) => {
+  if (!bookshelf || !isOpen) return null;
+
   const [shelfId, setShelfId] = useState(bookshelf.id);
   const [name, setName] = useState(bookshelf.name);
   const [isPublic, setIsPublic] = useState(bookshelf.isPublic);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleSave = () => {
     if (name.trim() === "") {
@@ -53,26 +58,19 @@ export const BookshelfSettingsDialog = ({
     });
   };
 
-  const handleDelete = () => {
-    deleteBookshelf({ shelfId: shelfId, side: "client" }).then(() => {
-      handleClose();
-      setShowDeleteConfirm(false);
-      onDelete();
-      onClose();
-    });
-  };
-
   const handleClose = () => {
     setShelfId("0");
     setName(bookshelf.name);
     setIsPublic(bookshelf.isPublic);
-    setShowDeleteConfirm(false);
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>책장 설정</DialogTitle>
           <DialogDescription>
@@ -83,7 +81,7 @@ export const BookshelfSettingsDialog = ({
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              이름
+              책장 이름
             </Label>
             <Input
               id="name"
@@ -91,7 +89,7 @@ export const BookshelfSettingsDialog = ({
               onChange={(e) => setName(e.target.value)}
               className="col-span-3"
               placeholder="책장 이름을 입력하세요"
-              maxLength={50}
+              maxLength={MAX_SHELF_NAME_LENGTH}
             />
           </div>
 
@@ -115,32 +113,6 @@ export const BookshelfSettingsDialog = ({
         </div>
 
         <DialogFooter className="flex justify-between">
-          <div>
-            {!showDeleteConfirm ? (
-              <Button
-                variant="destructive"
-                onClick={() => setShowDeleteConfirm(true)}
-                className="flex items-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                삭제
-              </Button>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button variant="destructive" size="sm" onClick={handleDelete}>
-                  확인
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowDeleteConfirm(false)}
-                >
-                  취소
-                </Button>
-              </div>
-            )}
-          </div>
-
           <div className="flex gap-2">
             <Button variant="outline" onClick={handleClose}>
               취소

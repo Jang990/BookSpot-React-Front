@@ -2,31 +2,27 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import type { BookshelfSummary } from "@/types/Bookshelf";
-import { Plus, Book, MoreVertical } from "lucide-react";
+import { MAX_USER_SHELF_SIZE, type BookshelfSummary } from "@/types/Bookshelf";
+import { Plus, Book, MoreVertical, Edit, Trash2 } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { PageTitleAndButton } from "../molecules/title/PageTitle";
-import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
+import { CommonIconDropdown } from "../atoms/button/icon/CommonIconButton";
+import { BookshelfSettingsDialog } from "../organisms/popup/BookShelfSettingsDialog";
+import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
+import { DeleteBookshelfDialog } from "../organisms/popup/ShelfDeleteDialog";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [editingShelf, setEditingShelf] = useState<BookshelfSummary | null>(
+
+  const [selectedShelf, setSelectedShelf] = useState<BookshelfSummary | null>(
     null
   );
-  const [editName, setEditName] = useState("");
+  const [dialogType, setDialogType] = useState<"edit" | "delete" | null>(null);
 
   useEffect(() => {
     fetchUserBookshelvesSummary({ userId: "1", side: "client" }).then(
@@ -36,23 +32,49 @@ export const UserBookshelvesListTemplate = () => {
     );
   }, []);
 
-  const updateBookshelfName = () => {
-    if (!editingShelf || editName.trim() === "") {
-      alert("책장 이름을 입력해주세요.");
-      return;
-    }
-
-    const updated = bookshelves.map((shelf) =>
-      shelf.id === editingShelf.id ? { ...shelf, name: editName.trim() } : shelf
-    );
-    setBookshelves(updated);
-    setEditingShelf(null);
-    setEditName("");
+  // 다이얼로그를 닫고 상태를 초기화하는 공통 함수
+  const handleCloseDialog = () => {
+    setSelectedShelf(null);
+    setDialogType(null);
   };
 
+  // 책장 이름 업데이트
+  const updateBookshelfName = (newShelf: BookshelfDetailResponseSpec) => {
+    if (!selectedShelf) return;
+
+    const updated = bookshelves.map((shelf) =>
+      shelf.id === selectedShelf.id
+        ? {
+            ...shelf,
+            name: newShelf.name.trim(),
+            isPublic: newShelf.isPublic,
+            createdAt: newShelf.createdAt,
+          }
+        : shelf
+    );
+    setBookshelves(updated);
+    handleCloseDialog(); // 다이얼로그 닫기
+  };
+
+  // 책장 삭제
+  const deleteBookshelf = () => {
+    if (!selectedShelf) return;
+    setBookshelves(
+      bookshelves.filter((shelf) => shelf.id !== selectedShelf.id)
+    );
+    handleCloseDialog(); // 다이얼로그 닫기
+  };
+
+  // 수정 시작 함수
   const startEditing = (shelf: BookshelfSummary) => {
-    setEditingShelf(shelf);
-    setEditName(shelf.name);
+    setSelectedShelf(shelf);
+    setDialogType("edit");
+  };
+
+  // 삭제 시작 함수
+  const startDeleting = (shelf: BookshelfSummary) => {
+    setSelectedShelf(shelf);
+    setDialogType("delete");
   };
 
   return (
@@ -60,14 +82,19 @@ export const UserBookshelvesListTemplate = () => {
       <div>
         <PageTitleAndButton
           title="내 책장"
-          subLabel={`${bookshelves.length} / 5개 사용중`}
+          subLabel={`${bookshelves.length} / ${MAX_USER_SHELF_SIZE}개 사용중`}
           btnIcon={<Plus onClick={() => console.log("HelloWorld!")} />}
-          btnDisabled={bookshelves.length >= 5}
+          btnDisabled={bookshelves.length >= MAX_USER_SHELF_SIZE}
           onClickBtn={() => setShowCreateDialog(true)}
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookshelves.map((shelf) => (
-            <BookshelfCard key={shelf.id} shelf={shelf} onEdit={startEditing} />
+            <BookshelfCard
+              key={shelf.id}
+              shelf={shelf}
+              onEdit={startEditing}
+              onDelete={startDeleting}
+            />
           ))}
         </div>
 
@@ -81,13 +108,6 @@ export const UserBookshelvesListTemplate = () => {
           </div>
         )}
 
-        <EditBookshelfDialog
-          editingShelf={editingShelf}
-          editName={editName}
-          setEditName={setEditName}
-          onUpdate={updateBookshelfName}
-          onClose={() => setEditingShelf(null)}
-        />
         <BookshelfCreationDialog
           isOpen={showCreateDialog}
           onClose={() => {
@@ -107,6 +127,18 @@ export const UserBookshelvesListTemplate = () => {
             setShowCreateDialog(false);
           }}
         />
+        <BookshelfSettingsDialog
+          bookshelf={selectedShelf ?? undefined}
+          isOpen={dialogType === "edit"}
+          onClose={handleCloseDialog}
+          onUpdate={updateBookshelfName}
+        />
+        <DeleteBookshelfDialog
+          isOpen={dialogType === "delete"}
+          shelf={selectedShelf}
+          onDelete={deleteBookshelf}
+          onClose={handleCloseDialog}
+        />
       </div>
     </div>
   );
@@ -115,14 +147,20 @@ export const UserBookshelvesListTemplate = () => {
 export const BookshelfCard = ({
   shelf,
   onEdit,
+  onDelete,
 }: {
   shelf: BookshelfSummary;
   onEdit: (shelf: BookshelfSummary) => void;
+  onDelete: (shelf: BookshelfSummary) => void;
 }) => {
   return (
     <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
       <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
-        <BookshelfCardHeader shelf={shelf} onEdit={onEdit} />
+        <BookshelfCardHeader
+          shelf={shelf}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
         <BookshelfCardContent shelf={shelf} />
       </Card>
     </Link>
@@ -132,9 +170,11 @@ export const BookshelfCard = ({
 const BookshelfCardHeader = ({
   shelf,
   onEdit,
+  onDelete,
 }: {
   shelf: BookshelfSummary;
   onEdit: (shelf: BookshelfSummary) => void;
+  onDelete: (shelf: BookshelfSummary) => void;
 }) => {
   return (
     <CardHeader className="pb-3">
@@ -149,9 +189,20 @@ const BookshelfCardHeader = ({
             e.preventDefault();
           }}
         >
-          <CommonIconButton
+          <CommonIconDropdown
             icon={<MoreVertical className="w-3 h-3" />}
-            onClick={() => onEdit(shelf)}
+            items={[
+              {
+                icon: <Edit className="h-4 w-4" />,
+                label: "책장 설정",
+                onClick: () => onEdit(shelf),
+              },
+              {
+                icon: <Trash2 className="h-4 w-4" />,
+                label: "책장 삭제",
+                onClick: () => onDelete(shelf),
+              },
+            ]}
           />
         </div>
       </div>
@@ -205,44 +256,5 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
         </div>
       )}
     </CardContent>
-  );
-};
-
-const EditBookshelfDialog = ({
-  editingShelf,
-  editName,
-  setEditName,
-  onUpdate,
-  onClose,
-}: {
-  editingShelf: BookshelfSummary | null;
-  editName: string;
-  setEditName: (v: string) => void;
-  onUpdate: () => void;
-  onClose: () => void;
-}) => {
-  return (
-    <Dialog open={!!editingShelf} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>책장 이름 변경</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4 py-4">
-          <Input
-            placeholder="새 책장 이름을 입력하세요"
-            value={editName}
-            onChange={(e) => setEditName(e.target.value)}
-            maxLength={50}
-            onKeyDown={(e) => e.key === "Enter" && onUpdate()}
-          />
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={onClose}>
-              취소
-            </Button>
-            <Button onClick={onUpdate}>변경</Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
   );
 };
