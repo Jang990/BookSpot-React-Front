@@ -147,7 +147,9 @@ const BookshelfCardHeader = ({
   return (
     <CardHeader className="pb-3">
       <div className="flex items-start justify-between">
-        <CardTitle className="text-lg font-semibold">{shelf.name}</CardTitle>
+        <CardTitle className="text-lg font-semibold line-clamp-2">
+          {shelf.name}
+        </CardTitle>
         <div
           className="flex items-center gap-1"
           onClick={(e) => {
