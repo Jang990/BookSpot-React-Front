@@ -60,8 +60,7 @@ export const UserBookshelvesListTemplate = () => {
         <PageTitleAndButton
           title="내 책장"
           subLabel={`${bookshelves.length} / 5개 사용중`}
-          btnText="책장 추가"
-          btnIcon={<Plus />}
+          btnIcon={<Plus onClick={() => console.log("HelloWorld!")} />}
           btnDisabled={bookshelves.length >= 5}
           onClickBtn={() => setShowCreateDialog(true)}
         />

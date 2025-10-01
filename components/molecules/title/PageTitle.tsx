@@ -61,7 +61,6 @@ export const PageTitlAndSubLabel = ({ title, label }: TitleAndLabel) => {
 interface TitleAndButtonProps {
   title: string;
   subLabel?: string;
-  btnText: string;
   btnIcon?: React.ReactNode;
   btnDisabled: boolean;
   onClickBtn: () => void;
@@ -71,7 +70,6 @@ export const PageTitleAndButton = ({
   title,
   subLabel,
 
-  btnText,
   btnDisabled,
   btnIcon,
   onClickBtn,
@@ -85,14 +83,14 @@ export const PageTitleAndButton = ({
           <Title title={title} />
         )}
 
-        <div className="pb-1">
+        <div>
           <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClickBtn}
             disabled={btnDisabled}
-            onClick={() => onClickBtn()}
-            className="flex items-center gap-2 pe-3"
           >
             {btnIcon}
-            {btnText}
           </Button>
         </div>
       </div>
