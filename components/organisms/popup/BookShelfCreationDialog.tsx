@@ -23,7 +23,7 @@ interface BookshelfSettingsDialogProps {
 
 export const BookshelfCreationDialog = ({
   isOpen,
-  onClose,
+  onClose = () => {},
   onCreate: onCreate,
 }: BookshelfSettingsDialogProps) => {
   const DEFAULT_NAME = "";
