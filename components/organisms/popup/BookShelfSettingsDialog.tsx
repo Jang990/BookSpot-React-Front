@@ -10,7 +10,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { updateBookshelf } from "@/utils/api/BookshelfApi";
 import {
   ShelfNameInput,
@@ -18,13 +17,13 @@ import {
 } from "@/components/molecules/shelf/ShelfForm";
 
 interface BookshelfSettingsDialogProps {
-  bookshelf?: ShelfSettingOptions;
+  bookshelf?: ShelfUpdateOptions;
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
+  onUpdate: (updatedBookshelf: ShelfUpdateOptions) => void;
 }
 
-export interface ShelfSettingOptions {
+export interface ShelfUpdateOptions {
   id: string;
   name: string;
   isPublic: boolean;
@@ -52,8 +51,8 @@ export const BookshelfSettingsDialog = ({
       shelfId: shelfId,
       creationRequest: { name: name, isPublic: isPublic },
       side: "client",
-    }).then((response) => {
-      onUpdate(response);
+    }).then(() => {
+      onUpdate({ id: shelfId, name: name, isPublic: isPublic });
       onClose();
     });
   };

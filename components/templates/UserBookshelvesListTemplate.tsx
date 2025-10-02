@@ -11,7 +11,10 @@ import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDia
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { PageTitleAndButton } from "../molecules/title/PageTitle";
 import { CommonIconDropdown } from "../atoms/button/icon/CommonIconButton";
-import { BookshelfSettingsDialog } from "../organisms/popup/BookShelfSettingsDialog";
+import {
+  BookshelfSettingsDialog,
+  ShelfUpdateOptions,
+} from "../organisms/popup/BookShelfSettingsDialog";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { DeleteBookshelfDialog } from "../organisms/popup/ShelfDeleteDialog";
 
@@ -38,8 +41,8 @@ export const UserBookshelvesListTemplate = () => {
     setDialogType(null);
   };
 
-  // 책장 이름 업데이트
-  const updateBookshelfName = (newShelf: BookshelfDetailResponseSpec) => {
+  // 책장 업데이트
+  const updateBookshelf = (newShelf: ShelfUpdateOptions) => {
     if (!selectedShelf) return;
 
     const updated = bookshelves.map((shelf) =>
@@ -48,7 +51,7 @@ export const UserBookshelvesListTemplate = () => {
             ...shelf,
             name: newShelf.name.trim(),
             isPublic: newShelf.isPublic,
-            createdAt: newShelf.createdAt,
+            createdAt: new Date().toISOString(),
           }
         : shelf
     );
@@ -134,7 +137,7 @@ export const UserBookshelvesListTemplate = () => {
           bookshelf={selectedShelf ?? undefined}
           isOpen={dialogType === "edit"}
           onClose={handleCloseDialog}
-          onUpdate={updateBookshelfName}
+          onUpdate={updateBookshelf}
         />
         <DeleteBookshelfDialog
           isOpen={dialogType === "delete"}

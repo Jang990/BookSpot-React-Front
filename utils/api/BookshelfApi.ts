@@ -95,13 +95,11 @@ export const updateBookshelf = async ({
   shelfId,
   creationRequest,
   side,
-}: BookshelfUpdateProps): Promise<BookshelfDetailResponseSpec> => {
+}: BookshelfUpdateProps): Promise<void> => {
   const response = await getApiClient(side).PATCH<BookshelfDetailResponseSpec>(
     `/api/users/shelves/${shelfId}`,
     creationRequest
   );
 
   if (!response.ok) throw response.error;
-  if (!response.data) throw new Error("데이터가 존재하지 않음");
-  return response.data;
 };

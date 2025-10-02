@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ShelfSettingOptions } from "./BookShelfSettingsDialog";
+import { ShelfUpdateOptions } from "./BookShelfSettingsDialog";
 import { useEffect, useState } from "react";
 import { deleteBookshelf } from "@/utils/api/BookshelfApi";
 
@@ -21,7 +21,7 @@ export const DeleteBookshelfDialog = ({
   onClose,
 }: {
   isOpen: boolean;
-  shelf: ShelfSettingOptions | null;
+  shelf: ShelfUpdateOptions | null;
   onDelete: () => void;
   onClose: () => void;
 }) => {
