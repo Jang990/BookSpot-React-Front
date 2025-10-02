@@ -77,6 +77,21 @@ export const UserBookshelvesListTemplate = () => {
     setDialogType("delete");
   };
 
+  // 새로운 책장을 UI 리스트에 추가
+  const addNewShelfToUiList = (shelf: BookshelfDetailResponseSpec) => {
+    const newShelf: BookshelfSummary = {
+      id: shelf.id,
+      name: shelf.name,
+      bookCount: shelf.bookCount,
+      createdAt: shelf.createdAt,
+      isPublic: shelf.isPublic,
+      thumbnailImageIsbn: [],
+    };
+
+    setBookshelves([...bookshelves, newShelf]);
+    setShowCreateDialog(false);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div>
@@ -113,19 +128,7 @@ export const UserBookshelvesListTemplate = () => {
           onClose={() => {
             setShowCreateDialog(false);
           }}
-          onCreate={(shelf) => {
-            const newShelf: BookshelfSummary = {
-              id: shelf.id,
-              name: shelf.name,
-              bookCount: shelf.bookCount,
-              createdAt: shelf.createdAt,
-              isPublic: shelf.isPublic,
-              thumbnailImageIsbn: [],
-            };
-
-            setBookshelves([...bookshelves, newShelf]);
-            setShowCreateDialog(false);
-          }}
+          onCreate={addNewShelfToUiList}
         />
         <BookshelfSettingsDialog
           bookshelf={selectedShelf ?? undefined}
