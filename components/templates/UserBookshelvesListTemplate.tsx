@@ -238,7 +238,7 @@ const BookshelfCardContent = ({ shelf }: { shelf: BookshelfSummary }) => {
                 height="h-24"
                 title={null}
                 rank={null}
-                clickDisabled
+                disabledClick
               />
             </div>
           ))}
