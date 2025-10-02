@@ -6,7 +6,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 import React, { useState } from "react";
+
+export interface IconTextButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  icon: React.ReactNode;
+}
+
+export const IconTextButton = React.forwardRef<
+  HTMLButtonElement,
+  IconTextButtonProps
+>(({ className, children, icon, ...props }, ref) => {
+  return (
+    <button
+      className={cn(
+        "inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors bg-background hover:bg-muted disabled:pointer-events-none",
+        className
+      )}
+      ref={ref}
+      {...props}
+    >
+      {icon}
+      <span>{children}</span>
+    </button>
+  );
+});
 
 export const CommonIconButton = ({
   icon,
