@@ -9,10 +9,10 @@ import { useRouter } from "next/navigation";
 
 interface BookInfoProps {
   book: BookPreview;
-  actionButtons: ReactNode[];
+  actionButton: ReactNode;
 }
 
-export const BookInfo = ({ book, actionButtons }: BookInfoProps) => {
+export const BookInfo = ({ book, actionButton }: BookInfoProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const router = useRouter();
 
@@ -32,19 +32,9 @@ export const BookInfo = ({ book, actionButtons }: BookInfoProps) => {
         isbn13={book.isbn13}
         rank={book.rank}
         isHovered={isHovered}
+        actionButton={actionButton}
       />
       <BookPreviewInfo book={book} />
-
-      <div
-        className={`absolute bottom-2 right-2 transition-opacity duration-200 ${isHovered ? "opacity-100" : "opacity-0"}`}
-      >
-        <MoveButton onClick={moveToMapSearch} />
-        {actionButtons.map((btn, i) => (
-          <span key={i} className="ml-2">
-            {btn}
-          </span>
-        ))}
-      </div>
     </div>
   );
 };

@@ -12,6 +12,7 @@ interface BookImageProps {
   clickDisabled?: boolean;
 
   isHovered?: boolean;
+  actionButton?: React.ReactNode;
 }
 
 export const BookPreviewImage = ({
@@ -22,6 +23,7 @@ export const BookPreviewImage = ({
   rank,
   clickDisabled = false,
   isHovered = false,
+  actionButton,
 }: BookImageProps) => {
   const imageUrl = `https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn13}.jpg`;
   const Wrapper = clickDisabled ? "div" : "a";
@@ -64,12 +66,13 @@ export const BookPreviewImage = ({
         >
           위치찾기
         </IconTextButton>
-        <IconTextButton
+        {actionButton}
+        {/* <IconTextButton
           icon={<Bookmark className="w-4 h-4" />}
           onClick={() => console.log("저장하기 클릭")}
         >
           저장하기
-        </IconTextButton>
+        </IconTextButton> */}
       </div>
     </Wrapper>
   );
