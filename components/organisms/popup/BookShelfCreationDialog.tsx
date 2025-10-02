@@ -10,12 +10,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { createBookshelf } from "@/utils/api/BookshelfApi";
-import { MAX_SHELF_NAME_LENGTH } from "@/types/Bookshelf";
-import { ShelfPublicSwitch } from "@/components/molecules/shelf/ShelfForm";
+import {
+  ShelfNameInput,
+  ShelfPublicSwitch,
+} from "@/components/molecules/shelf/ShelfForm";
 
 interface BookshelfSettingsDialogProps {
   isOpen: boolean;
@@ -63,20 +62,7 @@ export const BookshelfCreationDialog = ({
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              책장 이름
-            </Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="col-span-3"
-              placeholder="책장 이름을 입력하세요"
-              maxLength={MAX_SHELF_NAME_LENGTH}
-            />
-          </div>
-
+          <ShelfNameInput name={name} setName={setName} />
           <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
         </div>
 
