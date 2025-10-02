@@ -15,6 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { createBookshelf } from "@/utils/api/BookshelfApi";
 import { MAX_SHELF_NAME_LENGTH } from "@/types/Bookshelf";
+import { ShelfPublicSwitch } from "@/components/molecules/shelf/ShelfForm";
 
 interface BookshelfSettingsDialogProps {
   isOpen: boolean;
@@ -76,23 +77,7 @@ export const BookshelfCreationDialog = ({
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="public" className="text-right">
-              공개 설정
-            </Label>
-            <div className="col-span-3 flex items-center space-x-2">
-              <Switch
-                id="public"
-                checked={isPublic}
-                onCheckedChange={setIsPublic}
-              />
-              <Label htmlFor="public" className="text-sm text-muted-foreground">
-                {isPublic
-                  ? "다른 사용자가 볼 수 있습니다"
-                  : "나만 볼 수 있습니다"}
-              </Label>
-            </div>
-          </div>
+          <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
         </div>
 
         <DialogFooter className="flex justify-between">
