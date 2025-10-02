@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Settings, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
-import { BookshelfSettingsDialog } from "@/components/organisms/popup/BookShelfSettingsDialog";
+import {
+  BookshelfSettingsDialog,
+  ShelfUpdateOptions,
+} from "@/components/organisms/popup/BookShelfSettingsDialog";
 import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 
@@ -39,11 +42,15 @@ export default function BookshelfDetailPage() {
     setBookshelf(updatedBookshelf);
   };
 
-  const handleUpdateBookshelf = (
-    updatedBookshelf: BookshelfDetailResponseSpec
-  ) => {
-    setBookshelf(updatedBookshelf);
-    // In a real app, this would also update the backend
+  const handleUpdateBookshelf = (updatedBookshelf: ShelfUpdateOptions) => {
+    if (!bookshelf) return;
+
+    setBookshelf({
+      ...bookshelf,
+      name: updatedBookshelf.name.trim(),
+      isPublic: updatedBookshelf.isPublic,
+      createdAt: new Date().toISOString(),
+    });
   };
 
   const handleDeleteBookshelf = () => {
