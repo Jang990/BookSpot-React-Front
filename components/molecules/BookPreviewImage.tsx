@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import { RankingBadge } from "../atoms/badge/RankingBadge";
-import { Bookmark, ExternalLink, MapPinned } from "lucide-react";
+import { ExternalLink, MapPinned } from "lucide-react";
 import { IconTextButton } from "../atoms/button/icon/CommonIconButton";
+import { useRouter } from "next/navigation";
 
 interface BookImageProps {
   id: string;
@@ -21,21 +24,14 @@ export const BookPreviewImage = ({
   title,
   isbn13,
   rank,
-  clickDisabled = false,
   isHovered = false,
   actionButton,
 }: BookImageProps) => {
+  const router = useRouter();
   const imageUrl = `https://contents.kyobobook.co.kr/sih/fit-in/200x0/pdt/${isbn13}.jpg`;
-  const Wrapper = clickDisabled ? "div" : "a";
+
   return (
-    // 그냥 a 태그로 쓰다가 div, a로 바꿈 => 나중에 그냥 클릭 이벤트로 바뀔 것이다
-    <Wrapper
-      {...(!clickDisabled && {
-        target: "_blank",
-        href: `https://search.kyobobook.co.kr/search?keyword=${isbn13}`,
-      })}
-      className="relative block"
-    >
+    <div className="relative block">
       <div className={`relative bg-muted ${height ?? "h-64"}`}>
         {rank && <RankingBadge rank={rank} />}
         <Image
@@ -56,13 +52,18 @@ export const BookPreviewImage = ({
       >
         <IconTextButton
           icon={<ExternalLink className="w-4 h-4" />}
-          onClick={() => console.log("상세보기 클릭")}
+          onClick={() =>
+            window.open(
+              `https://search.kyobobook.co.kr/search?keyword=${isbn13}`,
+              "_blank"
+            )
+          }
         >
           상세보기
         </IconTextButton>
         <IconTextButton
           icon={<MapPinned className="w-4 h-4" />}
-          onClick={() => console.log("도서관 찾기 클릭")}
+          onClick={() => router.push(`/libraries/stock/search?bookIds=${id}`)}
         >
           위치찾기
         </IconTextButton>
@@ -74,6 +75,6 @@ export const BookPreviewImage = ({
           저장하기
         </IconTextButton> */}
       </div>
-    </Wrapper>
+    </div>
   );
 };

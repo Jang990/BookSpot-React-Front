@@ -4,8 +4,6 @@ import { ReactNode, useState } from "react";
 import { BookPreview } from "@/types/BookPreview";
 import { BookPreviewInfo } from "@/components/molecules/BookPreviewInfo";
 import { BookPreviewImage } from "@/components/molecules/BookPreviewImage";
-import { MoveButton } from "@/components/atoms/button/icon/MoveButton";
-import { useRouter } from "next/navigation";
 
 interface BookInfoProps {
   book: BookPreview;
@@ -14,11 +12,6 @@ interface BookInfoProps {
 
 export const BookInfo = ({ book, actionButton }: BookInfoProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
-
-  function moveToMapSearch() {
-    router.push(`/libraries/stock/search?bookIds=${book.id}`);
-  }
 
   return (
     <div
