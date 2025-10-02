@@ -31,6 +31,7 @@ export const BookInfo = ({ book, actionButtons }: BookInfoProps) => {
         title={book.title}
         isbn13={book.isbn13}
         rank={book.rank}
+        isHovered={isHovered}
       />
       <BookPreviewInfo book={book} />
 
