@@ -42,7 +42,7 @@ export const ShelfPublicSwitch = ({
       <div className="col-span-3 flex items-center space-x-2">
         <Switch id="public" checked={isPublic} onCheckedChange={setIsPublic} />
         <Label htmlFor="public" className="text-sm text-muted-foreground">
-          {isPublic ? "다른 사용자가 볼 수 있습니다" : "나만 볼 수 있습니다"}
+          {isPublic ? "다른 사용자와 함께 보기" : "혼자 보기"}
         </Label>
       </div>
     </div>
