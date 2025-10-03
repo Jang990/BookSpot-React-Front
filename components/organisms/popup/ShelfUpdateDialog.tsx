@@ -27,7 +27,7 @@ export interface ShelfUpdateOptions {
   isPublic: boolean;
 }
 
-export const BookshelfSettingsDialog = ({
+export const ShelfUpdateDialog = ({
   bookshelf,
   isOpen,
   onClose,

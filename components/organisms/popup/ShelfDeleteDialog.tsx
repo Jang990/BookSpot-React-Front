@@ -10,7 +10,7 @@ import {
   ModernDialogContent,
   ModernDialogFooter,
 } from "@/components/ui/custom-dialog";
-import { ShelfUpdateOptions } from "./BookShelfSettingsDialog";
+import { ShelfUpdateOptions } from "./ShelfUpdateDialog";
 
 const DELETE_CONFIRMATION_TEXT = "삭제하기";
 

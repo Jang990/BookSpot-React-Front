@@ -7,9 +7,9 @@ import { ArrowLeft, Settings, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
 import {
-  BookshelfSettingsDialog,
+  ShelfUpdateDialog,
   ShelfUpdateOptions,
-} from "@/components/organisms/popup/BookShelfSettingsDialog";
+} from "@/components/organisms/popup/ShelfUpdateDialog";
 import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 
@@ -133,7 +133,7 @@ export default function BookshelfDetailPage() {
           </div>
         )}
 
-        <BookshelfSettingsDialog
+        <ShelfUpdateDialog
           bookshelf={{
             id: bookshelf.id,
             name: bookshelf.name,

@@ -12,9 +12,9 @@ import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { PageTitleAndButton } from "../molecules/title/PageTitle";
 import { CommonIconDropdown } from "../atoms/button/icon/CommonIconButton";
 import {
-  BookshelfSettingsDialog,
+  ShelfUpdateDialog,
   ShelfUpdateOptions,
-} from "../organisms/popup/BookShelfSettingsDialog";
+} from "../organisms/popup/ShelfUpdateDialog";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { DeleteBookshelfDialog } from "../organisms/popup/ShelfDeleteDialog";
 
@@ -133,7 +133,7 @@ export const UserBookshelvesListTemplate = () => {
           }}
           onCreate={addNewShelfToUiList}
         />
-        <BookshelfSettingsDialog
+        <ShelfUpdateDialog
           bookshelf={selectedShelf ?? undefined}
           isOpen={dialogType === "edit"}
           onClose={handleCloseDialog}
