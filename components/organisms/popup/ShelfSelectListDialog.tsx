@@ -12,6 +12,7 @@ import { useBag } from "@/contexts/BagContext";
 import { useEffect, useState } from "react";
 import { fetchShelfBookStatus } from "@/utils/api/BookshelfApi";
 import { ShelfBookStatus } from "@/types/ApiSpec";
+import { addBookToShelves } from "@/utils/api/ShelfBook";
 
 interface ShelfSelectListDialogProps {
   bookId: string;
@@ -68,7 +69,12 @@ export function ShelfSelectListDialog({
       .map((s) => s.id);
 
     console.log("책이 삭제된 책장:", deletedShelfIds);
-    console.log("책이 추가된 책장:", addedShelfIds);
+    // console.log("책이 추가된 책장:", addedShelfIds);
+    addBookToShelves({
+      bookId: bookId,
+      targetShelfIds: addedShelfIds,
+      side: "client",
+    });
 
     const bagSnapShot = isInBag(bookId);
     const isBagChanged = bagSnapShot !== bagChecked;
