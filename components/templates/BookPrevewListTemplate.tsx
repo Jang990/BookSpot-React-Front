@@ -65,7 +65,6 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
         onClose={closeShelfListDialog}
         onComplete={() => {}}
         onClickNewShelf={() => {}}
-        onBookshelfToggle={(shelfId) => {}}
       />
     </div>
   );

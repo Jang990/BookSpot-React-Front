@@ -17,7 +17,6 @@ interface ShelfSelectListDialogProps {
   bookId: string;
   isOpen: boolean;
   onClose: () => void;
-  onBookshelfToggle: (id: string) => void;
   onClickNewShelf: () => void;
   onComplete: () => void;
 }
@@ -26,19 +25,49 @@ export function ShelfSelectListDialog({
   bookId,
   isOpen,
   onClose,
-  onBookshelfToggle,
   onClickNewShelf,
   onComplete,
 }: ShelfSelectListDialogProps) {
   const { isInBag, addToBag } = useBag();
-  const [shelfBookStatus, setShelfBookStatus] = useState<ShelfBookStatus[]>([]);
+
+  const [localStatus, setLocalStatus] = useState<ShelfBookStatus[]>([]);
+  const [initialStatus, setInitialStatus] = useState<ShelfBookStatus[]>([]);
 
   useEffect(() => {
     if (!bookId) return;
-    fetchShelfBookStatus({ bookId: bookId, side: "client" }).then((data) => {
-      setShelfBookStatus(data.shelves);
+    fetchShelfBookStatus({ bookId, side: "client" }).then((data) => {
+      setLocalStatus(data.shelves);
+      setInitialStatus(data.shelves);
     });
   }, [bookId]);
+
+  const toggleShelf = (id: string) => {
+    setLocalStatus((prev) =>
+      prev.map((s) => (s.id === id ? { ...s, isExists: !s.isExists } : s))
+    );
+  };
+
+  // 삭제된 책장 + 추가된 책장 뽑아내서 추가하기
+  const handleComplete = () => {
+    const deletedShelfIds = initialStatus
+      .filter(
+        (s) => s.isExists && !localStatus.find((ls) => ls.id === s.id)?.isExists
+      )
+      .map((s) => s.id);
+
+    const addedShelfIds = localStatus
+      .filter(
+        (s) =>
+          !initialStatus.find((is) => is.id === s.id)?.isExists && s.isExists
+      )
+      .map((s) => s.id);
+
+    console.log("책이 삭제된 책장:", deletedShelfIds);
+    console.log("책이 추가된 책장:", addedShelfIds);
+
+    onComplete();
+    onClose();
+  };
 
   return (
     <ModernDialog isOpen={isOpen} onClose={onClose}>
@@ -77,14 +106,14 @@ export function ShelfSelectListDialog({
               console.log("책가방저장!");
             }}
           />
-          {shelfBookStatus.map((bookshelf) => (
+          {localStatus.map((bookshelf) => (
             <ShelfBookStatusCheckBox
               key={bookshelf.id}
               name={bookshelf.name}
               isPublic={bookshelf.isPublic}
               checked={bookshelf.isExists}
               onClick={() => {
-                onBookshelfToggle(bookshelf.id);
+                toggleShelf(bookshelf.id);
               }}
             />
           ))}
@@ -95,7 +124,7 @@ export function ShelfSelectListDialog({
         <Button variant="ghost" onClick={onClose}>
           취소
         </Button>
-        <Button onClick={onComplete}>완료</Button>
+        <Button onClick={handleComplete}>완료</Button>
       </ModernDialogFooter>
     </ModernDialog>
   );
