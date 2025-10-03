@@ -21,7 +21,7 @@ interface BookshelfSettingsDialogProps {
   onCreate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
 }
 
-export const BookshelfCreationDialog = ({
+export const ShelfCreateDialog = ({
   isOpen,
   onClose = () => {},
   onCreate: onCreate,

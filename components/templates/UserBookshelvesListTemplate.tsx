@@ -7,7 +7,7 @@ import { MAX_USER_SHELF_SIZE, type BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book, MoreVertical, Edit, Trash2 } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
-import { BookshelfCreationDialog } from "../organisms/popup/BookShelfCreationDialog";
+import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { PageTitleAndButton } from "../molecules/title/PageTitle";
 import { CommonIconDropdown } from "../atoms/button/icon/CommonIconButton";
@@ -126,7 +126,7 @@ export const UserBookshelvesListTemplate = () => {
           </div>
         )}
 
-        <BookshelfCreationDialog
+        <ShelfCreateDialog
           isOpen={showCreateDialog}
           onClose={() => {
             setShowCreateDialog(false);
