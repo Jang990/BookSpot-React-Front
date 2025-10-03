@@ -45,7 +45,7 @@ export const ShelfDeleteDialog = ({
     <ModernDialog isOpen={isOpen} onClose={onClose}>
       <ModernDialogHeader
         onClose={onClose}
-        description={`'${shelf.name}' 책장을 영구 삭제하세요.`}
+        description={`'${shelf.name}' 책장을 영구 삭제`}
       >
         책장 삭제
       </ModernDialogHeader>
