@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, X, Lock, Globe } from "lucide-react";
 import { useBag } from "@/contexts/BagContext";
+import { useEffect, useState } from "react";
 
 interface ShelfBookStatus {
   id: string;
@@ -21,7 +22,6 @@ interface ShelfSelectListDialogProps {
   bookId: string;
   isOpen: boolean;
   onClose: () => void;
-  shelfBookStatus: ShelfBookStatus[];
   onBookshelfToggle: (id: string) => void;
   onClickNewShelf: () => void;
   onComplete: () => void;
@@ -31,12 +31,16 @@ export function ShelfSelectListDialog({
   bookId,
   isOpen,
   onClose,
-  shelfBookStatus,
   onBookshelfToggle,
   onClickNewShelf,
   onComplete,
 }: ShelfSelectListDialogProps) {
-  const { isInBag } = useBag();
+  const { isInBag, addToBag } = useBag();
+  const [shelfBookStatus, setShelfBookStatus] = useState<ShelfBookStatus[]>([]);
+
+  useEffect(() => {
+    if (!bookId) return;
+  }, [bookId]);
 
   return (
     <ModernDialog isOpen={isOpen} onClose={onClose}>
