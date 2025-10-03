@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, X, Lock, Globe } from "lucide-react";
+import { useBag } from "@/contexts/BagContext";
 
 interface ShelfBookStatus {
   id: string;
@@ -17,6 +18,7 @@ interface ShelfBookStatus {
 }
 
 interface ShelfSelectListDialogProps {
+  bookId: string;
   isOpen: boolean;
   onClose: () => void;
   shelfBookStatus: ShelfBookStatus[];
@@ -27,6 +29,7 @@ interface ShelfSelectListDialogProps {
 }
 
 export function ShelfSelectListDialog({
+  bookId,
   isOpen,
   onClose,
   shelfBookStatus,
@@ -35,6 +38,8 @@ export function ShelfSelectListDialog({
   onCancel,
   onComplete,
 }: ShelfSelectListDialogProps) {
+  const { isInBag } = useBag();
+
   return (
     <ModernDialog isOpen={isOpen} onClose={onClose}>
       {/* Header */}
@@ -63,10 +68,21 @@ export function ShelfSelectListDialog({
 
       <ModernDialogContent className="max-h-[400px] overflow-y-auto py-0">
         <div className="space-y-1">
+          <ShelfBookStatusCheckBox
+            key={0}
+            name="'책가방'에 저장"
+            checked={isInBag(bookId)}
+            isPublic={false}
+            onClick={() => {
+              console.log("책가방저장!");
+            }}
+          />
           {shelfBookStatus.map((bookshelf) => (
             <ShelfBookStatusCheckBox
               key={bookshelf.id}
-              shelf={bookshelf}
+              name={bookshelf.name}
+              isPublic={bookshelf.isPublic}
+              checked={bookshelf.isExists}
               onClick={() => {
                 onBookshelfToggle(bookshelf.id);
               }}
@@ -86,27 +102,28 @@ export function ShelfSelectListDialog({
 }
 
 interface ShelfBookStatusCheckBoxProp {
-  shelf: ShelfBookStatus;
+  checked: boolean;
+  name: string;
+  isPublic: boolean;
   onClick: () => void;
 }
 
 const ShelfBookStatusCheckBox = ({
-  shelf,
+  checked,
+  name,
+  isPublic,
   onClick,
 }: ShelfBookStatusCheckBoxProp) => {
   return (
     <div
-      key={shelf.id}
       onClick={onClick}
-      role="button" // 접근성 보완
-      tabIndex={0} // 키보드 접근 가능
+      role="button"
+      tabIndex={0}
       className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-muted"
     >
-      <Checkbox checked={shelf.isExists} className="pointer-events-none" />
-      <span className="flex-1 text-sm font-medium text-foreground">
-        {shelf.name}
-      </span>
-      {shelf.isPublic ? (
+      <Checkbox checked={checked} className="pointer-events-none" />
+      <span className="flex-1 text-sm font-medium text-foreground">{name}</span>
+      {isPublic ? (
         <Globe className="h-4 w-4 text-muted-foreground" />
       ) : (
         <Lock className="h-4 w-4 text-muted-foreground" />
