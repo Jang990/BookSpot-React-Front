@@ -10,13 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, X, Lock, Globe } from "lucide-react";
 import { useBag } from "@/contexts/BagContext";
 import { useEffect, useState } from "react";
-
-interface ShelfBookStatus {
-  id: string;
-  name: string;
-  isPublic: boolean;
-  isExists: boolean;
-}
+import { fetchShelfBookStatus } from "@/utils/api/BookshelfApi";
+import { ShelfBookStatus } from "@/types/ApiSpec";
 
 interface ShelfSelectListDialogProps {
   bookId: string;
@@ -40,6 +35,9 @@ export function ShelfSelectListDialog({
 
   useEffect(() => {
     if (!bookId) return;
+    fetchShelfBookStatus({ bookId: bookId, side: "client" }).then((data) => {
+      setShelfBookStatus(data.shelves);
+    });
   }, [bookId]);
 
   return (
