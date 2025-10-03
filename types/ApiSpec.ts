@@ -75,3 +75,14 @@ export interface BookshelfDetailResponseSpec {
   isPublic: boolean;
   books: BookPreview[];
 }
+
+export interface ShelvesBookStatusResponseSpec {
+  shelves: ShelfBookStatus[];
+}
+
+export interface ShelfBookStatus {
+  id: string;
+  name: string;
+  isPublic: boolean;
+  isExists: boolean;
+}

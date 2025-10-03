@@ -1,4 +1,8 @@
-import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
+import {
+  BookshelfDetailResponseSpec,
+  ShelfBookStatus,
+  ShelvesBookStatusResponseSpec,
+} from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
 import { BookshelfSummaryListResponseApiSpec as BookshelvesSummaryResponseApiSpec } from "@/types/ApiSpec";
 import { ShelfCreationRequest } from "@/types/Bookshelf";
@@ -102,4 +106,20 @@ export const updateBookshelf = async ({
   );
 
   if (!response.ok) throw response.error;
+};
+
+export const fetchShelfBookStatus = async ({
+  bookId,
+  side,
+}: {
+  bookId: string;
+  side: Side;
+}): Promise<ShelvesBookStatusResponseSpec> => {
+  const response = await getApiClient(side).get<ShelvesBookStatusResponseSpec>(
+    `/api/users/shelves/books/${bookId}`
+  );
+
+  if (!response.ok) throw response.error;
+  if (!response.data) return { shelves: [] };
+  return response.data;
 };
