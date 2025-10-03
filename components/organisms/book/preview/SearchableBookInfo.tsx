@@ -21,9 +21,8 @@ export const SearchableBookInfo = ({
       book={book}
       actionButton={
         <IconTextButton
-          icon={
-            <Bookmark className="w-4 h-4" onClick={() => onClickAddBtn(book)} />
-          }
+          icon={<Bookmark className="w-4 h-4" />}
+          onClick={() => onClickAddBtn(book)}
         >
           저장하기
         </IconTextButton>
