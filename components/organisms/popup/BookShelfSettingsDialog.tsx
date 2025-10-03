@@ -1,22 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { updateBookshelf } from "@/utils/api/BookshelfApi";
 import {
   ShelfNameInput,
   ShelfPublicSwitch,
 } from "@/components/molecules/shelf/ShelfForm";
+import {
+  ModernModal,
+  ModernModalHeader,
+  ModernModalContent,
+  ModernModalFooter,
+} from "@/components/ui/custom-dialog";
 
-interface BookshelfSettingsDialogProps {
+interface BookshelfSettingsModalProps {
   bookshelf?: ShelfUpdateOptions;
   isOpen: boolean;
   onClose: () => void;
@@ -34,12 +32,18 @@ export const BookshelfSettingsDialog = ({
   isOpen,
   onClose,
   onUpdate,
-}: BookshelfSettingsDialogProps) => {
-  if (!bookshelf || !isOpen) return null;
+}: BookshelfSettingsModalProps) => {
+  const [shelfId, setShelfId] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [isPublic, setIsPublic] = useState<boolean>(false);
 
-  const [shelfId, setShelfId] = useState(bookshelf.id);
-  const [name, setName] = useState(bookshelf.name);
-  const [isPublic, setIsPublic] = useState(bookshelf.isPublic);
+  useEffect(() => {
+    if (bookshelf) {
+      setShelfId(bookshelf.id);
+      setName(bookshelf.name);
+      setIsPublic(bookshelf.isPublic);
+    }
+  }, [bookshelf]);
 
   const handleSave = () => {
     if (name.trim() === "") {
@@ -58,41 +62,33 @@ export const BookshelfSettingsDialog = ({
   };
 
   const handleClose = () => {
-    setShelfId("0");
-    setName(bookshelf.name);
-    setIsPublic(bookshelf.isPublic);
     onClose();
   };
 
+  if (!bookshelf) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        onOpenAutoFocus={(e) => e.preventDefault()}
+    <ModernModal isOpen={isOpen} onClose={handleClose}>
+      <ModernModalHeader
+        onClose={handleClose}
+        description="책장의 이름과 공개 설정을 변경할 수 있습니다."
       >
-        <DialogHeader>
-          <DialogTitle>책장 설정</DialogTitle>
-          <DialogDescription>
-            책장의 이름과 공개 설정을 변경할 수 있습니다.
-          </DialogDescription>
-        </DialogHeader>
+        책장 설정
+      </ModernModalHeader>
 
-        <div className="grid gap-4 py-4">
-          <ShelfNameInput name={name} setName={setName} />
-          <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
-        </div>
+      <ModernModalContent className="space-y-4">
+        <ShelfNameInput name={name} setName={setName} />
+        <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
+      </ModernModalContent>
 
-        <DialogFooter className="flex justify-between">
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handleClose}>
-              취소
-            </Button>
-            <Button disabled={!name} onClick={handleSave}>
-              저장
-            </Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <ModernModalFooter>
+        <Button variant="outline" onClick={handleClose}>
+          취소
+        </Button>
+        <Button disabled={!name} onClick={handleSave}>
+          저장
+        </Button>
+      </ModernModalFooter>
+    </ModernModal>
   );
 };
