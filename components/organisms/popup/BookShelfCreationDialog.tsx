@@ -2,19 +2,18 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { createBookshelf } from "@/utils/api/BookshelfApi";
 import {
   ShelfNameInput,
   ShelfPublicSwitch,
 } from "@/components/molecules/shelf/ShelfForm";
+import {
+  ModernModal,
+  ModernModalContent,
+  ModernModalFooter,
+  ModernModalHeader,
+} from "@/components/ui/custom-dialog";
 
 interface BookshelfSettingsDialogProps {
   isOpen: boolean;
@@ -55,28 +54,22 @@ export const BookshelfCreationDialog = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>책장 추가</DialogTitle>
-        </DialogHeader>
+    <ModernModal isOpen={isOpen} onClose={handleClose}>
+      <ModernModalHeader onClose={handleClose}>책장 추가</ModernModalHeader>
 
-        <div className="grid gap-4 py-4">
-          <ShelfNameInput name={name} setName={setName} />
-          <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
-        </div>
+      <ModernModalContent className="space-y-4">
+        <ShelfNameInput name={name} setName={setName} />
+        <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
+      </ModernModalContent>
 
-        <DialogFooter className="flex justify-between">
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={handleClose}>
-              취소
-            </Button>
-            <Button disabled={!name} onClick={handleSave}>
-              저장
-            </Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <ModernModalFooter>
+        <Button variant="outline" onClick={handleClose}>
+          취소
+        </Button>
+        <Button disabled={!name} onClick={handleSave}>
+          저장
+        </Button>
+      </ModernModalFooter>
+    </ModernModal>
   );
 };
