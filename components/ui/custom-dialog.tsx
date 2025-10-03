@@ -117,7 +117,7 @@ export const ModernDialogContent = ({
   children,
   className,
 }: ModernDialogContentProps) => {
-  return <div className={cn("px-6 py-4", className)}>{children}</div>;
+  return <div className={cn("px-6 py-2", className)}>{children}</div>;
 };
 
 interface ModernDialogFooterProps {
@@ -130,7 +130,7 @@ export const ModernDialogFooter = ({
   className,
 }: ModernDialogFooterProps) => {
   return (
-    <div className={cn("px-6 py-4", className)}>
+    <div className={cn("px-6 py-3", className)}>
       <div className="flex justify-end gap-2">{children}</div>
     </div>
   );
