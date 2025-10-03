@@ -28,13 +28,18 @@ export function ShelfSelectListDialog({
   onClickNewShelf,
   onComplete,
 }: ShelfSelectListDialogProps) {
-  const { isInBag, addToBag } = useBag();
+  const { isInBag, addToBag, removeFromBag } = useBag();
+
+  const [bagChecked, setBagChecked] = useState(false);
 
   const [shelfStatus, setShelfStatus] = useState<ShelfBookStatus[]>([]);
   const [shelfSnapshot, setShelfSnapshot] = useState<ShelfBookStatus[]>([]);
 
   useEffect(() => {
     if (!bookId) return;
+
+    setBagChecked(isInBag(bookId));
+
     fetchShelfBookStatus({ bookId, side: "client" }).then((data) => {
       setShelfStatus(data.shelves);
       setShelfSnapshot(data.shelves);
@@ -47,7 +52,7 @@ export function ShelfSelectListDialog({
     );
   };
 
-  // 삭제된 책장 + 추가된 책장 뽑아내서 추가하기
+  // 삭제된 책장 + 추가된 책장 뽑아내서 추가하기 + 책가방까지 생각
   const handleComplete = () => {
     const deletedShelfIds = shelfSnapshot
       .filter(
@@ -64,6 +69,11 @@ export function ShelfSelectListDialog({
 
     console.log("책이 삭제된 책장:", deletedShelfIds);
     console.log("책이 추가된 책장:", addedShelfIds);
+
+    const bagSnapShot = isInBag(bookId);
+    const isBagChanged = bagSnapShot !== bagChecked;
+    if (isBagChanged && bagChecked) addToBag(bookId);
+    if (isBagChanged && !bagChecked) removeFromBag(bookId);
 
     onComplete();
     onClose();
@@ -100,10 +110,10 @@ export function ShelfSelectListDialog({
           <ShelfBookStatusCheckBox
             key={0}
             name="'책가방'에 저장"
-            checked={isInBag(bookId)}
+            checked={bagChecked}
             isPublic={false}
             onClick={() => {
-              console.log("책가방저장!");
+              setBagChecked(!bagChecked);
             }}
           />
           {shelfStatus.map((bookshelf) => (
