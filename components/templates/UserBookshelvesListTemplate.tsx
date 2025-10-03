@@ -16,7 +16,7 @@ import {
   ShelfUpdateOptions,
 } from "../organisms/popup/ShelfUpdateDialog";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
-import { DeleteBookshelfDialog } from "../organisms/popup/ShelfDeleteDialog";
+import { ShelfDeleteDialog } from "../organisms/popup/ShelfDeleteDialog";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -139,7 +139,7 @@ export const UserBookshelvesListTemplate = () => {
           onClose={handleCloseDialog}
           onUpdate={updateBookshelf}
         />
-        <DeleteBookshelfDialog
+        <ShelfDeleteDialog
           isOpen={dialogType === "delete"}
           shelf={selectedShelf}
           onDelete={deleteBookshelf}

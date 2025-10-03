@@ -14,7 +14,7 @@ import { ShelfUpdateOptions } from "./ShelfUpdateDialog";
 
 const DELETE_CONFIRMATION_TEXT = "삭제하기";
 
-export const DeleteBookshelfDialog = ({
+export const ShelfDeleteDialog = ({
   isOpen,
   shelf,
   onDelete,
