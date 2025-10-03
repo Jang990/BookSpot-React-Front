@@ -122,7 +122,9 @@ const ShelfBookStatusCheckBox = ({
       className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-muted"
     >
       <Checkbox checked={checked} className="pointer-events-none" />
-      <span className="flex-1 text-sm font-medium text-foreground">{name}</span>
+      <span className="flex-1 text-sm font-medium text-foreground line-clamp-2">
+        {name}
+      </span>
       {isPublic ? (
         <Globe className="h-4 w-4 text-muted-foreground" />
       ) : (
