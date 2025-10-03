@@ -23,8 +23,7 @@ interface ShelfSelectListDialogProps {
   onClose: () => void;
   shelfBookStatus: ShelfBookStatus[];
   onBookshelfToggle: (id: string) => void;
-  onCreateNew: () => void;
-  onCancel: () => void;
+  onClickNewShelf: () => void;
   onComplete: () => void;
 }
 
@@ -34,8 +33,7 @@ export function ShelfSelectListDialog({
   onClose,
   shelfBookStatus,
   onBookshelfToggle,
-  onCreateNew,
-  onCancel,
+  onClickNewShelf,
   onComplete,
 }: ShelfSelectListDialogProps) {
   const { isInBag } = useBag();
@@ -50,7 +48,7 @@ export function ShelfSelectListDialog({
             <Button
               variant="ghost"
               size="sm"
-              onClick={onCreateNew}
+              onClick={onClickNewShelf}
               className="h-8 gap-1 text-sm font-medium"
             >
               <Plus className="h-4 w-4" />새 책장
@@ -92,7 +90,7 @@ export function ShelfSelectListDialog({
       </ModernDialogContent>
 
       <ModernDialogFooter>
-        <Button variant="ghost" onClick={onCancel}>
+        <Button variant="ghost" onClick={onClose}>
           취소
         </Button>
         <Button onClick={onComplete}>완료</Button>
