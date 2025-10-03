@@ -30,35 +30,35 @@ export function ShelfSelectListDialog({
 }: ShelfSelectListDialogProps) {
   const { isInBag, addToBag } = useBag();
 
-  const [localStatus, setLocalStatus] = useState<ShelfBookStatus[]>([]);
-  const [initialStatus, setInitialStatus] = useState<ShelfBookStatus[]>([]);
+  const [shelfStatus, setShelfStatus] = useState<ShelfBookStatus[]>([]);
+  const [shelfSnapshot, setShelfSnapshot] = useState<ShelfBookStatus[]>([]);
 
   useEffect(() => {
     if (!bookId) return;
     fetchShelfBookStatus({ bookId, side: "client" }).then((data) => {
-      setLocalStatus(data.shelves);
-      setInitialStatus(data.shelves);
+      setShelfStatus(data.shelves);
+      setShelfSnapshot(data.shelves);
     });
   }, [bookId]);
 
   const toggleShelf = (id: string) => {
-    setLocalStatus((prev) =>
+    setShelfStatus((prev) =>
       prev.map((s) => (s.id === id ? { ...s, isExists: !s.isExists } : s))
     );
   };
 
   // 삭제된 책장 + 추가된 책장 뽑아내서 추가하기
   const handleComplete = () => {
-    const deletedShelfIds = initialStatus
+    const deletedShelfIds = shelfSnapshot
       .filter(
-        (s) => s.isExists && !localStatus.find((ls) => ls.id === s.id)?.isExists
+        (s) => s.isExists && !shelfStatus.find((ls) => ls.id === s.id)?.isExists
       )
       .map((s) => s.id);
 
-    const addedShelfIds = localStatus
+    const addedShelfIds = shelfStatus
       .filter(
         (s) =>
-          !initialStatus.find((is) => is.id === s.id)?.isExists && s.isExists
+          !shelfSnapshot.find((is) => is.id === s.id)?.isExists && s.isExists
       )
       .map((s) => s.id);
 
@@ -106,7 +106,7 @@ export function ShelfSelectListDialog({
               console.log("책가방저장!");
             }}
           />
-          {localStatus.map((bookshelf) => (
+          {shelfStatus.map((bookshelf) => (
             <ShelfBookStatusCheckBox
               key={bookshelf.id}
               name={bookshelf.name}
