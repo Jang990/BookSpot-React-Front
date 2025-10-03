@@ -7,19 +7,19 @@ import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 
-interface ModernModalProps {
+interface ModernDialogProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
   className?: string;
 }
 
-export const ModernModal = ({
+export const ModernDialog = ({
   isOpen,
   onClose,
   children,
   className,
-}: ModernModalProps) => {
+}: ModernDialogProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -76,17 +76,17 @@ export const ModernModal = ({
   );
 };
 
-interface ModernModalHeaderProps {
+interface ModernDialogHeaderProps {
   children: React.ReactNode;
   description?: string;
   onClose: () => void;
 }
 
-export const ModernModalHeader = ({
+export const ModernDialogHeader = ({
   children,
   description,
   onClose,
-}: ModernModalHeaderProps) => {
+}: ModernDialogHeaderProps) => {
   return (
     <div className="px-6 py-4">
       <div className="flex items-center justify-between">
@@ -108,27 +108,27 @@ export const ModernModalHeader = ({
   );
 };
 
-interface ModernModalContentProps {
+interface ModernDialogContentProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const ModernModalContent = ({
+export const ModernDialogContent = ({
   children,
   className,
-}: ModernModalContentProps) => {
+}: ModernDialogContentProps) => {
   return <div className={cn("px-6 py-4", className)}>{children}</div>;
 };
 
-interface ModernModalFooterProps {
+interface ModernDialogFooterProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const ModernModalFooter = ({
+export const ModernDialogFooter = ({
   children,
   className,
-}: ModernModalFooterProps) => {
+}: ModernDialogFooterProps) => {
   return (
     <div className={cn("px-6 py-4", className)}>
       <div className="flex justify-end gap-2">{children}</div>

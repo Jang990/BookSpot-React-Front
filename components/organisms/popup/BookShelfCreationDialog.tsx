@@ -9,10 +9,10 @@ import {
   ShelfPublicSwitch,
 } from "@/components/molecules/shelf/ShelfForm";
 import {
-  ModernModal,
-  ModernModalContent,
-  ModernModalFooter,
-  ModernModalHeader,
+  ModernDialog,
+  ModernDialogContent,
+  ModernDialogFooter,
+  ModernDialogHeader,
 } from "@/components/ui/custom-dialog";
 
 interface BookshelfSettingsDialogProps {
@@ -54,22 +54,22 @@ export const BookshelfCreationDialog = ({
   };
 
   return (
-    <ModernModal isOpen={isOpen} onClose={handleClose}>
-      <ModernModalHeader onClose={handleClose}>책장 추가</ModernModalHeader>
+    <ModernDialog isOpen={isOpen} onClose={handleClose}>
+      <ModernDialogHeader onClose={handleClose}>책장 추가</ModernDialogHeader>
 
-      <ModernModalContent className="space-y-4">
+      <ModernDialogContent className="space-y-4">
         <ShelfNameInput name={name} setName={setName} />
         <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
-      </ModernModalContent>
+      </ModernDialogContent>
 
-      <ModernModalFooter>
+      <ModernDialogFooter>
         <Button variant="outline" onClick={handleClose}>
           취소
         </Button>
         <Button disabled={!name} onClick={handleSave}>
           저장
         </Button>
-      </ModernModalFooter>
-    </ModernModal>
+      </ModernDialogFooter>
+    </ModernDialog>
   );
 };

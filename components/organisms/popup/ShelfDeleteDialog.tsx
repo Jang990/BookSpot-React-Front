@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { deleteBookshelf } from "@/utils/api/BookshelfApi";
 import {
-  ModernModal,
-  ModernModalHeader,
-  ModernModalContent,
-  ModernModalFooter,
+  ModernDialog,
+  ModernDialogHeader,
+  ModernDialogContent,
+  ModernDialogFooter,
 } from "@/components/ui/custom-dialog";
 import { ShelfUpdateOptions } from "./BookShelfSettingsDialog";
 
@@ -42,15 +42,15 @@ export const DeleteBookshelfDialog = ({
   };
 
   return (
-    <ModernModal isOpen={isOpen} onClose={onClose}>
-      <ModernModalHeader
+    <ModernDialog isOpen={isOpen} onClose={onClose}>
+      <ModernDialogHeader
         onClose={onClose}
         description={`'${shelf.name}' 책장을 영구 삭제하세요.`}
       >
         책장 삭제
-      </ModernModalHeader>
+      </ModernDialogHeader>
 
-      <ModernModalContent>
+      <ModernDialogContent>
         <Input
           value={confirmationText}
           onChange={(e) => setConfirmationText(e.target.value)}
@@ -58,9 +58,9 @@ export const DeleteBookshelfDialog = ({
           autoComplete="off"
           className="w-full"
         />
-      </ModernModalContent>
+      </ModernDialogContent>
 
-      <ModernModalFooter>
+      <ModernDialogFooter>
         <Button variant="outline" onClick={onClose}>
           취소
         </Button>
@@ -71,7 +71,7 @@ export const DeleteBookshelfDialog = ({
         >
           삭제
         </Button>
-      </ModernModalFooter>
-    </ModernModal>
+      </ModernDialogFooter>
+    </ModernDialog>
   );
 };
