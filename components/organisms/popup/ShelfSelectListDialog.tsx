@@ -64,24 +64,13 @@ export function ShelfSelectListDialog({
       <ModernDialogContent className="max-h-[400px] overflow-y-auto py-0">
         <div className="space-y-1">
           {shelfBookStatus.map((bookshelf) => (
-            <button
+            <ShelfBookStatusCheckBox
               key={bookshelf.id}
-              onClick={() => onBookshelfToggle(bookshelf.id)}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-muted"
-            >
-              <Checkbox
-                checked={bookshelf.isExists}
-                className="pointer-events-none"
-              />
-              <span className="flex-1 text-sm font-medium text-foreground">
-                {bookshelf.name}
-              </span>
-              {bookshelf.isPublic ? (
-                <Globe className="h-4 w-4 text-muted-foreground" />
-              ) : (
-                <Lock className="h-4 w-4 text-muted-foreground" />
-              )}
-            </button>
+              shelf={bookshelf}
+              onClick={() => {
+                onBookshelfToggle(bookshelf.id);
+              }}
+            />
           ))}
         </div>
       </ModernDialogContent>
@@ -95,3 +84,33 @@ export function ShelfSelectListDialog({
     </ModernDialog>
   );
 }
+
+interface ShelfBookStatusCheckBoxProp {
+  shelf: ShelfBookStatus;
+  onClick: () => void;
+}
+
+const ShelfBookStatusCheckBox = ({
+  shelf,
+  onClick,
+}: ShelfBookStatusCheckBoxProp) => {
+  return (
+    <div
+      key={shelf.id}
+      onClick={onClick}
+      role="button" // 접근성 보완
+      tabIndex={0} // 키보드 접근 가능
+      className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-muted"
+    >
+      <Checkbox checked={shelf.isExists} className="pointer-events-none" />
+      <span className="flex-1 text-sm font-medium text-foreground">
+        {shelf.name}
+      </span>
+      {shelf.isPublic ? (
+        <Globe className="h-4 w-4 text-muted-foreground" />
+      ) : (
+        <Lock className="h-4 w-4 text-muted-foreground" />
+      )}
+    </div>
+  );
+};
