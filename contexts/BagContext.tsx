@@ -14,6 +14,8 @@ type BagContextType = {
   clearBag: () => Promise<boolean>;
   addToBag: (bookId: string) => Promise<boolean>;
   removeFromBag: (bookId: string) => Promise<boolean>;
+  isInBag: (bookId: string) => boolean;
+  isFull: () => boolean;
 };
 
 const BagContext = createContext<BagContextType | undefined>(undefined);
@@ -90,6 +92,14 @@ export const BagProvider = ({ children }: BagProviderProps) => {
     return isSuccess;
   };
 
+  const isInBag = (targetId: string): boolean => {
+    return bag.some((id) => String(id) === String(targetId));
+  };
+
+  const isFull = (): boolean => {
+    return bag.length >= BagCookie.MAX_BAG_SIZE;
+  };
+
   return (
     <BagContext.Provider
       value={{
@@ -98,6 +108,8 @@ export const BagProvider = ({ children }: BagProviderProps) => {
         clearBag,
         addToBag,
         removeFromBag,
+        isInBag,
+        isFull,
       }}
     >
       {children}

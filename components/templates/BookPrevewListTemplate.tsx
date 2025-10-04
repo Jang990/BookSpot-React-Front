@@ -2,28 +2,33 @@
 import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { SearchableBookInfo } from "../organisms/book/preview/SearchableBookInfo";
-import { useBag } from "@/contexts/BagContext";
-import { useToast } from "@/contexts/ToastContext";
+import { useState } from "react";
+import { ShelfSelectListDialog } from "../organisms/popup/ShelfSelectListDialog";
+import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
 }
 
 export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
-  const { addToBag } = useBag();
-  const { showToast } = useToast();
+  const [shelfDialogType, setShelfDialogType] = useState<
+    "select" | "create" | null
+  >(null);
+  const [selectedBookId, setSelectedBookId] = useState<string>("");
 
-  const handleAddToBag = (book: BookPreview) => {
-    addToBag(book.id)
-      .then((isSuccess) => {
-        if (isSuccess)
-          showToast(`'${book.title}'이(가) 책가방에 추가되었습니다.`, "INFO");
-        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
-      })
-      .catch((err) => {
-        if (err instanceof Error) showToast(err.message, "WARN");
-        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
-      });
+  const openShelfListDialog = (bookId: string) => {
+    setSelectedBookId(bookId);
+    setShelfDialogType("select");
+  };
+
+  const closeShelfListDialog = () => {
+    setSelectedBookId("");
+    setShelfDialogType(null);
+  };
+
+  const openShelfCreateDialog = () => {
+    setSelectedBookId("");
+    setShelfDialogType("create");
   };
 
   return (
@@ -37,12 +42,24 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
               <SearchableBookInfo
                 key={book.id}
                 book={book}
-                onClickAddBtn={handleAddToBag}
+                onClickAddBtn={(book) => openShelfListDialog(book.id)}
               ></SearchableBookInfo>
             ))}
           </>
         )}
       </div>
+      <ShelfSelectListDialog
+        isOpen={shelfDialogType === "select"}
+        bookId={selectedBookId}
+        onClose={closeShelfListDialog}
+        onComplete={() => {}}
+        onClickNewShelf={openShelfCreateDialog}
+      />
+
+      <ShelfCreateDialog
+        isOpen={shelfDialogType === "create"}
+        onClose={closeShelfListDialog}
+      />
     </div>
   );
 };
