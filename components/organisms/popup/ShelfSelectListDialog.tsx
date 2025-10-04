@@ -257,7 +257,7 @@ const ShelfBookStatusCheckBox = ({
       </span>
       {disabled && <YellowBadge text="가득참" />}
       {isPublic ? (
-        <Globe className="h-4 w-4 text-muted-foreground" />
+        <Globe className="h-4 w-4 text-primary" />
       ) : (
         <Lock className="h-4 w-4 text-muted-foreground" />
       )}
