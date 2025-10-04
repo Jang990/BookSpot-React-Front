@@ -179,13 +179,10 @@ export function ShelfSelectListDialog({
             disabled={!isInBag(bookId) && isFull()}
           />
           {shelfStatus.map((bookshelf) => {
-            const initialShelf = shelfSnapshot.find(
+            const isInitShelfUnchecked = !shelfSnapshot.find(
               (snapshot) => snapshot.id === bookshelf.id
-            );
+            )?.isExists;
 
-            const isDisabled =
-              !initialShelf?.isExists &&
-              bookshelf.bookCount >= MAX_SHELF_BOOK_COUNT;
             return (
               <ShelfBookStatusCheckBox
                 key={bookshelf.id}
@@ -195,7 +192,10 @@ export function ShelfSelectListDialog({
                 onClick={() => {
                   toggleShelf(bookshelf.id);
                 }}
-                disabled={isDisabled}
+                disabled={
+                  isInitShelfUnchecked &&
+                  bookshelf.bookCount >= MAX_SHELF_BOOK_COUNT
+                }
               />
             );
           })}
@@ -238,7 +238,7 @@ const ShelfBookStatusCheckBox = ({
       tabIndex={0}
       // clsx를 사용하여 클래스를 동적으로 관리합니다.
       className={clsx(
-        "flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors",
+        "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors",
         {
           // disabled가 아닐 때만 아래 클래스들을 적용
           "cursor-pointer hover:bg-muted": !disabled,
@@ -252,7 +252,7 @@ const ShelfBookStatusCheckBox = ({
         disabled={disabled}
         className="pointer-events-none"
       />
-      <span className="flex-1 text-sm font-medium text-foreground line-clamp-2">
+      <span className="flex-1 text-sm font-medium text-foreground line-clamp-2 py-0.5">
         {name}
       </span>
       {disabled && <YellowBadge text="가득참" />}
