@@ -4,13 +4,16 @@ import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { SearchableBookInfo } from "../organisms/book/preview/SearchableBookInfo";
 import { useState } from "react";
 import { ShelfSelectListDialog } from "../organisms/popup/ShelfSelectListDialog";
+import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
 }
 
 export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
-  const [shelfDialogType, setShelfDialogType] = useState<"select" | null>(null);
+  const [shelfDialogType, setShelfDialogType] = useState<
+    "select" | "create" | null
+  >(null);
   const [selectedBookId, setSelectedBookId] = useState<string>("");
 
   const openShelfListDialog = (bookId: string) => {
@@ -21,6 +24,11 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
   const closeShelfListDialog = () => {
     setSelectedBookId("");
     setShelfDialogType(null);
+  };
+
+  const openShelfCreateDialog = () => {
+    setSelectedBookId("");
+    setShelfDialogType("create");
   };
 
   return (
@@ -45,7 +53,12 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
         bookId={selectedBookId}
         onClose={closeShelfListDialog}
         onComplete={() => {}}
-        onClickNewShelf={() => {}}
+        onClickNewShelf={openShelfCreateDialog}
+      />
+
+      <ShelfCreateDialog
+        isOpen={shelfDialogType === "create"}
+        onClose={closeShelfListDialog}
       />
     </div>
   );

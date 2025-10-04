@@ -18,13 +18,13 @@ import {
 interface BookshelfSettingsDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
+  onCreate?: (updatedBookshelf: BookshelfDetailResponseSpec) => void;
 }
 
 export const ShelfCreateDialog = ({
   isOpen,
   onClose = () => {},
-  onCreate: onCreate,
+  onCreate = (updatedBookshelf) => {},
 }: BookshelfSettingsDialogProps) => {
   const DEFAULT_NAME = "";
   const DEFAULT_IS_PUBLIC = false;
