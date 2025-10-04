@@ -16,16 +16,17 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
   const { showToast } = useToast();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [shelfDialogType, setShelfDialogType] = useState<"select" | null>(null);
   const [selectedBookId, setSelectedBookId] = useState<string>("");
 
   const openShelfListDialog = (bookId: string) => {
     setSelectedBookId(bookId);
-    setIsOpen(true);
+    setShelfDialogType("select");
   };
 
   const closeShelfListDialog = () => {
     setSelectedBookId("");
-    setIsOpen(false);
+    setShelfDialogType(null);
   };
 
   const handleAddToBag = (book: BookPreview) => {
@@ -60,7 +61,7 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
         )}
       </div>
       <ShelfSelectListDialog
-        isOpen={isOpen}
+        isOpen={shelfDialogType === "select"}
         bookId={selectedBookId}
         onClose={closeShelfListDialog}
         onComplete={() => {}}
