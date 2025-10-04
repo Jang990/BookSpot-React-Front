@@ -2,8 +2,6 @@
 import { BookPreview } from "@/types/BookPreview";
 import { EmptySearchResult } from "../molecules/EmptySearchResult";
 import { SearchableBookInfo } from "../organisms/book/preview/SearchableBookInfo";
-import { useBag } from "@/contexts/BagContext";
-import { useToast } from "@/contexts/ToastContext";
 import { useState } from "react";
 import { ShelfSelectListDialog } from "../organisms/popup/ShelfSelectListDialog";
 
@@ -12,10 +10,6 @@ interface BookPreviewListProps {
 }
 
 export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
-  const { addToBag } = useBag();
-  const { showToast } = useToast();
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [shelfDialogType, setShelfDialogType] = useState<"select" | null>(null);
   const [selectedBookId, setSelectedBookId] = useState<string>("");
 
@@ -29,20 +23,6 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
     setShelfDialogType(null);
   };
 
-  const handleAddToBag = (book: BookPreview) => {
-    openShelfListDialog(book.id);
-    /* addToBag(book.id)
-      .then((isSuccess) => {
-        if (isSuccess)
-          showToast(`'${book.title}'이(가) 책가방에 추가되었습니다.`, "INFO");
-        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
-      })
-      .catch((err) => {
-        if (err instanceof Error) showToast(err.message, "WARN");
-        else showToast("알 수 없는 오류가 발생했습니다.", "WARN");
-      }); */
-  };
-
   return (
     <div>
       {searchResults.length === 0 && <EmptySearchResult />}
@@ -54,7 +34,7 @@ export const BookPreviewList = ({ searchResults }: BookPreviewListProps) => {
               <SearchableBookInfo
                 key={book.id}
                 book={book}
-                onClickAddBtn={handleAddToBag}
+                onClickAddBtn={(book) => openShelfListDialog(book.id)}
               ></SearchableBookInfo>
             ))}
           </>
