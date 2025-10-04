@@ -83,6 +83,7 @@ export interface ShelvesBookStatusResponseSpec {
 export interface ShelfBookStatus {
   id: string;
   name: string;
+  bookCount: number;
   isPublic: boolean;
   isExists: boolean;
 }

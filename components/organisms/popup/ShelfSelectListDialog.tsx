@@ -14,6 +14,7 @@ import { fetchShelfBookStatus } from "@/utils/api/BookshelfApi";
 import { ShelfBookStatus } from "@/types/ApiSpec";
 import { addBookToShelves, removeBookToShelves } from "@/utils/api/ShelfBook";
 import { useToast } from "@/contexts/ToastContext";
+import { MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
 
 interface ShelfSelectListDialogProps {
   bookId: string;
@@ -173,19 +174,29 @@ export function ShelfSelectListDialog({
             onClick={() => {
               setBagChecked(!bagChecked);
             }}
-            disabled={!bagChecked && isFull()}
+            disabled={!isInBag(bookId) && isFull()}
           />
-          {shelfStatus.map((bookshelf) => (
-            <ShelfBookStatusCheckBox
-              key={bookshelf.id}
-              name={bookshelf.name}
-              isPublic={bookshelf.isPublic}
-              checked={bookshelf.isExists}
-              onClick={() => {
-                toggleShelf(bookshelf.id);
-              }}
-            />
-          ))}
+          {shelfStatus.map((bookshelf) => {
+            const initialShelf = shelfSnapshot.find(
+              (snapshot) => snapshot.id === bookshelf.id
+            );
+
+            const isDisabled =
+              !initialShelf?.isExists &&
+              bookshelf.bookCount >= MAX_SHELF_BOOK_COUNT;
+            return (
+              <ShelfBookStatusCheckBox
+                key={bookshelf.id}
+                name={bookshelf.name}
+                isPublic={bookshelf.isPublic}
+                checked={bookshelf.isExists}
+                onClick={() => {
+                  toggleShelf(bookshelf.id);
+                }}
+                disabled={isDisabled}
+              />
+            );
+          })}
         </div>
       </ModernDialogContent>
 
