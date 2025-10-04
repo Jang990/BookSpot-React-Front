@@ -12,7 +12,8 @@ import { useBag } from "@/contexts/BagContext";
 import { useEffect, useState } from "react";
 import { fetchShelfBookStatus } from "@/utils/api/BookshelfApi";
 import { ShelfBookStatus } from "@/types/ApiSpec";
-import { addBookToShelves } from "@/utils/api/ShelfBook";
+import { addBookToShelves, removeBookToShelves } from "@/utils/api/ShelfBook";
+import { useToast } from "@/contexts/ToastContext";
 
 interface ShelfSelectListDialogProps {
   bookId: string;
@@ -30,6 +31,7 @@ export function ShelfSelectListDialog({
   onComplete,
 }: ShelfSelectListDialogProps) {
   const { isInBag, addToBag, removeFromBag } = useBag();
+  const { showToast } = useToast();
 
   const [bagChecked, setBagChecked] = useState(false);
 
@@ -55,7 +57,7 @@ export function ShelfSelectListDialog({
 
   // 삭제된 책장 + 추가된 책장 뽑아내서 추가하기 + 책가방까지 생각
   const handleComplete = () => {
-    const deletedShelfIds = shelfSnapshot
+    const removedShelfIds = shelfSnapshot
       .filter(
         (s) => s.isExists && !shelfStatus.find((ls) => ls.id === s.id)?.isExists
       )
@@ -68,7 +70,9 @@ export function ShelfSelectListDialog({
       )
       .map((s) => s.id);
 
-    console.log("책이 삭제된 책장:", deletedShelfIds);
+    // TODO: Bulk Delete 기능 추가 | 책가방API, 책장도서삭제API, 책장도서추가API 모두 비동기임. 전부 비동기처리하고 전체가 완료되면 onClose, onComplted가 실행되게 만들어야함.
+    // disabled 필요. => | bookCount가 리미트에 도달 + 책장에 책이 존재하지 않음(=넣기밖에 안됌) |
+    // console.log("책이 삭제된 책장:", deletedShelfIds);
     // console.log("책이 추가된 책장:", addedShelfIds);
     addBookToShelves({
       bookId: bookId,
@@ -76,10 +80,19 @@ export function ShelfSelectListDialog({
       side: "client",
     });
 
+    removeBookToShelves({
+      bookId: bookId,
+      targetShelfIds: removedShelfIds,
+      side: "client",
+    });
+
     const bagSnapShot = isInBag(bookId);
     const isBagChanged = bagSnapShot !== bagChecked;
     if (isBagChanged && bagChecked) addToBag(bookId);
     if (isBagChanged && !bagChecked) removeFromBag(bookId);
+
+    if (isBagChanged || addedShelfIds.length > 0 || removedShelfIds.length > 0)
+      showToast("저장 작업을 성공적으로 마무리했습니다.", "INFO");
 
     onComplete();
     onClose();
