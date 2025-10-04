@@ -1,5 +1,5 @@
 export const MAX_SHELF_NAME_LENGTH = 50;
-export const MAX_USER_SHELF_SIZE = 5;
+export const MAX_USER_SHELF_SIZE = 10;
 export const MAX_SHELF_BOOK_COUNT = 50;
 
 export interface BookshelfSummary {
