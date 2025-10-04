@@ -30,7 +30,7 @@ export function ShelfSelectListDialog({
   onClickNewShelf,
   onComplete,
 }: ShelfSelectListDialogProps) {
-  const { isInBag, addToBag, removeFromBag } = useBag();
+  const { isInBag, isFull, addToBag, removeFromBag } = useBag();
   const { showToast } = useToast();
 
   const [bagChecked, setBagChecked] = useState(false);
@@ -173,6 +173,7 @@ export function ShelfSelectListDialog({
             onClick={() => {
               setBagChecked(!bagChecked);
             }}
+            disabled={!bagChecked && isFull()}
           />
           {shelfStatus.map((bookshelf) => (
             <ShelfBookStatusCheckBox
@@ -205,6 +206,7 @@ interface ShelfBookStatusCheckBoxProp {
   name: string;
   isPublic: boolean;
   onClick: () => void;
+  disabled?: boolean;
 }
 
 const ShelfBookStatusCheckBox = ({
@@ -212,15 +214,22 @@ const ShelfBookStatusCheckBox = ({
   name,
   isPublic,
   onClick,
+  disabled,
 }: ShelfBookStatusCheckBoxProp) => {
   return (
     <div
-      onClick={onClick}
+      onClick={() => {
+        if (!disabled) onClick();
+      }}
       role="button"
       tabIndex={0}
       className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-muted"
     >
-      <Checkbox checked={checked} className="pointer-events-none" />
+      <Checkbox
+        checked={checked}
+        disabled={disabled}
+        className="pointer-events-none"
+      />
       <span className="flex-1 text-sm font-medium text-foreground line-clamp-2">
         {name}
       </span>
