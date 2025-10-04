@@ -38,6 +38,8 @@ export function ShelfSelectListDialog({
   const [shelfStatus, setShelfStatus] = useState<ShelfBookStatus[]>([]);
   const [shelfSnapshot, setShelfSnapshot] = useState<ShelfBookStatus[]>([]);
 
+  const [isSaving, setIsSaving] = useState(false);
+
   useEffect(() => {
     if (!bookId) return;
 
@@ -55,47 +57,84 @@ export function ShelfSelectListDialog({
     );
   };
 
-  // 삭제된 책장 + 추가된 책장 뽑아내서 추가하기 + 책가방까지 생각
-  const handleComplete = () => {
-    const removedShelfIds = shelfSnapshot
-      .filter(
-        (s) => s.isExists && !shelfStatus.find((ls) => ls.id === s.id)?.isExists
-      )
-      .map((s) => s.id);
+  // disabled 필요. => | bookCount가 리미트에 도달 + 책장에 책이 존재하지 않음(=넣기밖에 안됌) |
+  const handleComplete = async () => {
+    setIsSaving(true);
 
-    const addedShelfIds = shelfStatus
-      .filter(
-        (s) =>
-          !shelfSnapshot.find((is) => is.id === s.id)?.isExists && s.isExists
-      )
-      .map((s) => s.id);
+    const promises = [];
 
-    // TODO: Bulk Delete 기능 추가 | 책가방API, 책장도서삭제API, 책장도서추가API 모두 비동기임. 전부 비동기처리하고 전체가 완료되면 onClose, onComplted가 실행되게 만들어야함.
-    // disabled 필요. => | bookCount가 리미트에 도달 + 책장에 책이 존재하지 않음(=넣기밖에 안됌) |
-    // console.log("책이 삭제된 책장:", deletedShelfIds);
-    // console.log("책이 추가된 책장:", addedShelfIds);
-    addBookToShelves({
-      bookId: bookId,
-      targetShelfIds: addedShelfIds,
-      side: "client",
-    });
+    // 새롭게 체크한 책장들 bulk Add
+    const addedShelfIds = getAddedShelfIds();
+    if (addedShelfIds.length > 0) {
+      promises.push(
+        addBookToShelves({
+          bookId: bookId,
+          targetShelfIds: addedShelfIds,
+          side: "client",
+        })
+      );
+    }
 
-    removeBookToShelves({
-      bookId: bookId,
-      targetShelfIds: removedShelfIds,
-      side: "client",
-    });
+    // 체크를 해제한 책장들 bulk remove
+    const removedShelfIds = getRemovedShelfIds();
+    if (removedShelfIds.length > 0) {
+      promises.push(
+        removeBookToShelves({
+          bookId: bookId,
+          targetShelfIds: removedShelfIds,
+          side: "client",
+        })
+      );
+    }
 
+    // 가방 작업 처리
     const bagSnapShot = isInBag(bookId);
     const isBagChanged = bagSnapShot !== bagChecked;
-    if (isBagChanged && bagChecked) addToBag(bookId);
-    if (isBagChanged && !bagChecked) removeFromBag(bookId);
+    if (isBagChanged) {
+      if (bagChecked) {
+        promises.push(addToBag(bookId));
+      } else {
+        promises.push(removeFromBag(bookId));
+      }
+    }
 
-    if (isBagChanged || addedShelfIds.length > 0 || removedShelfIds.length > 0)
+    // 변경 사항이 없으면 아무것도 안하고 종료
+    if (promises.length === 0) {
+      onClose();
+      setIsSaving(false);
+      return;
+    }
+
+    try {
+      await Promise.all(promises);
+
       showToast("저장 작업을 성공적으로 마무리했습니다.", "INFO");
+      onComplete();
+      onClose();
+    } catch (error) {
+      console.error("저장 중 오류가 발생했습니다:", error);
+      showToast("저장 중 문제가 발생했습니다. 다시 시도해주세요.", "WARN");
+    } finally {
+      setIsSaving(false);
+    }
 
-    onComplete();
-    onClose();
+    function getAddedShelfIds() {
+      return shelfStatus
+        .filter(
+          (s) =>
+            !shelfSnapshot.find((is) => is.id === s.id)?.isExists && s.isExists
+        )
+        .map((s) => s.id);
+    }
+
+    function getRemovedShelfIds() {
+      return shelfSnapshot
+        .filter(
+          (s) =>
+            s.isExists && !shelfStatus.find((ls) => ls.id === s.id)?.isExists
+        )
+        .map((s) => s.id);
+    }
   };
 
   return (
@@ -153,7 +192,9 @@ export function ShelfSelectListDialog({
         <Button variant="ghost" onClick={onClose}>
           취소
         </Button>
-        <Button onClick={handleComplete}>완료</Button>
+        <Button onClick={handleComplete} disabled={isSaving}>
+          완료
+        </Button>
       </ModernDialogFooter>
     </ModernDialog>
   );
