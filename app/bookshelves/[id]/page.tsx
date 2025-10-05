@@ -16,6 +16,7 @@ import { CommonShelf, MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { FIRST_PAGE } from "@/types/Pageable";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
+import { ShelfBookListTemplate } from "@/components/templates/ShelfBooksTemplate";
 
 export default function BookshelfDetailPage() {
   const params = useParams();
@@ -122,7 +123,7 @@ export default function BookshelfDetailPage() {
           </Button>
         </div>
 
-        <BookPreviewList searchResults={books} />
+        <ShelfBookListTemplate searchResults={books} />
 
         <ShelfUpdateDialog
           bookshelf={{
