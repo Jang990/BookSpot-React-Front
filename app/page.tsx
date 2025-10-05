@@ -4,7 +4,7 @@ import { Pageable } from "@/types/Pageable";
 import { findBooksPreview, SearchCondition } from "@/utils/api/BookPreviewApi";
 import { toRawQueryString } from "@/utils/querystring/QueryString";
 import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
-import { TitleAndSubButton } from "@/components/molecules/title/TitleAndSubButton";
+import { RecommendCategoryBooksTitle } from "@/components/molecules/title/TitleAndSubButton";
 import { POPULAR_CATEGORY_IDS } from "@/types/BookCategory";
 
 /*
@@ -56,11 +56,7 @@ export default async function Home({ searchParams }: Props) {
       </div>
 
       <div className="mt-5">
-        <TitleAndSubButton
-          title="이런 책 어때요?"
-          subButtonText="더보기"
-          categoryId={randomCategoryId}
-        />
+        <RecommendCategoryBooksTitle categoryId={randomCategoryId} />
 
         <BookPreviewList searchResults={books} />
       </div>

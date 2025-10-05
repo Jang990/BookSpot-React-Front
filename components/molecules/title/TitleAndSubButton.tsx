@@ -4,42 +4,44 @@ import { ChevronRight } from "lucide-react";
 import { ReadonlyURLSearchParams, useRouter } from "next/navigation";
 import { onClickCategory } from "@/components/templates/BookCategoryPageTemplate";
 import { LEVEL_LEAF } from "@/utils/querystring/CategoryId";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderTitle,
+} from "@/components/ui/custom-page-title";
+import { Button } from "@/components/ui/button";
 
 interface Props {
-  title: string;
-  subButtonText?: string;
   categoryId: number;
 }
 
-export const TitleAndSubButton = ({
-  title,
-  subButtonText = "더보기",
-  categoryId,
-}: Props) => {
+export const RecommendCategoryBooksTitle = ({ categoryId }: Props) => {
   const router = useRouter();
 
   return (
-    <div className="ps-3 mt-2 mb-3 flex items-center justify-between overflow-hidden">
-      {/* 왼쪽 */}
-      <div className="flex items-center overflow-hidden min-w-0">
-        <Title text={title} isTruncated={false} />
-      </div>
-
-      {/* 오른쪽 결과 수 */}
-      <div className="px-2 ps-3 self-end justify-self-end flex-shrink-0 select-none">
-        <SubButton
-          text={subButtonText}
-          onClick={() => {
-            onClickCategory(
-              router,
-              new ReadonlyURLSearchParams(),
-              categoryId,
-              LEVEL_LEAF,
-              () => {}
-            );
-          }}
-        />
-      </div>
+    <div>
+      <PageHeader>
+        <PageHeaderTitle>이런 책 어때요?</PageHeaderTitle>
+        <PageHeaderActions>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground"
+            onClick={() => {
+              onClickCategory(
+                router,
+                new ReadonlyURLSearchParams(),
+                categoryId,
+                LEVEL_LEAF,
+                () => {}
+              );
+            }}
+          >
+            더보기
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </PageHeaderActions>
+      </PageHeader>
     </div>
   );
 };
