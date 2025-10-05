@@ -1,5 +1,4 @@
 "use client";
-import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
 import { ReadonlyURLSearchParams, useRouter } from "next/navigation";
 import { onClickCategory } from "@/components/templates/BookCategoryPageTemplate";
@@ -44,43 +43,5 @@ export const RecommendCategoryBooksTitle = ({ categoryId }: Props) => {
         </PageHeaderActions>
       </PageHeader>
     </div>
-  );
-};
-
-interface TextProps {
-  text: string;
-  isTruncated: boolean;
-}
-
-const Title = ({ text, isTruncated }: TextProps) => {
-  return (
-    <h1
-      className={clsx(
-        "text-lg font-bold text-gray-800",
-        isTruncated && "truncate"
-      )}
-    >
-      {text}
-    </h1>
-  );
-};
-
-interface ButtonProps {
-  text: string;
-  onClick: () => void;
-}
-
-const SubButton = ({ text, onClick }: ButtonProps) => {
-  return (
-    <button
-      onClick={onClick}
-      className={clsx(
-        "font-medium text-muted-foreground hover:text-gray-900 transition-colors",
-        "flex items-center gap-1"
-      )}
-    >
-      {text}
-      <ChevronRight className="h-4 w-4" />
-    </button>
   );
 };
