@@ -55,7 +55,7 @@ export default async function Home({ searchParams }: Props) {
         />
       </div>
 
-      <div className="mt-5">
+      <div>
         <RecommendCategoryBooksTitle categoryId={randomCategoryId} />
 
         <BookPreviewList searchResults={books} />
