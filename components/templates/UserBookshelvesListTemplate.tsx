@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MAX_USER_SHELF_SIZE, type BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book, MoreVertical, Edit, Trash2 } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
-import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import {
@@ -27,22 +26,18 @@ import {
   PageHeaderTitle,
 } from "../ui/custom-page-title";
 
-export const UserBookshelvesListTemplate = () => {
-  const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
+export const UserBookshelvesListTemplate = ({
+  shelves,
+}: {
+  shelves: BookshelfSummary[];
+}) => {
+  const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>(shelves);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   const [selectedShelf, setSelectedShelf] = useState<BookshelfSummary | null>(
     null
   );
   const [dialogType, setDialogType] = useState<"edit" | "delete" | null>(null);
-
-  useEffect(() => {
-    fetchUserBookshelvesSummary({ userId: "1", side: "client" }).then(
-      (data) => {
-        setBookshelves(data.bookshelvesSummary);
-      }
-    );
-  }, []);
 
   // 다이얼로그를 닫고 상태를 초기화하는 공통 함수
   const handleCloseDialog = () => {

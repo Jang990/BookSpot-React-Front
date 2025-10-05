@@ -1,5 +1,17 @@
 import { UserBookshelvesListTemplate } from "@/components/templates/UserBookshelvesListTemplate";
+import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 
-export default function BookshelvesPage() {
-  return <UserBookshelvesListTemplate></UserBookshelvesListTemplate>;
+export default async function BookshelvesPage() {
+  const shelves = (
+    await fetchUserBookshelvesSummary({
+      userId: "1",
+      side: "server",
+    })
+  ).bookshelvesSummary;
+
+  return (
+    <UserBookshelvesListTemplate
+      shelves={shelves}
+    ></UserBookshelvesListTemplate>
+  );
 }
