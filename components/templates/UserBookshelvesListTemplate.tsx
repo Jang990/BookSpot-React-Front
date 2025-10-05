@@ -27,8 +27,12 @@ import {
   PageHeaderTitle,
 } from "../ui/custom-page-title";
 
-export const UserBookshelvesListTemplate = () => {
-  const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
+export const UserBookshelvesListTemplate = ({
+  shelves,
+}: {
+  shelves: BookshelfSummary[];
+}) => {
+  const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>(shelves);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   const [selectedShelf, setSelectedShelf] = useState<BookshelfSummary | null>(
