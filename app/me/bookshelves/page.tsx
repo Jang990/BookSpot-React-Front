@@ -5,7 +5,7 @@ export default async function BookshelvesPage() {
   const shelves = (
     await fetchUserBookshelvesSummary({
       userId: "1",
-      side: "client",
+      side: "server",
     })
   ).bookshelvesSummary;
 
