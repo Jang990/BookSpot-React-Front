@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Settings } from "lucide-react";
-import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
+import { Globe, Lock, Settings } from "lucide-react";
 import {
   ShelfUpdateDialog,
   ShelfUpdateOptions,
@@ -12,6 +10,14 @@ import {
 import { BookPreview } from "@/types/BookPreview";
 import { CommonShelf } from "@/types/Bookshelf";
 import { ShelfBookListTemplate } from "@/components/templates/ShelfBooksTemplate";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderGroup,
+  PageHeaderSubLabel,
+  PageHeaderTitle,
+} from "../ui/custom-page-title";
+import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 
 interface Props {
   initShelf: CommonShelf;
@@ -37,22 +43,32 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.back()}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              책장 목록
-            </Button>
-            <div>
-              <div className="flex items-center gap-3 mb-2">
+    <div>
+      {/* Header */}
+      <PageHeader>
+        <PageHeaderGroup>
+          <PageHeaderTitle onBackClick={() => router.back()}>
+            {shelf.isPublic ? (
+              <Globe className="inline-block align-middle mr-2 text-primary h-5 w-5" />
+            ) : (
+              <Lock className="inline-block align-middle text-muted-foreground mr-2 h-5 w-5" />
+            )}
+            {shelf.name}
+          </PageHeaderTitle>
+          <PageHeaderSubLabel>
+            {books.length} / 50권의 책 저장 중
+          </PageHeaderSubLabel>
+        </PageHeaderGroup>
+
+        <PageHeaderActions>
+          <CommonIconButton
+            icon={<Settings />}
+            onClick={() => setShowSettings(true)}
+          />
+        </PageHeaderActions>
+      </PageHeader>
+      {/* 
+        <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold text-foreground">
                   {shelf.name}
                 </h1>
@@ -64,34 +80,20 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
                   )}
                 </div>
               </div>
-              <p className="text-muted-foreground">
-                {books.length}/50권의 책이 저장되어 있습니다
-              </p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 bg-transparent"
-            onClick={() => setShowSettings(true)}
-          >
-            <Settings className="w-4 h-4" />
-            책장 설정
-          </Button>
-        </div>
+               */}
 
-        <ShelfBookListTemplate searchResults={books} />
+      <ShelfBookListTemplate searchResults={books} />
 
-        <ShelfUpdateDialog
-          bookshelf={{
-            id: shelf.id,
-            name: shelf.name,
-            isPublic: shelf.isPublic,
-          }}
-          isOpen={showSettings}
-          onClose={() => setShowSettings(false)}
-          onUpdate={handleUpdateShelf}
-        />
-      </div>
+      <ShelfUpdateDialog
+        bookshelf={{
+          id: shelf.id,
+          name: shelf.name,
+          isPublic: shelf.isPublic,
+        }}
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        onUpdate={handleUpdateShelf}
+      />
     </div>
   );
 };
