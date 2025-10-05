@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface Props {
+  subButtonText?: string;
   categoryId: number;
 }
 
