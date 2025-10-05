@@ -11,57 +11,60 @@ import {
   ShelfUpdateOptions,
 } from "@/components/organisms/popup/ShelfUpdateDialog";
 import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
-import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
+import { BookPreview } from "@/types/BookPreview";
+import { CommonShelf, MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
+import { findBooksPreview } from "@/utils/api/BookPreviewApi";
+import { FIRST_PAGE } from "@/types/Pageable";
 
 export default function BookshelfDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [bookshelf, setBookshelf] =
-    useState<BookshelfDetailResponseSpec | null>(null);
+
+  const [shelf, setShelf] = useState<CommonShelf | null>(null);
+  const [books, setBooks] = useState<BookPreview[]>([]);
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     if (!params.id) {
-      setBookshelf(null);
+      setShelf(null);
       return;
     }
 
+    // 책장 정보를 불러옴
     fetchBookshelfDetail({
       shelfId: params.id.toString(),
       side: "client",
     }).then((data) => {
-      if (data) setBookshelf(data);
-      else setBookshelf(null);
+      setShelf(data);
+      if (data.books.length === 0) return;
+
+      // 책장의 책정보를 불러옴
+      findBooksPreview(
+        { bookIds: data.books.map((book) => book.id), categoryCond: null },
+        { pageNumber: FIRST_PAGE, pageSize: MAX_SHELF_BOOK_COUNT },
+        "client"
+      ).then((response) => {
+        setBooks(response.books);
+      });
     });
   }, [params.id]);
 
   const removeBookFromShelf = (bookId: string) => {
-    if (!bookshelf) return;
-
-    const updatedBookshelf = {
-      ...bookshelf,
-      books: bookshelf.books.filter((book) => book.id !== bookId),
-    };
-    setBookshelf(updatedBookshelf);
+    setBooks((prev) => prev.filter((book) => book.id !== bookId));
   };
 
-  const handleUpdateBookshelf = (updatedBookshelf: ShelfUpdateOptions) => {
-    if (!bookshelf) return;
+  const handleUpdateShelf = (updatedShelf: ShelfUpdateOptions) => {
+    if (!shelf) return;
 
-    setBookshelf({
-      ...bookshelf,
-      name: updatedBookshelf.name.trim(),
-      isPublic: updatedBookshelf.isPublic,
+    setShelf({
+      ...shelf,
+      name: updatedShelf.name.trim(),
+      isPublic: updatedShelf.isPublic,
       createdAt: new Date().toISOString(),
     });
   };
 
-  const handleDeleteBookshelf = () => {
-    // In a real app, this would delete from backend
-    router.push("/me/bookshelves");
-  };
-
-  if (!bookshelf) {
+  if (!shelf) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
@@ -93,10 +96,10 @@ export default function BookshelfDetailPage() {
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-3xl font-bold text-foreground">
-                  {bookshelf.name}
+                  {shelf.name}
                 </h1>
                 <div className="flex items-center gap-2">
-                  {bookshelf.isPublic ? (
+                  {shelf.isPublic ? (
                     <GreenBadge text="공개" />
                   ) : (
                     <GrayBadge text="비공개" />
@@ -104,7 +107,7 @@ export default function BookshelfDetailPage() {
                 </div>
               </div>
               <p className="text-muted-foreground">
-                {bookshelf.books.length}/50권의 책이 저장되어 있습니다
+                {books.length}/50권의 책이 저장되어 있습니다
               </p>
             </div>
           </div>
@@ -119,9 +122,9 @@ export default function BookshelfDetailPage() {
         </div>
 
         {/* Books Grid */}
-        {bookshelf.books.length > 0 ? (
+        {books.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-8">
-            {bookshelf.books.map((book) => (
+            {books.map((book) => (
               <DeletablaBookInfo
                 key={book.id}
                 book={book}
@@ -138,13 +141,13 @@ export default function BookshelfDetailPage() {
 
         <ShelfUpdateDialog
           bookshelf={{
-            id: bookshelf.id,
-            name: bookshelf.name,
-            isPublic: bookshelf.isPublic,
+            id: shelf.id,
+            name: shelf.name,
+            isPublic: shelf.isPublic,
           }}
           isOpen={showSettings}
           onClose={() => setShowSettings(false)}
-          onUpdate={handleUpdateBookshelf}
+          onUpdate={handleUpdateShelf}
         />
       </div>
     </div>
