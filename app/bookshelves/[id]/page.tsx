@@ -15,6 +15,7 @@ import { BookPreview } from "@/types/BookPreview";
 import { CommonShelf, MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { FIRST_PAGE } from "@/types/Pageable";
+import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 
 export default function BookshelfDetailPage() {
   const params = useParams();
@@ -121,23 +122,7 @@ export default function BookshelfDetailPage() {
           </Button>
         </div>
 
-        {/* Books Grid */}
-        {books.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-8">
-            {books.map((book) => (
-              <DeletablaBookInfo
-                key={book.id}
-                book={book}
-                deleteBook={() => removeBookFromShelf(book.id)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 mb-8">
-            <Book className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2">책장이 비어있습니다</h3>
-          </div>
-        )}
+        <BookPreviewList searchResults={books} />
 
         <ShelfUpdateDialog
           bookshelf={{
