@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Settings, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
-import { DeletablaBookInfo } from "@/components/organisms/book/preview/DeletableBookInfo";
 import {
   ShelfUpdateDialog,
   ShelfUpdateOptions,
@@ -14,8 +13,6 @@ import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
 import { BookPreview } from "@/types/BookPreview";
 import { CommonShelf, MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
-import { FIRST_PAGE } from "@/types/Pageable";
-import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
 import { ShelfBookListTemplate } from "@/components/templates/ShelfBooksTemplate";
 
 export default function BookshelfDetailPage() {
@@ -50,10 +47,6 @@ export default function BookshelfDetailPage() {
       });
     });
   }, [params.id]);
-
-  const removeBookFromShelf = (bookId: string) => {
-    setBooks((prev) => prev.filter((book) => book.id !== bookId));
-  };
 
   const handleUpdateShelf = (updatedShelf: ShelfUpdateOptions) => {
     if (!shelf) return;
