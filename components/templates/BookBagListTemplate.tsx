@@ -7,7 +7,6 @@ import { DeletablaBookInfo } from "@/components/organisms/book/preview/Deletable
 import { useBag } from "@/contexts/BagContext";
 import { BookBagPopup } from "../organisms/BookBagPopup";
 import { InfoPanel } from "../molecules/InfoPanel";
-import { PageTitle } from "../molecules/title/PageTitle";
 import { Pageable } from "@/types/Pageable";
 import { findBooksPreview } from "@/utils/api/BookPreviewApi";
 import { MAX_BAG_SIZE } from "@/utils/BagLocalStorage";
@@ -15,6 +14,12 @@ import { SkeletonBookList } from "../organisms/SkeletonBookList";
 import { ErrorPage } from "../molecules/ErrorPage";
 import { SkeletonDiv } from "../atoms/SkeletonDiv";
 import { useToast } from "@/contexts/ToastContext";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderSubLabel,
+  PageHeaderTitle,
+} from "../ui/custom-page-title";
 
 interface Props {}
 
@@ -72,12 +77,18 @@ export const BookBagListTemplate = ({}: Props) => {
   ) : (
     <div>
       <div className="flex justify-between items-center">
-        <PageTitle text="내 가방" />
-        {loading ? (
-          <SkeletonDiv height="h-5 " width="w-28" />
-        ) : (
-          <div className="text-muted-foreground pe-3">{`담은 책 : ${books.length} / ${MAX_BAG_SIZE}`}</div>
-        )}
+        <PageHeader>
+          <PageHeaderTitle>내 가방</PageHeaderTitle>
+          <PageHeaderActions>
+            {loading ? (
+              <SkeletonDiv height="h-5" width="w-28" />
+            ) : (
+              <PageHeaderSubLabel>
+                담은 책 : {books.length} / {MAX_BAG_SIZE}
+              </PageHeaderSubLabel>
+            )}
+          </PageHeaderActions>
+        </PageHeader>
       </div>
       <div>
         {loading && <SkeletonBookList />}
