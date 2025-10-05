@@ -44,13 +44,13 @@ const createBookshelfDetailApiPath = (shelfId: string) => {
 export const fetchBookshelfDetail = async ({
   shelfId,
   side,
-}: BookshelfDetailProps): Promise<BookshelfDetailResponseSpec | null> => {
+}: BookshelfDetailProps): Promise<BookshelfDetailResponseSpec> => {
   const response = await getApiClient(side).get<BookshelfDetailResponseSpec>(
     createBookshelfDetailApiPath(shelfId)
   );
 
   if (!response.ok) throw response.error;
-  if (!response.data) return null;
+  if (!response.data) throw new Error("찾을 수 없는 책장");
   return response.data;
 };
 
