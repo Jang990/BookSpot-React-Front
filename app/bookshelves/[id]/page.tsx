@@ -21,15 +21,18 @@ export default function BookshelfDetailPage() {
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    if (!params.id) setBookshelf(null);
-    else
-      fetchBookshelfDetail({
-        shelfId: params.id.toString(),
-        side: "client",
-      }).then((data) => {
-        if (data) setBookshelf(data);
-        else setBookshelf(null);
-      });
+    if (!params.id) {
+      setBookshelf(null);
+      return;
+    }
+
+    fetchBookshelfDetail({
+      shelfId: params.id.toString(),
+      side: "client",
+    }).then((data) => {
+      if (data) setBookshelf(data);
+      else setBookshelf(null);
+    });
   }, [params.id]);
 
   const removeBookFromShelf = (bookId: string) => {
