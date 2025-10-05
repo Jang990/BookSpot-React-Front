@@ -1,7 +1,12 @@
 import { InfoPanel } from "@/components/molecules/InfoPanel";
-import { PageTitlAndSubLabel } from "@/components/molecules/title/PageTitle";
 import { RankingSearchButtons } from "@/components/organisms/ranking/RankingSearchButtons";
 import { BookPreviewList } from "@/components/templates/BookPrevewListTemplate";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderSubLabel,
+  PageHeaderTitle,
+} from "@/components/ui/custom-page-title";
 import { BookPreview } from "@/types/BookPreview";
 import {
   RankingPeriodMeta,
@@ -39,10 +44,7 @@ export default async function RankingPage({
 
   return (
     <div>
-      <PageTitlAndSubLabel
-        title={`🔥 ${pagePeriodText} 대출 Top50`}
-        label={periodText}
-      />
+      <Top50PageTitle pagePeriodText={pagePeriodText} periodText={periodText} />
       <RankingSearchButtons rankingConditions={rankingParams} />
       <BookPreviewList searchResults={bookRankings} />
 
@@ -52,6 +54,23 @@ export default async function RankingPage({
     </div>
   );
 }
+
+const Top50PageTitle = ({
+  pagePeriodText,
+  periodText,
+}: {
+  pagePeriodText: string;
+  periodText: string;
+}) => {
+  return (
+    <PageHeader>
+      <PageHeaderTitle>🔥 {pagePeriodText} 대출 Top50</PageHeaderTitle>
+      <PageHeaderActions>
+        <PageHeaderSubLabel>{periodText}</PageHeaderSubLabel>
+      </PageHeaderActions>
+    </PageHeader>
+  );
+};
 
 function getWeeklyRankingPeriod(today: Date): string {
   const dayOfWeek = today.getDay(); // 0:일, 1:월, ..., 6:토

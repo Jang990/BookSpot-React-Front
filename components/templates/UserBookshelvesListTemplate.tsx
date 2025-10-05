@@ -9,14 +9,23 @@ import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { fetchUserBookshelvesSummary } from "@/utils/api/BookshelfApi";
 import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
-import { PageTitleAndButton } from "../molecules/title/PageTitle";
-import { CommonIconDropdown } from "../atoms/button/icon/CommonIconButton";
+import {
+  CommonIconButton,
+  CommonIconDropdown,
+} from "../atoms/button/icon/CommonIconButton";
 import {
   ShelfUpdateDialog,
   ShelfUpdateOptions,
 } from "../organisms/popup/ShelfUpdateDialog";
 import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import { ShelfDeleteDialog } from "../organisms/popup/ShelfDeleteDialog";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderGroup,
+  PageHeaderSubLabel,
+  PageHeaderTitle,
+} from "../ui/custom-page-title";
 
 export const UserBookshelvesListTemplate = () => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>([]);
@@ -98,13 +107,7 @@ export const UserBookshelvesListTemplate = () => {
   return (
     <div className="min-h-screen bg-background">
       <div>
-        <PageTitleAndButton
-          title="내 책장"
-          subLabel={`${bookshelves.length} / ${MAX_USER_SHELF_SIZE}개 사용중`}
-          btnIcon={<Plus onClick={() => console.log("HelloWorld!")} />}
-          btnDisabled={bookshelves.length >= MAX_USER_SHELF_SIZE}
-          onClickBtn={() => setShowCreateDialog(true)}
-        />
+        {pageTitle()}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {bookshelves.map((shelf) => (
             <BookshelfCard
@@ -148,6 +151,28 @@ export const UserBookshelvesListTemplate = () => {
       </div>
     </div>
   );
+
+  function pageTitle() {
+    return (
+      <PageHeader>
+        {/* 제목과 서브라벨을 세로로 묶기 위해 Group 사용 */}
+        <PageHeaderGroup>
+          <PageHeaderTitle>내 책장</PageHeaderTitle>
+          <PageHeaderSubLabel>
+            {bookshelves.length} / {MAX_USER_SHELF_SIZE}개 사용중
+          </PageHeaderSubLabel>
+        </PageHeaderGroup>
+
+        <PageHeaderActions>
+          <CommonIconButton
+            icon={<Plus />}
+            disabled={bookshelves.length >= MAX_USER_SHELF_SIZE}
+            onClick={() => setShowCreateDialog(true)}
+          />
+        </PageHeaderActions>
+      </PageHeader>
+    );
+  }
 };
 
 export const BookshelfCard = ({
