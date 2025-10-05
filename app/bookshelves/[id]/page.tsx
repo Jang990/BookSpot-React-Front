@@ -36,12 +36,12 @@ export default function BookshelfDetailPage() {
       side: "client",
     }).then((data) => {
       setShelf(data);
-      if (data.books.length === 0) return;
+      if (data.bookIds.length === 0) return;
 
       // 책장의 책정보를 불러옴
       findBooksPreview(
-        { bookIds: data.books.map((book) => book.id), categoryCond: null },
-        { pageNumber: FIRST_PAGE, pageSize: MAX_SHELF_BOOK_COUNT },
+        { bookIds: data.bookIds, categoryCond: null },
+        { pageNumber: 0, pageSize: MAX_SHELF_BOOK_COUNT },
         "client"
       ).then((response) => {
         setBooks(response.books);

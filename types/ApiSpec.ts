@@ -68,7 +68,7 @@ export interface BookshelfSummaryListResponseApiSpec {
 }
 
 export interface BookshelfDetailResponseSpec extends CommonShelf {
-  books: BookPreview[];
+  bookIds: string[];
 }
 
 export interface ShelvesBookStatusResponseSpec {
