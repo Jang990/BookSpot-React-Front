@@ -1,5 +1,5 @@
 import { BookPreview, BookRankingPreview } from "./BookPreview";
-import { BookshelfSummary } from "./Bookshelf";
+import { BookshelfSummary, CommonShelf } from "./Bookshelf";
 import LibraryStock from "./LibraryStock";
 import { LoanInfo, LoanState } from "./Loan";
 
@@ -67,12 +67,7 @@ export interface BookshelfSummaryListResponseApiSpec {
   bookshelvesSummary: BookshelfSummary[];
 }
 
-export interface BookshelfDetailResponseSpec {
-  id: string;
-  name: string;
-  bookCount: number;
-  createdAt: string;
-  isPublic: boolean;
+export interface BookshelfDetailResponseSpec extends CommonShelf {
   books: BookPreview[];
 }
 
