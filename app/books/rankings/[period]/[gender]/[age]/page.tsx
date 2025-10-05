@@ -44,12 +44,7 @@ export default async function RankingPage({
 
   return (
     <div>
-      <div className="mb-1">
-        <Top50PageTitle
-          pagePeriodText={pagePeriodText}
-          periodText={periodText}
-        />
-      </div>
+      <Top50PageTitle pagePeriodText={pagePeriodText} periodText={periodText} />
       <RankingSearchButtons rankingConditions={rankingParams} />
       <BookPreviewList searchResults={bookRankings} />
 

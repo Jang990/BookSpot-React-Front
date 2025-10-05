@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 
 // --- 1. 기본 레이아웃 스타일 정의 ---
 const pageHeaderVariants = cva(
-  "flex w-full items-center justify-between gap-4 p-3"
+  "flex w-full items-center justify-between gap-4 p-3 pb-4"
 );
 
 // --- 2. 메인 컨테이너 컴포넌트 ---
