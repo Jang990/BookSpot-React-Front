@@ -47,6 +47,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           // 백엔드로부터 받은 JWT를 세션 토큰에 저장합니다.
           token.backendToken = backendData.accessToken;
           token.userRole = backendData.role;
+          token.userId = backendData.userId;
           token.exp = Math.floor(backendData.expiredAt / 1000);
         } catch (error) {
           console.error("JWT Callback Error:", error);
@@ -62,6 +63,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // user 객체에 role 같은 커스텀 데이터를 추가할 수 있습니다.
       if (session.user) {
         (session.user as any).role = token.userRole as string;
+        (session.user as any).id = token.userId as string;
       }
       return session;
     },
