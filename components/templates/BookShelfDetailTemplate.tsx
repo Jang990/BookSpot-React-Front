@@ -12,12 +12,12 @@ import { CommonShelf } from "@/types/Bookshelf";
 import { ShelfBookListTemplate } from "@/components/templates/ShelfBooksTemplate";
 import {
   PageHeader,
-  PageHeaderActions,
   PageHeaderGroup,
   PageHeaderSubLabel,
   PageHeaderTitle,
 } from "../ui/custom-page-title";
 import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
+import { ShelfDeleteDialog } from "../organisms/popup/ShelfDeleteDialog";
 
 interface Props {
   initShelf: CommonShelf;
@@ -29,7 +29,7 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
 
   const [shelf, setShelf] = useState<CommonShelf>(initShelf);
   const [books, setBooks] = useState<BookPreview[]>(initBooks);
-  const [showSettings, setShowSettings] = useState(false);
+  const [dialogType, setDialogType] = useState<"edit" | "delete" | null>(null);
 
   const handleUpdateShelf = (updatedShelf: ShelfUpdateOptions) => {
     if (!shelf) return;
@@ -63,10 +63,13 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
               )
             }
           />
-          <CommonIconButton icon={<Trash2 />} onClick={() => {}} />
+          <CommonIconButton
+            icon={<Trash2 />}
+            onClick={() => setDialogType("delete")}
+          />
           <CommonIconButton
             icon={<Settings />}
-            onClick={() => setShowSettings(true)}
+            onClick={() => setDialogType("edit")}
           />
         </div>
       </div>
@@ -87,9 +90,19 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
           name: shelf.name,
           isPublic: shelf.isPublic,
         }}
-        isOpen={showSettings}
-        onClose={() => setShowSettings(false)}
+        isOpen={dialogType === "edit"}
+        onClose={() => setDialogType(null)}
         onUpdate={handleUpdateShelf}
+      />
+      <ShelfDeleteDialog
+        isOpen={dialogType === "delete"}
+        shelf={{
+          id: shelf.id,
+          name: shelf.name,
+          isPublic: shelf.isPublic,
+        }}
+        onClose={() => setDialogType(null)}
+        onDelete={() => router.back()}
       />
     </div>
   );
