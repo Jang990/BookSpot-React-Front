@@ -7,11 +7,15 @@ import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 import { Book } from "lucide-react";
 
 interface BookPreviewListProps {
+  shelfId: string;
   searchResults: BookPreview[];
+  removeBook: (bookId: string) => void;
 }
 
 export const ShelfBookListTemplate = ({
+  shelfId,
   searchResults,
+  removeBook,
 }: BookPreviewListProps) => {
   const [shelfDialogType, setShelfDialogType] = useState<
     "select" | "create" | null
@@ -56,6 +60,9 @@ export const ShelfBookListTemplate = ({
         onClose={closeShelfListDialog}
         onComplete={() => {}}
         onClickNewShelf={openShelfCreateDialog}
+        onRemoveBookFromShelf={(bookId, removedShelfIds) => {
+          if (removedShelfIds.includes(shelfId)) removeBook(bookId);
+        }}
       />
 
       <ShelfCreateDialog

@@ -24,6 +24,7 @@ interface ShelfSelectListDialogProps {
   onClose: () => void;
   onClickNewShelf: () => void;
   onComplete: () => void;
+  onRemoveBookFromShelf: (bookId: string, removedShelfIds: string[]) => void;
 }
 
 export function ShelfSelectListDialog({
@@ -32,6 +33,7 @@ export function ShelfSelectListDialog({
   onClose,
   onClickNewShelf,
   onComplete,
+  onRemoveBookFromShelf,
 }: ShelfSelectListDialogProps) {
   const { isInBag, isFull, addToBag, removeFromBag } = useBag();
   const { showToast } = useToast();
@@ -112,6 +114,7 @@ export function ShelfSelectListDialog({
       await Promise.all(promises);
 
       showToast("저장 작업을 성공적으로 마무리했습니다.", "INFO");
+      if (onRemoveBookFromShelf) onRemoveBookFromShelf(bookId, removedShelfIds);
       onComplete();
       onClose();
     } catch (error) {
