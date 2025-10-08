@@ -18,6 +18,8 @@ import { MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
 import clsx from "clsx";
 import { YellowBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { createLoginUrl_CSR } from "@/utils/querystring/RedirectUri";
 
 interface ShelfSelectListDialogProps {
   bookId: string;
@@ -157,7 +159,10 @@ export function ShelfSelectListDialog({
             <Button
               variant="ghost"
               size="sm"
-              onClick={onClickNewShelf}
+              onClick={() => {
+                if (status !== "authenticated") redirect(createLoginUrl_CSR());
+                onClickNewShelf();
+              }}
               className="h-8 gap-1 text-sm font-medium"
             >
               <Plus className="h-4 w-4" />새 책장

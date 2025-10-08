@@ -11,3 +11,9 @@ export function createRedirectLoginUrl(currentUri?: string): string {
     return `/login?${REDIRECT_QUERY_STRING_KEY}=${encodeURIComponent(currentUri)}`;
   return "/login";
 }
+
+export function createLoginUrl_CSR(): string {
+  const { pathname, search } = window.location;
+  const currentUri = pathname + search;
+  return createRedirectLoginUrl(currentUri);
+}
