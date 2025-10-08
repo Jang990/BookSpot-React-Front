@@ -22,9 +22,14 @@ import { ShelfDeleteDialog } from "../organisms/popup/ShelfDeleteDialog";
 interface Props {
   initShelf: CommonShelf;
   initBooks: BookPreview[];
+  redirectUri?: string;
 }
 
-export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
+export const BookshelfDetailTemplate = ({
+  initShelf,
+  initBooks,
+  redirectUri = "/me/bookshelves",
+}: Props) => {
   const router = useRouter();
 
   const [shelf, setShelf] = useState<CommonShelf>(initShelf);
@@ -48,7 +53,7 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
         <div className="shrink-0">
           <CommonIconButton
             icon={<ArrowLeft />}
-            onClick={() => router.back()}
+            onClick={() => router.push(redirectUri)}
           />
         </div>
 
