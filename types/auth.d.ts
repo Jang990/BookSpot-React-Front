@@ -5,7 +5,7 @@ declare module "next-auth" {
   interface Session {
     backendToken?: string;
     user: {
-      id?: string;
+      id: string;
       role?: string;
     } & DefaultSession["user"];
   }
