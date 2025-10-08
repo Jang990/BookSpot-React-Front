@@ -82,7 +82,10 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
         </PageHeaderGroup>
       </PageHeader>
 
-      <ShelfBookListTemplate searchResults={books} />
+      <ShelfBookListTemplate
+        searchResults={books}
+        removeBook={(bookId) => books.filter((b) => b.id !== bookId)}
+      />
 
       <ShelfUpdateDialog
         bookshelf={{

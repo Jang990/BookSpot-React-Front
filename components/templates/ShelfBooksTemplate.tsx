@@ -8,10 +8,12 @@ import { Book } from "lucide-react";
 
 interface BookPreviewListProps {
   searchResults: BookPreview[];
+  removeBook: (bookId: string) => void;
 }
 
 export const ShelfBookListTemplate = ({
   searchResults,
+  removeBook,
 }: BookPreviewListProps) => {
   const [shelfDialogType, setShelfDialogType] = useState<
     "select" | "create" | null
