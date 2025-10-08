@@ -21,7 +21,7 @@ const steps: OnBoardinStep[] = [
   },
   {
     id: 2,
-    title: "제목을 클릭하고, 파란색 버튼을 누르세요",
+    title: "책 이미지를 클릭하고, 위치를 찾으세요",
     image: "/onboarding/onboarding-2.webp",
   },
   {
