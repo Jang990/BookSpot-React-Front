@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Settings } from "lucide-react";
-import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
+import { ArrowLeft, Globe, Lock, Settings, Trash2 } from "lucide-react";
 import {
   ShelfUpdateDialog,
   ShelfUpdateOptions,
@@ -12,6 +10,14 @@ import {
 import { BookPreview } from "@/types/BookPreview";
 import { CommonShelf } from "@/types/Bookshelf";
 import { ShelfBookListTemplate } from "@/components/templates/ShelfBooksTemplate";
+import {
+  PageHeader,
+  PageHeaderActions,
+  PageHeaderGroup,
+  PageHeaderSubLabel,
+  PageHeaderTitle,
+} from "../ui/custom-page-title";
+import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 
 interface Props {
   initShelf: CommonShelf;
@@ -37,61 +43,54 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.back()}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              책장 목록
-            </Button>
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-foreground">
-                  {shelf.name}
-                </h1>
-                <div className="flex items-center gap-2">
-                  {shelf.isPublic ? (
-                    <GreenBadge text="공개" />
-                  ) : (
-                    <GrayBadge text="비공개" />
-                  )}
-                </div>
-              </div>
-              <p className="text-muted-foreground">
-                {books.length}/50권의 책이 저장되어 있습니다
-              </p>
-            </div>
-          </div>
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 bg-transparent"
-            onClick={() => setShowSettings(true)}
-          >
-            <Settings className="w-4 h-4" />
-            책장 설정
-          </Button>
+    <div>
+      <div className="flex items-center justify-between mt-2">
+        <div className="shrink-0">
+          <CommonIconButton
+            icon={<ArrowLeft />}
+            onClick={() => router.back()}
+          />
         </div>
 
-        <ShelfBookListTemplate searchResults={books} />
-
-        <ShelfUpdateDialog
-          bookshelf={{
-            id: shelf.id,
-            name: shelf.name,
-            isPublic: shelf.isPublic,
-          }}
-          isOpen={showSettings}
-          onClose={() => setShowSettings(false)}
-          onUpdate={handleUpdateShelf}
-        />
+        <div className="flex items-center gap-2 shrink-0">
+          <CommonIconButton
+            onClick={() => {}}
+            icon={
+              shelf.isPublic ? (
+                <Globe className="w-5 h-5 text-primary" />
+              ) : (
+                <Lock className="w-5 h-5 text-muted-foreground" />
+              )
+            }
+          />
+          <CommonIconButton icon={<Trash2 />} onClick={() => {}} />
+          <CommonIconButton
+            icon={<Settings />}
+            onClick={() => setShowSettings(true)}
+          />
+        </div>
       </div>
+      <PageHeader>
+        <PageHeaderGroup>
+          <PageHeaderTitle>{shelf.name}</PageHeaderTitle>
+          <PageHeaderSubLabel>
+            {books.length} / 50권의 책 저장 중
+          </PageHeaderSubLabel>
+        </PageHeaderGroup>
+      </PageHeader>
+
+      <ShelfBookListTemplate searchResults={books} />
+
+      <ShelfUpdateDialog
+        bookshelf={{
+          id: shelf.id,
+          name: shelf.name,
+          isPublic: shelf.isPublic,
+        }}
+        isOpen={showSettings}
+        onClose={() => setShowSettings(false)}
+        onUpdate={handleUpdateShelf}
+      />
     </div>
   );
 };
