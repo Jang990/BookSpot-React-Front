@@ -17,6 +17,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
 import clsx from "clsx";
 import { YellowBadge } from "@/components/atoms/badge/TextLabelBadge";
+import { useSession } from "next-auth/react";
 
 interface ShelfSelectListDialogProps {
   bookId: string;
@@ -36,6 +37,8 @@ export function ShelfSelectListDialog({
   onRemoveBookFromShelf,
 }: ShelfSelectListDialogProps) {
   const { isInBag, isFull, addToBag, removeFromBag } = useBag();
+  const { status } = useSession();
+
   const { showToast } = useToast();
 
   const [bagChecked, setBagChecked] = useState(false);
@@ -50,11 +53,12 @@ export function ShelfSelectListDialog({
 
     setBagChecked(isInBag(bookId));
 
-    fetchShelfBookStatus({ bookId, side: "client" }).then((data) => {
-      setShelfStatus(data.shelves);
-      setShelfSnapshot(data.shelves);
-    });
-  }, [bookId]);
+    if (status === "authenticated")
+      fetchShelfBookStatus({ bookId, side: "client" }).then((data) => {
+        setShelfStatus(data.shelves);
+        setShelfSnapshot(data.shelves);
+      });
+  }, [bookId, status]);
 
   const toggleShelf = (id: string) => {
     setShelfStatus((prev) =>
