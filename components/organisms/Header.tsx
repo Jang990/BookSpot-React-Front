@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
 import { useBag } from "@/contexts/BagContext";
@@ -40,8 +40,43 @@ export const Header = () => {
 };
 
 const UserIconButton = () => {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    let logoutTimer: NodeJS.Timeout;
+
+    // 로그인 만료 실시간 체크
+    if (status === "authenticated" && session?.expiresAt) {
+      const expirationTime = session.expiresAt;
+      const currentTime = Date.now();
+
+      const timeoutDuration = expirationTime - currentTime;
+
+      const paramsString = searchParams.toString();
+      const queryString = paramsString ? `?${paramsString}` : "";
+      const currentPath = `${pathname}${queryString}`;
+
+      if (timeoutDuration > 0) {
+        logoutTimer = setTimeout(() => {
+          console.log("세션이 만료되어 자동으로 로그아웃됩니다.");
+          console.log(currentPath);
+          signOut({ callbackUrl: currentPath });
+        }, timeoutDuration);
+      } else {
+        console.log("만료된 세션이 감지되어 즉시 로그아웃됩니다.");
+        signOut({ callbackUrl: currentPath });
+      }
+    }
+
+    // 이후 변화가 발생해서 useEffect를 실행할 때 이 화살표 함수가 실행되며 타이머가 clear된다.
+    return () => {
+      clearTimeout(logoutTimer);
+    };
+  }, [status, session, pathname, searchParams]);
 
   return (
     <>

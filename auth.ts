@@ -4,7 +4,8 @@ import Naver from "next-auth/providers/naver";
 import Kakao from "next-auth/providers/kakao";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
+  // TODO: maxAge 하드코딩을 바꿔줘야함
+  session: { strategy: "jwt", maxAge: 60 * 60 * 24 * 3 },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -64,6 +65,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       if (session.user) {
         (session.user as any).role = token.userRole as string;
         (session.user as any).id = token.userId as string;
+      }
+      if (token.exp) {
+        session.expiresAt = token.exp * 1000;
       }
       return session;
     },
