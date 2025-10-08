@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Globe, Lock, Settings } from "lucide-react";
+import { ArrowLeft, Globe, Lock, Settings, Trash2 } from "lucide-react";
 import {
   ShelfUpdateDialog,
   ShelfUpdateOptions,
@@ -44,43 +44,40 @@ export const BookshelfDetailTemplate = ({ initShelf, initBooks }: Props) => {
 
   return (
     <div>
-      {/* Header */}
-      <PageHeader>
-        <PageHeaderGroup>
-          <PageHeaderTitle onBackClick={() => router.back()}>
-            {shelf.isPublic ? (
-              <Globe className="inline-block align-middle mr-2 text-primary h-5 w-5" />
-            ) : (
-              <Lock className="inline-block align-middle text-muted-foreground mr-2 h-5 w-5" />
-            )}
-            {shelf.name}
-          </PageHeaderTitle>
-          <PageHeaderSubLabel>
-            {books.length} / 50권의 책 저장 중
-          </PageHeaderSubLabel>
-        </PageHeaderGroup>
+      <div className="flex items-center justify-between mt-2">
+        <div className="shrink-0">
+          <CommonIconButton
+            icon={<ArrowLeft />}
+            onClick={() => router.back()}
+          />
+        </div>
 
-        <PageHeaderActions>
+        <div className="flex items-center gap-2 shrink-0">
+          <CommonIconButton
+            onClick={() => {}}
+            icon={
+              shelf.isPublic ? (
+                <Globe className="w-5 h-5 text-primary" />
+              ) : (
+                <Lock className="w-5 h-5 text-muted-foreground" />
+              )
+            }
+          />
+          <CommonIconButton icon={<Trash2 />} onClick={() => {}} />
           <CommonIconButton
             icon={<Settings />}
             onClick={() => setShowSettings(true)}
           />
-        </PageHeaderActions>
+        </div>
+      </div>
+      <PageHeader>
+        <PageHeaderGroup>
+          <PageHeaderTitle>{shelf.name}</PageHeaderTitle>
+          <PageHeaderSubLabel>
+            {books.length} / 50권의 책 저장 중
+          </PageHeaderSubLabel>
+        </PageHeaderGroup>
       </PageHeader>
-      {/* 
-        <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-3xl font-bold text-foreground">
-                  {shelf.name}
-                </h1>
-                <div className="flex items-center gap-2">
-                  {shelf.isPublic ? (
-                    <GreenBadge text="공개" />
-                  ) : (
-                    <GrayBadge text="비공개" />
-                  )}
-                </div>
-              </div>
-               */}
 
       <ShelfBookListTemplate searchResults={books} />
 
