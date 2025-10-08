@@ -8,7 +8,7 @@ import { useBag } from "@/contexts/BagContext";
 import { UserCircle } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
 import { signOut, useSession } from "next-auth/react";
-import { REDIRECT_QUERY_STRING_KEY } from "@/utils/querystring/RedirectUri";
+import { createRedirectLoginUrl } from "@/utils/querystring/RedirectUri";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -64,9 +64,7 @@ const UserIconButton = () => {
           onClick={() => {
             const { pathname, search } = window.location;
             const currentUri = pathname + search;
-            router.push(
-              `/login?${REDIRECT_QUERY_STRING_KEY}=${encodeURIComponent(currentUri)}`
-            );
+            router.push(createRedirectLoginUrl(currentUri));
           }}
           className={`inline-flex items-center justify-center p-2 rounded-full transition-transform duration-150 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-transparent`}
           title="로그인"
