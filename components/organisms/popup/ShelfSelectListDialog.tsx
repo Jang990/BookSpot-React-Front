@@ -27,7 +27,7 @@ interface ShelfSelectListDialogProps {
   onClose: () => void;
   onClickNewShelf: () => void;
   onComplete: () => void;
-  onRemoveBookFromShelf: (bookId: string, removedShelfIds: string[]) => void;
+  onRemoveBookFromShelf?: (bookId: string, removedShelfIds: string[]) => void;
 }
 
 export function ShelfSelectListDialog({
@@ -36,7 +36,7 @@ export function ShelfSelectListDialog({
   onClose,
   onClickNewShelf,
   onComplete,
-  onRemoveBookFromShelf,
+  onRemoveBookFromShelf = (bookId, removedShelfIds) => {},
 }: ShelfSelectListDialogProps) {
   const { isInBag, isFull, addToBag, removeFromBag } = useBag();
   const { status } = useSession();
