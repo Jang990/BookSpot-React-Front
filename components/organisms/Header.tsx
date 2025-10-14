@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter /* useSearchParams */ } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
 import { useBag } from "@/contexts/BagContext";
@@ -44,7 +44,7 @@ const UserIconButton = () => {
   const router = useRouter();
 
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
   useEffect(() => {
     let logoutTimer: NodeJS.Timeout;
@@ -56,7 +56,9 @@ const UserIconButton = () => {
 
       const timeoutDuration = expirationTime - currentTime;
 
-      const paramsString = searchParams.toString();
+      // TODO: 사용자 불쾌감. ex) 로그인 만료시 검색조건 쿼리스트링이 사라짐. 다시 검색해야함. 정말 가끔 발생하는 문제
+      // const paramsString = searchParams.toString();
+      const paramsString = "";
       const queryString = paramsString ? `?${paramsString}` : "";
       const currentPath = `${pathname}${queryString}`;
 
@@ -76,7 +78,7 @@ const UserIconButton = () => {
     return () => {
       clearTimeout(logoutTimer);
     };
-  }, [status, session, pathname, searchParams]);
+  }, [status, session, pathname /* , searchParams */]);
 
   return (
     <>
