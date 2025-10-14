@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter /* useSearchParams */ } from "next/navigation";
 import { BookSpotLogoButton } from "../atoms/BookSpotLogoLink";
 import { BagIconLink } from "../molecules/link/BagIconLink";
 import { useBag } from "@/contexts/BagContext";
 import { UserCircle } from "lucide-react";
 import IconDropDownButton from "./dropdown/IconDrowDown";
 import { signOut, useSession } from "next-auth/react";
-import { REDIRECT_QUERY_STRING_KEY } from "@/utils/querystring/RedirectUri";
+import { createRedirectLoginUrl } from "@/utils/querystring/RedirectUri";
 
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -40,8 +40,45 @@ export const Header = () => {
 };
 
 const UserIconButton = () => {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  const pathname = usePathname();
+  // const searchParams = useSearchParams();
+
+  useEffect(() => {
+    let logoutTimer: NodeJS.Timeout;
+
+    // 로그인 만료 실시간 체크
+    if (status === "authenticated" && session?.expiresAt) {
+      const expirationTime = session.expiresAt;
+      const currentTime = Date.now();
+
+      const timeoutDuration = expirationTime - currentTime;
+
+      // TODO: 사용자 불쾌감. ex) 로그인 만료시 검색조건 쿼리스트링이 사라짐. 다시 검색해야함. 정말 가끔 발생하는 문제
+      // const paramsString = searchParams.toString();
+      const paramsString = "";
+      const queryString = paramsString ? `?${paramsString}` : "";
+      const currentPath = `${pathname}${queryString}`;
+
+      if (timeoutDuration > 0) {
+        logoutTimer = setTimeout(() => {
+          console.log("세션이 만료되어 자동으로 로그아웃됩니다.");
+          console.log(currentPath);
+          signOut({ callbackUrl: currentPath });
+        }, timeoutDuration);
+      } else {
+        console.log("만료된 세션이 감지되어 즉시 로그아웃됩니다.");
+        signOut({ callbackUrl: currentPath });
+      }
+    }
+
+    // 이후 변화가 발생해서 useEffect를 실행할 때 이 화살표 함수가 실행되며 타이머가 clear된다.
+    return () => {
+      clearTimeout(logoutTimer);
+    };
+  }, [status, session, pathname /* , searchParams */]);
 
   return (
     <>
@@ -49,7 +86,7 @@ const UserIconButton = () => {
         <IconDropDownButton
           Icon={UserCircle}
           items={[
-            { type: "link", text: "내 서재", href: "/me/libraries" },
+            { type: "link", text: "내 책장", href: "/me/bookshelves" },
             {
               type: "button",
               text: "로그아웃",
@@ -64,9 +101,7 @@ const UserIconButton = () => {
           onClick={() => {
             const { pathname, search } = window.location;
             const currentUri = pathname + search;
-            router.push(
-              `/login?${REDIRECT_QUERY_STRING_KEY}=${encodeURIComponent(currentUri)}`
-            );
+            router.push(createRedirectLoginUrl(currentUri));
           }}
           className={`inline-flex items-center justify-center p-2 rounded-full transition-transform duration-150 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-transparent`}
           title="로그인"

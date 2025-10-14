@@ -4,7 +4,8 @@ import Naver from "next-auth/providers/naver";
 import Kakao from "next-auth/providers/kakao";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
+  // TODO: maxAge 하드코딩을 바꿔줘야함
+  session: { strategy: "jwt", maxAge: 60 * 60 * 24 * 3 },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -47,6 +48,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           // 백엔드로부터 받은 JWT를 세션 토큰에 저장합니다.
           token.backendToken = backendData.accessToken;
           token.userRole = backendData.role;
+          token.userId = backendData.userId;
           token.exp = Math.floor(backendData.expiredAt / 1000);
         } catch (error) {
           console.error("JWT Callback Error:", error);
@@ -62,6 +64,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // user 객체에 role 같은 커스텀 데이터를 추가할 수 있습니다.
       if (session.user) {
         (session.user as any).role = token.userRole as string;
+        (session.user as any).id = token.userId as string;
+      }
+      if (token.exp) {
+        session.expiresAt = token.exp * 1000;
       }
       return session;
     },

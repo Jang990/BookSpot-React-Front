@@ -14,6 +14,8 @@ type BagContextType = {
   clearBag: () => Promise<boolean>;
   addToBag: (bookId: string) => Promise<boolean>;
   removeFromBag: (bookId: string) => Promise<boolean>;
+  isInBag: (bookId: string) => boolean;
+  isFull: () => boolean;
 };
 
 const BagContext = createContext<BagContextType | undefined>(undefined);
@@ -41,7 +43,6 @@ export const BagProvider = ({ children }: BagProviderProps) => {
         if (status === "authenticated") {
           // 🙋‍♂️ 로그인 상태: API를 통해 데이터를 가져옵니다.
           const items = await BagApi.findBookIds();
-          console.log(items);
           setBag(items);
         } else if (status === "unauthenticated") {
           // 👤 비로그인 상태: 쿠키에서 데이터를 가져옵니다.
@@ -91,6 +92,14 @@ export const BagProvider = ({ children }: BagProviderProps) => {
     return isSuccess;
   };
 
+  const isInBag = (targetId: string): boolean => {
+    return bag.some((id) => String(id) === String(targetId));
+  };
+
+  const isFull = (): boolean => {
+    return bag.length >= BagCookie.MAX_BAG_SIZE;
+  };
+
   return (
     <BagContext.Provider
       value={{
@@ -99,6 +108,8 @@ export const BagProvider = ({ children }: BagProviderProps) => {
         clearBag,
         addToBag,
         removeFromBag,
+        isInBag,
+        isFull,
       }}
     >
       {children}
