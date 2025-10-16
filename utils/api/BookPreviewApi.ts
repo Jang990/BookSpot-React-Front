@@ -12,6 +12,7 @@ import {
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
 import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
+import { SORT_BY_QUERY_STRING_KEY } from "../querystring/SortBy";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -144,7 +145,7 @@ function createApiPath(
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");
   }
-  if (isSearchAfter(pageCond) && pageCond.lastScore && !keyword) {
+  if (isSearchAfter(pageCond) && pageCond.sortBy == "RELEVANCE" && !keyword) {
     throw new Error("관련성 검색은 keyword가 있어야 합니다.");
   }
   if (
@@ -164,8 +165,16 @@ function createApiPath(
     params.append(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryCond.categoryLevel);
   }
 
-  if (isPageable(pageCond)) appendPageableQueryParams(params, pageCond);
-  if (isSearchAfter(pageCond)) appendSearchAfterQueryParams(params, pageCond);
+  if (isPageable(pageCond)) {
+    appendPageableQueryParams(params, pageCond);
+    if (pageCond.sortBy)
+      params.append(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
+  }
+  if (isSearchAfter(pageCond)) {
+    appendSearchAfterQueryParams(params, pageCond);
+    if (pageCond.sortBy)
+      params.append(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
+  }
 
   const query = params.toString();
   return query ? `${BOOK_API_PATH}?${query}` : BOOK_API_PATH;

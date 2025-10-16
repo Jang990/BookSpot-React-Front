@@ -1,9 +1,11 @@
 "use client";
 
 import { DefaultFilterButton } from "@/components/molecules/button/filter/DefaultFilterButton copy";
+import { DropDownButton } from "@/components/molecules/button/filter/DropDownButton";
 import { SelectedFilterButton } from "@/components/molecules/button/filter/SelectedFilterButton";
 import { LinkButton } from "@/components/molecules/button/LinkButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
+import { SortBy } from "@/types/Pageable";
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
@@ -11,13 +13,15 @@ import {
 } from "@/utils/querystring/CategoryId";
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
-import { ListFilter, MapPin } from "lucide-react";
+import { SORT_BY_QUERY_STRING_KEY } from "@/utils/querystring/SortBy";
+import { Filter, ListFilter, MapPin } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 interface FilterStatusGroupProps {
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
+  sortBy: SortBy;
 }
 
 export function useDragToScroll(ref: React.RefObject<HTMLElement>) {
@@ -96,6 +100,7 @@ export const FilterStatusGroup = ({
   libraryId,
   categoryId,
   bookQueryString,
+  sortBy,
 }: FilterStatusGroupProps) => {
   const [libraryName, setLibraryName] = useState<string | null>(null);
   const [libLoading, setLibLoading] = useState(false);
@@ -162,6 +167,7 @@ export const FilterStatusGroup = ({
           msOverflowStyle: "none",
         }}
       >
+        <SortByFilterButton bookQueryString={bookQueryString} sortBy={sortBy} />
         {/* Library button */}
         {libraryId === null ? (
           <DefaultFilterButton
@@ -212,6 +218,46 @@ const WeeklyTop50BooksLink = () => {
     <LinkButton
       text="🔥 주간 대출 Top50"
       href="/books/rankings/weekly/all/all"
+    />
+  );
+};
+
+const SortByFilterButton = ({
+  bookQueryString,
+  sortBy,
+}: {
+  bookQueryString?: string;
+  sortBy: SortBy;
+}) => {
+  const LOAN_SORT_NAME = "인기순";
+  const RELEVANCE_SORT_NAME = "정확도순";
+  const sortName = sortBy === "LOAN" ? LOAN_SORT_NAME : RELEVANCE_SORT_NAME;
+
+  const changeSortByQueryString = (sortBy: SortBy) => {
+    const params = new URLSearchParams(bookQueryString ?? "");
+    params.delete(SORT_BY_QUERY_STRING_KEY);
+    params.append(SORT_BY_QUERY_STRING_KEY, sortBy);
+    deletePaginationOptions(params);
+    return params.toString();
+  };
+
+  return (
+    <DropDownButton
+      selected={true}
+      text={sortName}
+      Icon={Filter}
+      items={[
+        {
+          text: LOAN_SORT_NAME,
+          type: "link",
+          href: `/books?${changeSortByQueryString("LOAN")}`,
+        },
+        {
+          text: RELEVANCE_SORT_NAME,
+          type: "link",
+          href: `/books?${changeSortByQueryString("RELEVANCE")}`,
+        },
+      ]}
     />
   );
 };
