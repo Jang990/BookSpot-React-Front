@@ -13,6 +13,7 @@ import {
 } from "@/utils/querystring/CategoryId";
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
+import { SORT_BY_QUERY_STRING_KEY } from "@/utils/querystring/SortBy";
 import { Filter, ListFilter, MapPin } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -230,11 +231,10 @@ const SortByFilterButton = ({
 }) => {
   const LOAN_SORT_NAME = "인기순";
   const RELEVANCE_SORT_NAME = "정확도순";
-  const sortName = sortBy === "LONA" ? LOAN_SORT_NAME : RELEVANCE_SORT_NAME;
+  const sortName = sortBy === "LOAN" ? LOAN_SORT_NAME : RELEVANCE_SORT_NAME;
 
   const changeSortByQueryString = (sortBy: SortBy) => {
     const params = new URLSearchParams(bookQueryString ?? "");
-    const SORT_BY_QUERY_STRING_KEY = "sortBy";
     params.delete(SORT_BY_QUERY_STRING_KEY);
     params.append(SORT_BY_QUERY_STRING_KEY, sortBy);
     deletePaginationOptions(params);
@@ -250,7 +250,7 @@ const SortByFilterButton = ({
         {
           text: LOAN_SORT_NAME,
           type: "link",
-          href: `/books?${changeSortByQueryString("LONA")}`,
+          href: `/books?${changeSortByQueryString("LOAN")}`,
         },
         {
           text: RELEVANCE_SORT_NAME,

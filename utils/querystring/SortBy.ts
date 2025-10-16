@@ -2,7 +2,7 @@ import { SortBy } from "@/types/Pageable";
 import { parseString } from "./QueryString";
 
 export const SORT_BY_QUERY_STRING_KEY = "sortBy";
-const LOAN: SortBy = "LONA";
+const LOAN: SortBy = "LOAN";
 const RELEVANCE: SortBy = "RELEVANCE";
 
 export function parseSortByValue(queryStrings: {
