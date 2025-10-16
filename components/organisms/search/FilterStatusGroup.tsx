@@ -5,6 +5,7 @@ import { DropDownButton } from "@/components/molecules/button/filter/DropDownBut
 import { SelectedFilterButton } from "@/components/molecules/button/filter/SelectedFilterButton";
 import { LinkButton } from "@/components/molecules/button/LinkButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
+import { SortBy } from "@/types/Pageable";
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
@@ -19,6 +20,7 @@ interface FilterStatusGroupProps {
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
+  sortBy: SortBy;
 }
 
 export function useDragToScroll(ref: React.RefObject<HTMLElement>) {
@@ -97,6 +99,7 @@ export const FilterStatusGroup = ({
   libraryId,
   categoryId,
   bookQueryString,
+  sortBy,
 }: FilterStatusGroupProps) => {
   const [libraryName, setLibraryName] = useState<string | null>(null);
   const [libLoading, setLibLoading] = useState(false);
@@ -163,15 +166,7 @@ export const FilterStatusGroup = ({
           msOverflowStyle: "none",
         }}
       >
-        <DropDownButton
-          selected={true}
-          text={"인기순"}
-          Icon={Filter}
-          items={[
-            { text: "인기순", type: "link", href: "/books" },
-            { text: "정확도순", type: "link", href: "/books" },
-          ]}
-        />
+        <SortByFilterButton sortBy={sortBy} />
         {/* Library button */}
         {libraryId === null ? (
           <DefaultFilterButton
@@ -222,6 +217,24 @@ const WeeklyTop50BooksLink = () => {
     <LinkButton
       text="🔥 주간 대출 Top50"
       href="/books/rankings/weekly/all/all"
+    />
+  );
+};
+
+const SortByFilterButton = ({ sortBy }: { sortBy: SortBy }) => {
+  const LOAN_SORT_NAME = "인기순";
+  const RELEVANCE_SORT_NAME = "정확도순";
+  const sortName = sortBy === "LONA" ? LOAN_SORT_NAME : RELEVANCE_SORT_NAME;
+
+  return (
+    <DropDownButton
+      selected={true}
+      text={sortName}
+      Icon={Filter}
+      items={[
+        { text: LOAN_SORT_NAME, type: "link", href: "/books" },
+        { text: RELEVANCE_SORT_NAME, type: "link", href: "/books" },
+      ]}
     />
   );
 };

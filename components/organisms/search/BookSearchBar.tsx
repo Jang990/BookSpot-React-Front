@@ -1,11 +1,13 @@
 import { SearchBar } from "@/components/molecules/SearchBar";
 import { FilterStatusGroup } from "./FilterStatusGroup";
+import { SortBy } from "@/types/Pageable";
 
 interface SearchProps {
   initSearchTerm: string | null;
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
+  sortBy?: SortBy;
 }
 
 export const BookSearchBar = async ({
@@ -13,6 +15,7 @@ export const BookSearchBar = async ({
   libraryId,
   categoryId,
   bookQueryString,
+  sortBy = "LONA",
 }: SearchProps) => {
   return (
     <div className="w-full">
@@ -21,6 +24,7 @@ export const BookSearchBar = async ({
         categoryId={categoryId}
         libraryId={libraryId}
         bookQueryString={bookQueryString}
+        sortBy={sortBy}
       />
     </div>
   );
