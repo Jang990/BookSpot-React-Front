@@ -128,24 +128,3 @@
     box-shadow: none;
   }
 }
-
-/* 깜빡이는 클래스 */
-.blink-hover {
-  animation-name: hoverPulse;
-  animation-duration: 1.2s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-delay: var(--blink-delay, 0s);
-}
-
-/* 실제 hover 시에는 애니메이션 중단해서 자연스러운 hover 우선 */
-.blink-hover:hover {
-  animation: none;
-}
-
-/* 접근성: 애니메이션 안함 */
-@media (prefers-reduced-motion: reduce) {
-  .blink-hover {
-    animation: none !important;
-  }
-}
