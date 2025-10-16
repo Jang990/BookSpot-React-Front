@@ -1,6 +1,7 @@
 "use client";
 
 import { DefaultFilterButton } from "@/components/molecules/button/filter/DefaultFilterButton copy";
+import { DropDownButton } from "@/components/molecules/button/filter/DropDownButton";
 import { SelectedFilterButton } from "@/components/molecules/button/filter/SelectedFilterButton";
 import { LinkButton } from "@/components/molecules/button/LinkButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
@@ -11,7 +12,7 @@ import {
 } from "@/utils/querystring/CategoryId";
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
-import { ListFilter, MapPin } from "lucide-react";
+import { Filter, ListFilter, MapPin } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 interface FilterStatusGroupProps {
@@ -162,6 +163,15 @@ export const FilterStatusGroup = ({
           msOverflowStyle: "none",
         }}
       >
+        <DropDownButton
+          selected={true}
+          text={"인기순"}
+          Icon={Filter}
+          items={[
+            { text: "인기순", type: "link", href: "/books" },
+            { text: "정확도순", type: "link", href: "/books" },
+          ]}
+        />
         {/* Library button */}
         {libraryId === null ? (
           <DefaultFilterButton
