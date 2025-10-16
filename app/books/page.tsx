@@ -51,6 +51,7 @@ export default async function BookSearchResultPage({ searchParams }: Props) {
   const pageable: Pageable = {
     pageNumber: page - 1,
     pageSize: ITEMS_PER_PAGE,
+    sortBy: sortBy,
   };
 
   let totalPages: number | null;
@@ -80,6 +81,7 @@ export default async function BookSearchResultPage({ searchParams }: Props) {
         lastScore: lastScore,
         lastLoanCount: lastLoanCount,
         lastBookId: lastBookId,
+        sortBy: sortBy,
       },
       "server"
     );

@@ -22,6 +22,7 @@ export default async function Home({ searchParams }: Props) {
   const recommendPageable: Pageable = {
     pageNumber: 0,
     pageSize: 6,
+    sortBy: "LONA",
   };
 
   function getRandomPopularCategoryId(): number {
