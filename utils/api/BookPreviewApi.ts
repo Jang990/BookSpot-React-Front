@@ -12,6 +12,7 @@ import {
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
 import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
+import { SORT_BY_QUERY_STRING_KEY } from "../querystring/SortBy";
 
 export interface SearchCondition {
   keyword?: string | null;
@@ -164,8 +165,16 @@ function createApiPath(
     params.append(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryCond.categoryLevel);
   }
 
-  if (isPageable(pageCond)) appendPageableQueryParams(params, pageCond);
-  if (isSearchAfter(pageCond)) appendSearchAfterQueryParams(params, pageCond);
+  if (isPageable(pageCond)) {
+    appendPageableQueryParams(params, pageCond);
+    if (pageCond.sortBy)
+      params.append(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
+  }
+  if (isSearchAfter(pageCond)) {
+    appendSearchAfterQueryParams(params, pageCond);
+    if (pageCond.sortBy)
+      params.append(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
+  }
 
   const query = params.toString();
   return query ? `${BOOK_API_PATH}?${query}` : BOOK_API_PATH;
