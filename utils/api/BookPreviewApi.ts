@@ -144,7 +144,7 @@ function createApiPath(
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
     throw new Error("책 검색 시 키워드와 책ID 둘 중 하나는 필수입니다.");
   }
-  if (isSearchAfter(pageCond) && pageCond.lastScore && !keyword) {
+  if (isSearchAfter(pageCond) && pageCond.sortBy == "RELEVANCE" && !keyword) {
     throw new Error("관련성 검색은 keyword가 있어야 합니다.");
   }
   if (
