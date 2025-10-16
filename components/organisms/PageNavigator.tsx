@@ -69,6 +69,7 @@ export const PageNavigator = ({
       params.set(PAGE_QUERY_STRING_KEY, String(MAX_NUMBER_PAGE + 1));
       params.set(LAST_LOAN_COUNT_KEY, String(searchAfter.lastLoanCount));
       params.set(LAST_BOOK_ID_KEY, String(searchAfter.lastBookId));
+      params.set(LAST_SCORE_KEY, String(searchAfter.lastScore));
       router.push(`${pathname}?${params.toString()}`);
       return;
     }

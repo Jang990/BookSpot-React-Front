@@ -22,6 +22,7 @@ export default async function Home({ searchParams }: Props) {
   const recommendPageable: Pageable = {
     pageNumber: 0,
     pageSize: 6,
+    sortBy: "LOAN",
   };
 
   function getRandomPopularCategoryId(): number {
@@ -52,6 +53,7 @@ export default async function Home({ searchParams }: Props) {
           bookQueryString={toRawQueryString(await searchParams)}
           libraryId={null}
           categoryId={null}
+          sortBy="LOAN"
         />
       </div>
 
