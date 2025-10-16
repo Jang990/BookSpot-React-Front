@@ -166,7 +166,7 @@ export const FilterStatusGroup = ({
           msOverflowStyle: "none",
         }}
       >
-        <SortByFilterButton sortBy={sortBy} />
+        <SortByFilterButton bookQueryString={bookQueryString} sortBy={sortBy} />
         {/* Library button */}
         {libraryId === null ? (
           <DefaultFilterButton
@@ -221,10 +221,25 @@ const WeeklyTop50BooksLink = () => {
   );
 };
 
-const SortByFilterButton = ({ sortBy }: { sortBy: SortBy }) => {
+const SortByFilterButton = ({
+  bookQueryString,
+  sortBy,
+}: {
+  bookQueryString?: string;
+  sortBy: SortBy;
+}) => {
   const LOAN_SORT_NAME = "인기순";
   const RELEVANCE_SORT_NAME = "정확도순";
   const sortName = sortBy === "LONA" ? LOAN_SORT_NAME : RELEVANCE_SORT_NAME;
+
+  const changeSortByQueryString = (sortBy: SortBy) => {
+    const params = new URLSearchParams(bookQueryString ?? "");
+    const SORT_BY_QUERY_STRING_KEY = "sortBy";
+    params.delete(SORT_BY_QUERY_STRING_KEY);
+    params.append(SORT_BY_QUERY_STRING_KEY, sortBy);
+    deletePaginationOptions(params);
+    return params.toString();
+  };
 
   return (
     <DropDownButton
@@ -232,8 +247,16 @@ const SortByFilterButton = ({ sortBy }: { sortBy: SortBy }) => {
       text={sortName}
       Icon={Filter}
       items={[
-        { text: LOAN_SORT_NAME, type: "link", href: "/books" },
-        { text: RELEVANCE_SORT_NAME, type: "link", href: "/books" },
+        {
+          text: LOAN_SORT_NAME,
+          type: "link",
+          href: `/books?${changeSortByQueryString("LONA")}`,
+        },
+        {
+          text: RELEVANCE_SORT_NAME,
+          type: "link",
+          href: `/books?${changeSortByQueryString("RELEVANCE")}`,
+        },
       ]}
     />
   );
