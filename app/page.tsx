@@ -52,6 +52,7 @@ export default async function Home({ searchParams }: Props) {
           bookQueryString={toRawQueryString(await searchParams)}
           libraryId={null}
           categoryId={null}
+          sortBy="LONA"
         />
       </div>
 

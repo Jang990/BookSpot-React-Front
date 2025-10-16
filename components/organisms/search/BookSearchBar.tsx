@@ -7,7 +7,7 @@ interface SearchProps {
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
-  sortBy?: SortBy;
+  sortBy: SortBy;
 }
 
 export const BookSearchBar = async ({
@@ -15,7 +15,7 @@ export const BookSearchBar = async ({
   libraryId,
   categoryId,
   bookQueryString,
-  sortBy = "LONA",
+  sortBy,
 }: SearchProps) => {
   return (
     <div className="w-full">

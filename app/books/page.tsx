@@ -42,7 +42,7 @@ export default async function BookSearchResultPage({ searchParams }: Props) {
   const libraryId = parseLibraryId(queryStrings);
   const categoryId = parseCategoryId(queryStrings);
   const categoryLevel = parseCategoryLevel(queryStrings);
-  const sortBy = parseSortByValue(queryStrings);
+  const sortBy = parseSortByValue(queryStrings) ?? "LONA";
 
   const lastBookId = parseNumber(queryStrings, LAST_BOOK_ID_KEY);
   const lastLoanCount = parseNumber(queryStrings, LAST_LOAN_COUNT_KEY);
@@ -110,7 +110,7 @@ export default async function BookSearchResultPage({ searchParams }: Props) {
         bookQueryString={toRawQueryString(await searchParams)}
         libraryId={libraryId}
         categoryId={categoryId}
-        sortBy={sortBy ?? undefined}
+        sortBy={sortBy}
       />
 
       <BookPreviewList searchResults={books} />
