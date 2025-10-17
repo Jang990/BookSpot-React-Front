@@ -9,6 +9,7 @@ import { SearchTermProvider } from "@/contexts/SearchTermContext";
 import NextAuthProvider from "@/contexts/NextAuthProvider";
 import { ToastProvider } from "@/contexts/ToastContext";
 import { OnboardingModal } from "@/components/organisms/onboarding/OnBoardingModal";
+import Script from "next/script";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -82,6 +83,38 @@ export default function RootLayout({
             </SearchTermProvider>
           </BagProvider>
         </NextAuthProvider>
+
+        {/* Google Analytics / Ads Script */}
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+          `}
+        </Script>
+
+        {/* Naver Ads Analytics Script */}
+        <Script
+          type="text/javascript"
+          src="//wcs.naver.net/wcslog.js"
+          strategy="afterInteractive"
+        />
+        <Script id="naver-analytics" strategy="afterInteractive">
+          {`
+            if (!wcs_add) var wcs_add={};
+            wcs_add["wa"] = "${process.env.NEXT_PUBLIC_NAVER_ANALYTICS_ID}";
+            if (!_nasa) var _nasa={};
+            if(window.wcs){
+              wcs.inflow();
+              wcs_do();
+            }
+          `}
+        </Script>
       </body>
     </html>
   );
