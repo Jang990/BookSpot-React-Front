@@ -207,7 +207,7 @@ export const FilterStatusGroup = ({
             SelectedIcon={ListFilter}
           />
         )}
-        <WeeklyTop50BooksLink />
+        {/* <WeeklyTop50BooksLink /> */}
       </div>
     </div>
   );
