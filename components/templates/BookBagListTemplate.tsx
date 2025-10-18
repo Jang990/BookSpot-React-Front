@@ -8,7 +8,10 @@ import { useBag } from "@/contexts/BagContext";
 import { BookBagPopup } from "../organisms/BookBagPopup";
 import { InfoPanel } from "../molecules/InfoPanel";
 import { Pageable } from "@/types/Pageable";
-import { findBooksPreview } from "@/utils/api/BookPreviewApi";
+import {
+  findBooksPreview,
+  findBooksPreviewWithIds,
+} from "@/utils/api/BookPreviewApi";
 import { MAX_BAG_SIZE } from "@/utils/BagLocalStorage";
 import { SkeletonBookList } from "../organisms/SkeletonBookList";
 import { ErrorPage } from "../molecules/ErrorPage";
@@ -46,16 +49,8 @@ export const BookBagListTemplate = ({}: Props) => {
     }
 
     setLoading(true);
-    findBooksPreview(
-      {
-        keyword: null,
-        bookIds: bag,
-        categoryCond: null,
-      },
-      BAG_PAGEABLE,
-      "client"
-    )
-      .then((json) => setBooks(json.books))
+    findBooksPreviewWithIds({ bookIds: bag, side: "client" })
+      .then((books) => setBooks(books))
       .catch(() => setIsError(true))
       .finally(() => setLoading(false));
   }, [isLoading]);
