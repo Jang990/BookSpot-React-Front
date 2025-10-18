@@ -10,7 +10,11 @@ import {
   CATEGORY_QUERY_STRING_KEY,
 } from "../querystring/CategoryId";
 import { LAST_SCORE_KEY } from "../querystring/SearchAfter";
-import { BookPagingApiSpec, BookSearchAfterApiSpec } from "@/types/ApiSpec";
+import {
+  BookIdsSearchApiSpec,
+  BookPagingApiSpec,
+  BookSearchAfterApiSpec,
+} from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
 import { SORT_BY_QUERY_STRING_KEY } from "../querystring/SortBy";
 
@@ -203,4 +207,25 @@ function isPageable(x: Pageable | SearchAfter): x is Pageable {
 
 function isSearchAfter(x: Pageable | SearchAfter): x is SearchAfter {
   return !isPageable(x);
+}
+
+export async function findBooksPreviewWithIds({
+  bookIds,
+  side,
+}: {
+  bookIds: string[];
+  side: Side;
+}): Promise<BookPreview[]> {
+  const apiPath = BOOK_API_PATH + "/by-ids";
+
+  const response = await getApiClient(side).get<BookIdsSearchApiSpec>(
+    apiPath + "?bookIds=" + bookIds.join(",")
+  );
+
+  if (!response.ok) {
+    throw response.error;
+  }
+
+  if (!response.data) return [];
+  else return response.data.books;
 }

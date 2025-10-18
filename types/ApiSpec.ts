@@ -3,6 +3,10 @@ import { BookshelfSummary, CommonShelf } from "./Bookshelf";
 import LibraryStock from "./LibraryStock";
 import { LoanInfo, LoanState } from "./Loan";
 
+export interface BookIdsSearchApiSpec {
+  books: BookPreview[];
+}
+
 export interface BookPagingApiSpec {
   books: {
     content: BookPreview[];
