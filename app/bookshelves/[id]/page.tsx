@@ -1,10 +1,9 @@
 import { fetchBookshelfDetail } from "@/utils/api/BookshelfApi";
 import { BookPreview } from "@/types/BookPreview";
-import { CommonShelf, MAX_SHELF_BOOK_COUNT } from "@/types/Bookshelf";
-import { findBooksPreview } from "@/utils/api/BookPreviewApi";
+import { CommonShelf } from "@/types/Bookshelf";
+import { findBooksPreviewWithIds } from "@/utils/api/BookPreviewApi";
 import { BookshelfDetailTemplate } from "@/components/templates/BookShelfDetailTemplate";
 import PageNotFound from "@/app/not-found";
-import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 
 export default async function BookshelfDetailPage({
   params,
@@ -27,13 +26,7 @@ export default async function BookshelfDetailPage({
   const books: BookPreview[] =
     bookIds.length === 0
       ? []
-      : (
-          await findBooksPreview(
-            { bookIds: bookIds, categoryCond: null },
-            { pageNumber: 0, pageSize: MAX_SHELF_BOOK_COUNT },
-            "server"
-          )
-        ).books;
+      : await findBooksPreviewWithIds({ bookIds: bookIds, side: "server" });
 
   return <BookshelfDetailTemplate initShelf={shelf} initBooks={books} />;
 }
