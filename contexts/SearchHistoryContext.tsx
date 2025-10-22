@@ -6,6 +6,7 @@ import { createContext, useContext, useState } from "react";
 type SearchHistoryContextType = {
   history: string[];
   addHistory: (term: string) => void;
+  removeHistory: (term: string) => void;
 };
 
 const SearchHistoryContext = createContext<
@@ -41,8 +42,14 @@ export const SearchHistoryProvider = ({
     });
   };
 
+  const removeHistory = (term: string) => {
+    setHistory((prev) => prev.filter((item) => item !== term));
+  };
+
   return (
-    <SearchHistoryContext.Provider value={{ history, addHistory }}>
+    <SearchHistoryContext.Provider
+      value={{ history, addHistory, removeHistory }}
+    >
       {children}
     </SearchHistoryContext.Provider>
   );

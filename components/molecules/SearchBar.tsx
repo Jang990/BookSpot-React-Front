@@ -5,7 +5,7 @@ import {
   LAST_BOOK_ID_KEY,
   LAST_LOAN_COUNT_KEY,
 } from "@/utils/querystring/SearchAfter";
-import { Clock, Search } from "lucide-react";
+import { Clock, Search, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
@@ -36,7 +36,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
   const [showHistory, setShowHistory] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null); // ref 추가
   const containerRef = useRef<HTMLDivElement>(null);
-  const { history, addHistory } = useSearchHistory();
+  const { history, addHistory, removeHistory } = useSearchHistory();
 
   useEffect(() => {
     setSearchTerm(initSearchTerm === null ? "" : initSearchTerm);
@@ -103,6 +103,11 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
     search(historyItem);
   };
 
+  const handleRemoveHistory = (e: React.MouseEvent, index: number) => {
+    e.stopPropagation();
+    removeHistory(history[index]);
+  };
+
   // input 따로 뺄 것
   return (
     <div ref={containerRef} className="relative">
@@ -138,20 +143,38 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
               .slice()
               .reverse()
               .map((item, index) => (
-                <button
+                <div
                   key={index}
-                  type="button"
                   onClick={() => handleHistoryClick(item)}
-                  className="w-full px-4 py-3 text-left hover:bg-accent transition-colors flex items-center gap-3 group"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleHistoryClick(item);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  className="w-full px-4 py-3 hover:bg-accent transition-colors flex items-center gap-3 group cursor-pointer"
                 >
                   <Clock
                     size={18}
                     className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0"
                   />
-                  <span className="text-foreground truncate text-base md:text-lg">
+                  <span className="text-foreground truncate text-base md:text-lg flex-1">
                     {item}
                   </span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeHistory(item);
+                    }}
+                    className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all p-1 flex-shrink-0"
+                    aria-label="Delete history item"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
               ))}
           </div>
         </div>
