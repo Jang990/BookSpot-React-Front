@@ -1,7 +1,13 @@
 "use client";
 
 import type React from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import {
+  getHistory,
+  addHistory as addHistoryCookie,
+  removeHistory as removeHistoryCookie,
+  SEARCH_HISTORY_MAX_LENGTH,
+} from "@/utils/SearchHistoryCookie";
 
 type SearchHistoryContextType = {
   history: string[];
@@ -12,8 +18,6 @@ type SearchHistoryContextType = {
 const SearchHistoryContext = createContext<
   SearchHistoryContextType | undefined
 >(undefined);
-
-export const SEARCH_HISTORY_MAX_LENGTH = 5;
 
 export const useSearchHistory = () => {
   const context = useContext(SearchHistoryContext);
@@ -31,19 +35,31 @@ export const SearchHistoryProvider = ({
 }: SearchHistoryProviderProps) => {
   const [history, setHistory] = useState<string[]>([]);
 
-  const addHistory = (term: string) => {
-    if (!term.trim()) return;
+  useEffect(() => {
+    const fetchHistory = async () => {
+      const cookieHistory = await getHistory();
+      setHistory(cookieHistory);
+    };
+    fetchHistory();
+  }, []);
+
+  const addHistory = async (term: string) => {
+    term = term.trim();
+    if (!term) return;
 
     setHistory((prev) => {
       const filtered = prev.filter((item) => item !== term);
       const updated = [...filtered, term];
-      if (updated.length > SEARCH_HISTORY_MAX_LENGTH) updated.shift(); // 5개 초과 시 FIFO 제거
+      if (updated.length > SEARCH_HISTORY_MAX_LENGTH) updated.shift();
       return updated;
     });
+
+    await addHistoryCookie(term);
   };
 
-  const removeHistory = (term: string) => {
+  const removeHistory = async (term: string) => {
     setHistory((prev) => prev.filter((item) => item !== term));
+    await removeHistoryCookie(term);
   };
 
   return (

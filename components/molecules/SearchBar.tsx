@@ -11,10 +11,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
 import { useSearchTerm } from "@/contexts/SearchTermContext";
 import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
-import {
-  SEARCH_HISTORY_MAX_LENGTH,
-  useSearchHistory,
-} from "@/contexts/SearchHistoryContext";
+import { useSearchHistory } from "@/contexts/SearchHistoryContext";
 
 interface SearchProps {
   initSearchTerm: string | null;
@@ -154,7 +151,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
                   }}
                   role="button"
                   tabIndex={0}
-                  className="w-full px-4 py-3 hover:bg-accent transition-colors flex items-center gap-3 group cursor-pointer"
+                  className="w-full px-4 py-4 hover:bg-accent transition-colors flex items-center gap-3 group cursor-pointer"
                 >
                   <Clock
                     size={18}
