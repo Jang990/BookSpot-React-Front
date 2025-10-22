@@ -138,7 +138,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
       </form>
       {showHistory && history.length > 0 && (
         <div className="absolute z-50 w-full mt-2 bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
-          <div className="py-2">
+          <div>
             {history
               .slice()
               .reverse()
