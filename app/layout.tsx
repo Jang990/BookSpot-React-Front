@@ -10,6 +10,7 @@ import NextAuthProvider from "@/contexts/NextAuthProvider";
 import { ToastProvider } from "@/contexts/ToastContext";
 import { OnboardingModal } from "@/components/organisms/onboarding/OnBoardingModal";
 import Script from "next/script";
+import { SearchHistoryProvider } from "@/contexts/SearchHistoryContext";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -64,22 +65,24 @@ export default function RootLayout({
         <NextAuthProvider>
           <BagProvider>
             <SearchTermProvider>
-              <ToastProvider>
-                <div className="flex flex-col min-h-screen">
-                  <Header />
+              <SearchHistoryProvider>
+                <ToastProvider>
+                  <div className="flex flex-col min-h-screen">
+                    <Header />
 
-                  <div className="flex-1 bg-background pt-12 pb-8 px-4 sm:px-6 lg:px-8">
-                    <div className="max-w-6xl mx-auto">
-                      <div className="w-full max-w-4xl mx-auto">
-                        <main className="pt-4">{children}</main>
+                    <div className="flex-1 bg-background pt-12 pb-8 px-4 sm:px-6 lg:px-8">
+                      <div className="max-w-6xl mx-auto">
+                        <div className="w-full max-w-4xl mx-auto">
+                          <main className="pt-4">{children}</main>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <Footer />
-                </div>
-                <OnboardingModal />
-              </ToastProvider>
+                    <Footer />
+                  </div>
+                  <OnboardingModal />
+                </ToastProvider>
+              </SearchHistoryProvider>
             </SearchTermProvider>
           </BagProvider>
         </NextAuthProvider>

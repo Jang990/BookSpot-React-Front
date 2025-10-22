@@ -11,6 +11,10 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { XButton } from "../atoms/button/icon/XButton";
 import { useSearchTerm } from "@/contexts/SearchTermContext";
 import { SEARCH_TERM_KEY } from "@/utils/querystring/SearchTerm";
+import {
+  SEARCH_HISTORY_MAX_LENGTH,
+  useSearchHistory,
+} from "@/contexts/SearchHistoryContext";
 
 interface SearchProps {
   initSearchTerm: string | null;
@@ -32,6 +36,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
   const [showHistory, setShowHistory] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null); // ref 추가
   const containerRef = useRef<HTMLDivElement>(null);
+  const { history, addHistory } = useSearchHistory();
 
   useEffect(() => {
     setSearchTerm(initSearchTerm === null ? "" : initSearchTerm);
@@ -69,12 +74,14 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
       return;
     }
 
-    setShowHistory(false);
     search(searchTerm);
   };
 
   function search(searchTerm: string) {
     startTransition(() => {
+      inputRef.current?.blur();
+      addHistory(searchTerm);
+      setShowHistory(false);
       const params = new URLSearchParams(searchParams as any);
       params.set("searchTerm", searchTerm);
       params.delete(PAGE_QUERY_STRING_KEY);
@@ -86,15 +93,13 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
 
   const handleClear = () => {
     clearSearchTerm();
-    inputRef.current?.focus();
+    // inputRef.current?.focus();
     const params = new URLSearchParams(searchParams as any);
     params.delete(SEARCH_TERM_KEY);
-    router.push(`/books??${params.toString()}`);
+    router.push(`/books?${params.toString()}`);
   };
 
   const handleHistoryClick = (historyItem: string) => {
-    setSearchTerm(historyItem);
-    setShowHistory(false);
     search(historyItem);
   };
 
@@ -126,25 +131,28 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
           </button>
         </div>
       </form>
-      {showHistory && SEARCH_HISTORY.length > 0 && (
+      {showHistory && history.length > 0 && (
         <div className="absolute z-50 w-full mt-2 bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
           <div className="py-2">
-            {SEARCH_HISTORY.map((item, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => handleHistoryClick(item)}
-                className="w-full px-4 py-3 text-left hover:bg-accent transition-colors flex items-center gap-3 group"
-              >
-                <Clock
-                  size={18}
-                  className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0"
-                />
-                <span className="text-foreground truncate text-base md:text-lg">
-                  {item}
-                </span>
-              </button>
-            ))}
+            {history
+              .slice()
+              .reverse()
+              .map((item, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  onClick={() => handleHistoryClick(item)}
+                  className="w-full px-4 py-3 text-left hover:bg-accent transition-colors flex items-center gap-3 group"
+                >
+                  <Clock
+                    size={18}
+                    className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0"
+                  />
+                  <span className="text-foreground truncate text-base md:text-lg">
+                    {item}
+                  </span>
+                </button>
+              ))}
           </div>
         </div>
       )}
