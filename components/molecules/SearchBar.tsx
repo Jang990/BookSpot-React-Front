@@ -166,7 +166,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
                       e.stopPropagation();
                       removeHistory(item);
                     }}
-                    className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all p-1 flex-shrink-0"
+                    className="text-muted-foreground hover:text-destructive transition-colors p-1 flex-shrink-0"
                     aria-label="Delete history item"
                   >
                     <X size={16} />
