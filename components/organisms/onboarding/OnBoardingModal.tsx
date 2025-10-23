@@ -28,8 +28,8 @@ const steps: OnBoardinStep[] = [
     title: "책 사진을 클릭하고, 위치를 찾으세요",
     image: "/onboarding/onboarding-2.webp",
     description: [
-      "'저장하기'로 여러 책을 한 번에 찾을 수 있어요",
-      "저장된 책은 우측 상단에 아이콘에서 확인하세요",
+      "'저장하기'로 여러 책 위치를 한 번에 확인하세요",
+      "저장된 책은 우측 상단 아이콘에서 볼 수 있어요",
     ],
   },
   {
