@@ -18,20 +18,25 @@ const steps: OnBoardinStep[] = [
     id: 1,
     title: "읽고 싶은 책을 찾으세요",
     image: "/onboarding/onboarding-1.webp",
+    description: [
+      "검색 결과가 많다면 정확도순으로 확인해보세요",
+      "검색어와 일치하는 책을 먼저 보여드릴게요",
+    ],
   },
   {
     id: 2,
-    title: "책 이미지를 클릭하고, 위치를 찾으세요",
+    title: "책 사진을 클릭하고, 위치를 찾으세요",
     image: "/onboarding/onboarding-2.webp",
+    description: [
+      "'저장하기'로 여러 책을 한 번에 찾을 수 있어요",
+      "저장된 책은 우측 상단에 아이콘에서 확인하세요",
+    ],
   },
   {
     id: 3,
     title: "소장하고 있는 도서관을 찾아보세요",
     image: "/onboarding/onboarding-3.webp",
-    description: [
-      "😅 1인 개발이라 부족할 수 있어요",
-      "오류나 개선 정보는 페이지 하단 이메일로 보내주세요!",
-    ],
+    description: ["대출 현황을 확인할 수 있게 연결해 드릴게요"],
   },
 ];
 

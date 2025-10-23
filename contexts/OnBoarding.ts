@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-const ONBOARDING_COOKIE_NAME = "bookspot-onboarding-completed-v2";
+const ONBOARDING_COOKIE_NAME = "bookspot-onboarding-completed-v3";
 
 export function useOnboarding() {
   const [showOnboarding, setShowOnboarding] = useState(false);
