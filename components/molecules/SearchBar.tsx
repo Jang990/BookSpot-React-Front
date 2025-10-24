@@ -17,14 +17,6 @@ interface SearchProps {
   initSearchTerm: string | null;
 }
 
-const SEARCH_HISTORY: string[] = [
-  "해리포터와 마법사의 돌",
-  "1984 조지 오웰",
-  "코스모스 칼 세이건",
-  "사피엔스",
-  "데미안 헤르만 헤세",
-];
-
 export const SearchBar = ({ initSearchTerm }: SearchProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
