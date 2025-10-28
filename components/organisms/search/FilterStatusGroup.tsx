@@ -207,6 +207,8 @@ export const FilterStatusGroup = ({
             SelectedIcon={ListFilter}
           />
         )}
+
+        <PublicShelvesPageLink />
         {/* <WeeklyTop50BooksLink /> */}
       </div>
     </div>
@@ -220,6 +222,10 @@ const WeeklyTop50BooksLink = () => {
       href="/books/rankings/weekly/all/all"
     />
   );
+};
+
+const PublicShelvesPageLink = () => {
+  return <LinkButton text="📚 모두의 책장" href="/bookshelves" />;
 };
 
 const SortByFilterButton = ({
