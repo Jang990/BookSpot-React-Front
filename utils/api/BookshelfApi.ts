@@ -132,6 +132,13 @@ export const fetchPublicBookShelves = async ({
   pageable: Pageable;
   side: Side;
 }): Promise<BookshelvesSummaryResponseApiSpec> => {
-  console.log("hello");
-  return Promise.resolve({ bookshelvesSummary: [] });
+  const response = await getApiClient(
+    side
+  ).get<BookshelvesSummaryResponseApiSpec>(
+    `/api/shelves?pageNumber=${pageable.pageNumber}&pageSiz=${pageable.pageSize}`
+  );
+
+  if (!response.ok) throw response.error;
+  if (!response.data) return { bookshelvesSummary: [] };
+  return response.data;
 };
