@@ -1,3 +1,4 @@
+import { PublicBookshelvesListTemplate } from "@/components/templates/PublicBookshelvesListTemplate";
 import { fetchPublicBookShelves } from "@/utils/api/BookshelfApi";
 
 export default async function PublicBookShelvesListPage() {
@@ -8,5 +9,5 @@ export default async function PublicBookShelvesListPage() {
     })
   ).bookshelvesSummary;
 
-  return <div>Hello World</div>;
+  return <PublicBookshelvesListTemplate shelves={shelves} />;
 }
