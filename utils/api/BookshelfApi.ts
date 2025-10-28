@@ -135,7 +135,7 @@ export const fetchPublicBookShelves = async ({
   const response = await getApiClient(
     side
   ).get<BookshelvesSummaryResponseApiSpec>(
-    `/api/shelves?pageNumber=${pageable.pageNumber}&pageSiz=${pageable.pageSize}`
+    `/api/shelves?pageNumber=${pageable.pageNumber}&pageSize=${pageable.pageSize}`
   );
 
   if (!response.ok) throw response.error;
