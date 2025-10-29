@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MAX_USER_SHELF_SIZE, type BookshelfSummary } from "@/types/Bookshelf";
+import { type BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book } from "lucide-react";
 import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
-import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 import {
@@ -16,13 +14,15 @@ import {
   PageHeaderTitle,
 } from "../ui/custom-page-title";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { createRedirectLoginUrl } from "@/utils/querystring/RedirectUri";
 
 export const PublicBookshelvesListTemplate = ({
   shelves,
 }: {
   shelves: BookshelfSummary[];
 }) => {
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const { status } = useSession();
   const router = useRouter();
 
   return (
@@ -44,17 +44,6 @@ export const PublicBookshelvesListTemplate = ({
             </p>
           </div>
         )}
-
-        <ShelfCreateDialog
-          isOpen={showCreateDialog}
-          onClose={() => {
-            setShowCreateDialog(false);
-          }}
-          onCreate={(shelf) => {
-            setShowCreateDialog(false);
-            router.push(`/bookshelves/${shelf.id}`);
-          }}
-        />
       </div>
     </div>
   );
@@ -70,8 +59,14 @@ export const PublicBookshelvesListTemplate = ({
         <PageHeaderActions>
           <CommonIconButton
             icon={<Plus />}
-            disabled={shelves.length >= MAX_USER_SHELF_SIZE}
-            onClick={() => setShowCreateDialog(true)}
+            onClick={() => {
+              if (status === "authenticated") router.push("/me/bookshelves");
+              else {
+                const { pathname, search } = window.location;
+                const currentUri = pathname + search;
+                router.push(createRedirectLoginUrl(currentUri));
+              }
+            }}
           />
         </PageHeaderActions>
       </PageHeader>
