@@ -9,48 +9,33 @@ import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
-import { BookshelfDetailResponseSpec } from "@/types/ApiSpec";
 import {
   PageHeader,
   PageHeaderActions,
   PageHeaderGroup,
   PageHeaderTitle,
 } from "../ui/custom-page-title";
+import { useRouter } from "next/navigation";
 
 export const PublicBookshelvesListTemplate = ({
   shelves,
 }: {
   shelves: BookshelfSummary[];
 }) => {
-  const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>(shelves);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
-
-  // 새로운 책장을 UI 리스트에 추가
-  const addNewShelfToUiList = (shelf: BookshelfDetailResponseSpec) => {
-    const newShelf: BookshelfSummary = {
-      id: shelf.id,
-      name: shelf.name,
-      bookCount: shelf.bookCount,
-      createdAt: shelf.createdAt,
-      isPublic: shelf.isPublic,
-      thumbnailImageIsbn: [],
-    };
-
-    setBookshelves([...bookshelves, newShelf]);
-    setShowCreateDialog(false);
-  };
+  const router = useRouter();
 
   return (
     <div className="min-h-screen bg-background">
       <div>
         <div className="mb-5">{pageTitle()}</div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {bookshelves.map((shelf) => (
+          {shelves.map((shelf) => (
             <BookshelfCard key={shelf.id} shelf={shelf} />
           ))}
         </div>
 
-        {bookshelves.length === 0 && (
+        {shelves.length === 0 && (
           <div className="text-center py-12">
             <Book className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold mb-2">아직 책장이 없습니다</h3>
@@ -65,7 +50,10 @@ export const PublicBookshelvesListTemplate = ({
           onClose={() => {
             setShowCreateDialog(false);
           }}
-          onCreate={addNewShelfToUiList}
+          onCreate={(shelf) => {
+            setShowCreateDialog(false);
+            router.push(`/bookshelves/${shelf.id}`);
+          }}
         />
       </div>
     </div>
@@ -82,7 +70,7 @@ export const PublicBookshelvesListTemplate = ({
         <PageHeaderActions>
           <CommonIconButton
             icon={<Plus />}
-            disabled={bookshelves.length >= MAX_USER_SHELF_SIZE}
+            disabled={shelves.length >= MAX_USER_SHELF_SIZE}
             onClick={() => setShowCreateDialog(true)}
           />
         </PageHeaderActions>
