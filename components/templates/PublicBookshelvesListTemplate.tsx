@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { createRedirectLoginUrl } from "@/utils/querystring/RedirectUri";
+import { useToast } from "@/contexts/ToastContext";
 
 export const PublicBookshelvesListTemplate = ({
   shelves,
@@ -24,6 +25,7 @@ export const PublicBookshelvesListTemplate = ({
 }) => {
   const { status } = useSession();
   const router = useRouter();
+  const { showToast } = useToast();
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,8 +62,10 @@ export const PublicBookshelvesListTemplate = ({
           <CommonIconButton
             icon={<Plus />}
             onClick={() => {
-              if (status === "authenticated") router.push("/me/bookshelves");
-              else {
+              if (status === "authenticated") {
+                showToast("내 책장에서 책장을 추가해주세요!", "INFO");
+                router.push("/me/bookshelves");
+              } else {
                 const { pathname, search } = window.location;
                 const currentUri = pathname + search;
                 router.push(createRedirectLoginUrl(currentUri));
