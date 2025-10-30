@@ -95,7 +95,7 @@ export const UserBookshelvesListTemplate = ({
       thumbnailImageIsbn: [],
     };
 
-    setBookshelves([...bookshelves, newShelf]);
+    setBookshelves([newShelf, ...bookshelves]);
     setShowCreateDialog(false);
   };
 
