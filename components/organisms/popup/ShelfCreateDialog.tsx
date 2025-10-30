@@ -27,7 +27,7 @@ export const ShelfCreateDialog = ({
   onCreate = (updatedBookshelf) => {},
 }: BookshelfSettingsDialogProps) => {
   const DEFAULT_NAME = "";
-  const DEFAULT_IS_PUBLIC = false;
+  const DEFAULT_IS_PUBLIC = true;
 
   const [name, setName] = useState(DEFAULT_NAME);
   const [isPublic, setIsPublic] = useState(DEFAULT_IS_PUBLIC);

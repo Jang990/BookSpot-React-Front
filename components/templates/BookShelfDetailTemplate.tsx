@@ -28,7 +28,7 @@ interface Props {
 export const BookshelfDetailTemplate = ({
   initShelf,
   initBooks,
-  redirectUri = "/me/bookshelves",
+  redirectUri = "/bookshelves",
 }: Props) => {
   const router = useRouter();
 
