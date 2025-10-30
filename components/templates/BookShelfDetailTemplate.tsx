@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Globe, Lock, Settings, Trash2 } from "lucide-react";
+import { ArrowLeft, Globe, Lock, Settings, Share2, Trash2 } from "lucide-react";
 import {
   ShelfUpdateDialog,
   ShelfUpdateOptions,
@@ -18,6 +18,8 @@ import {
 } from "../ui/custom-page-title";
 import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 import { ShelfDeleteDialog } from "../organisms/popup/ShelfDeleteDialog";
+import { useSession } from "next-auth/react";
+import { useToast } from "@/contexts/ToastContext";
 
 interface Props {
   initShelf: CommonShelf;
@@ -28,9 +30,11 @@ interface Props {
 export const BookshelfDetailTemplate = ({
   initShelf,
   initBooks,
-  redirectUri = "/me/bookshelves",
+  redirectUri = "/bookshelves",
 }: Props) => {
   const router = useRouter();
+  const { status, data: session } = useSession();
+  const { showToast } = useToast();
 
   const [shelf, setShelf] = useState<CommonShelf>(initShelf);
   const [books, setBooks] = useState<BookPreview[]>(initBooks);
@@ -47,6 +51,12 @@ export const BookshelfDetailTemplate = ({
     });
   };
 
+  const onClickShareBtn = async () => {
+    const url = window.location.href;
+    await navigator.clipboard.writeText(url);
+    showToast("📚 이 책장의 링크를 복사했어요!", "INFO");
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between mt-2">
@@ -59,23 +69,14 @@ export const BookshelfDetailTemplate = ({
 
         <div className="flex items-center gap-2 shrink-0">
           <CommonIconButton
-            onClick={() => {}}
-            icon={
-              shelf.isPublic ? (
-                <Globe className="w-5 h-5 text-primary" />
-              ) : (
-                <Lock className="w-5 h-5 text-muted-foreground" />
-              )
-            }
+            icon={<Share2 />}
+            onClick={() => {
+              onClickShareBtn();
+            }}
           />
-          <CommonIconButton
-            icon={<Trash2 />}
-            onClick={() => setDialogType("delete")}
-          />
-          <CommonIconButton
-            icon={<Settings />}
-            onClick={() => setDialogType("edit")}
-          />
+          {status === "authenticated" &&
+            session?.user.id === shelf.ownerId &&
+            OwnerButtonGroups()}
         </div>
       </div>
       <PageHeader>
@@ -92,27 +93,43 @@ export const BookshelfDetailTemplate = ({
         searchResults={books}
         removeBook={(bookId) => setBooks(books.filter((b) => b.id !== bookId))}
       />
-
-      <ShelfUpdateDialog
-        bookshelf={{
-          id: shelf.id,
-          name: shelf.name,
-          isPublic: shelf.isPublic,
-        }}
-        isOpen={dialogType === "edit"}
-        onClose={() => setDialogType(null)}
-        onUpdate={handleUpdateShelf}
-      />
-      <ShelfDeleteDialog
-        isOpen={dialogType === "delete"}
-        shelf={{
-          id: shelf.id,
-          name: shelf.name,
-          isPublic: shelf.isPublic,
-        }}
-        onClose={() => setDialogType(null)}
-        onDelete={() => router.back()}
-      />
     </div>
   );
+
+  function OwnerButtonGroups() {
+    return (
+      <>
+        <CommonIconButton
+          icon={<Trash2 />}
+          onClick={() => setDialogType("delete")}
+        />
+
+        <ShelfDeleteDialog
+          isOpen={dialogType === "delete"}
+          shelf={{
+            id: shelf.id,
+            name: shelf.name,
+            isPublic: shelf.isPublic,
+          }}
+          onClose={() => setDialogType(null)}
+          onDelete={() => router.back()}
+        />
+        <CommonIconButton
+          icon={<Settings />}
+          onClick={() => setDialogType("edit")}
+        />
+
+        <ShelfUpdateDialog
+          bookshelf={{
+            id: shelf.id,
+            name: shelf.name,
+            isPublic: shelf.isPublic,
+          }}
+          isOpen={dialogType === "edit"}
+          onClose={() => setDialogType(null)}
+          onUpdate={handleUpdateShelf}
+        />
+      </>
+    );
+  }
 };

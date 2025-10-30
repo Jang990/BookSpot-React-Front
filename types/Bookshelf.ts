@@ -8,6 +8,7 @@ export interface CommonShelf {
   bookCount: number;
   createdAt: string;
   isPublic: boolean;
+  ownerId: string;
 }
 
 export interface BookshelfSummary extends CommonShelf {

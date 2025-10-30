@@ -25,11 +25,14 @@ import {
   PageHeaderSubLabel,
   PageHeaderTitle,
 } from "../ui/custom-page-title";
+import { REDIRECT_QUERY_STRING_KEY } from "@/utils/querystring/RedirectUri";
 
 export const UserBookshelvesListTemplate = ({
   shelves,
+  ownerId,
 }: {
   shelves: BookshelfSummary[];
+  ownerId: string;
 }) => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>(shelves);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -93,9 +96,10 @@ export const UserBookshelvesListTemplate = ({
       createdAt: shelf.createdAt,
       isPublic: shelf.isPublic,
       thumbnailImageIsbn: [],
+      ownerId: ownerId,
     };
 
-    setBookshelves([...bookshelves, newShelf]);
+    setBookshelves([newShelf, ...bookshelves]);
     setShowCreateDialog(false);
   };
 
@@ -180,7 +184,10 @@ export const BookshelfCard = ({
   onDelete: (shelf: BookshelfSummary) => void;
 }) => {
   return (
-    <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
+    <Link
+      href={`/bookshelves/${shelf.id}?${REDIRECT_QUERY_STRING_KEY}=/me/bookshelves`}
+      className="flex-1"
+    >
       <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
         <BookshelfCardHeader
           shelf={shelf}

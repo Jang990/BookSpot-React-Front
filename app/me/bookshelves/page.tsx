@@ -23,6 +23,7 @@ export default async function BookshelvesPage() {
   return (
     <UserBookshelvesListTemplate
       shelves={shelves}
+      ownerId={session.user.id}
     ></UserBookshelvesListTemplate>
   );
 }
