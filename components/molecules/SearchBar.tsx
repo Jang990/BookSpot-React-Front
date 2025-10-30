@@ -105,7 +105,7 @@ export const SearchBar = ({ initSearchTerm }: SearchProps) => {
           ref={inputRef}
           name="search"
           type="text"
-          placeholder="책 제목, 저자 또는 출판사를 입력하세요"
+          placeholder="책 제목, 저자, 출판사, ISBN13 검색"
           className={`w-full p-4 pr-12 text-lg border-4 rounded-full focus:outline-none transition-all duration-300 ${
             isPending
               ? "border-primary animate-border-loading"
