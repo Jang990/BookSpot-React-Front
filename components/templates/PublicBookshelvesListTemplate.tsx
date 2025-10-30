@@ -58,7 +58,7 @@ export const PublicBookshelvesListTemplate = ({
       <PageHeader>
         {/* 제목과 서브라벨을 세로로 묶기 위해 Group 사용 */}
         <PageHeaderGroup>
-          <PageHeaderTitle>책장 목록</PageHeaderTitle>
+          <PageHeaderTitle>📚 모두의 책장</PageHeaderTitle>
         </PageHeaderGroup>
 
         <PageHeaderActions>
