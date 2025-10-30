@@ -54,7 +54,7 @@ export const BookshelfDetailTemplate = ({
   const onClickShareBtn = async () => {
     const url = window.location.href;
     await navigator.clipboard.writeText(url);
-    showToast("이 책장의 링크를 복사했어요!", "INFO");
+    showToast("📚 이 책장의 링크를 복사했어요!", "INFO");
   };
 
   return (
