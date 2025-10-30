@@ -68,14 +68,7 @@ export const BookshelfDetailTemplate = ({
               )
             }
           />
-          <CommonIconButton
-            icon={<Trash2 />}
-            onClick={() => setDialogType("delete")}
-          />
-          <CommonIconButton
-            icon={<Settings />}
-            onClick={() => setDialogType("edit")}
-          />
+          {OwnerButtonGroups()}
         </div>
       </div>
       <PageHeader>
@@ -92,27 +85,43 @@ export const BookshelfDetailTemplate = ({
         searchResults={books}
         removeBook={(bookId) => setBooks(books.filter((b) => b.id !== bookId))}
       />
-
-      <ShelfUpdateDialog
-        bookshelf={{
-          id: shelf.id,
-          name: shelf.name,
-          isPublic: shelf.isPublic,
-        }}
-        isOpen={dialogType === "edit"}
-        onClose={() => setDialogType(null)}
-        onUpdate={handleUpdateShelf}
-      />
-      <ShelfDeleteDialog
-        isOpen={dialogType === "delete"}
-        shelf={{
-          id: shelf.id,
-          name: shelf.name,
-          isPublic: shelf.isPublic,
-        }}
-        onClose={() => setDialogType(null)}
-        onDelete={() => router.back()}
-      />
     </div>
   );
+
+  function OwnerButtonGroups() {
+    return (
+      <>
+        <CommonIconButton
+          icon={<Trash2 />}
+          onClick={() => setDialogType("delete")}
+        />
+
+        <ShelfDeleteDialog
+          isOpen={dialogType === "delete"}
+          shelf={{
+            id: shelf.id,
+            name: shelf.name,
+            isPublic: shelf.isPublic,
+          }}
+          onClose={() => setDialogType(null)}
+          onDelete={() => router.back()}
+        />
+        <CommonIconButton
+          icon={<Settings />}
+          onClick={() => setDialogType("edit")}
+        />
+
+        <ShelfUpdateDialog
+          bookshelf={{
+            id: shelf.id,
+            name: shelf.name,
+            isPublic: shelf.isPublic,
+          }}
+          isOpen={dialogType === "edit"}
+          onClose={() => setDialogType(null)}
+          onUpdate={handleUpdateShelf}
+        />
+      </>
+    );
+  }
 };
