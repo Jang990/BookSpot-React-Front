@@ -18,6 +18,7 @@ import {
 } from "../ui/custom-page-title";
 import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 import { ShelfDeleteDialog } from "../organisms/popup/ShelfDeleteDialog";
+import { useSession } from "next-auth/react";
 
 interface Props {
   initShelf: CommonShelf;
@@ -31,6 +32,7 @@ export const BookshelfDetailTemplate = ({
   redirectUri = "/bookshelves",
 }: Props) => {
   const router = useRouter();
+  const { status, data: session } = useSession();
 
   const [shelf, setShelf] = useState<CommonShelf>(initShelf);
   const [books, setBooks] = useState<BookPreview[]>(initBooks);
@@ -68,7 +70,9 @@ export const BookshelfDetailTemplate = ({
               )
             }
           />
-          {OwnerButtonGroups()}
+          {status === "authenticated" &&
+            session?.user.id === shelf.ownerId &&
+            OwnerButtonGroups()}
         </div>
       </div>
       <PageHeader>
