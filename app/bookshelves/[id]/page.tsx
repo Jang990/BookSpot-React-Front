@@ -4,13 +4,20 @@ import { CommonShelf } from "@/types/Bookshelf";
 import { findBooksPreviewWithIds } from "@/utils/api/BookPreviewApi";
 import { BookshelfDetailTemplate } from "@/components/templates/BookShelfDetailTemplate";
 import PageNotFound from "@/app/not-found";
+import { parseRedirectUri } from "@/utils/querystring/RedirectUri";
 
 export default async function BookshelfDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
 }) {
   const shelfId = await (await params).id;
+
+  const queryStrings = await searchParams;
+  const redirectUri = parseRedirectUri(queryStrings);
+
   if (!shelfId) return <PageNotFound />;
 
   // 책장 정보를 불러옴
@@ -28,5 +35,11 @@ export default async function BookshelfDetailPage({
       ? []
       : await findBooksPreviewWithIds({ bookIds: bookIds, side: "server" });
 
-  return <BookshelfDetailTemplate initShelf={shelf} initBooks={books} />;
+  return (
+    <BookshelfDetailTemplate
+      initShelf={shelf}
+      initBooks={books}
+      redirectUri={redirectUri}
+    />
+  );
 }

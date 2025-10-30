@@ -15,7 +15,10 @@ import {
 } from "../ui/custom-page-title";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { createRedirectLoginUrl } from "@/utils/querystring/RedirectUri";
+import {
+  createRedirectLoginUrl,
+  REDIRECT_QUERY_STRING_KEY,
+} from "@/utils/querystring/RedirectUri";
 import { useToast } from "@/contexts/ToastContext";
 
 export const PublicBookshelvesListTemplate = ({
@@ -78,9 +81,26 @@ export const PublicBookshelvesListTemplate = ({
   }
 };
 
+function currentUri() {
+  const { pathname, search } = window.location;
+  return pathname + search;
+}
+
 export const BookshelfCard = ({ shelf }: { shelf: BookshelfSummary }) => {
+  const router = useRouter();
   return (
-    <Link href={`/bookshelves/${shelf.id}`} className="flex-1">
+    // href를 쓰면 렌더링된 상태를 쓰기 때문에 currentUri는 항상 "/"을 반환한다.
+    // 그래서 onClick을 사용해서 클릭 시점에 값을 얻도록 만든다
+    <Link
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        router.push(
+          `/bookshelves/${shelf.id}?${REDIRECT_QUERY_STRING_KEY}=${currentUri()}`
+        );
+      }}
+      className="flex-1"
+    >
       <Card className="group hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
         <ReadonlyBookshelfCardHeader shelf={shelf} />
         <BookshelfCardContent shelf={shelf} />
