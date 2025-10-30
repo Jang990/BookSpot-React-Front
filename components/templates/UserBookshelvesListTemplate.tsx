@@ -29,8 +29,10 @@ import { REDIRECT_QUERY_STRING_KEY } from "@/utils/querystring/RedirectUri";
 
 export const UserBookshelvesListTemplate = ({
   shelves,
+  ownerId,
 }: {
   shelves: BookshelfSummary[];
+  ownerId: string;
 }) => {
   const [bookshelves, setBookshelves] = useState<BookshelfSummary[]>(shelves);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -94,6 +96,7 @@ export const UserBookshelvesListTemplate = ({
       createdAt: shelf.createdAt,
       isPublic: shelf.isPublic,
       thumbnailImageIsbn: [],
+      ownerId: ownerId,
     };
 
     setBookshelves([newShelf, ...bookshelves]);
