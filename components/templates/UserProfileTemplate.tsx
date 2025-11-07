@@ -1,5 +1,8 @@
+"use client";
+import { signOut } from "next-auth/react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
+import { useRouter } from "next/navigation";
 
 interface TEMP_UserDetail {
   loginEmail: string;
@@ -7,6 +10,7 @@ interface TEMP_UserDetail {
 }
 
 export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
+  const router = useRouter();
   return (
     <div className="mt-5">
       {/* 계정 섹션 */}
@@ -24,8 +28,18 @@ export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
       <div>
         <ItemTitle title="메뉴" />
         <div className="space-y-1">
-          <MenuItem label="책가방" />
-          <MenuItem label="내 책장" />
+          <MenuItem
+            label="책가방"
+            onClick={() => {
+              router.push("/cart");
+            }}
+          />
+          <MenuItem
+            label="내 책장"
+            onClick={() => {
+              router.push("/me/bookshelves");
+            }}
+          />
         </div>
       </div>
 
@@ -35,7 +49,12 @@ export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
       <div>
         <ItemTitle title="기타" />
         <div className="space-y-1">
-          <MenuItem label="로그아웃" /* onClick={handleLogout} */ />
+          <MenuItem
+            label="로그아웃"
+            onClick={() => {
+              signOut({ redirectTo: "/" });
+            }}
+          />
           <MenuItem
             label="회원탈퇴"
             // onClick={handleDeleteAccount}
@@ -79,7 +98,7 @@ function MenuItem({
           ? "text-destructive hover:text-destructive hover:bg-destructive/10"
           : ""
       }`}
-      //   onClick={onClick}
+      onClick={onClick}
     >
       <span className="text-base">{label}</span>
     </Button>
