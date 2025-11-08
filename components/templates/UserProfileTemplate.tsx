@@ -3,6 +3,7 @@ import { signOut } from "next-auth/react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { useRouter } from "next/navigation";
+import { deleteMe } from "@/utils/api/UsersApi";
 
 interface TEMP_UserDetail {
   loginEmail: string;
@@ -57,7 +58,11 @@ export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
           />
           <MenuItem
             label="회원탈퇴"
-            // onClick={handleDeleteAccount}
+            onClick={() => {
+              deleteMe({ side: "client" }).then(() => {
+                router.push("/");
+              });
+            }}
             variant="destructive"
           />
         </div>
