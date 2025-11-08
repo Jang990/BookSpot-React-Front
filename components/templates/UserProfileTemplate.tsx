@@ -4,6 +4,8 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { useRouter } from "next/navigation";
 import { deleteMe } from "@/utils/api/UsersApi";
+import { useState } from "react";
+import { UserDeleteDialog } from "../organisms/popup/UserDeleteDialog";
 
 interface TEMP_UserDetail {
   loginEmail: string;
@@ -12,6 +14,7 @@ interface TEMP_UserDetail {
 
 export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
   const router = useRouter();
+  const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState<boolean>(false);
   return (
     <div className="mt-5">
       {/* 계정 섹션 */}
@@ -59,14 +62,20 @@ export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
           <MenuItem
             label="회원탈퇴"
             onClick={() => {
-              deleteMe({ side: "client" }).then(() => {
-                router.push("/");
-              });
+              setIsOpenDeleteDialog(true);
             }}
             variant="destructive"
           />
         </div>
       </div>
+      <UserDeleteDialog
+        isOpen={isOpenDeleteDialog}
+        onDelete={() => {
+          setIsOpenDeleteDialog(false);
+          signOut({ redirectTo: "/" });
+        }}
+        onClose={() => setIsOpenDeleteDialog(false)}
+      />
     </div>
   );
 };
