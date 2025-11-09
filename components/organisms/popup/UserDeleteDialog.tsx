@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/custom-dialog";
 import { deleteMe } from "@/utils/api/UsersApi";
 
-const DELETE_CONFIRMATION_TEXT = "계정 삭제";
+const DELETE_CONFIRMATION_TEXT = "회원탈퇴";
 
 export const UserDeleteDialog = ({
   isOpen,
@@ -40,7 +40,7 @@ export const UserDeleteDialog = ({
         onClose={onClose}
         description={`계정정보, 책장정보가 모두 삭제됩니다.`}
       >
-        회원 탈퇴
+        회원탈퇴
       </ModernDialogHeader>
 
       <ModernDialogContent>
