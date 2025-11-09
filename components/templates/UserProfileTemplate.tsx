@@ -14,6 +14,10 @@ export const UserProfileTemplate = ({
 }) => {
   const router = useRouter();
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState<boolean>(false);
+
+  const dateOnly = (dateStr: string): string => {
+    return new Date(dateStr).toISOString().split("T")[0];
+  };
   return (
     <div className="mt-5">
       {/* 계정 섹션 */}
@@ -21,7 +25,7 @@ export const UserProfileTemplate = ({
         <ItemTitle title="계정" />
         <div className="space-y-1">
           <InfoItem label="이메일" value={user.email} />
-          <InfoItem label="가입일" value={user.createdAt} />
+          <InfoItem label="가입일" value={dateOnly(user.createdAt)} />
         </div>
       </div>
 
