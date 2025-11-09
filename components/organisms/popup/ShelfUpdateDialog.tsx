@@ -78,7 +78,7 @@ export const ShelfUpdateDialog = ({
 
       <ModernDialogContent className="space-y-4">
         <ShelfNameInput name={name} setName={setName} />
-        <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} />
+        {/* <ShelfPublicSwitch isPublic={isPublic} setIsPublic={setIsPublic} /> */}
       </ModernDialogContent>
 
       <ModernDialogFooter>
