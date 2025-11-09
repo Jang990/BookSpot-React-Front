@@ -18,5 +18,8 @@ declare module "next-auth/jwt" {
     backendToken?: string;
     userRole?: string;
     error?: string;
+
+    // exp는 초단위(next-auth에서 내부적으로 쓰는 값)
+    expiresAtMs?: number; // backendExpiresAt은 ms단위. Date와 호환.
   }
 }
