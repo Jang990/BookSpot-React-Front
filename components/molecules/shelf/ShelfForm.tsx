@@ -34,8 +34,10 @@ export const ShelfPublicSwitch = ({
   isPublic: boolean;
   setIsPublic: (isPublic: boolean) => void;
 }) => {
+  // TODO: 책장 신고하기 기능과 함께 주석 해제
   return (
-    <div className="grid grid-cols-4 items-center gap-4">
+    <>
+      {/* <div className="grid grid-cols-4 items-center gap-4">
       <Label htmlFor="public" className="text-right">
         공개 설정
       </Label>
@@ -45,6 +47,7 @@ export const ShelfPublicSwitch = ({
           {isPublic ? "다른 사용자와 함께 보기" : "혼자 보기"}
         </Label>
       </div>
-    </div>
+    </div> */}
+    </>
   );
 };

@@ -225,7 +225,7 @@ const WeeklyTop50BooksLink = () => {
 };
 
 const PublicShelvesPageLink = () => {
-  return <LinkButton text="📚 모두의 책장" href="/bookshelves" />;
+  return <>{/* <LinkButton text="📚 모두의 책장" href="/bookshelves" /> */}</>;
 };
 
 const SortByFilterButton = ({
