@@ -4,9 +4,5 @@ import { findMe } from "@/utils/api/UsersApi";
 
 export default async function MyProfile() {
   const userDetail: UserDetailResponseSpec = await findMe({ side: "server" });
-  return (
-    <UserProfileTemplate
-      users={{ loginEmail: userDetail.email, createdAt: userDetail.createdAt }}
-    />
-  );
+  return <UserProfileTemplate user={userDetail} />;
 }

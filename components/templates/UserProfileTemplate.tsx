@@ -3,16 +3,15 @@ import { signOut } from "next-auth/react";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { useRouter } from "next/navigation";
-import { deleteMe } from "@/utils/api/UsersApi";
 import { useState } from "react";
 import { UserDeleteDialog } from "../organisms/popup/UserDeleteDialog";
+import { UserDetailResponseSpec } from "@/types/ApiSpec";
 
-interface TEMP_UserDetail {
-  loginEmail: string;
-  createdAt: string;
-}
-
-export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
+export const UserProfileTemplate = ({
+  user,
+}: {
+  user: UserDetailResponseSpec;
+}) => {
   const router = useRouter();
   const [isOpenDeleteDialog, setIsOpenDeleteDialog] = useState<boolean>(false);
   return (
@@ -21,8 +20,8 @@ export const UserProfileTemplate = ({ users }: { users: TEMP_UserDetail }) => {
       <div>
         <ItemTitle title="계정" />
         <div className="space-y-1">
-          <InfoItem label="이메일" value={users.loginEmail} />
-          <InfoItem label="가입일" value={users.createdAt} />
+          <InfoItem label="이메일" value={user.email} />
+          <InfoItem label="가입일" value={user.createdAt} />
         </div>
       </div>
 
