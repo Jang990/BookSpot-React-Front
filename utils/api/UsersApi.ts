@@ -8,8 +8,12 @@ export const findMe = async ({
 }): Promise<UserDetailResponseSpec> => {
   const response = await getApiClient(side).get<void>(`/api/users/me`);
 
-  if (!response.ok) throw response.error;
-  if (!response.data) throw new Error("사용자 정보 없음");
+  if (!response.ok || !response.data)
+    return {
+      email: "로그아웃을 진행해주세요.",
+      createdAt: new Date().toLocaleDateString(),
+      provider: "로그아웃 필요",
+    };
   return response.data;
 };
 
