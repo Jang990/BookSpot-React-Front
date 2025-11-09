@@ -86,3 +86,9 @@ export interface ShelfBookStatus {
   isPublic: boolean;
   isExists: boolean;
 }
+
+export interface UserDetailResponseSpec {
+  email: string;
+  createdAt: string;
+  provider: string;
+}
