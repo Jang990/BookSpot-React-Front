@@ -6,7 +6,7 @@ export const findMe = async ({
 }: {
   side: Side;
 }): Promise<UserDetailResponseSpec> => {
-  const response = await getApiClient(side).delete<void>(`/api/users/me`);
+  const response = await getApiClient(side).get<void>(`/api/users/me`);
 
   if (!response.ok) throw response.error;
   if (!response.data) throw new Error("사용자 정보 없음");
