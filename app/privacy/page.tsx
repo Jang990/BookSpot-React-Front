@@ -39,79 +39,125 @@ export default function PrivacyPolicyPage() {
         </p>
       </section>
 
-      {/* 2. 수집하는 개인정보의 항목 및 수집 방법 */}
+      {/* 2. 수집하는 개인정보의 항목 및 수집 방법 - [수정됨] */}
       <section className="mt-8">
         <h2 className="text-lg font-semibold">
           2. 수집하는 개인정보의 항목 및 수집 방법
         </h2>
         <p className="mt-2">
-          본 서비스는 회원가입 절차 없이 운영합니다. 이름, 이메일 주소, 연락처
-          등 개인을 직접 식별할 수 있는 정보를 수집하지 않습니다. 다만, 서비스
-          이용 과정에서 아래 정보가 자동으로 생성·수집될 수 있습니다.
+          서비스는 이용자의 필요에 따라 선택적으로 개인정보를 수집합니다.
         </p>
 
-        {/* 가. 쿠키 */}
+        {/* 가. 회원가입(로그인) 시 */}
         <div className="mt-4 border-l-2 border-gray-200 pl-4">
-          <h3 className="font-medium">가. 쿠키 (Cookie)</h3>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
-            <li>
-              <span className="font-medium">수집 항목:</span> 북카트에 담은
-              도서의 고유 ID (bookId)
-            </li>
-            <li>
-              <span className="font-medium">수집 목적:</span> 로그인 없이도
-              사용자가 북카트 목록을 유지할 수 있도록 편의 기능 제공
-            </li>
-          </ul>
+          <h3 className="font-medium">가. 회원가입(로그인) 시 수집 항목</h3>
           <p className="mt-2 text-gray-700">
-            쿠키는 이용자 브라우저에 저장되는 작은 텍스트 파일입니다. 이용자는
-            브라우저 옵션에서 모든 쿠키 허용, 저장 시 확인, 전체 차단 등을
-            선택할 수 있습니다. (쿠키 저장을 거부하면 북카트 기능 이용에 제약이
-            있을 수 있습니다.)
+            '내 책장' 등 개인화된 서비스 이용을 원하는 경우, 소셜 로그인을 통해
+            아래의 정보를 수집합니다.
           </p>
-        </div>
-
-        {/* 나. 로컬 스토리지 */}
-        <div className="mt-6 border-l-2 border-gray-200 pl-4">
-          <h3 className="font-medium">나. 로컬 스토리지 (Local Storage)</h3>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>
-              <span className="font-medium">수집 항목:</span> 마지막으로 조회한
-              지도 위치 정보(위도, 경도, 확대 레벨 등)
+              <span className="font-medium">수집 항목:</span> (예시)
+              Google/Kakao/Naver 계정 이메일, 사용자 고유 식별 ID
             </li>
             <li>
-              <span className="font-medium">수집 목적:</span> 재방문 시 이전
-              지도 위치에서 바로 시작할 수 있도록 사용자 경험 향상
+              <span className="font-medium">수집 목적:</span> 회원 식별 및
+              서비스 이용, '내 책장' 기능 제공, 계정 연동
             </li>
           </ul>
         </div>
 
-        {/* 다. 서비스 이용 기록 */}
+        {/* 나. 서비스 이용 과정에서 자동으로 수집되는 항목 */}
         <div className="mt-6 border-l-2 border-gray-200 pl-4">
-          <h3 className="font-medium">다. 서비스 이용 기록 (Log Data)</h3>
+          <h3 className="font-medium">
+            나. 서비스 이용 과정에서 자동으로 수집되는 항목
+          </h3>
+          <p className="mt-2 text-gray-700">
+            로그인 여부와 관계없이 서비스 이용 과정에서 아래 정보가 자동으로
+            생성·수집될 수 있습니다.
+          </p>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>
-              <span className="font-medium">수집 항목:</span> 검색 조건(검색어),
-              지도 탐색 위치, 조회한 도서관 ID/도서 ID, 접속 IP, 브라우저 종류
-              등
+              <span className="font-medium">(1) 쿠키 (Cookie):</span>
+              <ul className="list-inside list-['–'] pl-4">
+                <li>
+                  <span className="font-medium">수집 항목:</span> 책가방에 담은
+                  도서의 고유 ID (bookId)
+                </li>
+                <li>
+                  <span className="font-medium">수집 목적:</span> 로그인 없이도
+                  사용자가 책가방 목록을 유지할 수 있도록 편의 기능 제공
+                </li>
+              </ul>
             </li>
-            <li>
-              <span className="font-medium">수집 목적:</span> 서비스 사용 통계
-              분석, 오류 확인 및 품질 개선, 비정상 이용(어뷰징) 방지
+            <li className="mt-2">
+              <span className="font-medium">
+                (2) 로컬 스토리지 (Local Storage):
+              </span>
+              <ul className="list-inside list-['–'] pl-4">
+                <li>
+                  <span className="font-medium">수집 항목:</span> 마지막으로
+                  조회한 지도 위치 정보(위도, 경도, 확대 레벨 등)
+                </li>
+                <li>
+                  <span className="font-medium">수집 목적:</span> 재방문 시 이전
+                  지도 위치에서 바로 시작할 수 있도록 사용자 경험 향상
+                </li>
+              </ul>
+            </li>
+            <li className="mt-2">
+              <span className="font-medium">
+                (3) 기기 위치 정보 (GPS) - [GPS 추가됨]:
+              </span>
+              <ul className="list-inside list-['–'] pl-4">
+                <li>
+                  <span className="font-medium">수집 항목:</span> 기기의 정확한
+                  위치 정보 (위도, 경도)
+                </li>
+                <li>
+                  <span className="font-medium">수집 목적:</span> 사용자가 '현재
+                  위치로 이동' 기능을 요청할 경우, 지도를 사용자의 현재 위치로
+                  이동시키기 위한 목적
+                </li>
+                <li className="font-bold text-gray-800">
+                  이 정보는 서버에 저장되지 않으며, 오직 해당 기능의 1회성
+                  작동을 위해서만 사용됩니다.
+                </li>
+              </ul>
+            </li>
+            <li className="mt-2">
+              <span className="font-medium">
+                (4) 서비스 이용 기록 (Log Data):
+              </span>
+              <ul className="list-inside list-['–'] pl-4">
+                <li>
+                  <span className="font-medium">수집 항목:</span> 검색
+                  조건(검색어), 지도 탐색 위치, 조회한 도서관 ID/도서 ID, 접속
+                  IP, 브라우저 종류 등
+                </li>
+                <li>
+                  <span className="font-medium">수집 목적:</span> 서비스 사용
+                  통계 분석, 오류 확인 및 품질 개선, 비정상 이용(어뷰징) 방지
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
       </section>
 
-      {/* 3. 개인정보의 수집 및 이용 목적 */}
+      {/* 3. 개인정보의 수집 및 이용 목적 - [수정됨] */}
       <section className="mt-8">
         <h2 className="text-lg font-semibold">
           3. 개인정보의 수집 및 이용 목적
         </h2>
         <ul className="mt-2 list-disc space-y-1 pl-5">
           <li>
-            <span className="font-medium">서비스 기능 제공:</span> 북카트,
-            마지막 지도 위치 기억 등 개인화 편의 제공
+            <span className="font-medium">서비스 기본 기능 제공:</span> '현재
+            위치로 이동', '책가방', '마지막 지도 위치 기억' 등 편의 기능 제공
+          </li>
+          <li>
+            <span className="font-medium">회원 서비스 제공:</span> 회원 식별,
+            '내 책장' 생성 및 관리 등 개인화 서비스 제공
           </li>
           <li>
             <span className="font-medium">서비스 개선 및 신규 개발:</span> 이용
@@ -124,7 +170,7 @@ export default function PrivacyPolicyPage() {
         </ul>
       </section>
 
-      {/* 4. 광고에 관한 사항 */}
+      {/* 4. 광고에 관한 사항 (Google AdSense) */}
       <section className="mt-8">
         <h2 className="text-lg font-semibold">
           4. 광고에 관한 사항 (Google AdSense)
@@ -160,12 +206,16 @@ export default function PrivacyPolicyPage() {
         </p>
       </section>
 
-      {/* 5. 개인정보의 보유 및 이용기간 */}
+      {/* 5. 개인정보의 보유 및 이용기간 - [수정됨] */}
       <section className="mt-8">
         <h2 className="text-lg font-semibold">
           5. 개인정보의 보유 및 이용기간
         </h2>
         <ul className="mt-2 list-disc space-y-1 pl-5">
+          <li>
+            <span className="font-medium">회원 정보:</span> 회원 탈퇴 시 또는
+            법령에서 정한 보존 기간 만료 시 지체 없이 파기합니다.
+          </li>
           <li>
             <span className="font-medium">쿠키 및 로컬 스토리지:</span> 이용자
             브라우저에 저장되며, 이용자가 직접 브라우저 데이터를 삭제하기 전까지
@@ -179,12 +229,20 @@ export default function PrivacyPolicyPage() {
         </ul>
       </section>
 
-      {/* 6. 이용자의 권리 및 그 행사방법 */}
+      {/* 6. 이용자의 권리 및 그 행사방법 - [수정됨] */}
       <section className="mt-8">
         <h2 className="text-lg font-semibold">
           6. 이용자의 권리 및 그 행사방법
         </h2>
-        <p className="mt-2">
+        <p className="mt-2 font-medium">[로그인 이용자의 권리]</p>
+        <p className="mt-1">
+          로그인한 이용자는 서비스 내 '회원 탈퇴' 기능을 통해 언제든지 가입을
+          해지(개인정보 수집·이용 동의 철회)할 수 있습니다. 회원 탈퇴 시,
+          이용자의 '내 책장' 정보를 포함한 개인정보는 관련 법령 및 내부 방침에
+          따라 지체 없이 파기됩니다.
+        </p>
+        <p className="mt-4 font-medium">[모든 이용자의 권리]</p>
+        <p className="mt-1">
           이용자는 언제든지 브라우저 설정을 통해 쿠키 및 로컬 스토리지 저장을
           거부하거나 삭제할 수 있습니다.
         </p>

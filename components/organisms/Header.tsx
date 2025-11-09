@@ -80,35 +80,29 @@ const UserIconButton = () => {
     };
   }, [status, session, pathname /* , searchParams */]);
 
+  const isAuthenticated = (): boolean => {
+    return status === "authenticated";
+  };
+
   return (
     <>
-      {status === "authenticated" ? (
-        <IconDropDownButton
-          Icon={UserCircle}
-          items={[
-            { type: "link", text: "내 책장", href: "/me/bookshelves" },
-            {
-              type: "button",
-              text: "로그아웃",
-              onClick: () => signOut(),
-            },
-          ]}
+      <button
+        type="button"
+        aria-haspopup="menu"
+        onClick={() => {
+          if (isAuthenticated()) router.push("/me");
+          else router.push(createRedirectLoginUrl("/me"));
+        }}
+        className={`inline-flex items-center justify-center p-2 rounded-full transition-transform duration-150 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-transparent`}
+        title="로그인"
+      >
+        <UserCircle
+          size={24}
+          className={
+            isAuthenticated() ? "text-primary" : "text-muted-foreground"
+          }
         />
-      ) : (
-        <button
-          type="button"
-          aria-haspopup="menu"
-          onClick={() => {
-            const { pathname, search } = window.location;
-            const currentUri = pathname + search;
-            router.push(createRedirectLoginUrl(currentUri));
-          }}
-          className={`inline-flex items-center justify-center p-2 rounded-full transition-transform duration-150 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-transparent`}
-          title="로그인"
-        >
-          <UserCircle size={24} className="text-muted-foreground" />
-        </button>
-      )}
+      </button>
     </>
   );
 };
