@@ -68,12 +68,13 @@ export const BookshelfDetailTemplate = ({
         </div>
 
         <div className="flex items-center gap-2 shrink-0">
-          <CommonIconButton
+          {/* TODO: 신고하기 기능과 함께 주석을 제거할 것*/}
+          {/* <CommonIconButton
             icon={<Share2 />}
             onClick={() => {
               onClickShareBtn();
             }}
-          />
+          /> */}
           {status === "authenticated" &&
             session?.user.id === shelf.ownerId &&
             OwnerButtonGroups()}
