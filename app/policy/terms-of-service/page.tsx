@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   },
 };
 
-const SERVICE_NAME = "BookSpot"; // 서비스 이름
+const SERVICE_NAME = "북스팟-BookSpot"; // 서비스 이름
 const CONTACT_EMAIL = "sdsd090811@gmail.com"; // 문의용 이메일
 const ANNOUNCED_AT = "2025년 08월 26일"; // 공고일자
 const EFFECTIVE_AT = "2025년 08월 26일"; // 시행일자

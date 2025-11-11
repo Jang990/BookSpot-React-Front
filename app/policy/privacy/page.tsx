@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 // TODO: 아래 상수 값을 프로젝트에 맞게 채우세요.
-const SERVICE_NAME = "BookSpot"; // 예: BookRadar
+const SERVICE_NAME = "북스팟-BookSpot"; // 예: BookRadar
 const CONTACT_EMAIL = "sdsd090811@gmail.com"; // 문의용 이메일
 const ANNOUNCED_AT = "2025년 08월 26일"; // 공고일자
 const EFFECTIVE_AT = "2025년 08월 26일"; // 시행일자
