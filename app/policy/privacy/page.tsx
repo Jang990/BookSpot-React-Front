@@ -106,9 +106,7 @@ export default function PrivacyPolicyPage() {
               </ul>
             </li>
             <li className="mt-2">
-              <span className="font-medium">
-                (3) 기기 위치 정보 (GPS) - [GPS 추가됨]:
-              </span>
+              <span className="font-medium">(3) 기기 위치 정보 (GPS):</span>
               <ul className="list-inside list-['–'] pl-4">
                 <li>
                   <span className="font-medium">수집 항목:</span> 기기의 정확한
@@ -223,8 +221,11 @@ export default function PrivacyPolicyPage() {
           </li>
           <li>
             <span className="font-medium">서비스 이용 기록:</span> 서비스 개선
-            및 통계 분석의 목적 달성 시 또는 관련 법령에 따른 보관 기간 종료 시
-            지체 없이 파기합니다.
+            및 통계 분석을 위해{" "}
+            <span className="font-bold">
+              개인을 식별할 수 없도록 비식별화 처리 후 1년간
+            </span>{" "}
+            보관하며, 이 기간이 종료되면 지체 없이 파기합니다.
           </li>
         </ul>
       </section>
