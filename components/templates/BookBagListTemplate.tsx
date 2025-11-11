@@ -71,20 +71,18 @@ export const BookBagListTemplate = ({}: Props) => {
     <ErrorPage />
   ) : (
     <div>
-      <div className="flex justify-between items-center">
-        <PageHeader>
-          <PageHeaderTitle>내 가방</PageHeaderTitle>
-          <PageHeaderActions>
-            {loading ? (
-              <SkeletonDiv height="h-5" width="w-28" />
-            ) : (
-              <PageHeaderSubLabel>
-                담은 책 : {books.length} / {MAX_BAG_SIZE}
-              </PageHeaderSubLabel>
-            )}
-          </PageHeaderActions>
-        </PageHeader>
-      </div>
+      <PageHeader>
+        <PageHeaderTitle>책가방</PageHeaderTitle>
+        <PageHeaderActions>
+          {loading ? (
+            <SkeletonDiv height="h-5" width="w-28" />
+          ) : (
+            <PageHeaderSubLabel>
+              담은 책 : {books.length} / {MAX_BAG_SIZE}
+            </PageHeaderSubLabel>
+          )}
+        </PageHeaderActions>
+      </PageHeader>
       <div>
         {loading && <SkeletonBookList />}
         {!loading && !isError && books.length === 0 && (
