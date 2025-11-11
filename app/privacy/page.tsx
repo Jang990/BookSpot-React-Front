@@ -106,9 +106,7 @@ export default function PrivacyPolicyPage() {
               </ul>
             </li>
             <li className="mt-2">
-              <span className="font-medium">
-                (3) 기기 위치 정보 (GPS) - [GPS 추가됨]:
-              </span>
+              <span className="font-medium">(3) 기기 위치 정보 (GPS):</span>
               <ul className="list-inside list-['–'] pl-4">
                 <li>
                   <span className="font-medium">수집 항목:</span> 기기의 정확한
