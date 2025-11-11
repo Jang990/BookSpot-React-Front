@@ -24,6 +24,14 @@ export const Footer = () => {
                   개인정보 처리 방침
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/policy/terms-of-service"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  이용약관
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
