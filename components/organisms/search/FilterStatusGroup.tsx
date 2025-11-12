@@ -15,6 +15,7 @@ import {
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
 import { SORT_BY_QUERY_STRING_KEY } from "@/utils/querystring/SortBy";
+import { DEFAULT_YEAR_RANGE } from "@/utils/querystring/YearRange";
 import { Filter, ListFilter, MapPin } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -211,7 +212,7 @@ export const FilterStatusGroup = ({
           />
         )}
 
-        <YearRangeFilterButton />
+        <YearRangeFilterButton yearRange={yearRange} />
 
         <PublicShelvesPageLink />
         {/* <WeeklyTop50BooksLink /> */}
@@ -233,11 +234,16 @@ const PublicShelvesPageLink = () => {
   return <>{/* <LinkButton text="📚 모두의 책장" href="/bookshelves" /> */}</>;
 };
 
-const YearRangeFilterButton = () => {
+const YearRangeFilterButton = ({ yearRange }: { yearRange: YearRange }) => {
+  const displayText = (): string => {
+    if (yearRange === DEFAULT_YEAR_RANGE) return "발행연도";
+    else return "사용자 지정";
+  };
+
   return (
     <DropDownButton
       selected={false}
-      text={"발행연도"}
+      text={displayText()}
       Icon={ListFilter}
       items={[
         {
