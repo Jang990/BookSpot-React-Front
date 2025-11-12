@@ -23,6 +23,12 @@ export interface SearchCondition {
   bookIds?: string[];
   libraryId?: string;
   categoryCond: CategoryCondition | null;
+  yearRange?: YearRange | null;
+}
+
+export interface YearRange {
+  startYear: number;
+  endYear: number;
 }
 
 export interface CategoryCondition {
@@ -143,7 +149,7 @@ export const findBooksPreviewWithSA = async (
 
 export const BOOK_API_PATH = "/api/books";
 function createApiPath(
-  { keyword, bookIds, libraryId, categoryCond }: SearchCondition,
+  { keyword, bookIds, libraryId, categoryCond, yearRange }: SearchCondition,
   pageCond: Pageable | SearchAfter
 ): string {
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
@@ -161,6 +167,10 @@ function createApiPath(
   if (keyword) params.append("title", keyword);
   if (bookIds) params.append("bookIds", bookIds.join(","));
   if (libraryId) params.append("libraryId", libraryId);
+  if (yearRange) {
+    params.append("startYear", yearRange.startYear.toString());
+    params.append("endYear", yearRange.endYear.toString());
+  }
   if (categoryCond?.categoryId && categoryCond?.categoryLevel) {
     params.append(CATEGORY_QUERY_STRING_KEY, categoryCond.categoryId);
     params.append(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryCond.categoryLevel);
