@@ -27,6 +27,7 @@ import {
 import { parseLibraryId } from "@/utils/querystring/LibraryId";
 import { BookSearchPageTitle } from "@/components/molecules/BookSearchPageTitle";
 import { parseSortByValue } from "@/utils/querystring/SortBy";
+import { parseYearRange } from "@/utils/querystring/YearRange";
 
 const ITEMS_PER_PAGE = 12;
 
@@ -43,6 +44,7 @@ export default async function BookSearchResultPage({ searchParams }: Props) {
   const categoryId = parseCategoryId(queryStrings);
   const categoryLevel = parseCategoryLevel(queryStrings);
   const sortBy = parseSortByValue(queryStrings) ?? "LOAN";
+  const yearRange = parseYearRange(queryStrings);
 
   const lastBookId = parseNumber(queryStrings, LAST_BOOK_ID_KEY);
   const lastLoanCount = parseNumber(queryStrings, LAST_LOAN_COUNT_KEY);
