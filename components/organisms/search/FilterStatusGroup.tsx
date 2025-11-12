@@ -208,6 +208,8 @@ export const FilterStatusGroup = ({
           />
         )}
 
+        <YearRangeFilterButton />
+
         <PublicShelvesPageLink />
         {/* <WeeklyTop50BooksLink /> */}
       </div>
@@ -226,6 +228,43 @@ const WeeklyTop50BooksLink = () => {
 
 const PublicShelvesPageLink = () => {
   return <>{/* <LinkButton text="📚 모두의 책장" href="/bookshelves" /> */}</>;
+};
+
+const YearRangeFilterButton = () => {
+  return (
+    <DropDownButton
+      selected={false}
+      text={"발행연도"}
+      Icon={ListFilter}
+      items={[
+        {
+          type: "link",
+          text: "최근 1년",
+          href: "/books",
+        },
+        {
+          type: "link",
+          text: "최근 3년",
+          href: "/books",
+        },
+        {
+          type: "link",
+          text: "최근 5년",
+          href: "/books",
+        },
+        {
+          type: "link",
+          text: "최근 10년",
+          href: "/books",
+        },
+        {
+          type: "link",
+          text: "사용자 지정",
+          href: "/books",
+        },
+      ]}
+    />
+  );
 };
 
 const SortByFilterButton = ({
