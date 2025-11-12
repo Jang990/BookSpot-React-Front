@@ -15,9 +15,14 @@ import {
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
 import { SORT_BY_QUERY_STRING_KEY } from "@/utils/querystring/SortBy";
-import { DEFAULT_YEAR_RANGE } from "@/utils/querystring/YearRange";
+import {
+  deleteYearRangeParams,
+  isDefaultYearRange,
+  setYearRangeParams,
+} from "@/utils/querystring/YearRange";
 import { Filter, ListFilter, MapPin } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { DropdownItem } from "../dropdown/IconDrowDown";
 
 interface FilterStatusGroupProps {
   libraryId: number | null;
@@ -212,7 +217,10 @@ export const FilterStatusGroup = ({
           />
         )}
 
-        <YearRangeFilterButton yearRange={yearRange} />
+        <YearRangeFilterButton
+          bookQueryString={bookQueryString}
+          yearRange={yearRange}
+        />
 
         <PublicShelvesPageLink />
         {/* <WeeklyTop50BooksLink /> */}
@@ -234,44 +242,56 @@ const PublicShelvesPageLink = () => {
   return <>{/* <LinkButton text="📚 모두의 책장" href="/bookshelves" /> */}</>;
 };
 
-const YearRangeFilterButton = ({ yearRange }: { yearRange: YearRange }) => {
+const YearRangeFilterButton = ({
+  bookQueryString,
+  yearRange,
+}: {
+  bookQueryString?: string;
+  yearRange: YearRange;
+}) => {
+  const isSelected = !isDefaultYearRange(yearRange);
   const displayText = (): string => {
-    if (yearRange === DEFAULT_YEAR_RANGE) return "발행연도";
-    else return "사용자 지정";
+    if (!isSelected) return "발행연도";
+
+    const startTxt = yearRange.startYear % 100;
+    const endTxt = yearRange.endYear % 100;
+    return `${startTxt}~${endTxt}`;
   };
+
+  const yearRangeHref = (changedYearRange?: YearRange): string => {
+    const params = new URLSearchParams(bookQueryString ?? "");
+    deletePaginationOptions(params);
+
+    if (changedYearRange) setYearRangeParams(params, changedYearRange);
+    else deleteYearRangeParams(params);
+
+    return `/books/?${params.toString()}`;
+  };
+
+  const currentYear = new Date().getFullYear();
+  const yearShortcuts: number[] = [1, 5, 10];
+  const items: DropdownItem[] = [
+    {
+      type: "link",
+      text: "전체",
+      href: yearRangeHref(),
+    },
+    ...yearShortcuts.map<DropdownItem>((n) => ({
+      type: "link",
+      text: `최근 ${n}년`,
+      href: yearRangeHref({
+        startYear: currentYear - n,
+        endYear: currentYear,
+      }),
+    })),
+  ];
 
   return (
     <DropDownButton
-      selected={false}
+      selected={isSelected}
       text={displayText()}
       Icon={ListFilter}
-      items={[
-        {
-          type: "link",
-          text: "전체",
-          href: "/books",
-        },
-        {
-          type: "link",
-          text: "올해",
-          href: "/books",
-        },
-        {
-          type: "link",
-          text: "최근 5년",
-          href: "/books",
-        },
-        {
-          type: "link",
-          text: "최근 10년",
-          href: "/books",
-        },
-        {
-          type: "link",
-          text: "사용자 지정",
-          href: "/books",
-        },
-      ]}
+      items={items}
     />
   );
 };

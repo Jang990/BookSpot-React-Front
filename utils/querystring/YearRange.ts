@@ -23,3 +23,23 @@ export function parseYearRange(queryStrings: {
   if (startYear < endYear) return { startYear: startYear, endYear: endYear };
   else return DEFAULT_YEAR_RANGE;
 }
+
+export function deleteYearRangeParams(params: URLSearchParams): void {
+  params.delete(START_YEAR_QUERY_STRING_KEY);
+  params.delete(END_YEAR_QUERY_STRING_KEY);
+}
+
+export function setYearRangeParams(
+  params: URLSearchParams,
+  yearRange: YearRange
+) {
+  params.set(START_YEAR_QUERY_STRING_KEY, yearRange.startYear.toString());
+  params.set(END_YEAR_QUERY_STRING_KEY, yearRange.endYear.toString());
+}
+
+export function isDefaultYearRange(yearRange: YearRange): boolean {
+  return (
+    yearRange.startYear === DEFAULT_START_VAL &&
+    yearRange.endYear === DEFAULT_END_VAL
+  );
+}
