@@ -6,6 +6,7 @@ import { SelectedFilterButton } from "@/components/molecules/button/filter/Selec
 import { LinkButton } from "@/components/molecules/button/LinkButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
 import { SortBy } from "@/types/Pageable";
+import { YearRange } from "@/utils/api/BookPreviewApi";
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
@@ -22,6 +23,7 @@ interface FilterStatusGroupProps {
   categoryId: number | null;
   bookQueryString?: string;
   sortBy: SortBy;
+  yearRange: YearRange;
 }
 
 export function useDragToScroll(ref: React.RefObject<HTMLElement>) {
@@ -101,6 +103,7 @@ export const FilterStatusGroup = ({
   categoryId,
   bookQueryString,
   sortBy,
+  yearRange,
 }: FilterStatusGroupProps) => {
   const [libraryName, setLibraryName] = useState<string | null>(null);
   const [libLoading, setLibLoading] = useState(false);
@@ -239,12 +242,12 @@ const YearRangeFilterButton = () => {
       items={[
         {
           type: "link",
-          text: "최근 1년",
+          text: "전체",
           href: "/books",
         },
         {
           type: "link",
-          text: "최근 3년",
+          text: "올해",
           href: "/books",
         },
         {

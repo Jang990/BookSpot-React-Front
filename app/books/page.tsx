@@ -115,6 +115,7 @@ export default async function BookSearchResultPage({ searchParams }: Props) {
         libraryId={libraryId}
         categoryId={categoryId}
         sortBy={sortBy}
+        yearRange={yearRange}
       />
 
       <BookPreviewList searchResults={books} />

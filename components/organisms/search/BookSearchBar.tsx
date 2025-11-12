@@ -1,6 +1,8 @@
 import { SearchBar } from "@/components/molecules/SearchBar";
 import { FilterStatusGroup } from "./FilterStatusGroup";
 import { SortBy } from "@/types/Pageable";
+import { YearRange } from "@/utils/api/BookPreviewApi";
+import { DEFAULT_YEAR_RANGE } from "@/utils/querystring/YearRange";
 
 interface SearchProps {
   initSearchTerm: string | null;
@@ -8,6 +10,7 @@ interface SearchProps {
   categoryId: number | null;
   bookQueryString?: string;
   sortBy: SortBy;
+  yearRange?: YearRange;
 }
 
 export const BookSearchBar = async ({
@@ -16,6 +19,7 @@ export const BookSearchBar = async ({
   categoryId,
   bookQueryString,
   sortBy,
+  yearRange = DEFAULT_YEAR_RANGE,
 }: SearchProps) => {
   return (
     <div className="w-full">
@@ -25,6 +29,7 @@ export const BookSearchBar = async ({
         libraryId={libraryId}
         bookQueryString={bookQueryString}
         sortBy={sortBy}
+        yearRange={yearRange}
       />
     </div>
   );
