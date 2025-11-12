@@ -6,6 +6,7 @@ import { SelectedFilterButton } from "@/components/molecules/button/filter/Selec
 import { LinkButton } from "@/components/molecules/button/LinkButton";
 import { CATEGORY_MAP } from "@/types/BookCategory";
 import { SortBy } from "@/types/Pageable";
+import { YearRange } from "@/utils/api/BookPreviewApi";
 import { fetchSingleLibrary } from "@/utils/api/LibraryApi";
 import {
   CATEGORY_LEVEL_QUERY_STRING_KEY,
@@ -14,14 +15,21 @@ import {
 import { LIBRARY_QUERY_STRING_KEY } from "@/utils/querystring/LibraryId";
 import { deletePaginationOptions } from "@/utils/querystring/PaginationOptions.Util";
 import { SORT_BY_QUERY_STRING_KEY } from "@/utils/querystring/SortBy";
+import {
+  deleteYearRangeParams,
+  isDefaultYearRange,
+  setYearRangeParams,
+} from "@/utils/querystring/YearRange";
 import { Filter, ListFilter, MapPin } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { DropdownItem } from "../dropdown/IconDrowDown";
 
 interface FilterStatusGroupProps {
   libraryId: number | null;
   categoryId: number | null;
   bookQueryString?: string;
   sortBy: SortBy;
+  yearRange: YearRange;
 }
 
 export function useDragToScroll(ref: React.RefObject<HTMLElement>) {
@@ -101,6 +109,7 @@ export const FilterStatusGroup = ({
   categoryId,
   bookQueryString,
   sortBy,
+  yearRange,
 }: FilterStatusGroupProps) => {
   const [libraryName, setLibraryName] = useState<string | null>(null);
   const [libLoading, setLibLoading] = useState(false);
@@ -208,6 +217,11 @@ export const FilterStatusGroup = ({
           />
         )}
 
+        <YearRangeFilterButton
+          bookQueryString={bookQueryString}
+          yearRange={yearRange}
+        />
+
         <PublicShelvesPageLink />
         {/* <WeeklyTop50BooksLink /> */}
       </div>
@@ -226,6 +240,60 @@ const WeeklyTop50BooksLink = () => {
 
 const PublicShelvesPageLink = () => {
   return <>{/* <LinkButton text="📚 모두의 책장" href="/bookshelves" /> */}</>;
+};
+
+const YearRangeFilterButton = ({
+  bookQueryString,
+  yearRange,
+}: {
+  bookQueryString?: string;
+  yearRange: YearRange;
+}) => {
+  const isSelected = !isDefaultYearRange(yearRange);
+  const displayText = (): string => {
+    if (!isSelected) return "발행연도";
+
+    const startTxt = yearRange.startYear % 100;
+    const endTxt = yearRange.endYear % 100;
+    return `${startTxt}~${endTxt}`;
+  };
+
+  const yearRangeHref = (changedYearRange?: YearRange): string => {
+    const params = new URLSearchParams(bookQueryString ?? "");
+    deletePaginationOptions(params);
+
+    if (changedYearRange) setYearRangeParams(params, changedYearRange);
+    else deleteYearRangeParams(params);
+
+    return `/books/?${params.toString()}`;
+  };
+
+  const currentYear = new Date().getFullYear();
+  const yearShortcuts: number[] = [1, 5, 10];
+  const items: DropdownItem[] = [
+    {
+      type: "link",
+      text: "전체",
+      href: yearRangeHref(),
+    },
+    ...yearShortcuts.map<DropdownItem>((n) => ({
+      type: "link",
+      text: `최근 ${n}년`,
+      href: yearRangeHref({
+        startYear: currentYear - n,
+        endYear: currentYear,
+      }),
+    })),
+  ];
+
+  return (
+    <DropDownButton
+      selected={isSelected}
+      text={displayText()}
+      Icon={ListFilter}
+      items={items}
+    />
+  );
 };
 
 const SortByFilterButton = ({

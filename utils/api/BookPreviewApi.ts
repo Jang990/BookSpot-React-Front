@@ -17,12 +17,19 @@ import {
 } from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
 import { SORT_BY_QUERY_STRING_KEY } from "../querystring/SortBy";
+import { setYearRangeParams } from "../querystring/YearRange";
 
 export interface SearchCondition {
   keyword?: string | null;
   bookIds?: string[];
   libraryId?: string;
   categoryCond: CategoryCondition | null;
+  yearRange?: YearRange;
+}
+
+export interface YearRange {
+  startYear: number;
+  endYear: number;
 }
 
 export interface CategoryCondition {
@@ -143,7 +150,7 @@ export const findBooksPreviewWithSA = async (
 
 export const BOOK_API_PATH = "/api/books";
 function createApiPath(
-  { keyword, bookIds, libraryId, categoryCond }: SearchCondition,
+  { keyword, bookIds, libraryId, categoryCond, yearRange }: SearchCondition,
   pageCond: Pageable | SearchAfter
 ): string {
   if (keyword && keyword.length < MIN_SEARCH_TERM_LENGTH) {
@@ -158,47 +165,45 @@ function createApiPath(
 
   const params = new URLSearchParams();
 
-  if (keyword) params.append("title", keyword);
-  if (bookIds) params.append("bookIds", bookIds.join(","));
-  if (libraryId) params.append("libraryId", libraryId);
+  if (keyword) params.set("title", keyword);
+  if (bookIds) params.set("bookIds", bookIds.join(","));
+  if (libraryId) params.set("libraryId", libraryId);
+  if (yearRange) {
+    setYearRangeParams(params, yearRange);
+  }
   if (categoryCond?.categoryId && categoryCond?.categoryLevel) {
-    params.append(CATEGORY_QUERY_STRING_KEY, categoryCond.categoryId);
-    params.append(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryCond.categoryLevel);
+    params.set(CATEGORY_QUERY_STRING_KEY, categoryCond.categoryId);
+    params.set(CATEGORY_LEVEL_QUERY_STRING_KEY, categoryCond.categoryLevel);
   }
 
   if (isPageable(pageCond)) {
-    appendPageableQueryParams(params, pageCond);
-    if (pageCond.sortBy)
-      params.append(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
+    setPageableQueryParams(params, pageCond);
+    if (pageCond.sortBy) params.set(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
   }
   if (isSearchAfter(pageCond)) {
-    appendSearchAfterQueryParams(params, pageCond);
-    if (pageCond.sortBy)
-      params.append(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
+    setSearchAfterQueryParams(params, pageCond);
+    if (pageCond.sortBy) params.set(SORT_BY_QUERY_STRING_KEY, pageCond.sortBy);
   }
 
   const query = params.toString();
   return query ? `${BOOK_API_PATH}?${query}` : BOOK_API_PATH;
 }
 
-function appendSearchAfterQueryParams(
+function setSearchAfterQueryParams(
   params: URLSearchParams,
   pageCond: SearchAfter
 ) {
   if (pageCond.lastLoanCount !== null)
-    params.append("lastLoanCount", pageCond.lastLoanCount.toString());
+    params.set("lastLoanCount", pageCond.lastLoanCount.toString());
   if (pageCond.lastBookId !== null)
-    params.append("lastBookId", pageCond.lastBookId.toString());
+    params.set("lastBookId", pageCond.lastBookId.toString());
   if (pageCond.lastScore !== null)
-    params.append(LAST_SCORE_KEY, pageCond.lastScore.toString());
+    params.set(LAST_SCORE_KEY, pageCond.lastScore.toString());
 }
 
-function appendPageableQueryParams(
-  params: URLSearchParams,
-  pageCond: Pageable
-) {
-  params.append("page", pageCond.pageNumber.toString());
-  params.append("size", pageCond.pageSize.toString());
+function setPageableQueryParams(params: URLSearchParams, pageCond: Pageable) {
+  params.set("page", pageCond.pageNumber.toString());
+  params.set("size", pageCond.pageSize.toString());
 }
 
 function isPageable(x: Pageable | SearchAfter): x is Pageable {
