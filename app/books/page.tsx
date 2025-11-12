@@ -74,6 +74,7 @@ export default async function BookSearchResultPage({ searchParams }: Props) {
             categoryId: categoryId.toString(),
             categoryLevel: categoryLevel,
           },
+    yearRange: yearRange,
   };
 
   if (hasCursorCond && isOutOfPageNumber) {

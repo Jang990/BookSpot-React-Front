@@ -17,13 +17,14 @@ import {
 } from "@/types/ApiSpec";
 import { getApiClient, Side } from "./common/Request";
 import { SORT_BY_QUERY_STRING_KEY } from "../querystring/SortBy";
+import { setYearRangeParams } from "../querystring/YearRange";
 
 export interface SearchCondition {
   keyword?: string | null;
   bookIds?: string[];
   libraryId?: string;
   categoryCond: CategoryCondition | null;
-  yearRange?: YearRange | null;
+  yearRange?: YearRange;
 }
 
 export interface YearRange {
@@ -168,8 +169,7 @@ function createApiPath(
   if (bookIds) params.append("bookIds", bookIds.join(","));
   if (libraryId) params.append("libraryId", libraryId);
   if (yearRange) {
-    params.append("startYear", yearRange.startYear.toString());
-    params.append("endYear", yearRange.endYear.toString());
+    setYearRangeParams(params, yearRange);
   }
   if (categoryCond?.categoryId && categoryCond?.categoryLevel) {
     params.append(CATEGORY_QUERY_STRING_KEY, categoryCond.categoryId);
