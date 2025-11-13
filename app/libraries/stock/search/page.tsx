@@ -9,7 +9,7 @@ import { LibraryMapTemplate } from "@/components/templates/LibraryMapTemplate";
 import LibraryMarkerInfo from "@/types/LibraryMarkerInfo";
 import { fetchLibraryStock } from "@/utils/api/LibraryStockApi";
 import { BookPreview } from "@/types/BookPreview";
-import { findBooksPreview } from "@/utils/api/BookPreviewApi";
+import { findBooksPreviewWithIds } from "@/utils/api/BookPreviewApi";
 
 import {
   findMapLocationProps,
@@ -35,15 +35,14 @@ export default function Libraries({
   const mapBound: MapBound = findMapLocationProps();
 
   useEffect(() => {
-    if (!bookIds || bookIds.length === 0) return;
+    if (!bookIds || bookIds.length === 0 || bookIds.length >= MAX_CART_SIZE)
+      return;
 
-    findBooksPreview(
-      { bookIds: bookIds, categoryCond: null },
-      { pageNumber: 0, pageSize: MAX_CART_SIZE },
-      "client"
-    ).then((pageResult) => {
-      setBooksInfo(pageResult.books);
-    });
+    findBooksPreviewWithIds({ bookIds: bookIds, side: "client" }).then(
+      (books) => {
+        setBooksInfo(books);
+      }
+    );
 
     debouncedMapSearch(mapBound);
   }, []);
