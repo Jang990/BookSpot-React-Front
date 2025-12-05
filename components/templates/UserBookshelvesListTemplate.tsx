@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MAX_USER_SHELF_SIZE, type BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book, MoreVertical, Edit, Trash2 } from "lucide-react";
+import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
 import { ShelfCreateDialog } from "../organisms/popup/ShelfCreateDialog";
 import { BookPreviewImage } from "../molecules/BookPreviewImage";
 import {
@@ -25,7 +26,6 @@ import {
   PageHeaderTitle,
 } from "../ui/custom-page-title";
 import { REDIRECT_QUERY_STRING_KEY } from "@/utils/querystring/RedirectUri";
-import { IsPublicBadge } from "../molecules/IsPublicBadge";
 
 export const UserBookshelvesListTemplate = ({
   shelves,
@@ -242,7 +242,11 @@ const BookshelfCardHeader = ({
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Book className="w-4 h-4" />
         <span>{shelf.bookCount}권</span>
-        <IsPublicBadge isPublic={shelf.isPublic} />
+        {shelf.isPublic ? (
+          <GreenBadge text="공개" />
+        ) : (
+          <GrayBadge text="비공개" />
+        )}
       </div>
     </CardHeader>
   );

@@ -13,9 +13,6 @@ interface UserBookshelvesProps {
   side: Side;
 }
 
-// TODO: 신고하기 기능과 함께 없앨 것
-const TEMP_IS_PUBLIC_FALSE = false;
-
 const createUserBookshelvesSummaryApiPath = (userId: string) => {
   return `/api/users/${userId}/shelves`;
 };
@@ -70,7 +67,7 @@ export const createBookshelf = async ({
 }: BookshelfCreationProps): Promise<BookshelfDetailResponseSpec> => {
   const response = await getApiClient(side).post<BookshelfDetailResponseSpec>(
     "/api/users/shelves",
-    { ...creationRequest, isPublic: TEMP_IS_PUBLIC_FALSE }
+    creationRequest
   );
 
   if (!response.ok) throw response.error;
@@ -106,7 +103,7 @@ export const updateBookshelf = async ({
 }: BookshelfUpdateProps): Promise<void> => {
   const response = await getApiClient(side).PATCH<BookshelfDetailResponseSpec>(
     `/api/users/shelves/${shelfId}`,
-    { ...creationRequest, isPublic: TEMP_IS_PUBLIC_FALSE }
+    creationRequest
   );
 
   if (!response.ok) throw response.error;
