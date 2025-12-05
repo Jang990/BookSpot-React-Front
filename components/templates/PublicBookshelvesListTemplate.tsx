@@ -4,8 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book } from "lucide-react";
-import { GrayBadge, GreenBadge } from "@/components/atoms/badge/TextLabelBadge";
-import { BookPreviewImage } from "../molecules/BookPreviewImage";
+import { BookPreviewImage } from "@/components/molecules/BookPreviewImage";
 import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 import {
   PageHeader,
@@ -20,6 +19,7 @@ import {
   REDIRECT_QUERY_STRING_KEY,
 } from "@/utils/querystring/RedirectUri";
 import { useToast } from "@/contexts/ToastContext";
+import { IsPublicBadge } from "../molecules/IsPublicBadge";
 
 export const PublicBookshelvesListTemplate = ({
   shelves,
@@ -124,11 +124,7 @@ const ReadonlyBookshelfCardHeader = ({
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Book className="w-4 h-4" />
         <span>{shelf.bookCount}권</span>
-        {shelf.isPublic ? (
-          <GreenBadge text="공개" />
-        ) : (
-          <GrayBadge text="비공개" />
-        )}
+        <IsPublicBadge isPublic={shelf.isPublic} />
       </div>
     </CardHeader>
   );
