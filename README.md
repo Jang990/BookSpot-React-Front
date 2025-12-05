@@ -27,18 +27,22 @@
 <br>
 
 ### 책 검색 결과
-<img width="845" height="900" alt="image" src="https://github.com/user-attachments/assets/0e728197-c2ce-435e-b956-02a83dabbceb" />
-<br>
+<img width="950" height="699" alt="image" src="https://github.com/user-attachments/assets/55b14104-f652-436c-9013-4e9e3803e64c" />
 
 ### 카테고리 필터링 선택
 <img width="796" height="596" alt="image" src="https://github.com/user-attachments/assets/1d87752d-6257-45be-a205-580e398addca" />
 <br>
 
 ### 북카트
-![image](https://github.com/user-attachments/assets/47fd3bfe-a152-4eb9-a782-68a982e6234c)
+<img width="969" height="681" alt="image" src="https://github.com/user-attachments/assets/9ed86dc4-1574-45e6-82a2-3da672fdfb22" />
+
 <br>
 
-### 도서관 재고 검색
-<img width="1126" height="830" alt="image" src="https://github.com/user-attachments/assets/2e456b8d-5929-49f8-815d-380dab0e66fd" />
+### 도서관 책 상태 검색
+<img width="899" height="900" alt="image" src="https://github.com/user-attachments/assets/a8e57c3b-7fca-43bb-aada-699569e60aae" />
+
+### 내 책장
+<img width="935" height="646" alt="image" src="https://github.com/user-attachments/assets/f79d6d67-c10b-4fa8-8f69-6656b8b3e5f0" />
+
 
 
