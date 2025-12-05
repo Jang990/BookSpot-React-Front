@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { type BookshelfSummary } from "@/types/Bookshelf";
 import { Plus, Book } from "lucide-react";
-import { BookPreviewImage } from "../molecules/BookPreviewImage";
+import { BookPreviewImage } from "@/components/molecules/BookPreviewImage";
 import { CommonIconButton } from "../atoms/button/icon/CommonIconButton";
 import {
   PageHeader,
