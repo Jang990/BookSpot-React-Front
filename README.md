@@ -27,7 +27,8 @@
 <br>
 
 ### 책 검색 결과
-<img width="950" height="699" alt="image" src="https://github.com/user-attachments/assets/55b14104-f652-436c-9013-4e9e3803e64c" />
+<img width="923" height="695" alt="image" src="https://github.com/user-attachments/assets/0ffe38a0-ccbe-4f22-9040-71b96e1421cd" />
+<br>
 
 ### 카테고리 필터링 선택
 <img width="796" height="596" alt="image" src="https://github.com/user-attachments/assets/1d87752d-6257-45be-a205-580e398addca" />
