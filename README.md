@@ -29,9 +29,9 @@
 ### 랜딩 팝업
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/c2b8d602-dbb7-4c0a-83e8-805d6fd2aa71" width="300" />
-  <img src="https://github.com/user-attachments/assets/f6b2767b-f1da-486f-ae81-8abf8dc08860" width="300" />
-  <img src="https://github.com/user-attachments/assets/4e244ff0-d9a9-457e-9f3a-986e930fe58e" width="300" />
+  <img src="https://github.com/user-attachments/assets/c2b8d602-dbb7-4c0a-83e8-805d6fd2aa71" width="250" />
+  <img src="https://github.com/user-attachments/assets/f6b2767b-f1da-486f-ae81-8abf8dc08860" width="250" />
+  <img src="https://github.com/user-attachments/assets/4e244ff0-d9a9-457e-9f3a-986e930fe58e" width="250" />
 </p>
 
 
